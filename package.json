@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.symptomsmobileapp",
+    "id": "es.uji.geotec.symptomsmobileapp",
     "tns-android": {
       "version": "6.2.0"
     },
@@ -8,9 +8,9 @@
       "version": "6.2.0"
     }
   },
-  "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "repository": "<fill-your-repository-here>",
+  "description": "Symptoms mobile application",
+  "license": "SEE LICENSE IN LICENSE.MD",
+  "repository": "github.com/GeoTecINIT/symptoms-mobile-app.git",
   "scripts": {
     "lint": "tslint \"src/**/*.ts\""
   },
@@ -40,5 +40,5 @@
     "typescript": "~3.5.3"
   },
   "gitHead": "a6fec076a20f898feabb4466a2c411158c18a100",
-  "readme": "NativeScript Application"
+  "readme": "Symptoms mobile application"
 }
