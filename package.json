@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "es.uji.geotec.symptomsmobileapp",
+    "id": "es.uji.geotec.symptomsapp",
     "tns-android": {
       "version": "6.3.1"
     },

@@ -3,10 +3,10 @@ import {
     TaskNotFoundError,
     setTasks
 } from '~/app/core/tasks/task-provider';
-import { tasks } from '.';
+import { testTasks } from '.';
 
 describe('Task provider', () => {
-    setTasks(tasks);
+    setTasks(testTasks);
 
     it('throws an error when task os unknown', () => {
         const name = 'patata';
@@ -15,7 +15,7 @@ describe('Task provider', () => {
 
     it('returns a dummy task', () => {
         const name = 'dummyTask';
-        const expectedTask = tasks[name];
+        const expectedTask = testTasks[name];
         expect(getTask(name)).toBe(expectedTask);
     });
 });

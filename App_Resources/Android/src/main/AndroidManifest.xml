@@ -35,5 +35,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.tns.ErrorReportActivity"/>
+
+		<receiver android:name=".AlarmReceiver"/>
 	</application>
 </manifest>
