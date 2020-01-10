@@ -1,18 +1,16 @@
-import { android as androidApp } from "tns-core-modules/application/application";
+import { android as androidApp } from 'tns-core-modules/application/application';
 
 export class AlarmScheduler {
     interval: number;
     task;
-    production: boolean;
 
     alarmManager: android.app.AlarmManager;
     receiverIntent: android.content.Intent;
     pendingIntent: android.app.PendingIntent;
 
-    constructor(interval: number, task, production: boolean) {
+    constructor(interval: number, task) {
         this.interval = interval;
         this.task = task;
-        this.production = production;
         this.alarmManager = androidApp.context.getSystemService(
             android.content.Context.ALARM_SERVICE
         );
