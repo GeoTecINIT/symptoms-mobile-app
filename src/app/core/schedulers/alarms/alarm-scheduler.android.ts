@@ -1,8 +1,53 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { AlarmReceiver } from './alarm-receiver.android';
-import { INTERVAL_KEY, TASK_NAME_KEY } from '..';
+import { INTERVAL_KEY, TASK_NAME_KEY, TaskToSchedule, ScheduledTask } from '..';
 
-export class AlarmScheduler {
+let alarmScheduler: AlarmScheduler;
+let scheduledTaskStore: ScheduledTaskStore;
+
+export function scheduleAlarm(taskToSchedule: TaskToSchedule): ScheduledTask {
+    const possibleExisting = scheduledTaskStore.get(taskToSchedule);
+    if (possibleExisting) {
+        return possibleExisting;
+    }
+    const allTasks = scheduledTaskStore.getAll();
+    if (allTasks.length === 0) {
+        alarmScheduler.set(taskToSchedule.in);
+    }
+    const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
+    scheduledTaskStore.insert(scheduledTask);
+
+    return scheduledTask;
+}
+
+export function cancelAlarm(id: string) {
+    throw new Error('Not implemented');
+}
+
+export function setAlarmScheduler(scheduler: AlarmScheduler) {
+    alarmScheduler = scheduler;
+}
+
+export function setScheduledTaskStore(taskStore: ScheduledTaskStore) {
+    scheduledTaskStore = taskStore;
+}
+
+export interface AlarmScheduler {
+    set(interval: number): void;
+    cancel(): void;
+}
+
+export interface ScheduledTaskStore {
+    insert(scheduledTask: ScheduledTask): void;
+    delete(task: string): void;
+    get(task: TaskToSchedule | string): ScheduledTask;
+    getAll(): Array<ScheduledTask>;
+    increaseErrorCount(task: string): void;
+    increaseTimeoutCount(task: string): void;
+    updateLastRun(task: string, timestamp: number): void;
+}
+
+/* export class AlarmScheduler {
     interval: number;
     taskName: string;
 
@@ -61,4 +106,4 @@ export class AlarmScheduler {
 
         return this.pendingIntent;
     }
-}
+} */

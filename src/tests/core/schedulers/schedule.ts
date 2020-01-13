@@ -8,7 +8,7 @@ describe('Schedule', () => {
     it('schedules a job in time', () => {
         const taskToSchedule = 'dummyTask';
         const task = schedule(60, taskToSchedule);
-        expect(task.scheduled).toBe(true);
+        expect(task).not.toBeNull();
     });
 
     it('raises an error when task is unknown', () => {

@@ -1,6 +1,7 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { AlarmScheduler } from './alarms/alarm-scheduler.android';
+import { scheduleAlarm } from './alarms/alarm-scheduler.android';
 import { getTask } from '../tasks/task-provider';
+import { uuid } from '../utils/uuid';
 
 export const INTERVAL_KEY = 'interval';
 export const TASK_NAME_KEY = 'taskName';
@@ -19,11 +20,11 @@ function androidSchedule(time: number, taskName: string) {
     if (time >= 5 && time < 60) {
         throw new Error('Not implemented yet');
     } else if (time < 900) {
-        const alarmScheduler = new AlarmScheduler(time * 1000, taskName);
-        // TODO: alarmScheduler.schedule devuelve algo que pasar a ScheduledTask...
-        alarmScheduler.schedule();
-
-        return new ScheduledTask();
+        return scheduleAlarm({
+            name: taskName,
+            in: time * 1000,
+            recurrent: true
+        });
     } else {
         throw new Error('Not implemented yet');
     }
@@ -33,12 +34,30 @@ function checkIfTaskExists(name: string) {
     getTask(name);
 }
 
-export class ScheduledTask {
-    get scheduled(): boolean {
-        return false;
-    }
+type ScheduleType = 'alarm';
 
-    get cancelled(): boolean {
-        return false;
+export class ScheduledTask {
+    task: string;
+    in: number;
+    recurrent: boolean;
+
+    constructor(
+        public type: ScheduleType,
+        task: TaskToSchedule,
+        public id = uuid(),
+        public createdAt = new Date().getTime(),
+        public lastRun = -1,
+        public errorCount = 0,
+        public timeoutCount = 0
+    ) {
+        this.task = task.name;
+        this.in = task.in;
+        this.recurrent = task.recurrent;
     }
+}
+
+export interface TaskToSchedule {
+    name: string;
+    in: number;
+    recurrent: boolean;
 }
