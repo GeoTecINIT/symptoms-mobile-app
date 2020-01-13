@@ -21,7 +21,7 @@ function androidSchedule(time: number, taskName: string) {
         throw new Error('Not implemented yet');
     } else if (time < 900) {
         return scheduleAlarm({
-            name: taskName,
+            task: taskName,
             in: time * 1000,
             recurrent: true
         });
@@ -50,14 +50,14 @@ export class ScheduledTask {
         public errorCount = 0,
         public timeoutCount = 0
     ) {
-        this.task = task.name;
+        this.task = task.task;
         this.in = task.in;
         this.recurrent = task.recurrent;
     }
 }
 
 export interface TaskToSchedule {
-    name: string;
+    task: string;
     in: number;
     recurrent: boolean;
 }
