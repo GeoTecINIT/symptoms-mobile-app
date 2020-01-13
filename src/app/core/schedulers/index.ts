@@ -2,6 +2,9 @@ import { android as androidApp } from 'tns-core-modules/application/application'
 import { AlarmScheduler } from './alarms/alarm-scheduler.android';
 import { getTask } from '../tasks/task-provider';
 
+export const INTERVAL_KEY = 'interval';
+export const TASK_NAME_KEY = 'taskName';
+
 export function schedule(time: number, taskName: string): ScheduledTask {
     checkIfTaskExists(taskName);
 

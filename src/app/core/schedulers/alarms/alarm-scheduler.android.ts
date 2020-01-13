@@ -1,5 +1,6 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { AlarmReceiver } from './alarm-receiver.android';
+import { INTERVAL_KEY, TASK_NAME_KEY } from '..';
 
 export class AlarmScheduler {
     interval: number;
@@ -19,6 +20,8 @@ export class AlarmScheduler {
             androidApp.context,
             AlarmReceiver.class
         );
+        this.receiverIntent.putExtra(INTERVAL_KEY, interval);
+        this.receiverIntent.putExtra(TASK_NAME_KEY, taskName);
         this.pendingIntent = null;
     }
 
