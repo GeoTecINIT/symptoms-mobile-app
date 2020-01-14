@@ -6,7 +6,10 @@ import { uuid } from '../utils/uuid';
 export const INTERVAL_KEY = 'interval';
 export const TASK_NAME_KEY = 'taskName';
 
-export function schedule(time: number, taskName: string): ScheduledTask {
+export async function schedule(
+    time: number,
+    taskName: string
+): Promise<ScheduledTask> {
     checkIfTaskExists(taskName);
 
     if (androidApp) {

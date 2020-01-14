@@ -6,12 +6,14 @@ import { ScheduledTasksStore } from '../scheduled-tasks-store';
 let alarmScheduler: AlarmScheduler;
 let scheduledTaskStore: ScheduledTasksStore;
 
-export function scheduleAlarm(taskToSchedule: TaskToSchedule): ScheduledTask {
-    const possibleExisting = scheduledTaskStore.get(taskToSchedule);
+export async function scheduleAlarm(
+    taskToSchedule: TaskToSchedule
+): Promise<ScheduledTask> {
+    const possibleExisting = await scheduledTaskStore.get(taskToSchedule);
     if (possibleExisting) {
         return possibleExisting;
     }
-    const allTasks = scheduledTaskStore.getAllSortedByInterval();
+    const allTasks = await scheduledTaskStore.getAllSortedByInterval();
     if (allTasks.length === 0) {
         alarmScheduler.set(taskToSchedule.interval);
     } else if (allTasks[0].interval > taskToSchedule.interval) {
@@ -19,12 +21,12 @@ export function scheduleAlarm(taskToSchedule: TaskToSchedule): ScheduledTask {
         alarmScheduler.set(taskToSchedule.interval);
     }
     const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
-    scheduledTaskStore.insert(scheduledTask);
+    await scheduledTaskStore.insert(scheduledTask);
 
     return scheduledTask;
 }
 
-export function cancelAlarm(id: string) {
+export async function cancelAlarm(id: string) {
     throw new Error('Not implemented');
 }
 

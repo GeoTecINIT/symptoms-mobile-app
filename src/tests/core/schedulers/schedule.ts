@@ -5,16 +5,16 @@ import { testTasks } from '../tasks';
 describe('Schedule', () => {
     setTasks(testTasks);
 
-    it('schedules a job in time', () => {
+    it('schedules a job in time', async () => {
         const taskToSchedule = 'dummyTask';
-        const task = schedule(60, taskToSchedule);
+        const task = await schedule(60, taskToSchedule);
         expect(task).not.toBeNull();
     });
 
     it('raises an error when task is unknown', () => {
         const taskToSchedule = 'patata';
-        expect(() => schedule(60, taskToSchedule)).toThrow(
-            new TaskNotFoundError(taskToSchedule)
-        );
+        expect(async () => {
+            await schedule(60, taskToSchedule);
+        }).toThrow(new TaskNotFoundError(taskToSchedule));
     });
 });

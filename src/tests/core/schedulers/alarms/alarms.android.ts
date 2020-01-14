@@ -13,18 +13,24 @@ describe('Android alarm', () => {
     setAlarmScheduler(scheduler);
     setScheduledTaskStore(taskStore);
 
-    const dummyTask: TaskToSchedule = { task: 'dummyTask', interval: 120000, recurrent: true };
+    const dummyTask: TaskToSchedule = {
+        task: 'dummyTask',
+        interval: 120000,
+        recurrent: true
+    };
     const expectedTask: ScheduledTask = new ScheduledTask('alarm', dummyTask);
 
-    it('schedules a task and an alarm when no other task exists', () => {
+    it('schedules a task and an alarm when no other task exists', async () => {
         spyOn(taskStore, 'get')
             .withArgs(dummyTask)
-            .and.returnValue(null);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([]);
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([])
+        );
         spyOn(scheduler, 'set').withArgs(dummyTask.interval);
-        spyOn(taskStore, 'insert');
+        spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
 
-        const scheduledTask = scheduleAlarm(dummyTask);
+        const scheduledTask = await scheduleAlarm(dummyTask);
 
         expect(taskStore.get).toHaveBeenCalled();
         expect(taskStore.getAllSortedByInterval).toHaveBeenCalled();
@@ -33,27 +39,32 @@ describe('Android alarm', () => {
         expect(scheduledTask).not.toBeNull();
     });
 
-    it('does nothing when a task has already been scheduled', () => {
+    it('does nothing when a task has already been scheduled', async () => {
         spyOn(taskStore, 'get')
             .withArgs(dummyTask)
-            .and.returnValue(expectedTask);
+            .and.returnValue(Promise.resolve(expectedTask));
         spyOn(scheduler, 'set');
-        const scheduledTask = scheduleAlarm(dummyTask);
+        const scheduledTask = await scheduleAlarm(dummyTask);
         expect(scheduler.set).not.toHaveBeenCalled();
         expect(scheduledTask).toBe(expectedTask);
     });
 
-    it('schedules a task and reschedules an alarm when a lower frequency task exists', () => {
-        const higherFreqTask = { ...dummyTask, interval: dummyTask.interval / 2 };
+    it('schedules a task and reschedules an alarm when a lower frequency task exists', async () => {
+        const higherFreqTask = {
+            ...dummyTask,
+            interval: dummyTask.interval / 2
+        };
         spyOn(taskStore, 'get')
             .withArgs(higherFreqTask)
-            .and.returnValue(null);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([expectedTask]);
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
         spyOn(scheduler, 'cancel');
         spyOn(scheduler, 'set').withArgs(higherFreqTask.interval);
-        spyOn(taskStore, 'insert');
+        spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
 
-        const scheduledTask = scheduleAlarm(higherFreqTask);
+        const scheduledTask = await scheduleAlarm(higherFreqTask);
 
         expect(scheduler.cancel).toHaveBeenCalled();
         expect(scheduler.set).toHaveBeenCalledWith(higherFreqTask.interval);
@@ -61,17 +72,19 @@ describe('Android alarm', () => {
         expect(scheduledTask).not.toBeNull();
     });
 
-    it('schedules a task and does not reschedule an alarm when a higher frequency task exists', () => {
+    it('schedules a task and does not reschedule an alarm when a higher frequency task exists', async () => {
         const lowerFreqTask = { ...dummyTask, in: dummyTask.interval * 2 };
         spyOn(taskStore, 'get')
             .withArgs(lowerFreqTask)
-            .and.returnValue(null);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([expectedTask]);
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
         spyOn(scheduler, 'cancel');
         spyOn(scheduler, 'set');
-        spyOn(taskStore, 'insert');
+        spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
 
-        const scheduledTask = scheduleAlarm(lowerFreqTask);
+        const scheduledTask = await scheduleAlarm(lowerFreqTask);
 
         expect(scheduler.cancel).not.toHaveBeenCalled();
         expect(scheduler.set).not.toHaveBeenCalled();
@@ -94,25 +107,25 @@ function createAlarmSchedulerMock(): AlarmScheduler {
 function createScheduledTaskStoreMock(): ScheduledTasksStore {
     return {
         insert(scheduledTask: ScheduledTask) {
-            return null;
+            return Promise.resolve();
         },
         delete(task: string) {
-            return null;
+            return Promise.resolve();
         },
         get(task: TaskToSchedule | string) {
-            return null;
+            return Promise.resolve(null);
         },
-        getAllSortedByInterval(): Array<ScheduledTask> {
-            return [];
+        getAllSortedByInterval() {
+            return Promise.resolve([]);
         },
         increaseErrorCount(task: string) {
-            return null;
+            return Promise.resolve();
         },
         increaseTimeoutCount(task: string) {
-            return null;
+            return Promise.resolve();
         },
         updateLastRun(task: string, timestamp: number) {
-            return null;
+            return Promise.resolve();
         }
     };
 }
