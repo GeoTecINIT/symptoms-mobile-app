@@ -22,7 +22,7 @@ function androidSchedule(time: number, taskName: string) {
     } else if (time < 900) {
         return scheduleAlarm({
             task: taskName,
-            in: time * 1000,
+            interval: time * 1000,
             recurrent: true
         });
     } else {
@@ -38,7 +38,7 @@ type ScheduleType = 'alarm';
 
 export class ScheduledTask {
     task: string;
-    in: number;
+    interval: number;
     recurrent: boolean;
 
     constructor(
@@ -51,13 +51,13 @@ export class ScheduledTask {
         public timeoutCount = 0
     ) {
         this.task = task.task;
-        this.in = task.in;
+        this.interval = task.interval;
         this.recurrent = task.recurrent;
     }
 }
 
 export interface TaskToSchedule {
     task: string;
-    in: number;
+    interval: number;
     recurrent: boolean;
 }

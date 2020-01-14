@@ -1,18 +1,22 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { AlarmReceiver } from './alarm-receiver.android';
 import { INTERVAL_KEY, TASK_NAME_KEY, TaskToSchedule, ScheduledTask } from '..';
+import { ScheduledTasksStore } from '../scheduled-tasks-store';
 
 let alarmScheduler: AlarmScheduler;
-let scheduledTaskStore: ScheduledTaskStore;
+let scheduledTaskStore: ScheduledTasksStore;
 
 export function scheduleAlarm(taskToSchedule: TaskToSchedule): ScheduledTask {
     const possibleExisting = scheduledTaskStore.get(taskToSchedule);
     if (possibleExisting) {
         return possibleExisting;
     }
-    const allTasks = scheduledTaskStore.getAll();
+    const allTasks = scheduledTaskStore.getAllSortedByInterval();
     if (allTasks.length === 0) {
-        alarmScheduler.set(taskToSchedule.in);
+        alarmScheduler.set(taskToSchedule.interval);
+    } else if (allTasks[0].interval > taskToSchedule.interval) {
+        alarmScheduler.cancel();
+        alarmScheduler.set(taskToSchedule.interval);
     }
     const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
     scheduledTaskStore.insert(scheduledTask);
@@ -28,23 +32,13 @@ export function setAlarmScheduler(scheduler: AlarmScheduler) {
     alarmScheduler = scheduler;
 }
 
-export function setScheduledTaskStore(taskStore: ScheduledTaskStore) {
+export function setScheduledTaskStore(taskStore: ScheduledTasksStore) {
     scheduledTaskStore = taskStore;
 }
 
 export interface AlarmScheduler {
     set(interval: number): void;
     cancel(): void;
-}
-
-export interface ScheduledTaskStore {
-    insert(scheduledTask: ScheduledTask): void;
-    delete(task: string): void;
-    get(task: TaskToSchedule | string): ScheduledTask;
-    getAll(): Array<ScheduledTask>;
-    increaseErrorCount(task: string): void;
-    increaseTimeoutCount(task: string): void;
-    updateLastRun(task: string, timestamp: number): void;
 }
 
 /* export class AlarmScheduler {

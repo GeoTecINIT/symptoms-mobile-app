@@ -1,11 +1,11 @@
 import {
     scheduleAlarm,
     AlarmScheduler,
-    ScheduledTaskStore,
     setAlarmScheduler,
     setScheduledTaskStore
 } from '~/app/core/schedulers/alarms/alarm-scheduler.android';
 import { TaskToSchedule, ScheduledTask } from '~/app/core/schedulers';
+import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
 
 describe('Android alarm', () => {
     const scheduler = createAlarmSchedulerMock();
@@ -13,21 +13,21 @@ describe('Android alarm', () => {
     setAlarmScheduler(scheduler);
     setScheduledTaskStore(taskStore);
 
-    const dummyTask = { task: 'dummyTask', in: 120000, recurrent: true };
-    const expectedTask = new ScheduledTask('alarm', dummyTask);
+    const dummyTask: TaskToSchedule = { task: 'dummyTask', interval: 120000, recurrent: true };
+    const expectedTask: ScheduledTask = new ScheduledTask('alarm', dummyTask);
 
     it('schedules a task and an alarm when no other task exists', () => {
         spyOn(taskStore, 'get')
             .withArgs(dummyTask)
             .and.returnValue(null);
-        spyOn(taskStore, 'getAll').and.returnValue([]);
-        spyOn(scheduler, 'set').withArgs(dummyTask.in);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([]);
+        spyOn(scheduler, 'set').withArgs(dummyTask.interval);
         spyOn(taskStore, 'insert');
 
         const scheduledTask = scheduleAlarm(dummyTask);
 
         expect(taskStore.get).toHaveBeenCalled();
-        expect(taskStore.getAll).toHaveBeenCalled();
+        expect(taskStore.getAllSortedByInterval).toHaveBeenCalled();
         expect(scheduler.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
@@ -44,29 +44,29 @@ describe('Android alarm', () => {
     });
 
     it('schedules a task and reschedules an alarm when a lower frequency task exists', () => {
-        const higherFreqTask = { ...dummyTask, in: dummyTask.in / 2 };
+        const higherFreqTask = { ...dummyTask, interval: dummyTask.interval / 2 };
         spyOn(taskStore, 'get')
             .withArgs(higherFreqTask)
             .and.returnValue(null);
-        spyOn(taskStore, 'getAll').and.returnValue([expectedTask]);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([expectedTask]);
         spyOn(scheduler, 'cancel');
-        spyOn(scheduler, 'set').withArgs(higherFreqTask.in);
+        spyOn(scheduler, 'set').withArgs(higherFreqTask.interval);
         spyOn(taskStore, 'insert');
 
         const scheduledTask = scheduleAlarm(higherFreqTask);
 
         expect(scheduler.cancel).toHaveBeenCalled();
-        expect(scheduler.set).toHaveBeenCalledWith(higherFreqTask.in);
+        expect(scheduler.set).toHaveBeenCalledWith(higherFreqTask.interval);
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
     });
 
     it('schedules a task and does not reschedule an alarm when a higher frequency task exists', () => {
-        const lowerFreqTask = { ...dummyTask, in: dummyTask.in * 2 };
+        const lowerFreqTask = { ...dummyTask, in: dummyTask.interval * 2 };
         spyOn(taskStore, 'get')
             .withArgs(lowerFreqTask)
             .and.returnValue(null);
-        spyOn(taskStore, 'getAll').and.returnValue([expectedTask]);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue([expectedTask]);
         spyOn(scheduler, 'cancel');
         spyOn(scheduler, 'set');
         spyOn(taskStore, 'insert');
@@ -91,7 +91,7 @@ function createAlarmSchedulerMock(): AlarmScheduler {
     };
 }
 
-function createScheduledTaskStoreMock(): ScheduledTaskStore {
+function createScheduledTaskStoreMock(): ScheduledTasksStore {
     return {
         insert(scheduledTask: ScheduledTask) {
             return null;
@@ -102,7 +102,7 @@ function createScheduledTaskStoreMock(): ScheduledTaskStore {
         get(task: TaskToSchedule | string) {
             return null;
         },
-        getAll(): Array<ScheduledTask> {
+        getAllSortedByInterval(): Array<ScheduledTask> {
             return [];
         },
         increaseErrorCount(task: string) {
