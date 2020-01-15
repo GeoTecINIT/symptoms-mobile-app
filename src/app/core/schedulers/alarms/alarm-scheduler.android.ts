@@ -28,7 +28,21 @@ export class AndroidAlarmScheduler {
     }
 
     async cancel(id: string) {
-        throw new Error('Not implemented');
+        const possibleExisting = await this.scheduledTaskStore.get(id);
+        if (!possibleExisting) {
+            return;
+        }
+        const allTasks = await this.scheduledTaskStore.getAllSortedByInterval();
+        if (allTasks.length === 1) {
+            this.alarmManager.cancel();
+        } else if (
+            allTasks[0].interval === possibleExisting.interval &&
+            allTasks[1].interval !== possibleExisting.interval
+        ) {
+            this.alarmManager.cancel();
+            this.alarmManager.set(allTasks[1].interval);
+        }
+        await this.scheduledTaskStore.delete(id);
     }
 }
 
