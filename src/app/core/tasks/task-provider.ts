@@ -3,12 +3,16 @@ import { Tasks, Task, tasks as prodTasks } from '.';
 let tasks: Tasks = prodTasks;
 
 export function getTask(name: string): Task {
+    checkIfTaskExists(name);
+
+    return tasks[name];
+}
+
+export function checkIfTaskExists(name: string) {
     const task = tasks[name];
     if (!task) {
         throw new TaskNotFoundError(name);
     }
-
-    return task;
 }
 
 export function setTasks(t: Tasks) {

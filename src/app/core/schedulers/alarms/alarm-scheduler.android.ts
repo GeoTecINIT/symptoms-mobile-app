@@ -1,44 +1,38 @@
-import { android as androidApp } from 'tns-core-modules/application/application';
-import { AlarmReceiver } from './alarm-receiver.android';
-import { INTERVAL_KEY, TASK_NAME_KEY, TaskToSchedule, ScheduledTask } from '..';
 import { ScheduledTasksStore } from '../scheduled-tasks-store';
+import { TaskToSchedule, ScheduledTask } from '../scheduled-task';
 
-let alarmScheduler: AlarmScheduler;
-let scheduledTaskStore: ScheduledTasksStore;
+export class AndroidAlarmScheduler {
+    constructor(
+        private alarmManager: AlarmManager,
+        private scheduledTaskStore: ScheduledTasksStore
+    ) {}
 
-export async function scheduleAlarm(
-    taskToSchedule: TaskToSchedule
-): Promise<ScheduledTask> {
-    const possibleExisting = await scheduledTaskStore.get(taskToSchedule);
-    if (possibleExisting) {
-        return possibleExisting;
+    async schedule(taskToSchedule: TaskToSchedule): Promise<ScheduledTask> {
+        const possibleExisting = await this.scheduledTaskStore.get(
+            taskToSchedule
+        );
+        if (possibleExisting) {
+            return possibleExisting;
+        }
+        const allTasks = await this.scheduledTaskStore.getAllSortedByInterval();
+        if (allTasks.length === 0) {
+            this.alarmManager.set(taskToSchedule.interval);
+        } else if (allTasks[0].interval > taskToSchedule.interval) {
+            this.alarmManager.cancel();
+            this.alarmManager.set(taskToSchedule.interval);
+        }
+        const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
+        await this.scheduledTaskStore.insert(scheduledTask);
+
+        return scheduledTask;
     }
-    const allTasks = await scheduledTaskStore.getAllSortedByInterval();
-    if (allTasks.length === 0) {
-        alarmScheduler.set(taskToSchedule.interval);
-    } else if (allTasks[0].interval > taskToSchedule.interval) {
-        alarmScheduler.cancel();
-        alarmScheduler.set(taskToSchedule.interval);
+
+    async cancel(id: string) {
+        throw new Error('Not implemented');
     }
-    const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
-    await scheduledTaskStore.insert(scheduledTask);
-
-    return scheduledTask;
 }
 
-export async function cancelAlarm(id: string) {
-    throw new Error('Not implemented');
-}
-
-export function setAlarmScheduler(scheduler: AlarmScheduler) {
-    alarmScheduler = scheduler;
-}
-
-export function setScheduledTaskStore(taskStore: ScheduledTasksStore) {
-    scheduledTaskStore = taskStore;
-}
-
-export interface AlarmScheduler {
+export interface AlarmManager {
     set(interval: number): void;
     cancel(): void;
 }

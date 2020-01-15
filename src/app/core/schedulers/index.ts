@@ -1,10 +1,20 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { scheduleAlarm } from './alarms/alarm-scheduler.android';
-import { getTask } from '../tasks/task-provider';
-import { uuid } from '../utils/uuid';
+import { ScheduledTask } from './scheduled-task';
+import { checkIfTaskExists } from '../tasks/task-provider';
+import {
+    AndroidAlarmScheduler,
+    AlarmManager
+} from './alarms/alarm-scheduler.android';
+import { ScheduledTasksStore, scheduledTasksDB } from './scheduled-tasks-store';
 
 export const INTERVAL_KEY = 'interval';
 export const TASK_NAME_KEY = 'taskName';
+const scheduledTaskStore: ScheduledTasksStore = scheduledTasksDB;
+const alarmManager: AlarmManager = null;
+const androidAlarmScheduler = new AndroidAlarmScheduler(
+    alarmManager,
+    scheduledTaskStore
+);
 
 export async function schedule(
     time: number,
@@ -23,7 +33,7 @@ function androidSchedule(time: number, taskName: string) {
     if (time >= 5 && time < 60) {
         throw new Error('Not implemented yet');
     } else if (time < 900) {
-        return scheduleAlarm({
+        return androidAlarmScheduler.schedule({
             task: taskName,
             interval: time * 1000,
             recurrent: true
@@ -31,36 +41,4 @@ function androidSchedule(time: number, taskName: string) {
     } else {
         throw new Error('Not implemented yet');
     }
-}
-
-function checkIfTaskExists(name: string) {
-    getTask(name);
-}
-
-type ScheduleType = 'alarm';
-
-export class ScheduledTask {
-    task: string;
-    interval: number;
-    recurrent: boolean;
-
-    constructor(
-        public type: ScheduleType,
-        task: TaskToSchedule,
-        public id = uuid(),
-        public createdAt = new Date().getTime(),
-        public lastRun = -1,
-        public errorCount = 0,
-        public timeoutCount = 0
-    ) {
-        this.task = task.task;
-        this.interval = task.interval;
-        this.recurrent = task.recurrent;
-    }
-}
-
-export interface TaskToSchedule {
-    task: string;
-    interval: number;
-    recurrent: boolean;
 }

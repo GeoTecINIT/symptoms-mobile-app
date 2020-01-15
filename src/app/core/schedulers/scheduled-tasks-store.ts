@@ -1,11 +1,12 @@
-import { ScheduledTask, TaskToSchedule, schedule } from '.';
+import { schedule } from '.';
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
+import { ScheduledTask, TaskToSchedule } from './scheduled-task';
 
 const DB_NAME = 'symptoms-mobile';
 const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
 
-export class ScheduledTasksDBStore implements ScheduledTasksStore {
+class ScheduledTasksDBStore implements ScheduledTasksStore {
     private dbInitialized: boolean = false;
 
     async insert(scheduledTask: ScheduledTask): Promise<void> {
@@ -170,3 +171,5 @@ export interface ScheduledTasksStore {
     increaseTimeoutCount(task: string): Promise<void>;
     updateLastRun(task: string, timestamp: number): Promise<void>;
 }
+
+export const scheduledTasksDB = new ScheduledTasksDBStore();

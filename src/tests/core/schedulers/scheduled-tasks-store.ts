@@ -1,8 +1,11 @@
-import { ScheduledTasksDBStore } from '~/app/core/schedulers/scheduled-tasks-store';
-import { TaskToSchedule, ScheduledTask } from '~/app/core/schedulers';
+import { scheduledTasksDB } from '~/app/core/schedulers/scheduled-tasks-store';
+import {
+    TaskToSchedule,
+    ScheduledTask
+} from '~/app/core/schedulers/scheduled-task';
 
 describe('Scheduled Tasks Store', () => {
-    const store = new ScheduledTasksDBStore();
+    const store = scheduledTasksDB;
 
     const taskToSchedule1: TaskToSchedule = {
         task: 'dummyTask1',
