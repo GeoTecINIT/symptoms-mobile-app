@@ -18,7 +18,6 @@ describe('Android alarm', () => {
         interval: 120000,
         recurrent: true
     };
-    const expectedTask: ScheduledTask = new ScheduledTask('alarm', dummyTask);
     const lowerFreqTask = {
         ...dummyTask,
         interval: dummyTask.interval * 2
@@ -27,12 +26,14 @@ describe('Android alarm', () => {
         ...dummyTask,
         interval: dummyTask.interval / 2
     };
-    const lowerFreqST = new ScheduledTask('alarm', lowerFreqTask);
-    const higherFreqST = new ScheduledTask('alarm', higherFreqTask);
-    const equalFreqST = new ScheduledTask('alarm', {
+    const equalFreqTask = {
         ...dummyTask,
         task: 'patata'
-    });
+    };
+    const expectedTask: ScheduledTask = new ScheduledTask('alarm', dummyTask);
+    const lowerFreqST = new ScheduledTask('alarm', lowerFreqTask);
+    const higherFreqST = new ScheduledTask('alarm', higherFreqTask);
+    const equalFreqST = new ScheduledTask('alarm', equalFreqTask);
 
     beforeEach(() => {
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
@@ -99,20 +100,49 @@ describe('Android alarm', () => {
         expect(scheduledTask).not.toBeNull();
     });
 
-    it('removes the highest frequency scheduled task and reschedules the alarm', () => {
+    it('removes the highest frequency scheduled task and reschedules the alarm', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(higherFreqTask)
+            .and.returnValue(Promise.resolve(higherFreqST));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
+
+        await androidAlarm.cancel(higherFreqST.id);
+
         expect(taskStore.delete).toHaveBeenCalled();
         expect(manager.cancel).toHaveBeenCalled();
-        expect(manager.set).toHaveBeenCalledWith();
+        expect(manager.set).toHaveBeenCalledWith(higherFreqST.interval);
     });
 
-    it('removes a task different than the one with the highest frequency', () => {
+    it('removes a task different than the one with the highest frequency', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(lowerFreqTask)
+            .and.returnValue(Promise.resolve(lowerFreqST));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
+
+        await androidAlarm.cancel(lowerFreqST.id);
+
         expect(taskStore.delete).toHaveBeenCalled();
         expect(manager.cancel).not.toHaveBeenCalled();
+        expect(manager.set).not.toHaveBeenCalled();
     });
 
-    it('removes a task with the same frequency than the one with the highest frequency', () => {
+    it('removes a task with the same frequency than the one with the highest frequency', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(equalFreqTask)
+            .and.returnValue(Promise.resolve(equalFreqST));
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
+
+        await androidAlarm.cancel(equalFreqST.id);
+
         expect(taskStore.delete).toHaveBeenCalled();
         expect(manager.cancel).not.toHaveBeenCalled();
+        expect(manager.set).not.toHaveBeenCalled();
     });
 
     it('tries to remove a task not scheduled', async () => {
