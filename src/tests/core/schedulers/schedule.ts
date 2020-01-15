@@ -11,10 +11,10 @@ describe('Schedule', () => {
         expect(task).not.toBeNull();
     });
 
-    it('raises an error when task is unknown', () => {
+    it('raises an error when task is unknown', async () => {
         const taskToSchedule = 'patata';
-        expect(async () => {
-            await schedule(60, taskToSchedule);
-        }).toThrow(new TaskNotFoundError(taskToSchedule));
+        await expectAsync(schedule(60, taskToSchedule)).toBeRejectedWith(
+            new TaskNotFoundError(taskToSchedule)
+        );
     });
 });

@@ -10,6 +10,15 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
 
     async insert(scheduledTask: ScheduledTask): Promise<void> {
         await this.createDB();
+        const { task, interval, recurrent } = scheduledTask;
+        const taskToSchedule = { task, interval, recurrent };
+        const possibleTask = await this.get(taskToSchedule);
+        if (possibleTask) {
+            throw new Error(
+                `Already stored: {task=${task}, interval=${interval}, recurrent=${recurrent}}`
+            );
+        }
+
         await nSQL(SCHEDULED_TASKS_TABLE)
             .query('upsert', { ...scheduledTask })
             .exec();
@@ -31,9 +40,9 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
             const taskToSchedule = task as TaskToSchedule;
             whereStatement = [
                 ['task', '=', taskToSchedule.task],
-                'and',
+                'AND',
                 ['interval', '=', taskToSchedule.interval],
-                'and',
+                'AND',
                 ['recurrent', '=', taskToSchedule.recurrent]
             ];
         }
@@ -69,7 +78,7 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
                 .where(['id', '=', task])
                 .exec();
         } else {
-            throw new Error('Task not found');
+            throw new Error(`Task not found: ${task}`);
         }
     }
 
@@ -83,7 +92,7 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
                 .where(['id', '=', task])
                 .exec();
         } else {
-            throw new Error('Task not found');
+            throw new Error(`Task not found: ${task}`);
         }
     }
 
@@ -97,7 +106,7 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
                 .where(['id', '=', task])
                 .exec();
         } else {
-            throw new Error('Task not found');
+            throw new Error(`Task not found: ${task}`);
         }
     }
 
@@ -138,7 +147,11 @@ export class ScheduledTasksDBStore implements ScheduledTasksStore {
     private scheduledTaskFromRow(obj: any) {
         return new ScheduledTask(
             obj.type,
-            obj.task,
+            {
+                task: obj.task,
+                interval: obj.interval,
+                recurrent: obj.recurrent
+            },
             obj.id,
             obj.createdAt,
             obj.lastRun,

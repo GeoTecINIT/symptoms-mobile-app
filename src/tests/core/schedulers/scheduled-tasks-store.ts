@@ -1,6 +1,5 @@
 import { ScheduledTasksDBStore } from '~/app/core/schedulers/scheduled-tasks-store';
 import { TaskToSchedule, ScheduledTask } from '~/app/core/schedulers';
-import { async } from 'rxjs/internal/scheduler/async';
 
 describe('Scheduled Tasks Store', () => {
     const store = new ScheduledTasksDBStore();
@@ -43,15 +42,19 @@ describe('Scheduled Tasks Store', () => {
         await store.insert(scheduledTask2);
     });
 
-    it('throws an error when trying to store an existing task', () => {
-        expect(async () => {
-            await store.insert(scheduledTask1);
-        }).toThrow(new Error(`Already stored: ${taskToSchedule1}`));
+    it('throws an error when trying to store an existing task', async () => {
+        const { task, interval, recurrent } = taskToSchedule1;
+        await expectAsync(store.insert(scheduledTask1)).toBeRejectedWith(
+            new Error(
+                `Already stored: {task=${task}, interval=${interval}, recurrent=${recurrent}}`
+            )
+        );
     });
 
     it('deletes a stored task', async () => {
         await store.delete(scheduledTask1.id);
-        await store.insert(scheduledTask1);
+        const task = await store.get(taskToSchedule1);
+        expect(task).toBeNull();
     });
 
     it('gets a stored task by similarity criteria', async () => {
@@ -71,7 +74,7 @@ describe('Scheduled Tasks Store', () => {
         await store.insert(scheduledTask3);
 
         const tasks = await store.getAllSortedByInterval();
-
+        expect(tasks.length).toBe(3);
         for (let i = 0; i < tasks.length - 1; i++) {
             if (tasks[i].interval > tasks[i + 1].interval) {
                 fail('Tasks out of order');
@@ -85,7 +88,7 @@ describe('Scheduled Tasks Store', () => {
         expect(task.errorCount).toBe(scheduledTask1.errorCount + 1);
     });
 
-    it('increses timeout count of a task by id', async () => {
+    it('increases timeout count of a task by id', async () => {
         await store.increaseTimeoutCount(scheduledTask1.id);
         const task = await store.get(scheduledTask1.id);
         expect(task.timeoutCount).toBe(scheduledTask1.timeoutCount + 1);
@@ -96,6 +99,12 @@ describe('Scheduled Tasks Store', () => {
         await store.updateLastRun(scheduledTask1.id, timestamp);
         const task = await store.get(scheduledTask1.id);
         expect(task.lastRun).toBe(timestamp);
+    });
+
+    it('deletes all the stored tasks', async () => {
+        await store.deleteAll();
+        const tasks = await store.getAllSortedByInterval();
+        expect(tasks.length).toBe(0);
     });
 
     afterAll(async () => {
