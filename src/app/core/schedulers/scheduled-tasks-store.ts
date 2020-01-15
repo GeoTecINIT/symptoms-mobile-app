@@ -1,4 +1,3 @@
-import { schedule } from '.';
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
 import { ScheduledTask, TaskToSchedule } from './scheduled-task';

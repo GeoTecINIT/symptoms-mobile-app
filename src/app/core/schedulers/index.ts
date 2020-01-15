@@ -1,16 +1,17 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { ScheduledTask } from './scheduled-task';
 import { checkIfTaskExists } from '../tasks/task-provider';
+import { AndroidAlarmScheduler } from './alarms/alarm-scheduler.android';
 import {
-    AndroidAlarmScheduler,
-    AlarmManager
-} from './alarms/alarm-scheduler.android';
+    AlarmManager,
+    AndroidAlarmManager
+} from './alarms/alarm-manager.android';
 import { ScheduledTasksStore, scheduledTasksDB } from './scheduled-tasks-store';
 
 export const INTERVAL_KEY = 'interval';
 export const TASK_NAME_KEY = 'taskName';
+const alarmManager: AlarmManager = new AndroidAlarmManager();
 const scheduledTaskStore: ScheduledTasksStore = scheduledTasksDB;
-const alarmManager: AlarmManager = null;
 const androidAlarmScheduler = new AndroidAlarmScheduler(
     alarmManager,
     scheduledTaskStore

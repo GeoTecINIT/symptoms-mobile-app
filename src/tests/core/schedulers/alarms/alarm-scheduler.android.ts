@@ -1,8 +1,6 @@
-import {
-    AlarmManager,
-    AndroidAlarmScheduler
-} from '~/app/core/schedulers/alarms/alarm-scheduler.android';
+import { AlarmManager } from '~/app/core/schedulers/alarms/alarm-manager.android';
 import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
+import { AndroidAlarmScheduler } from '~/app/core/schedulers/alarms/alarm-scheduler.android';
 import {
     TaskToSchedule,
     ScheduledTask
