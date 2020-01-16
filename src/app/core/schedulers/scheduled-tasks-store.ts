@@ -1,6 +1,6 @@
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
-import { ScheduledTask, TaskToSchedule } from './scheduled-task';
+import { ScheduledTask, TaskToSchedule, SchedulerType } from './scheduled-task';
 
 const DB_NAME = 'symptoms-mobile';
 const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
@@ -59,7 +59,9 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
     }
 
     // TODO: Allow filtering by type
-    async getAllSortedByInterval(): Promise<Array<ScheduledTask>> {
+    async getAllSortedByInterval(
+        schedulerType?: SchedulerType
+    ): Promise<Array<ScheduledTask>> {
         await this.createDB();
         const rows = await nSQL(SCHEDULED_TASKS_TABLE)
             .query('select')
@@ -166,7 +168,9 @@ export interface ScheduledTasksStore {
     insert(scheduledTask: ScheduledTask): Promise<void>;
     delete(task: string): Promise<void>;
     get(task: TaskToSchedule | string): Promise<ScheduledTask>;
-    getAllSortedByInterval(): Promise<Array<ScheduledTask>>;
+    getAllSortedByInterval(
+        schedulerType: SchedulerType
+    ): Promise<Array<ScheduledTask>>;
     increaseErrorCount(task: string): Promise<void>;
     increaseTimeoutCount(task: string): Promise<void>;
     updateLastRun(task: string, timestamp: number): Promise<void>;

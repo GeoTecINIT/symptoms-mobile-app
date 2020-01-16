@@ -1,6 +1,6 @@
 import { uuid } from '../utils/uuid';
 
-type ScheduleType = 'alarm';
+export type SchedulerType = 'alarm';
 
 export class ScheduledTask {
     task: string;
@@ -8,7 +8,7 @@ export class ScheduledTask {
     recurrent: boolean;
 
     constructor(
-        public type: ScheduleType,
+        public type: SchedulerType,
         task: TaskToSchedule,
         public id = uuid(),
         public createdAt = new Date().getTime(),

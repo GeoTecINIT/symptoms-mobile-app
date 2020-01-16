@@ -50,6 +50,10 @@ describe('Android Alarm Manager', () => {
         expect(systemAlarmManager.cancel).toHaveBeenCalled();
         expect(alarmManager.alarmUp).not.toBeTruthy();
     });
+
+    afterAll(() => {
+        alarmManager.cancel();
+    });
 });
 
 function createOsAlarmManagerMock(): any {

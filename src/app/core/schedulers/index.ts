@@ -5,9 +5,6 @@ import { AndroidAlarmScheduler } from './alarms/alarm-scheduler.android';
 import { AndroidAlarmManager } from './alarms/alarm-manager.android';
 import { scheduledTasksDB } from './scheduled-tasks-store';
 
-export const INTERVAL_KEY = 'interval';
-export const TASK_NAME_KEY = 'taskName';
-
 export async function schedule(
     time: number,
     taskName: string

@@ -76,7 +76,7 @@ describe('Scheduled Tasks Store', () => {
         await store.insert(scheduledTask2);
         await store.insert(scheduledTask3);
 
-        const tasks = await store.getAllSortedByInterval();
+        const tasks = await store.getAllSortedByInterval('alarm');
         expect(tasks.length).toBe(3);
         for (let i = 0; i < tasks.length - 1; i++) {
             if (tasks[i].interval > tasks[i + 1].interval) {

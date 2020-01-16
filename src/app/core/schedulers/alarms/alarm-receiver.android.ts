@@ -1,5 +1,3 @@
-import { INTERVAL_KEY, TASK_NAME_KEY } from '..';
-
 @JavaProxy('es.uji.geotec.symptomsapp.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
     interval: number;
@@ -9,8 +7,12 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         context: android.content.Context,
         intent: android.content.Intent
     ) {
-        this.interval = intent.getIntExtra(INTERVAL_KEY, 0);
-        this.taskName = intent.getStringExtra(TASK_NAME_KEY);
-        console.log('Hellooo');
+        console.log('AlarmReceiver: Alarm trigger');
+
+        // TODO: When no tasks to plan do nothing
+        // TODO: Obtain fastest delay in order to plan next alarm trigger
+        // TODO: Check if something needs to be executed in the foreground
+
+        console.log('Work enqueued');
     }
 }
