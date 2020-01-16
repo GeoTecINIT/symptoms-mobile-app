@@ -9,18 +9,25 @@ export interface AlarmManager {
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 
 export class AndroidAlarmManager implements AlarmManager {
-    receiverIntent: android.content.Intent;
-    pendingIntent: android.app.PendingIntent;
+    get alarmUp(): boolean {
+        return (
+            android.app.PendingIntent.getBroadcast(
+                androidApp.context,
+                0,
+                this.receiverIntent,
+                android.app.PendingIntent.FLAG_NO_CREATE
+            ) !== null
+        );
+    }
+    private pendingIntent: android.app.PendingIntent;
+    private receiverIntent: android.content.Intent;
 
     constructor(
-        private alarmManager = androidApp.context.getSystemService(
+        private osAlarmManager = androidApp.context.getSystemService(
             ALARM_SERVICE
         ) as android.app.AlarmManager,
         private sdkVersion = android.os.Build.VERSION.SDK_INT
     ) {
-        this.alarmManager = androidApp.context.getSystemService(
-            android.content.Context.ALARM_SERVICE
-        );
         this.receiverIntent = new android.content.Intent(
             androidApp.context,
             AlarmReceiver.class
@@ -28,63 +35,42 @@ export class AndroidAlarmManager implements AlarmManager {
     }
 
     set(interval: number): void {
-        throw new Error('Method not implemented.');
-    }
-
-    cancel(): void {
-        throw new Error('Method not implemented.');
-    }
-}
-
-/* export class AlarmScheduler {
-    interval: number;
-    taskName: string;
-
-    alarmManager: android.app.AlarmManager;
-    receiverIntent: android.content.Intent;
-    pendingIntent: android.app.PendingIntent;
-
-    constructor(interval: number, taskName: string) {
-        this.interval = interval;
-        this.taskName = taskName;
-        this.alarmManager = androidApp.context.getSystemService(
-            android.content.Context.ALARM_SERVICE
-        );
-        this.receiverIntent = new android.content.Intent(
-            androidApp.context,
-            AlarmReceiver.class
-        );
-        this.receiverIntent.putExtra(INTERVAL_KEY, interval);
-        this.receiverIntent.putExtra(TASK_NAME_KEY, taskName);
-        this.pendingIntent = null;
-    }
-
-    schedule() {
-        const sdkVersion = android.os.Build.VERSION.SDK_INT;
-
+        if (this.alarmUp) {
+            this.cancel();
+        }
         const alarmType = android.app.AlarmManager.RTC_WAKEUP;
-        const triggerAtMillis = new Date().getTime() + this.interval;
+        const triggerAtMillis = new Date().getTime() + interval;
         const pendingIntent = this.getPendingIntent();
 
-        if (sdkVersion >= 23) {
-            this.alarmManager.setExactAndAllowWhileIdle(
+        if (this.sdkVersion >= 23) {
+            this.osAlarmManager.setExactAndAllowWhileIdle(
                 alarmType,
                 triggerAtMillis,
                 pendingIntent
             );
-        } else if (sdkVersion >= 19) {
-            this.alarmManager.setExact(
+        } else if (this.sdkVersion >= 19) {
+            this.osAlarmManager.setExact(
                 alarmType,
                 triggerAtMillis,
                 pendingIntent
             );
         } else {
-            this.alarmManager.set(alarmType, triggerAtMillis, pendingIntent);
+            this.osAlarmManager.set(alarmType, triggerAtMillis, pendingIntent);
         }
     }
 
+    cancel(): void {
+        if (!this.alarmUp) {
+            return;
+        }
+        const pendingIntent = this.getPendingIntent();
+        this.osAlarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+        this.pendingIntent = null;
+    }
+
     private getPendingIntent(): android.app.PendingIntent {
-        if (this.pendingIntent === null) {
+        if (!this.pendingIntent) {
             this.pendingIntent = android.app.PendingIntent.getBroadcast(
                 androidApp.context,
                 0,
@@ -95,4 +81,4 @@ export class AndroidAlarmManager implements AlarmManager {
 
         return this.pendingIntent;
     }
-} */
+}

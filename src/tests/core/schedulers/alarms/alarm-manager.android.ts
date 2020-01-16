@@ -6,7 +6,7 @@ describe('Android Alarm Manager', () => {
     const interval = 60000;
 
     beforeEach(() => {
-        systemAlarmManager = ({} as any) as android.app.AlarmManager;
+        systemAlarmManager = createOsAlarmManagerMock() as android.app.AlarmManager;
         alarmManager = new AndroidAlarmManager(systemAlarmManager, 23);
         spyOn(systemAlarmManager, 'setExactAndAllowWhileIdle');
         spyOn(systemAlarmManager, 'setExact');
@@ -19,6 +19,7 @@ describe('Android Alarm Manager', () => {
         expect(systemAlarmManager.setExactAndAllowWhileIdle).toHaveBeenCalled();
         expect(systemAlarmManager.setExact).not.toHaveBeenCalled();
         expect(systemAlarmManager.set).not.toHaveBeenCalled();
+        expect(alarmManager.alarmUp).toBeTruthy();
     });
 
     it('sets an exact alarm when SDK version is over 18 and bellow 23', () => {
@@ -29,6 +30,7 @@ describe('Android Alarm Manager', () => {
         ).not.toHaveBeenCalled();
         expect(systemAlarmManager.setExact).toHaveBeenCalled();
         expect(systemAlarmManager.set).not.toHaveBeenCalled();
+        expect(alarmManager.alarmUp).toBeTruthy();
     });
 
     it('sets a regular alarm when skd version is bellow 19', () => {
@@ -39,11 +41,34 @@ describe('Android Alarm Manager', () => {
         ).not.toHaveBeenCalled();
         expect(systemAlarmManager.setExact).not.toHaveBeenCalled();
         expect(systemAlarmManager.set).toHaveBeenCalled();
+        expect(alarmManager.alarmUp).toBeTruthy();
     });
 
     it('cancels a scheduled alarm', () => {
         alarmManager.set(interval);
         alarmManager.cancel();
         expect(systemAlarmManager.cancel).toHaveBeenCalled();
+        expect(alarmManager.alarmUp).not.toBeTruthy();
     });
 });
+
+function createOsAlarmManagerMock(): any {
+    return {
+        setExactAndAllowWhileIdle(
+            p0: number,
+            p1: number,
+            p2: android.app.PendingIntent
+        ): void {
+            return;
+        },
+        setExact(p0: number, p1: number, p2: android.app.PendingIntent): void {
+            return;
+        },
+        set(p0: number, p1: number, p2: android.app.PendingIntent): void {
+            return;
+        },
+        cancel(p0: android.app.PendingIntent): void {
+            return;
+        }
+    };
+}

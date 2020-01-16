@@ -16,10 +16,10 @@ export class AndroidAlarmScheduler {
             return possibleExisting;
         }
         const allTasks = await this.scheduledTaskStore.getAllSortedByInterval();
-        if (allTasks.length === 0) {
-            this.alarmManager.set(taskToSchedule.interval);
-        } else if (allTasks[0].interval > taskToSchedule.interval) {
-            this.alarmManager.cancel();
+        if (
+            allTasks.length === 0 ||
+            allTasks[0].interval > taskToSchedule.interval
+        ) {
             this.alarmManager.set(taskToSchedule.interval);
         }
         const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
@@ -40,7 +40,6 @@ export class AndroidAlarmScheduler {
             allTasks[0].interval === possibleExisting.interval &&
             allTasks[1].interval !== possibleExisting.interval
         ) {
-            this.alarmManager.cancel();
             this.alarmManager.set(allTasks[1].interval);
         }
         await this.scheduledTaskStore.delete(id);

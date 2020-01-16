@@ -58,6 +58,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         return this.scheduledTaskFromRow(rows[0]);
     }
 
+    // TODO: Allow filtering by type
     async getAllSortedByInterval(): Promise<Array<ScheduledTask>> {
         await this.createDB();
         const rows = await nSQL(SCHEDULED_TASKS_TABLE)

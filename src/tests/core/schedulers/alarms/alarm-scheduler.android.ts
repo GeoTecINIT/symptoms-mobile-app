@@ -76,7 +76,6 @@ describe('Android Alarm Scheduler', () => {
 
         const scheduledTask = await androidAlarm.schedule(higherFreqTask);
 
-        expect(manager.cancel).toHaveBeenCalled();
         expect(manager.set).toHaveBeenCalledWith(higherFreqTask.interval);
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
@@ -108,7 +107,6 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.cancel(higherFreqST.id);
 
-        expect(manager.cancel).toHaveBeenCalled();
         expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
         expect(taskStore.delete).toHaveBeenCalledWith(higherFreqST.id);
     });
