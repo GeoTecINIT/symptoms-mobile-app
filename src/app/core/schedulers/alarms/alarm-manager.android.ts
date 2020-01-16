@@ -1,9 +1,32 @@
+import { android as androidApp } from 'tns-core-modules/application/application';
+import { AlarmReceiver } from './alarm-receiver.android';
+
 export interface AlarmManager {
     set(interval: number): void;
     cancel(): void;
 }
 
+const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
+
 export class AndroidAlarmManager implements AlarmManager {
+    receiverIntent: android.content.Intent;
+    pendingIntent: android.app.PendingIntent;
+
+    constructor(
+        private alarmManager = androidApp.context.getSystemService(
+            ALARM_SERVICE
+        ) as android.app.AlarmManager,
+        private sdkVersion = android.os.Build.VERSION.SDK_INT
+    ) {
+        this.alarmManager = androidApp.context.getSystemService(
+            android.content.Context.ALARM_SERVICE
+        );
+        this.receiverIntent = new android.content.Intent(
+            androidApp.context,
+            AlarmReceiver.class
+        );
+    }
+
     set(interval: number): void {
         throw new Error('Method not implemented.');
     }

@@ -6,7 +6,7 @@ import {
     ScheduledTask
 } from '~/app/core/schedulers/scheduled-task';
 
-describe('Android alarm', () => {
+describe('Android Alarm Scheduler', () => {
     const manager = createAlarmManagerMock();
     const taskStore = createScheduledTaskStoreMock();
     const androidAlarm = new AndroidAlarmScheduler(manager, taskStore);
