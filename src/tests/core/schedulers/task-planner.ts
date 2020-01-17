@@ -6,19 +6,19 @@ import {
 import { TaskPlanner } from '~/app/core/schedulers/task-planner';
 import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
 import { uuid } from '~/app/core/utils/uuid';
-import { async } from 'rxjs/internal/scheduler/async';
 
 describe('Task Planner', () => {
     const schedulerType: SchedulerType = 'alarm';
     const offset = 30000; // The half of alarm scheduler's fastest triggering frequency
     const scheduledTasksStore = createScheduledTaskStoreMock();
-    const currentTime = new Date().getTime();
     const taskPlanner = new TaskPlanner(
         schedulerType,
         scheduledTasksStore,
         offset
     );
+
     const stdInterval = 60000;
+    const currentTime = new Date().getTime();
     const ephemeralTaskToBeRun = new ScheduledTask(
         schedulerType,
         { task: 'dummyTask', interval: stdInterval, recurrent: false },
@@ -47,9 +47,9 @@ describe('Task Planner', () => {
     );
     const sortedTasks = [
         ephemeralTaskToBeRun,
-        recurrentTaskToBeRun,
         ephemeralTaskNotToBeRun,
-        recurrentTaskToBeRun
+        recurrentTaskToBeRun,
+        recurrentTaskNotToBeRun
     ];
 
     it('lists the tasks to be run for a given type', async () => {
