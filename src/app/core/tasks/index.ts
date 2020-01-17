@@ -1,13 +1,10 @@
-export const tasks: Tasks = {};
+import { Task } from './task';
+import { SimpleTask } from './simple-task';
 
 export interface Tasks {
     [key: string]: Task;
 }
 
-export abstract class Task {
-    abstract run(): any;
-
-    canRun() {
-        return true;
-    }
-}
+export const tasks: Tasks = {
+    simpleTask: new SimpleTask(() => console.log('It works!'))
+};

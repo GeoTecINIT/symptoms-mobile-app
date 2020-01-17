@@ -1,3 +1,5 @@
+import { setTasks } from '~/app/core/tasks/task-provider';
+import { testTasks } from '../tasks';
 import {
     SchedulerType,
     ScheduledTask,
@@ -8,6 +10,7 @@ import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store
 import { uuid } from '~/app/core/utils/uuid';
 
 describe('Task Planner', () => {
+    setTasks(testTasks);
     const schedulerType: SchedulerType = 'alarm';
     const offset = 30000; // The half of alarm scheduler's fastest triggering frequency
     const scheduledTasksStore = createScheduledTaskStoreMock();
@@ -15,6 +18,7 @@ describe('Task Planner', () => {
 
     const stdInterval = 60000;
     const currentTime = new Date().getTime();
+
     const ephemeralTaskToBeRun = new ScheduledTask(
         schedulerType,
         { task: 'dummyTask', interval: stdInterval, recurrent: false },
@@ -29,7 +33,11 @@ describe('Task Planner', () => {
     );
     const recurrentTaskToBeRun = new ScheduledTask(
         schedulerType,
-        { task: 'dummyTask', interval: stdInterval + offset, recurrent: true },
+        {
+            task: 'dummyForegroundTask',
+            interval: stdInterval + offset,
+            recurrent: true
+        },
         uuid(),
         currentTime - 2 * stdInterval + offset,
         currentTime - stdInterval
@@ -41,6 +49,7 @@ describe('Task Planner', () => {
         currentTime - 4 * stdInterval,
         currentTime - stdInterval
     );
+
     const sortedTasks = [
         ephemeralTaskToBeRun,
         recurrentTaskToBeRun,
@@ -78,12 +87,26 @@ describe('Task Planner', () => {
         expect(tasks.length).toBe(0);
     });
 
-    it('checks if at least a task to be run requires foreground execution', () => {
-        throw new Error('Not implemented');
+    it('checks if at least a task to be run requires foreground execution', async () => {
+        spyOn(scheduledTasksStore, 'getAllSortedByInterval')
+            .withArgs(schedulerType)
+            .and.returnValue(Promise.resolve(sortedTasks));
+        const requiresForeground = await taskPlanner.requiresForeground();
+        expect(requiresForeground).toBeTruthy();
     });
 
-    it('returns false when no tasks need to be run in the foreground', () => {
-        throw new Error('Not implemented');
+    it('returns false when no tasks need to be run in the foreground', async () => {
+        spyOn(scheduledTasksStore, 'getAllSortedByInterval')
+            .withArgs(schedulerType)
+            .and.returnValue(
+                Promise.resolve([
+                    ephemeralTaskToBeRun,
+                    ephemeralTaskNotToBeRun,
+                    recurrentTaskNotToBeRun
+                ])
+            );
+        const requiresForeground = await taskPlanner.requiresForeground();
+        expect(requiresForeground).toBeFalsy();
     });
 
     it('determines if there are tasks that will require another run', async () => {
