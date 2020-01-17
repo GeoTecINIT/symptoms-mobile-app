@@ -11,11 +11,7 @@ describe('Task Planner', () => {
     const schedulerType: SchedulerType = 'alarm';
     const offset = 30000; // The half of alarm scheduler's fastest triggering frequency
     const scheduledTasksStore = createScheduledTaskStoreMock();
-    const taskPlanner = new TaskPlanner(
-        schedulerType,
-        scheduledTasksStore,
-        offset
-    );
+    let taskPlanner: TaskPlanner;
 
     const stdInterval = 60000;
     const currentTime = new Date().getTime();
@@ -47,10 +43,19 @@ describe('Task Planner', () => {
     );
     const sortedTasks = [
         ephemeralTaskToBeRun,
-        ephemeralTaskNotToBeRun,
         recurrentTaskToBeRun,
+        ephemeralTaskNotToBeRun,
         recurrentTaskNotToBeRun
     ];
+
+    beforeEach(() => {
+        taskPlanner = new TaskPlanner(
+            schedulerType,
+            scheduledTasksStore,
+            offset,
+            currentTime
+        );
+    });
 
     it('lists the tasks to be run for a given type', async () => {
         spyOn(scheduledTasksStore, 'getAllSortedByInterval')
@@ -108,7 +113,9 @@ describe('Task Planner', () => {
     it('returns true when all the tasks are finite but do not fit in this execution window', async () => {
         spyOn(scheduledTasksStore, 'getAllSortedByInterval')
             .withArgs(schedulerType)
-            .and.returnValue(Promise.resolve([ephemeralTaskNotToBeRun]));
+            .and.returnValue(
+                Promise.resolve([ephemeralTaskToBeRun, ephemeralTaskNotToBeRun])
+            );
         const willContinue = await taskPlanner.willContinue();
         expect(willContinue).toBeTruthy();
     });

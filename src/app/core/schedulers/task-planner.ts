@@ -2,20 +2,18 @@ import { SchedulerType, ScheduledTask } from './scheduled-task';
 import { ScheduledTasksStore } from './scheduled-tasks-store';
 
 export class TaskPlanner {
-    private currentTime: number;
+    private _allTasks: Array<ScheduledTask>;
 
     constructor(
         private schedulerType: SchedulerType,
         private scheduledTasksStore: ScheduledTasksStore,
-        private intervalOffset: number
-    ) {
-        this.currentTime = new Date().getTime();
-    }
+        private intervalOffset: number,
+        private currentTime = new Date().getTime()
+    ) {}
 
     async tasksToRun(): Promise<Array<ScheduledTask>> {
-        const allTasks = await this.scheduledTasksStore.getAllSortedByInterval(
-            this.schedulerType
-        );
+        const allTasks = await this.allTasks();
+
         const tasksToRunNow = allTasks.filter((task) =>
             this.determineIfTaskShouldBeRun(task)
         );
@@ -28,11 +26,23 @@ export class TaskPlanner {
     }
 
     async willContinue(): Promise<boolean> {
-        throw new Error('Not implemented');
+        return (await this.nextInterval()) !== -1;
     }
 
     async nextInterval(): Promise<number> {
-        throw new Error('Not implemented');
+        const allTasks = await this.allTasks();
+
+        if (allTasks.length === 0) {
+            return -1;
+        }
+
+        const tasksToRunInTheFuture = allTasks.filter(
+            (task) => task.recurrent || !this.determineIfTaskShouldBeRun(task)
+        );
+
+        return tasksToRunInTheFuture.length === 0
+            ? -1
+            : tasksToRunInTheFuture[0].interval;
     }
 
     private determineIfTaskShouldBeRun(task: ScheduledTask): boolean {
@@ -45,5 +55,15 @@ export class TaskPlanner {
             this.currentTime >=
             priorExecution + task.interval - this.intervalOffset
         );
+    }
+
+    private async allTasks(): Promise<Array<ScheduledTask>> {
+        if (!this._allTasks) {
+            this._allTasks = await this.scheduledTasksStore.getAllSortedByInterval(
+                this.schedulerType
+            );
+        }
+
+        return this._allTasks;
     }
 }
