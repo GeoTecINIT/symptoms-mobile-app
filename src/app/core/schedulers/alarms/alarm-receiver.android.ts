@@ -1,8 +1,9 @@
 import { TaskPlanner } from '../task-planner';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
 import { AndroidAlarmManager, AlarmManager } from './alarm-manager.android';
+import { startAlarmRunnerService } from './alarm-runner-service.android';
 
-@JavaProxy('es.uji.geotec.symptomsapp.AlarmReceiver')
+@JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
     private taskPlanner: TaskPlanner;
     private alarmManager: AlarmManager;
@@ -48,9 +49,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         const tasksToRun = await this.taskPlanner.tasksToRun();
         if (tasksToRun.length > 0) {
             const requiresForeground = await this.taskPlanner.requiresForeground();
-            console.log(
-                `Task execution requires foreground runner: ${requiresForeground}`
-            );
+            startAlarmRunnerService(requiresForeground);
         } else {
             console.log(
                 'AlarmReceiver: WARNING, triggered without tasks to run'

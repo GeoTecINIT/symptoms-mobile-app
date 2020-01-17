@@ -31,7 +31,10 @@ const {
 } = require("nativescript-dev-webpack/plugins/NativeScriptAngularCompilerPlugin");
 const hashSalt = Date.now().toString();
 
-const ANDROID_COMPONENTS = ["core/schedulers/alarms/alarm-receiver.android.ts"];
+const ANDROID_COMPONENTS = [
+  "core/schedulers/alarms/alarm-receiver.android.ts",
+  "core/schedulers/alarms/alarm-runner-service.android.ts"
+];
 
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
