@@ -31,16 +31,17 @@ const {
 } = require("nativescript-dev-webpack/plugins/NativeScriptAngularCompilerPlugin");
 const hashSalt = Date.now().toString();
 
-// WARNING: Place here only those components that AREN'T called (e.g. Component.class
-// reference) by any other application component.
-const ANDROID_ENTRY_POINT_COMPONENTS = [];
+const ANDROID_COMPONENTS = [
+  "core/schedulers/alarms/alarm-receiver.android.ts",
+  "core/schedulers/alarms/alarm-runner-service.android.ts"
+];
 
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
   const appComponents = [
     "tns-core-modules/ui/frame",
     "tns-core-modules/ui/frame/activity",
-    ...ANDROID_ENTRY_POINT_COMPONENTS.map(componentPath =>
+    ...ANDROID_COMPONENTS.map(componentPath =>
       resolve(__dirname, `src/app/${componentPath}`)
     )
   ];

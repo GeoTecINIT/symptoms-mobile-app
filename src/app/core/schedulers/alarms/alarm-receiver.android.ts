@@ -1,8 +1,12 @@
 import { TaskPlanner } from '../task-planner';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
-import { startAlarmRunnerService } from './alarm-runner-service.android';
 
+const RUN_IN_FOREGROUND = 'foreground';
+const ALARM_RUNNER_SERVICE =
+    'es.uji.geotec.symptomsapp.alarms.AlarmRunnerService';
+
+// WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
     private taskPlanner: TaskPlanner;
@@ -18,7 +22,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         this.taskPlanner = new TaskPlanner('alarm', scheduledTasksDB, offset);
         this.alarmManager = new AndroidAlarmManager();
 
-        this.handleAlarmTrigger()
+        this.handleAlarmTrigger(context)
             .then(() => {
                 console.log('AlarmReceiver: Alarm handled');
             })
@@ -27,9 +31,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
             });
     }
 
-    private async handleAlarmTrigger() {
+    private async handleAlarmTrigger(context: android.content.Context) {
         await this.rescheduleIfNeeded();
-        await this.startTaskRunnerService();
+        await this.startTaskRunnerService(context);
     }
 
     private async rescheduleIfNeeded() {
@@ -45,15 +49,37 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         }
     }
 
-    private async startTaskRunnerService() {
+    private async startTaskRunnerService(context: android.content.Context) {
         const tasksToRun = await this.taskPlanner.tasksToRun();
         if (tasksToRun.length > 0) {
             const requiresForeground = await this.taskPlanner.requiresForeground();
-            startAlarmRunnerService(requiresForeground);
+            this.startAlarmRunnerService(context, requiresForeground);
         } else {
             console.log(
                 'AlarmReceiver: WARNING, triggered without tasks to run'
             );
+        }
+    }
+
+    private startAlarmRunnerService(
+        context: android.content.Context,
+        inForeground: boolean
+    ) {
+        const appContext: android.content.Context = context;
+        const startRunnerService = new android.content.Intent();
+        const alarmRunnerService = new android.content.ComponentName(
+            context,
+            ALARM_RUNNER_SERVICE
+        );
+        startRunnerService.setComponent(alarmRunnerService);
+        startRunnerService.putExtra(RUN_IN_FOREGROUND, inForeground);
+        if (inForeground) {
+            androidx.core.content.ContextCompat.startForegroundService(
+                appContext,
+                startRunnerService
+            );
+        } else {
+            appContext.startService(startRunnerService);
         }
     }
 }

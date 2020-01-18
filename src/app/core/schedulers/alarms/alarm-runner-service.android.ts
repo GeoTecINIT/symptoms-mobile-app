@@ -1,6 +1,6 @@
-import { android as androidApp } from 'tns-core-modules/application/application';
 const RUN_IN_FOREGROUND = 'foreground';
 
+// WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmRunnerService')
 export class AlarmRunnerService extends android.app.Service {
     onCreate() {
@@ -35,22 +35,5 @@ export class AlarmRunnerService extends android.app.Service {
     onDestroy() {
         console.log('AlarmRunnerService: onDestroy called!');
         super.onDestroy();
-    }
-}
-
-export function startAlarmRunnerService(inForeground: boolean) {
-    const appContext: android.content.Context = androidApp.context;
-    const startRunnerService = new android.content.Intent(
-        appContext,
-        AlarmRunnerService.class
-    );
-    startRunnerService.putExtra(RUN_IN_FOREGROUND, inForeground);
-    if (inForeground) {
-        androidx.core.content.ContextCompat.startForegroundService(
-            appContext,
-            startRunnerService
-        );
-    } else {
-        appContext.startService(startRunnerService);
     }
 }
