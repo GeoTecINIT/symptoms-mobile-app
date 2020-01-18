@@ -1,5 +1,4 @@
-import { Tasks, tasks as prodTasks } from '.';
-import { Task } from './task';
+import { Tasks, Task, tasks as prodTasks } from '.';
 
 let tasks: Tasks = prodTasks;
 

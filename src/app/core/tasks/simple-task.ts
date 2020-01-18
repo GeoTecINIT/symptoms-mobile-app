@@ -1,15 +1,14 @@
-import { Task } from './task';
+import { Task } from '.';
 
 export class SimpleTask extends Task {
-    constructor(private functionToBeRun: () => any, private background = true) {
+    functionToBeRun: () => any;
+
+    constructor(f: () => any) {
         super();
+        this.functionToBeRun = f;
     }
 
     run() {
         this.functionToBeRun();
-    }
-
-    runsInBackground() {
-        return this.background;
     }
 }
