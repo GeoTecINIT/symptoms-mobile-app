@@ -120,6 +120,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
             .exec();
     }
 
+    // TODO: Extract to an isolated class
     private async createDB() {
         if (this.dbInitialized) {
             return;
