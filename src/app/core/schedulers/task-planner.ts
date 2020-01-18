@@ -1,5 +1,6 @@
 import { SchedulerType, ScheduledTask } from './scheduled-task';
 import { ScheduledTasksStore } from './scheduled-tasks-store';
+import { getTask } from '../tasks/task-provider';
 
 export class TaskPlanner {
     private _allTasks: Array<ScheduledTask>;
@@ -22,7 +23,12 @@ export class TaskPlanner {
     }
 
     async requiresForeground(): Promise<boolean> {
-        throw new Error('Not implemented');
+        const tasksToRun = await this.tasksToRun();
+        const allRunInBackground = tasksToRun.every((scheduledTask) =>
+            getTask(scheduledTask.task).runsInBackground()
+        );
+
+        return !allRunInBackground;
     }
 
     async willContinue(): Promise<boolean> {
