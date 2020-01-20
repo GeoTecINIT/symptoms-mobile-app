@@ -8,23 +8,31 @@ import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.andr
 export class AlarmReceiver extends android.content.BroadcastReceiver {
     private taskPlanner: TaskPlanner;
     private alarmManager: AlarmManager;
+    private timeOffset: number;
+    private currentTime: number;
 
     onReceive(
         context: android.content.Context,
         intent: android.content.Intent
     ) {
-        console.log('AlarmReceiver: Alarm trigger');
+        this.log('Alarm triggered');
 
-        const offset = 30000; // TODO: Discuss about the most suitable value
-        this.taskPlanner = new TaskPlanner('alarm', scheduledTasksDB, offset);
+        this.timeOffset = 30000; // TODO: Discuss about the most suitable value
+        this.currentTime = new Date().getTime();
+        this.taskPlanner = new TaskPlanner(
+            'alarm',
+            scheduledTasksDB,
+            this.timeOffset,
+            this.currentTime
+        );
         this.alarmManager = new AndroidAlarmManager();
 
         this.handleAlarmTrigger(context)
             .then(() => {
-                console.log('AlarmReceiver: Alarm handled');
+                this.log('Alarm handled');
             })
             .catch((err) => {
-                console.log(`AlarmReceiver: ${err}`);
+                this.log(`${err}`);
             });
     }
 
@@ -38,11 +46,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         if (willContinue) {
             const nextInterval = await this.taskPlanner.nextInterval();
             this.alarmManager.set(nextInterval);
-            console.log(
-                `AlarmReceiver: Next alarm will be run in: ${nextInterval}`
-            );
+            this.log(`Next alarm will be run in: ${nextInterval}`);
         } else {
-            console.log('AlarmReceiver: Won\'t reschedule');
+            this.log('AlarmReceiver: Won\'t reschedule');
         }
     }
 
@@ -52,9 +58,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
             const requiresForeground = await this.taskPlanner.requiresForeground();
             this.startAlarmRunnerService(context, requiresForeground);
         } else {
-            console.log(
-                'AlarmReceiver: WARNING, triggered without tasks to run'
-            );
+            this.log('WARNING - triggered without tasks to run');
         }
     }
 
@@ -62,10 +66,11 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         context: android.content.Context,
         inForeground: boolean
     ) {
-        const startRunnerService = createAlarmRunnerServiceIntent(
-            context,
-            inForeground
-        );
+        const startRunnerService = createAlarmRunnerServiceIntent(context, {
+            runInForeground: inForeground,
+            timeOffset: this.timeOffset,
+            invocationTime: this.currentTime
+        });
         if (inForeground) {
             androidx.core.content.ContextCompat.startForegroundService(
                 context,
@@ -74,5 +79,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         } else {
             context.startService(startRunnerService);
         }
+    }
+
+    private log(message: string) {
+        console.log(`AlarmReceiver: ${message}`);
     }
 }

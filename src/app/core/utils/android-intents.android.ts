@@ -5,28 +5,43 @@ export function createAlarmReceiverIntent(appContext: android.content.Context) {
 }
 
 const ARS_RUN_IN_FOREGROUND = 'foreground';
+const ARS_TIME_OFFSET = 'time-offset';
+const ARS_INVOCATION_TIME = 'invocation-time';
+interface AlarmRunnerParams {
+    runInForeground: boolean;
+    timeOffset: number;
+    invocationTime: number;
+}
+
 export function createAlarmRunnerServiceIntent(
     appContext: android.content.Context,
-    runInForeground: boolean
+    params: AlarmRunnerParams
 ) {
     const intent = createAppComponentIntent(
         appContext,
         '.alarms.AlarmRunnerService'
     );
-    intent.putExtra(ARS_RUN_IN_FOREGROUND, runInForeground);
+    intent.putExtra(ARS_RUN_IN_FOREGROUND, params.runInForeground);
+    intent.putExtra(ARS_TIME_OFFSET, params.timeOffset);
+    intent.putExtra(ARS_INVOCATION_TIME, params.invocationTime);
 
     return intent;
 }
 
 export function unpackAlarmRunnerServiceIntent(
     intent: android.content.Intent
-): any {
+): AlarmRunnerParams {
     if (!intent) {
         return;
     }
 
     return {
-        runInForeground: intent.getBooleanExtra(ARS_RUN_IN_FOREGROUND, false)
+        runInForeground: intent.getBooleanExtra(ARS_RUN_IN_FOREGROUND, false),
+        timeOffset: intent.getIntExtra(ARS_TIME_OFFSET, 0),
+        invocationTime: intent.getLongExtra(
+            ARS_INVOCATION_TIME,
+            new Date().getTime()
+        )
     };
 }
 

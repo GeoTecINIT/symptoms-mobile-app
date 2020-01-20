@@ -18,16 +18,23 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.items = this._itemService.getItems();
-        schedule(60, 'simpleTask')
-            .then((scheduledTask) => {
-                console.log(
-                    `Task successfully scheduled: ${JSON.stringify(
-                        scheduledTask
-                    )}`
-                );
+        Promise.all([
+            schedule(60, 'simpleTask'),
+            schedule(120, 'simpleTask'),
+            schedule(240, 'simpleTask')
+        ])
+            .then((scheduledTasks) => {
+                scheduledTasks.forEach((scheduledTask) => {
+                    console.log(
+                        `Task successfully scheduled: ${JSON.stringify(
+                            scheduledTask
+                        )}`
+                    );
+                });
+
                 if (!this.alarmManager.alarmUp) {
                     console.log('Alarm was not up! Scheduling...');
-                    this.alarmManager.set(scheduledTask.interval);
+                    this.alarmManager.set(scheduledTasks[0].interval);
                 }
             })
             .catch((err) => {
