@@ -1,12 +1,15 @@
 import { Task } from './task';
 
 export class SimpleTask extends Task {
-    constructor(private functionToBeRun: () => any, private background = true) {
+    constructor(
+        private functionToBeRun: () => Promise<any>,
+        private background = true
+    ) {
         super();
     }
 
-    run() {
-        this.functionToBeRun();
+    async run() {
+        await this.functionToBeRun();
     }
 
     runsInBackground() {

@@ -2,7 +2,7 @@ import { Task } from './task';
 import { SimpleTask } from './simple-task';
 
 export const tasks: Tasks = {
-    simpleTask: new SimpleTask(() => 'Simple task run!')
+    simpleTask: new SimpleTask(async () => console.log('Simple task run!'))
 };
 
 export interface Tasks {

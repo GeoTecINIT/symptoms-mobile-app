@@ -1,13 +1,12 @@
 import {
     SchedulerType,
-    ScheduledTask,
-    TaskToSchedule
+    ScheduledTask
 } from '~/app/core/schedulers/scheduled-task';
 import { TaskPlanner } from '~/app/core/schedulers/task-planner';
-import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
 import { uuid } from '~/app/core/utils/uuid';
 import { setTasks } from '~/app/core/tasks/task-provider';
 import { testTasks } from '../tasks';
+import { createScheduledTaskStoreMock } from '.';
 
 describe('Task Planner', () => {
     setTasks(testTasks);
@@ -160,29 +159,3 @@ describe('Task Planner', () => {
         expect(nextInterval).toBe(-1);
     });
 });
-
-function createScheduledTaskStoreMock(): ScheduledTasksStore {
-    return {
-        insert(scheduledTask: ScheduledTask) {
-            return Promise.resolve();
-        },
-        delete(task: string) {
-            return Promise.resolve();
-        },
-        get(task: TaskToSchedule | string) {
-            return Promise.resolve(null);
-        },
-        getAllSortedByInterval() {
-            return Promise.resolve([]);
-        },
-        increaseErrorCount(task: string) {
-            return Promise.resolve();
-        },
-        increaseTimeoutCount(task: string) {
-            return Promise.resolve();
-        },
-        updateLastRun(task: string, timestamp: number) {
-            return Promise.resolve();
-        }
-    };
-}
