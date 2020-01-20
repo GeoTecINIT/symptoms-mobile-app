@@ -1,4 +1,4 @@
-const RUN_IN_FOREGROUND = 'foreground';
+import { unpackAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmRunnerService')
@@ -15,14 +15,11 @@ export class AlarmRunnerService extends android.app.Service {
     ): number {
         super.onStartCommand(intent, flags, startId);
         console.log('AlarmRunnerService: Service called!');
-        if (intent) {
-            const runInForeground = intent
-                .getExtras()
-                .getBoolean(RUN_IN_FOREGROUND);
-            console.log(
-                `AlarmRunnerService: Running in foreground: ${runInForeground}`
-            );
-        }
+
+        const { runInForeground } = unpackAlarmRunnerServiceIntent(intent);
+        console.log(
+            `AlarmRunnerService: Running in foreground: ${runInForeground}`
+        );
         this.stopSelf(startId);
 
         return android.app.Service.START_STICKY;

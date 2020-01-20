@@ -1,10 +1,7 @@
 import { TaskPlanner } from '../task-planner';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
-
-const RUN_IN_FOREGROUND = 'foreground';
-const ALARM_RUNNER_SERVICE =
-    'es.uji.geotec.symptomsapp.alarms.AlarmRunnerService';
+import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
@@ -65,21 +62,17 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         context: android.content.Context,
         inForeground: boolean
     ) {
-        const appContext: android.content.Context = context;
-        const startRunnerService = new android.content.Intent();
-        const alarmRunnerService = new android.content.ComponentName(
+        const startRunnerService = createAlarmRunnerServiceIntent(
             context,
-            ALARM_RUNNER_SERVICE
+            inForeground
         );
-        startRunnerService.setComponent(alarmRunnerService);
-        startRunnerService.putExtra(RUN_IN_FOREGROUND, inForeground);
         if (inForeground) {
             androidx.core.content.ContextCompat.startForegroundService(
-                appContext,
+                context,
                 startRunnerService
             );
         } else {
-            appContext.startService(startRunnerService);
+            context.startService(startRunnerService);
         }
     }
 }

@@ -1,4 +1,5 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
+import { createAlarmReceiverIntent } from '../../utils/android-intents.android';
 
 export interface AlarmManager {
     set(interval: number): void;
@@ -6,7 +7,6 @@ export interface AlarmManager {
 }
 
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
-const ALARM_RECEIVER = 'es.uji.geotec.symptomsapp.alarms.AlarmReceiver';
 
 export class AndroidAlarmManager implements AlarmManager {
     get alarmUp(): boolean {
@@ -28,12 +28,7 @@ export class AndroidAlarmManager implements AlarmManager {
         ) as android.app.AlarmManager,
         private sdkVersion = android.os.Build.VERSION.SDK_INT
     ) {
-        this.receiverIntent = new android.content.Intent();
-        const alarmReceiver = new android.content.ComponentName(
-            androidApp.context,
-            ALARM_RECEIVER
-        );
-        this.receiverIntent.setComponent(alarmReceiver);
+        this.receiverIntent = createAlarmReceiverIntent(androidApp.context);
     }
 
     set(interval: number): void {
