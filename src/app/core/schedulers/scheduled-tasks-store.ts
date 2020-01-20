@@ -7,6 +7,7 @@ const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
 
 class ScheduledTasksDBStore implements ScheduledTasksStore {
     private dbInitialized: boolean = false;
+    private createDBProcedure: Promise<void>;
 
     async insert(scheduledTask: ScheduledTask): Promise<void> {
         await this.createDB();
@@ -125,26 +126,29 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         if (this.dbInitialized) {
             return;
         }
-        await nSQL().createDatabase({
-            id: DB_NAME,
-            mode: new NativeSQLite(),
-            tables: [
-                {
-                    name: 'scheduledTasks',
-                    model: {
-                        'id:uuid': { pk: true },
-                        'type:string': {},
-                        'task:string': {},
-                        'interval:int': {},
-                        'recurrent:boolean': {},
-                        'createdAt:int': {},
-                        'errorCount:int': {},
-                        'timeoutCount:int': {},
-                        'lastRun:int': {}
+        if (!this.createDBProcedure) {
+            this.createDBProcedure = nSQL().createDatabase({
+                id: DB_NAME,
+                mode: new NativeSQLite(),
+                tables: [
+                    {
+                        name: 'scheduledTasks',
+                        model: {
+                            'id:uuid': { pk: true },
+                            'type:string': {},
+                            'task:string': {},
+                            'interval:int': {},
+                            'recurrent:boolean': {},
+                            'createdAt:int': {},
+                            'errorCount:int': {},
+                            'timeoutCount:int': {},
+                            'lastRun:int': {}
+                        }
                     }
-                }
-            ]
-        });
+                ]
+            });
+        }
+        await this.createDBProcedure;
         this.dbInitialized = true;
     }
 
