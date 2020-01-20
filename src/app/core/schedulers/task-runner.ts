@@ -32,18 +32,33 @@ export class TaskRunner {
         );
     }
 
-    private async runTask(id: string, task: Task) {
+    private async runTask(id: string, task: Task): Promise<void> {
         await this.taskStore.updateLastRun(id, new Date().getTime());
-        this.timeouts[id] = setTimeout(async () => {
-            task.cancel();
-            await this.taskStore.increaseTimeoutCount(id);
-        }, task.timeout);
 
         try {
-            await task.run();
+            await this.runWithTimeout(id, task);
         } catch (error) {
             await this.taskStore.increaseErrorCount(id);
         }
+    }
+
+    private runWithTimeout(id: string, task: Task): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.timeouts[id] = setTimeout(() => {
+                task.cancel();
+                this.taskStore.increaseTimeoutCount(id).then(() => resolve());
+            });
+
+            task.run()
+                .then(() => {
+                    clearTimeout(this.timeouts[id]);
+                    resolve();
+                })
+                .catch((err) => {
+                    clearTimeout(this.timeouts[id]);
+                    reject(err);
+                });
+        });
     }
 
     private getTasks() {

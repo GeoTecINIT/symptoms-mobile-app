@@ -36,7 +36,7 @@ describe('Task runner', () => {
     ];
 
     const taskRunner = new TaskRunner(scheduledTasks, taskStore);
-    const expectedTimeout = 15000;
+    const expectedTimeout = 100;
     setTasks(testTasks);
 
     beforeEach(() => {
@@ -47,12 +47,6 @@ describe('Task runner', () => {
         spyOn(taskStore, 'increaseTimeoutCount').and.returnValue(
             Promise.resolve()
         );
-
-        jasmine.clock().install();
-    });
-
-    afterEach(() => {
-        jasmine.clock().uninstall();
     });
 
     it('calculates the total timeout of all the tasks to be run.', () => {
@@ -61,9 +55,7 @@ describe('Task runner', () => {
     });
 
     it('executes all the tasks successfully', async () => {
-        const run = taskRunner.run();
-        jasmine.clock().tick(expectedTimeout + 5);
-        await run;
+        await taskRunner.run();
 
         expect(taskStore.updateLastRun).toHaveBeenCalledWith(
             expectedDummyTask.id,
@@ -80,20 +72,28 @@ describe('Task runner', () => {
     });
 
     it('increases the error count of a task that has failed', async () => {
-        const run = taskRunner.run();
-        jasmine.clock().tick(expectedTimeout + 5);
-        await run;
+        await taskRunner.run();
 
+        expect(taskStore.increaseErrorCount).not.toHaveBeenCalledWith(
+            expectedDummyTask.id
+        );
         expect(taskStore.increaseErrorCount).toHaveBeenCalledWith(
             expectedFailedTask.id
+        );
+        expect(taskStore.increaseErrorCount).not.toHaveBeenCalledWith(
+            expectedTimeoutTask.id
         );
     });
 
     it('increases the timeout count of a task that has failed', async () => {
-        const run = taskRunner.run();
-        jasmine.clock().tick(expectedTimeout + 5);
-        await run;
+        await taskRunner.run();
 
+        expect(taskStore.increaseTimeoutCount).not.toHaveBeenCalledWith(
+            expectedDummyTask.id
+        );
+        expect(taskStore.increaseTimeoutCount).not.toHaveBeenCalledWith(
+            expectedFailedTask.id
+        );
         expect(taskStore.increaseTimeoutCount).toHaveBeenCalledWith(
             expectedTimeoutTask.id
         );
