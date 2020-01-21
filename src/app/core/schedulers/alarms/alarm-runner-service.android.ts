@@ -107,6 +107,7 @@ export class AlarmRunnerService extends android.app.Service {
             AndroidNotification.BehaviorTracking,
             createNotification(this, AndroidNotification.BehaviorTracking)
         );
+        this.inForeground = true;
         this.log('Running in foreground');
     }
 
@@ -117,6 +118,7 @@ export class AlarmRunnerService extends android.app.Service {
         }
         const andRemoveNotification = true;
         this.stopForeground(andRemoveNotification);
+        this.inForeground = false;
         this.log('Running in background');
     }
 
