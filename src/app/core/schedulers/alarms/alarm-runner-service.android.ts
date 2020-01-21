@@ -123,7 +123,8 @@ export class AlarmRunnerService extends android.app.Service {
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
             const taskRunner = new TaskRunner(tasksToRun, taskStore);
-            this.wakeLock.acquire(taskRunner.getTimeout() * 1100);
+            const wakeLockTimeout = taskRunner.getTimeout() * 1100;
+            this.wakeLock.acquire(wakeLockTimeout);
 
             console.log(`Running ${taskCount} tasks`);
             await taskRunner.run();
@@ -139,7 +140,8 @@ export class AlarmRunnerService extends android.app.Service {
             this.stopSelf(1);
             this.started = false;
         }
-        if (this.wakeLock) {
+        if (this.wakeLock.isHeld()) {
+            this.log('Lock released');
             this.wakeLock.release();
         }
     }
