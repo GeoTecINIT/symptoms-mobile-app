@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { android as androidApp } from 'tns-core-modules/application/application';
 
 import { DataService, DataItem } from '../shared/data.service';
 import { schedule } from '../core/schedulers';
 import { AndroidAlarmManager } from '../core/schedulers/alarms/alarm-manager.android';
+import { setupNotificationChannels } from '../core/notification-manager.android';
 
 @Component({
     selector: 'Home',
@@ -17,6 +19,9 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (androidApp) {
+            setupNotificationChannels(androidApp.context);
+        }
         this.items = this._itemService.getItems();
         Promise.all([
             schedule(60, 'fastTask'),

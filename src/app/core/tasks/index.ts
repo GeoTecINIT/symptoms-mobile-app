@@ -16,7 +16,7 @@ export const tasks: Tasks = {
             new Promise((resolve) =>
                 setTimeout(() => resolve(), 30000)
             ).then(() => console.log('Slow task run!')),
-        true,
+        false,
         31000
     )
 };

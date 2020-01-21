@@ -2,6 +2,10 @@ import { unpackAlarmRunnerServiceIntent } from '../../utils/android-intents.andr
 import { TaskRunner } from '../task-runner';
 import { TaskPlanner } from '../task-planner';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
+import {
+    AndroidNotification,
+    createNotification
+} from '../../notification-manager.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmRunnerService')
@@ -99,6 +103,10 @@ export class AlarmRunnerService extends android.app.Service {
         if (this.inForeground) {
             return;
         }
+        this.startForeground(
+            AndroidNotification.BehaviorTracking,
+            createNotification(this, AndroidNotification.BehaviorTracking)
+        );
         this.log('Running in foreground');
     }
 
@@ -107,6 +115,8 @@ export class AlarmRunnerService extends android.app.Service {
         if (!this.inForeground) {
             return;
         }
+        const andRemoveNotification = true;
+        this.stopForeground(andRemoveNotification);
         this.log('Running in background');
     }
 

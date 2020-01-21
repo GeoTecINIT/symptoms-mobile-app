@@ -1,7 +1,8 @@
 const NotificationManagerCompat = androidx.core.app.NotificationManagerCompat;
 
+// Member numbers are notification unique ids, only the first one is needed
 export enum AndroidNotification {
-    BehaviorTracking
+    BehaviorTracking = 1000
 }
 
 // FIXME: Add text translations
