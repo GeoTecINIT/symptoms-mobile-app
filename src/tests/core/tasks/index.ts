@@ -12,7 +12,7 @@ export const testTasks: Tasks = {
     }),
     timeoutTask: new SimpleTask(
         () =>
-            new Promise((resolve, reject) => setTimeout(() => resolve(), 200)),
+            new Promise((resolve, reject) => setTimeout(() => resolve(), 1000)),
         true,
         100
     )
