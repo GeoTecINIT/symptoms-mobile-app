@@ -11,6 +11,9 @@ export const testTasks: Tasks = {
         throw new Error('BOOOOM!');
     }),
     timeoutTask: new SimpleTask(
-        () => new Promise((resolve, reject) => setTimeout(() => resolve(), 200))
+        () =>
+            new Promise((resolve, reject) => setTimeout(() => resolve(), 200)),
+        true,
+        100
     )
 };

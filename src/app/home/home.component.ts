@@ -19,9 +19,9 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.items = this._itemService.getItems();
         Promise.all([
-            schedule(60, 'simpleTask'),
-            schedule(120, 'simpleTask'),
-            schedule(240, 'simpleTask')
+            schedule(60, 'fastTask'),
+            schedule(120, 'mediumTask'),
+            schedule(240, 'slowTask')
         ])
             .then((scheduledTasks) => {
                 scheduledTasks.forEach((scheduledTask) => {

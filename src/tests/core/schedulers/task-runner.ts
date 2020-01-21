@@ -36,7 +36,7 @@ describe('Task runner', () => {
     ];
 
     const taskRunner = new TaskRunner(scheduledTasks, taskStore);
-    const expectedTimeout = 100;
+    const expectedTimeout = 1000;
     setTasks(testTasks);
 
     beforeEach(() => {

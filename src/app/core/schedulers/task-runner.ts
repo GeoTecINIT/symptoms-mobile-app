@@ -47,7 +47,7 @@ export class TaskRunner {
             this.timeouts[id] = setTimeout(() => {
                 task.cancel();
                 this.taskStore.increaseTimeoutCount(id).then(() => resolve());
-            });
+            }, task.timeout);
 
             task.run()
                 .then(() => {

@@ -4,7 +4,7 @@ export class SimpleTask extends Task {
     constructor(
         private functionToBeRun: () => Promise<any>,
         private background = true,
-        timeout = 100
+        timeout = 1000
     ) {
         super(timeout);
     }
