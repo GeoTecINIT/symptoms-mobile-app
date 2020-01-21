@@ -24,6 +24,8 @@ export class AlarmRunnerService extends android.app.Service {
         this.started = false;
         this.inForeground = false;
 
+        this.wakeLock = alarmRunnerWakeLock(this);
+
         this.log('onCreate called');
     }
 
@@ -69,8 +71,8 @@ export class AlarmRunnerService extends android.app.Service {
 
     private alreadyRunning(startId: number) {
         if (startId === 1) {
-            this.log('Service started');
             this.started = true;
+            this.log('Service started');
 
             return false;
         }
@@ -120,9 +122,9 @@ export class AlarmRunnerService extends android.app.Service {
         const tasksToRun = await taskPlanner.tasksToRun();
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
-            // TODO: Adquire wakelock
-
             const taskRunner = new TaskRunner(tasksToRun, taskStore);
+            this.wakeLock.acquire(taskRunner.getTimeout() * 1100);
+
             console.log(`Running ${taskCount} tasks`);
             await taskRunner.run();
         } else {
@@ -130,7 +132,6 @@ export class AlarmRunnerService extends android.app.Service {
         }
     }
 
-    // TODO: Stop service cleanly
     private gracefullyStop() {
         this.moveToBackground();
         if (this.started) {
@@ -146,4 +147,18 @@ export class AlarmRunnerService extends android.app.Service {
     private log(message: string) {
         console.log(`AlarmRunnerService: ${message}`);
     }
+}
+
+function alarmRunnerWakeLock(
+    context: android.content.Context
+): android.os.PowerManager.WakeLock {
+    const wakeLockName = 'Symptoms::AlarmRunnerWakeLock';
+    const powerManager = context.getSystemService(
+        android.content.Context.POWER_SERVICE
+    ) as android.os.PowerManager;
+
+    return powerManager.newWakeLock(
+        android.os.PowerManager.PARTIAL_WAKE_LOCK,
+        wakeLockName
+    );
 }
