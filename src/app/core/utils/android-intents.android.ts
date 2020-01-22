@@ -1,10 +1,13 @@
 const appPackage = 'es.uji.geotec.symptomsapp';
 
 export function createAppLaunchIntent(appContext: android.content.Context) {
-    return createAppComponentIntent(appContext, {
+    const intent = createAppComponentIntent(appContext, {
         pathPrefix: 'com.tns',
         relativeClassPath: '.NativeScriptActivity'
     });
+    intent.putExtra('action', 'Holaaa!');
+
+    return intent;
 }
 
 export function createAlarmReceiverIntent(appContext: android.content.Context) {
