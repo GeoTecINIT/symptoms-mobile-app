@@ -1,3 +1,5 @@
+import { createAppLaunchIntent } from './utils/android-intents.android';
+
 const NotificationManagerCompat = androidx.core.app.NotificationManagerCompat;
 
 // Member numbers are notification unique ids, only the first one is needed
@@ -38,14 +40,20 @@ export function createNotification(
 ): android.app.Notification {
     let notificationBuilder: androidx.core.app.NotificationCompat.Builder;
     switch (type) {
-        // TODO: Add a pending intent to open the app in the welcome screen
         case AndroidNotification.BehaviorTracking:
+            const appLaunchIntent = createAppLaunchIntent(context);
+            const pendingIntent = android.app.PendingIntent.getActivity(
+                context,
+                0,
+                appLaunchIntent,
+                0
+            );
             notificationBuilder = initializeNotificationBuilder(
                 context,
                 type,
                 'Checking location', // FIXME: Add text translations
                 ''
-            );
+            ).setContentIntent(pendingIntent);
 
             break;
     }

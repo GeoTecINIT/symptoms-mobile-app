@@ -1,7 +1,16 @@
 const appPackage = 'es.uji.geotec.symptomsapp';
 
+export function createAppLaunchIntent(appContext: android.content.Context) {
+    return createAppComponentIntent(appContext, {
+        pathPrefix: 'com.tns',
+        relativeClassPath: '.NativeScriptActivity'
+    });
+}
+
 export function createAlarmReceiverIntent(appContext: android.content.Context) {
-    return createAppComponentIntent(appContext, '.alarms.AlarmReceiver');
+    return createAppComponentIntent(appContext, {
+        relativeClassPath: '.alarms.AlarmReceiver'
+    });
 }
 
 const ARS_RUN_IN_FOREGROUND = 'foreground';
@@ -17,10 +26,9 @@ export function createAlarmRunnerServiceIntent(
     appContext: android.content.Context,
     params: AlarmRunnerParams
 ) {
-    const intent = createAppComponentIntent(
-        appContext,
-        '.alarms.AlarmRunnerService'
-    );
+    const intent = createAppComponentIntent(appContext, {
+        relativeClassPath: '.alarms.AlarmRunnerService'
+    });
     intent.putExtra(ARS_RUN_IN_FOREGROUND, params.runInForeground);
     intent.putExtra(ARS_TIME_OFFSET, params.timeOffset);
     intent.putExtra(ARS_INVOCATION_TIME, params.invocationTime);
@@ -47,14 +55,21 @@ export function unpackAlarmRunnerServiceIntent(
 
 function createAppComponentIntent(
     appContext: android.content.Context,
-    relativeClassPath: string
+    componentReference: AppComponentRef
 ): android.content.Intent {
+    const { pathPrefix, relativeClassPath } = componentReference;
+    const pkg = pathPrefix ? pathPrefix : appPackage;
     const intent = new android.content.Intent();
     const componentRef = new android.content.ComponentName(
         appContext,
-        appPackage + relativeClassPath
+        pkg + relativeClassPath
     );
     intent.setComponent(componentRef);
 
     return intent;
+}
+
+interface AppComponentRef {
+    pathPrefix?: string;
+    relativeClassPath: string;
 }

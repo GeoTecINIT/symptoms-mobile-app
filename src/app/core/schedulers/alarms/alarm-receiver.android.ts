@@ -17,7 +17,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
     ) {
         this.log('Alarm triggered');
 
-        this.timeOffset = 30000; // TODO: Discuss about the most suitable value
+        this.timeOffset = 30000;
         this.currentTime = new Date().getTime();
         this.taskPlanner = new TaskPlanner(
             'alarm',

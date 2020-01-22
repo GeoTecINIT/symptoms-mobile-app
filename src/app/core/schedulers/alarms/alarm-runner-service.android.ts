@@ -40,9 +40,10 @@ export class AlarmRunnerService extends android.app.Service {
     ): number {
         super.onStartCommand(intent, flags, startId);
         this.log('Service called');
+        const startFlag = android.app.Service.START_STICKY;
 
         if (this.alreadyRunning(startId)) {
-            return;
+            return startFlag;
         }
 
         this.extractInvocationArguments(intent);
@@ -60,7 +61,7 @@ export class AlarmRunnerService extends android.app.Service {
                 this.gracefullyStop();
             });
 
-        return android.app.Service.START_STICKY;
+        return startFlag;
     }
 
     onBind(intent: android.content.Intent): android.os.IBinder {
@@ -98,7 +99,6 @@ export class AlarmRunnerService extends android.app.Service {
         this.currentTime = args.invocationTime;
     }
 
-    // TODO: Make it truly run in foreground
     private runInForeground() {
         if (this.inForeground) {
             return;
@@ -111,7 +111,6 @@ export class AlarmRunnerService extends android.app.Service {
         this.log('Running in foreground');
     }
 
-    // TODO: Make it truly stop running in foreground
     private moveToBackground() {
         if (!this.inForeground) {
             return;
