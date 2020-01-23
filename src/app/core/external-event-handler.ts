@@ -1,5 +1,8 @@
 import * as app from 'tns-core-modules/application';
 
+// FIXME: This class only serves as a demonstrator of what is possible.
+// It should be modified in order to allow subscribing to filtered
+// external events, limited to domain events
 class ExternalEventHandler {
     private initialized: boolean;
     private lastIntent: android.content.Intent;
