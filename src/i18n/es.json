@@ -2,9 +2,11 @@
   "app.name": "SyMptOMS",
   "title.activity.kimera": "SyMptOMS",
   "notifications": {
-    "behaviour-tracking": {
-      "channel.name": "Análisis de comportamiento",
-      "channel.description": "Indica cuando se está ejecutando un análisis de comportamiento en segundo plano",
+    "behavior-tracking": {
+      "channel": {
+        "name": "Análisis de comportamiento",
+        "description": "Indica cuando se está ejecutando un análisis de comportamiento en segundo plano"
+      },
       "tracking-notification": {
         "title": "Comprobando ubicación",
         "content": ""

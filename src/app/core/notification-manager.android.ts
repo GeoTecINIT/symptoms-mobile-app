@@ -8,7 +8,7 @@ export enum AndroidNotification {
     BehaviorTracking = 1000
 }
 
-const BEHAVIOR_TRACKING_PREFIX = 'notifications.behaviour-tracking';
+const BEHAVIOR_TRACKING_PREFIX = 'notifications.behavior-tracking';
 
 const NOTIFICATION_CHANNELS: Map<
     AndroidNotification,

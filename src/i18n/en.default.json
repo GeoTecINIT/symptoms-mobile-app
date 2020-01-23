@@ -2,9 +2,11 @@
   "app.name": "SyMptOMS",
   "title.activity.kimera": "SyMptOMS",
   "notifications": {
-    "behaviour-tracking": {
-      "channel.name": "Behaviour analysis",
-      "channel.description": "Indicates when a background behavior analysis is running",
+    "behavior-tracking": {
+      "channel": {
+        "name": "Behavior analysis",
+        "description": "Indicates when a background behavior analysis is running"
+      },
       "tracking-notification": {
         "title": "Checking location",
         "content": ""
