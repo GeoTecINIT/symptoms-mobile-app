@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="_notifications_behaviour_tracking_tracking_notification_content_1GB5h1">""</string>
+  <string name="_notifications_behaviour_tracking_tracking_notification_title_2gIVG1">"Comprobando ubicación"</string>
+  <string name="_notifications_behaviour_tracking_channel_description_KoMK4">"Indica cuando se está ejecutando un análisis de comportamiento en segundo plano"</string>
+  <string name="_notifications_behaviour_tracking_channel_name_Z1xrVgP">"Análisis de comportamiento"</string>
+  <string name="_title_activity_kimera_PKGla">"SyMptOMS"</string>
+  <string name="_app_name_1k3Sbz">"SyMptOMS"</string>
+  <string name="app_name">"SyMptOMS"</string>
+  <string name="title_activity_kimera">"SyMptOMS"</string>
+</resources>

@@ -1,4 +1,5 @@
 import { createAppLaunchIntent } from './utils/android-intents.android';
+import { localize } from 'nativescript-localize';
 
 const NotificationManagerCompat = androidx.core.app.NotificationManagerCompat;
 
@@ -7,7 +8,8 @@ export enum AndroidNotification {
     BehaviorTracking = 1000
 }
 
-// FIXME: Add text translations
+const BEHAVIOR_TRACKING_PREFIX = 'notifications.behaviour-tracking';
+
 const NOTIFICATION_CHANNELS: Map<
     AndroidNotification,
     NotificationChannel
@@ -16,9 +18,10 @@ const NOTIFICATION_CHANNELS: Map<
         AndroidNotification.BehaviorTracking,
         {
             id: 'BEHAVIOR_TRACKING',
-            name: 'Behavior analysis',
-            description:
-                'Indicates when a background behavior analysis is running',
+            name: localize(BEHAVIOR_TRACKING_PREFIX + '.channel.name'),
+            description: localize(
+                BEHAVIOR_TRACKING_PREFIX + '.channel.description'
+            ),
             priority: NotificationManagerCompat.IMPORTANCE_LOW
         }
     ]
@@ -51,8 +54,12 @@ export function createNotification(
             notificationBuilder = initializeNotificationBuilder(
                 context,
                 type,
-                'Checking location', // FIXME: Add text translations
-                ''
+                localize(
+                    BEHAVIOR_TRACKING_PREFIX + '.tracking-notification.title'
+                ),
+                localize(
+                    BEHAVIOR_TRACKING_PREFIX + '.tracking-notification.content'
+                )
             ).setContentIntent(pendingIntent);
 
             break;
