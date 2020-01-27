@@ -6,7 +6,7 @@ describe('Android Geolocation Provider', () => {
 
     it('allows to check if geolocation is enabled or not', async () => {
         const enabled = await geolocationProvider.isEnabled();
-        expect(enabled).not.toBeUndefined();
+        expect(enabled === true || enabled === false).toBeTruthy();
     });
 
     it('allows to request to enable the geolocation services', async () => {
@@ -15,7 +15,9 @@ describe('Android Geolocation Provider', () => {
 
     it('allows to check if geolocation permissions are granted', () => {
         const permissionGranted = geolocationProvider.hasPermission();
-        expect(permissionGranted).not.toBeUndefined();
+        expect(
+            permissionGranted === true || permissionGranted === false
+        ).toBeTruthy();
     });
 
     it('allows to ask geolocation permissions', async () => {

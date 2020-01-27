@@ -1,18 +1,55 @@
 import { hasPermission } from 'nativescript-permissions';
-
+import { android as androidApp } from 'tns-core-modules/application/application';
 import { NativeGeolocationProvider, ProviderInterruption } from '.';
 import { Geolocation } from './geolocation';
 
+const REQUEST_AT_LEAST_EVERY = 1000;
+const REQUEST_EVERY = 100;
+
+const OnSuccessListener = com.google.android.gms.tasks.OnSuccessListener;
+const OnFailureListener = com.google.android.gms.tasks.OnFailureListener;
+const location = com.google.android.gms.location;
+type LocationRequest = com.google.android.gms.location.LocationRequest;
+type FusedLocationProviderClient = com.google.android.gms.location.FusedLocationProviderClient;
+type LocationSettingsClient = com.google.android.gms.location.SettingsClient;
+
 export class AndroidGeolocationProvider implements NativeGeolocationProvider {
+    private locationRequest: LocationRequest;
+    private fusedLocationClient: FusedLocationProviderClient;
+    private settingsClient: LocationSettingsClient;
+
+    constructor() {
+        this.fusedLocationClient = location.LocationServices.getFusedLocationProviderClient(
+            androidApp.context
+        );
+        this.settingsClient = location.LocationServices.getSettingsClient(
+            androidApp.context
+        );
+    }
+
     isEnabled(): Promise<boolean> {
-        throw new Error('Method not implemented.');
+        const settingsRequest = new location.LocationSettingsRequest.Builder()
+            .addLocationRequest(this.getLocationRequest())
+            .build();
+
+        return new Promise((resolve, reject) => {
+            this.settingsClient
+                .checkLocationSettings(settingsRequest)
+                .addOnSuccessListener(
+                    new OnSuccessListener({
+                        onSuccess: () => resolve(true)
+                    })
+                )
+                .addOnFailureListener(
+                    new OnFailureListener({
+                        onFailure: () => resolve(false)
+                    })
+                );
+        });
     }
     enable(): Promise<void> {
         throw new Error('Method not implemented.');
     }
-    // TODO: Check if we should also ask ACCESS_BACKGROUND_LOCATION
-    // Explanation: https://developer.android.com/about/versions/10/privacy/changes#app-access-device-location
-    // Tutorial: https://medium.com/google-developer-experts/exploring-android-q-location-permissions-64d312b0e2e1
     hasPermission(): boolean {
         return hasPermission(android.Manifest.permission.ACCESS_FINE_LOCATION);
     }
@@ -23,5 +60,18 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         quantity: number
     ): [Promise<Array<Geolocation>>, ProviderInterruption] {
         throw new Error('Method not implemented.');
+    }
+
+    private getLocationRequest(): LocationRequest {
+        if (this.locationRequest === null) {
+            this.locationRequest = new location.LocationRequest();
+            this.locationRequest.setInterval(REQUEST_AT_LEAST_EVERY);
+            this.locationRequest.setFastestInterval(REQUEST_EVERY);
+            this.locationRequest.setPriority(
+                location.LocationRequest.PRIORITY_HIGH_ACCURACY
+            );
+        }
+
+        return this.locationRequest;
     }
 }

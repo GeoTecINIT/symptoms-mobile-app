@@ -48,6 +48,7 @@
 
 		<service
 			android:name=".alarms.AlarmRunnerService"
-			android:exported="false"/>
+			android:exported="false"
+			android:foregroundServiceType="location"/>
 	</application>
 </manifest>
