@@ -10,6 +10,8 @@ import { Geolocation } from './geolocation';
 
 const REQUEST_AT_LEAST_EVERY = 1000;
 const REQUEST_EVERY = 100;
+const RESOLUTION_REQUIRED = 6;
+const REQUEST_ENABLE_LOCATION = 53;
 
 const OnSuccessListener = com.google.android.gms.tasks.OnSuccessListener;
 const OnFailureListener = com.google.android.gms.tasks.OnFailureListener;
@@ -33,47 +35,52 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
     }
 
     isEnabled(): Promise<boolean> {
-        const settingsRequest = new location.LocationSettingsRequest.Builder()
-            .addLocationRequest(this.getLocationRequest())
-            .build();
+        return this.checkLocationSettings()
+            .then(() => true)
+            .catch(() => false);
+    }
 
-        return new Promise((resolve, reject) => {
-            this.settingsClient
-                .checkLocationSettings(settingsRequest)
-                .addOnSuccessListener(
-                    new OnSuccessListener({
-                        onSuccess: () => resolve(true)
-                    })
-                )
-                .addOnFailureListener(
-                    new OnFailureListener({
-                        onFailure: () => resolve(false)
-                    })
-                );
-        });
+    async enable(): Promise<void> {
+        try {
+            await this.checkLocationSettings();
+
+            return;
+        } catch (ex) {
+            if (
+                androidApp.foregroundActivity === null ||
+                typeof ex.getStatusCode !== 'function' ||
+                ex.getStatusCode() !== RESOLUTION_REQUIRED
+            ) {
+                throw ex;
+            }
+
+            return ex.startResolutionForResult(
+                androidApp.foregroundActivity,
+                REQUEST_ENABLE_LOCATION
+            );
+        }
     }
-    enable(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
+
     hasPermission(): boolean {
         return hasPermission(android.Manifest.permission.ACCESS_FINE_LOCATION);
     }
+
     requestPermission(): Promise<void> {
         if (this.hasPermission()) {
             return;
         }
-        const activity = this.getActivity();
-        if (activity !== null) {
-            return new Promise((resolve, reject) => {
-                requestPermission(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    localize('permissions.location')
-                )
-                    .then(() => resolve())
-                    .catch(() => reject(geolocationAccessNotGrantedError));
-            });
+        if (androidApp.foregroundActivity === null) {
+            throw geolocationAccessNotGrantedError;
         }
+
+        return requestPermission(
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            localize('permissions.location')
+        ).catch(() => {
+            throw geolocationAccessNotGrantedError;
+        });
     }
+
     next(
         quantity: number
     ): [Promise<Array<Geolocation>>, ProviderInterruption] {
@@ -81,7 +88,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
     }
 
     private getLocationRequest(): LocationRequest {
-        if (this.locationRequest === null) {
+        if (!this.locationRequest) {
             this.locationRequest = new location.LocationRequest();
             this.locationRequest.setInterval(REQUEST_AT_LEAST_EVERY);
             this.locationRequest.setFastestInterval(REQUEST_EVERY);
@@ -93,9 +100,26 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         return this.locationRequest;
     }
 
-    private getActivity(): android.app.Activity {
-        if (androidApp.context instanceof android.app.Activity) {
-            return androidApp.context as android.app.Activity;
-        }
+    private checkLocationSettings(): Promise<void> {
+        const settingsRequest = new location.LocationSettingsRequest.Builder()
+            .addLocationRequest(this.getLocationRequest())
+            .build();
+
+        return new Promise((resolve, reject) => {
+            this.settingsClient
+                .checkLocationSettings(settingsRequest)
+                .addOnSuccessListener(
+                    new OnSuccessListener({
+                        onSuccess: () => resolve()
+                    })
+                )
+                .addOnFailureListener(
+                    new OnFailureListener({
+                        onFailure: (ex: any) => {
+                            reject(ex);
+                        }
+                    })
+                );
+        });
     }
 }
