@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="_permissions_location_Z1ENI0b">"In order to offer you a better treatment, we need to access to your location."</string>
   <string name="_notifications_behavior_tracking_tracking_notification_content_Z1Ga1oc">""</string>
   <string name="_notifications_behavior_tracking_tracking_notification_title_Z2g6y23">"Checking location"</string>
   <string name="_notifications_behavior_tracking_channel_description_Z1BwLPx">"Indicates when a background behavior analysis is running"</string>

@@ -12,5 +12,8 @@
         "content": ""
       }
     }
+  },
+  "permissions": {
+    "location": "Para ofrecerte un mejor tratamiento, necesitamos acceder a tu ubicación."
   }
 }

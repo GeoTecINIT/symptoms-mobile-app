@@ -1,6 +1,11 @@
-import { hasPermission } from 'nativescript-permissions';
+import { hasPermission, requestPermission } from 'nativescript-permissions';
+import { localize } from 'nativescript-localize';
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { NativeGeolocationProvider, ProviderInterruption } from '.';
+import {
+    NativeGeolocationProvider,
+    ProviderInterruption,
+    geolocationAccessNotGrantedError
+} from '.';
 import { Geolocation } from './geolocation';
 
 const REQUEST_AT_LEAST_EVERY = 1000;
@@ -54,7 +59,20 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         return hasPermission(android.Manifest.permission.ACCESS_FINE_LOCATION);
     }
     requestPermission(): Promise<void> {
-        throw new Error('Method not implemented.');
+        if (this.hasPermission()) {
+            return;
+        }
+        const activity = this.getActivity();
+        if (activity !== null) {
+            return new Promise((resolve, reject) => {
+                requestPermission(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    localize('permissions.location')
+                )
+                    .then(() => resolve())
+                    .catch(() => reject(geolocationAccessNotGrantedError));
+            });
+        }
     }
     next(
         quantity: number
@@ -73,5 +91,11 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         }
 
         return this.locationRequest;
+    }
+
+    private getActivity(): android.app.Activity {
+        if (androidApp.context instanceof android.app.Activity) {
+            return androidApp.context as android.app.Activity;
+        }
     }
 }

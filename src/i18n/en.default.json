@@ -12,5 +12,8 @@
         "content": ""
       }
     }
+  },
+  "permissions": {
+    "location": "In order to offer you a better treatment, we need to access to your location."
   }
 }
