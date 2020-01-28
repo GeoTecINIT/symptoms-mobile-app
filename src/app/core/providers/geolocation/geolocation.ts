@@ -1,5 +1,4 @@
 export class Geolocation {
-
     static fromAndroidLocation(location: android.location.Location) {
         return new Geolocation(
             location.getLatitude(),
@@ -7,16 +6,18 @@ export class Geolocation {
             location.getAltitude(),
             location.getSpeed(),
             location.getBearing(),
+            location.getAccuracy(),
             new Date(location.getTime())
         );
     }
     constructor(
-        private latitude: number,
-        private longitude: number,
-        private altitude: number,
-        private speed: number,
-        private bearing: number,
-        private capturedAt: Date,
-        private createdAt = new Date()
+        public latitude: number,
+        public longitude: number,
+        public altitude: number,
+        public speed: number,
+        public bearing: number,
+        public accuracy: number,
+        public capturedAt: Date,
+        public createdAt = new Date()
     ) {}
 }

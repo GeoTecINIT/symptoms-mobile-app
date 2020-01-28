@@ -49,11 +49,10 @@ describe('Android Geolocation Provider', () => {
         expect(locations.length).toBe(3);
     });
 
-    it('returns the locations gathered until the time the request gets canceled', async () => {
-        const [locationsPromise, stopGathering] = geolocationProvider.next(5);
-        setTimeout(() => stopGathering(), 1000);
+    it('returns the locations collected until the time the request gets canceled', async () => {
+        const [locationsPromise, stopCollecting] = geolocationProvider.next(5);
+        setTimeout(() => stopCollecting(), 1000);
         const locations = await locationsPromise;
-        console.log(locations);
         expect(locations.length).toBeGreaterThan(0);
     });
 });
