@@ -4,6 +4,15 @@ import { geolocationAccessNotGrantedError } from '~/app/core/providers/geolocati
 describe('Android Geolocation Provider', () => {
     const geolocationProvider = new AndroidGeolocationProvider();
 
+    const ORIGINAL_INTERVAL = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    beforeAll(() => {
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    });
+
+    afterAll(() => {
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = ORIGINAL_INTERVAL;
+    });
+
     it('allows to check if geolocation is enabled or not', async () => {
         const enabled = await geolocationProvider.isEnabled();
         expect(enabled === true || enabled === false).toBeTruthy();
@@ -35,15 +44,16 @@ describe('Android Geolocation Provider', () => {
     });
 
     it('returns more than one geolocation when requested', async () => {
-        const [locationsPromise] = geolocationProvider.next(2);
+        const [locationsPromise] = geolocationProvider.next(3);
         const locations = await locationsPromise;
-        expect(locations.length).toBe(2);
+        expect(locations.length).toBe(3);
     });
 
     it('returns the locations gathered until the time the request gets canceled', async () => {
         const [locationsPromise, stopGathering] = geolocationProvider.next(5);
         setTimeout(() => stopGathering(), 1000);
         const locations = await locationsPromise;
+        console.log(locations);
         expect(locations.length).toBeGreaterThan(0);
     });
 });
