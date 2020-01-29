@@ -1,13 +1,15 @@
 import {
     InternalEventManager,
-    EventData,
     EventCallback
 } from '~/app/core/events/internal-event-manager';
 
 describe('Internal event manager', () => {
     const eventName = 'dummyEvent';
-    const eventData = { param: 'patata' };
-    const expectedEventData = { ...eventData, eventName };
+    const platformEvent = {
+        name: eventName,
+        id: 'uniqueEventId',
+        data: { param: 'patata' }
+    };
     let dummyCallback: EventCallback;
     let anotherDummyCallback: EventCallback;
     let internalEventManager: InternalEventManager;
@@ -20,31 +22,31 @@ describe('Internal event manager', () => {
 
     it('allows to register an event subscription', () => {
         internalEventManager.on(eventName, dummyCallback);
-        internalEventManager.emmit(eventName, eventData);
-        expect(dummyCallback).toHaveBeenCalledWith(expectedEventData);
+        internalEventManager.emit(platformEvent);
+        expect(dummyCallback).toHaveBeenCalledWith(platformEvent);
     });
 
     it('allows to unregister an event subscription', () => {
         internalEventManager.on(eventName, dummyCallback);
         internalEventManager.off(eventName, dummyCallback);
-        internalEventManager.emmit(eventName, eventData);
+        internalEventManager.emit(platformEvent);
         expect(dummyCallback).not.toHaveBeenCalled();
     });
 
     it('allows to register multiple event subscriptions', () => {
         internalEventManager.on(eventName, dummyCallback);
         internalEventManager.on(eventName, anotherDummyCallback);
-        internalEventManager.emmit(eventName, eventData);
-        expect(dummyCallback).toHaveBeenCalledWith(expectedEventData);
-        expect(anotherDummyCallback).toHaveBeenCalledWith(expectedEventData);
+        internalEventManager.emit(platformEvent);
+        expect(dummyCallback).toHaveBeenCalledWith(platformEvent);
+        expect(anotherDummyCallback).toHaveBeenCalledWith(platformEvent);
     });
 
     it('allows to unregister one of the event subscriptions', () => {
         internalEventManager.on(eventName, dummyCallback);
         internalEventManager.on(eventName, anotherDummyCallback);
         internalEventManager.off(eventName, dummyCallback);
-        internalEventManager.emmit(eventName, eventData);
+        internalEventManager.emit(platformEvent);
         expect(dummyCallback).not.toHaveBeenCalled();
-        expect(anotherDummyCallback).toHaveBeenCalledWith(expectedEventData);
+        expect(anotherDummyCallback).toHaveBeenCalledWith(platformEvent);
     });
 });

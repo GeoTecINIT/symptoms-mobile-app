@@ -2,32 +2,22 @@ import {
     NativeGeolocationProvider,
     GeolocationProvider
 } from '~/app/core/providers/geolocation';
-import { Geolocation } from '~/app/core/providers/geolocation/geolocation';
 
 describe('Geolocation Provider', () => {
-    const fakeOutput = {
-        onNewLoc(loc: Geolocation) {
-            return null;
-        },
-        providerInterrupt() {
-            return null;
-        }
-    };
+    const fakeOutput = jasmine.createSpy();
+    const providerInterrupt = jasmine.createSpy();
     let nativeProvider: NativeGeolocationProvider;
     let provider: GeolocationProvider;
     const measurementCount = 5;
 
     beforeEach(() => {
-        spyOn(fakeOutput, 'onNewLoc');
-        spyOn(fakeOutput, 'providerInterrupt');
-
         nativeProvider = createNativeGeolocationProvider();
         spyOn(nativeProvider, 'requestPermission').and.returnValue(
             Promise.resolve()
         );
         spyOn(nativeProvider, 'enable').and.returnValue(Promise.resolve());
 
-        provider = new GeolocationProvider(fakeOutput.onNewLoc, nativeProvider);
+        provider = new GeolocationProvider(fakeOutput, nativeProvider);
     });
 
     it('returns true if device can provide locations', async () => {
@@ -86,12 +76,12 @@ describe('Geolocation Provider', () => {
     it('calculates the best location among 5 location updates', async () => {
         spyOn(nativeProvider, 'next').and.returnValue([
             Promise.resolve(fakeLocations),
-            fakeOutput.providerInterrupt
+            providerInterrupt
         ]);
         const [result] = provider.next();
         await result;
         expect(nativeProvider.next).toHaveBeenCalledWith(measurementCount);
-        expect(fakeOutput.onNewLoc).toHaveBeenCalledWith(
+        expect(fakeOutput).toHaveBeenCalledWith(
             fakeLocations[measurementCount - 1]
         );
     });
@@ -99,21 +89,21 @@ describe('Geolocation Provider', () => {
     it('returns null when no location is obtained', async () => {
         spyOn(nativeProvider, 'next').and.returnValue([
             Promise.resolve([]),
-            fakeOutput.providerInterrupt
+            providerInterrupt
         ]);
         const [result] = provider.next();
         await result;
-        expect(fakeOutput.onNewLoc).toHaveBeenCalledWith(null);
+        expect(fakeOutput).toHaveBeenCalledWith(null);
     });
 
     it('stops gathering locations when requested', async () => {
         spyOn(nativeProvider, 'next').and.returnValue([
             Promise.resolve([]),
-            fakeOutput.providerInterrupt
+            providerInterrupt
         ]);
         const [_, stopCollecting] = provider.next();
         stopCollecting();
-        expect(fakeOutput.providerInterrupt).toHaveBeenCalled();
+        expect(providerInterrupt).toHaveBeenCalled();
     });
 });
 
