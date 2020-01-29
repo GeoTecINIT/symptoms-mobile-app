@@ -54,6 +54,10 @@ export class GeolocationProvider implements Provider {
     private async processLocations(
         pendingLocations: Promise<Array<Geolocation>>
     ) {
+        const isReady = await this.isReady();
+        if (!isReady) {
+            throw new Error('Check if provider is ready first!');
+        }
         const locations = await pendingLocations;
         const currentTime = new Date();
         const bestLocation = locations.reduce(
