@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { externalEventHandler } from './core/external-event-handler';
+import { externalEventHandler } from './core/events/external-event-handler';
 
 @Component({
     selector: 'ns-app',
