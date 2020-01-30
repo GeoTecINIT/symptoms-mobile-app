@@ -1,4 +1,4 @@
-import { RunnableTask } from '.';
+import { RunnableTask } from './runnable-task';
 import { PlatformEvent } from '../events';
 import { ScheduledTask } from '../schedulers/scheduled-task';
 

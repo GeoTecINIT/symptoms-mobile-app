@@ -1,39 +1,40 @@
 import { scheduledTasksDB } from '~/app/core/schedulers/scheduled-tasks-store';
-import {
-    TaskToSchedule,
-    ScheduledTask
-} from '~/app/core/schedulers/scheduled-task';
+import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 describe('Scheduled Tasks Store', () => {
     const store = scheduledTasksDB;
 
-    const taskToSchedule1: TaskToSchedule = {
-        task: 'dummyTask1',
+    const runnableTask1: RunnableTask = {
+        name: 'dummyTask1',
         interval: 120000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
-    const taskToSchedule2: TaskToSchedule = {
-        task: 'dummyTask2',
+    const runnableTask2: RunnableTask = {
+        name: 'dummyTask2',
         interval: 60000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
-    const taskToSchedule3: TaskToSchedule = {
-        task: 'dummyTask3',
+    const runnableTask3: RunnableTask = {
+        name: 'dummyTask3',
         interval: 150000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
 
     const scheduledTask1: ScheduledTask = new ScheduledTask(
         'alarm',
-        taskToSchedule1
+        runnableTask1
     );
     const scheduledTask2: ScheduledTask = new ScheduledTask(
         'alarm',
-        taskToSchedule2
+        runnableTask2
     );
     const scheduledTask3: ScheduledTask = new ScheduledTask(
         'alarm',
-        taskToSchedule3
+        runnableTask3
     );
 
     beforeEach(async () => {
@@ -46,22 +47,22 @@ describe('Scheduled Tasks Store', () => {
     });
 
     it('throws an error when trying to store an existing task', async () => {
-        const { task, interval, recurrent } = taskToSchedule1;
+        const { name, interval, recurrent } = runnableTask1;
         await expectAsync(store.insert(scheduledTask1)).toBeRejectedWith(
             new Error(
-                `Already stored: {task=${task}, interval=${interval}, recurrent=${recurrent}}`
+                `Already stored: {name=${name}, interval=${interval}, recurrent=${recurrent}}`
             )
         );
     });
 
     it('deletes a stored task', async () => {
         await store.delete(scheduledTask1.id);
-        const task = await store.get(taskToSchedule1);
+        const task = await store.get(runnableTask1);
         expect(task).toBeNull();
     });
 
     it('gets a stored task by similarity criteria', async () => {
-        const task = await store.get(taskToSchedule1);
+        const task = await store.get(runnableTask1);
         expect(task).toEqual(scheduledTask1);
     });
 

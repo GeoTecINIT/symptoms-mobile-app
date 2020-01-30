@@ -1,9 +1,7 @@
 import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
 
-import {
-    ScheduledTask,
-    TaskToSchedule
-} from '~/app/core/schedulers/scheduled-task';
+import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 export function createScheduledTaskStoreMock(): ScheduledTasksStore {
     return {
@@ -13,19 +11,19 @@ export function createScheduledTaskStoreMock(): ScheduledTasksStore {
         delete(task: string) {
             return Promise.resolve();
         },
-        get(task: TaskToSchedule | string) {
+        get(task: RunnableTask | string) {
             return Promise.resolve(null);
         },
         getAllSortedByInterval() {
             return Promise.resolve([]);
         },
-        increaseErrorCount(task: string) {
+        increaseErrorCount(taskId: string) {
             return Promise.resolve();
         },
-        increaseTimeoutCount(task: string) {
+        increaseTimeoutCount(taskId: string) {
             return Promise.resolve();
         },
-        updateLastRun(task: string, timestamp: number) {
+        updateLastRun(taskId: string, timestamp: number) {
             return Promise.resolve();
         }
     };

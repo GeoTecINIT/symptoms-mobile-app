@@ -1,6 +1,7 @@
 import { ScheduledTasksStore } from '../scheduled-tasks-store';
 import { AlarmManager } from './alarm-manager.android';
-import { TaskToSchedule, ScheduledTask } from '../scheduled-task';
+import { ScheduledTask } from '../scheduled-task';
+import { RunnableTask } from '../../runners/runnable-task';
 
 export class AndroidAlarmScheduler {
     constructor(
@@ -8,9 +9,9 @@ export class AndroidAlarmScheduler {
         private scheduledTaskStore: ScheduledTasksStore
     ) {}
 
-    async schedule(taskToSchedule: TaskToSchedule): Promise<ScheduledTask> {
+    async schedule(runnableTask: RunnableTask): Promise<ScheduledTask> {
         const possibleExisting = await this.scheduledTaskStore.get(
-            taskToSchedule
+            runnableTask
         );
         if (possibleExisting) {
             return possibleExisting;
@@ -20,11 +21,11 @@ export class AndroidAlarmScheduler {
         );
         if (
             allTasks.length === 0 ||
-            allTasks[0].interval > taskToSchedule.interval
+            allTasks[0].interval > runnableTask.interval
         ) {
-            this.alarmManager.set(taskToSchedule.interval);
+            this.alarmManager.set(runnableTask.interval);
         }
-        const scheduledTask = new ScheduledTask('alarm', taskToSchedule);
+        const scheduledTask = new ScheduledTask('alarm', runnableTask);
         await this.scheduledTaskStore.insert(scheduledTask);
 
         return scheduledTask;

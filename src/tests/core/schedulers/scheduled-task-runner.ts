@@ -2,28 +2,29 @@ import { createScheduledTaskStoreMock } from '.';
 import { setTasks } from '~/app/core/tasks/task-provider';
 import { testTasks } from '../tasks';
 import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
-import {
-    TaskToSchedule,
-    ScheduledTask
-} from '~/app/core/schedulers/scheduled-task';
+import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 describe('Scheduled Task runner', () => {
     const taskStore = createScheduledTaskStoreMock();
 
-    const dummyTask: TaskToSchedule = {
-        task: 'dummyTask',
+    const dummyTask: RunnableTask = {
+        name: 'dummyTask',
         interval: 60000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
-    const failedTask: TaskToSchedule = {
-        task: 'failedTask',
+    const failedTask: RunnableTask = {
+        name: 'failedTask',
         interval: 60000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
-    const timeoutTask: TaskToSchedule = {
-        task: 'timeoutTask',
+    const timeoutTask: RunnableTask = {
+        name: 'timeoutTask',
         interval: 60000,
-        recurrent: true
+        recurrent: true,
+        params: {}
     };
 
     const expectedDummyTask = new ScheduledTask('alarm', dummyTask);

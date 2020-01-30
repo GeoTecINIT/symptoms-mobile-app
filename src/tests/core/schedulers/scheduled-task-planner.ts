@@ -21,22 +21,33 @@ describe('Scheduled Task Planner', () => {
 
     const ephemeralTaskToBeRun = new ScheduledTask(
         schedulerType,
-        { task: 'dummyTask', interval: stdInterval, recurrent: false },
+        {
+            name: 'dummyTask',
+            interval: stdInterval,
+            recurrent: false,
+            params: {}
+        },
         uuid(),
         currentTime - stdInterval + offset
     );
     const ephemeralTaskNotToBeRun = new ScheduledTask(
         schedulerType,
-        { task: 'dummyTask', interval: 2 * stdInterval, recurrent: false },
+        {
+            name: 'dummyTask',
+            interval: 2 * stdInterval,
+            recurrent: false,
+            params: {}
+        },
         uuid(),
         currentTime - stdInterval + offset
     );
     const recurrentTaskToBeRun = new ScheduledTask(
         schedulerType,
         {
-            task: 'dummyForegroundTask',
+            name: 'dummyForegroundTask',
             interval: stdInterval + offset,
-            recurrent: true
+            recurrent: true,
+            params: {}
         },
         uuid(),
         currentTime - 2 * stdInterval + offset,
@@ -44,7 +55,12 @@ describe('Scheduled Task Planner', () => {
     );
     const recurrentTaskNotToBeRun = new ScheduledTask(
         schedulerType,
-        { task: 'dummyTask', interval: 2 * stdInterval, recurrent: true },
+        {
+            name: 'dummyTask',
+            interval: 2 * stdInterval,
+            recurrent: true,
+            params: {}
+        },
         uuid(),
         currentTime - 4 * stdInterval,
         currentTime - stdInterval

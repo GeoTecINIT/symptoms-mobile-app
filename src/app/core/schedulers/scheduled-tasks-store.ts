@@ -1,6 +1,7 @@
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
-import { ScheduledTask, TaskToSchedule, SchedulerType } from './scheduled-task';
+import { ScheduledTask, SchedulerType } from './scheduled-task';
+import { RunnableTask } from '../runners/runnable-task';
 
 const DB_NAME = 'symptoms-mobile';
 const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
@@ -12,11 +13,16 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
     async insert(scheduledTask: ScheduledTask): Promise<void> {
         await this.createDB();
         const { task, interval, recurrent } = scheduledTask;
-        const taskToSchedule = { task, interval, recurrent };
-        const possibleTask = await this.get(taskToSchedule);
+        const runnableTask: RunnableTask = {
+            name: task,
+            interval,
+            recurrent,
+            params: null
+        };
+        const possibleTask = await this.get(runnableTask);
         if (possibleTask) {
             throw new Error(
-                `Already stored: {task=${task}, interval=${interval}, recurrent=${recurrent}}`
+                `Already stored: {name=${task}, interval=${interval}, recurrent=${recurrent}}`
             );
         }
 
@@ -25,26 +31,26 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
             .exec();
     }
 
-    async delete(task: string): Promise<void> {
+    async delete(taskId: string): Promise<void> {
         await this.createDB();
         await nSQL(SCHEDULED_TASKS_TABLE)
             .query('delete')
-            .where(['id', '=', task])
+            .where(['id', '=', taskId])
             .exec();
     }
 
-    async get(task: string | TaskToSchedule): Promise<ScheduledTask> {
+    async get(task: string | RunnableTask): Promise<ScheduledTask> {
         await this.createDB();
 
         let whereStatement: Array<any> = ['id', '=', task];
         if (typeof task !== 'string') {
-            const taskToSchedule = task as TaskToSchedule;
+            const runnableTask = task as RunnableTask;
             whereStatement = [
-                ['task', '=', taskToSchedule.task],
+                ['task', '=', runnableTask.name],
                 'AND',
-                ['interval', '=', taskToSchedule.interval],
+                ['interval', '=', runnableTask.interval],
                 'AND',
-                ['recurrent', '=', taskToSchedule.recurrent]
+                ['recurrent', '=', runnableTask.recurrent]
             ];
         }
 
@@ -72,45 +78,45 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         return rows.map((row) => this.scheduledTaskFromRow(row));
     }
 
-    async increaseErrorCount(task: string): Promise<void> {
+    async increaseErrorCount(taskId: string): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(task);
+        const scheduledTask = await this.get(taskId);
 
         if (scheduledTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.errorCount`)
                 .query('upsert', scheduledTask.errorCount + 1)
-                .where(['id', '=', task])
+                .where(['id', '=', taskId])
                 .exec();
         } else {
-            throw new Error(`Task not found: ${task}`);
+            throw new Error(`Task not found: ${taskId}`);
         }
     }
 
-    async increaseTimeoutCount(task: string): Promise<void> {
+    async increaseTimeoutCount(taskId: string): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(task);
+        const scheduledTask = await this.get(taskId);
 
         if (scheduledTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.timeoutCount`)
                 .query('upsert', scheduledTask.timeoutCount + 1)
-                .where(['id', '=', task])
+                .where(['id', '=', taskId])
                 .exec();
         } else {
-            throw new Error(`Task not found: ${task}`);
+            throw new Error(`Task not found: ${taskId}`);
         }
     }
 
-    async updateLastRun(task: string, timestamp: number): Promise<void> {
+    async updateLastRun(taskId: string, timestamp: number): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(task);
+        const scheduledTask = await this.get(taskId);
 
         if (scheduledTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.lastRun`)
                 .query('upsert', timestamp)
-                .where(['id', '=', task])
+                .where(['id', '=', taskId])
                 .exec();
         } else {
-            throw new Error(`Task not found: ${task}`);
+            throw new Error(`Task not found: ${taskId}`);
         }
     }
 
@@ -156,9 +162,10 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         return new ScheduledTask(
             obj.type,
             {
-                task: obj.task,
+                name: obj.task,
                 interval: obj.interval,
-                recurrent: obj.recurrent
+                recurrent: obj.recurrent,
+                params: null
             },
             obj.id,
             obj.createdAt,
@@ -172,7 +179,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
 export interface ScheduledTasksStore {
     insert(scheduledTask: ScheduledTask): Promise<void>;
     delete(task: string): Promise<void>;
-    get(task: TaskToSchedule | string): Promise<ScheduledTask>;
+    get(task: RunnableTask | string): Promise<ScheduledTask>;
     getAllSortedByInterval(
         schedulerType: SchedulerType
     ): Promise<Array<ScheduledTask>>;

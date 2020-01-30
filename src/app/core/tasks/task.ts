@@ -3,6 +3,7 @@ export abstract class Task {
 
     // TODO: custom run code should be in onRun instead.
     // Run it from here and check if code canRun also
+    // Receives params and platformEvent (optional)
     abstract run(): Promise<any>;
 
     canRun() {
@@ -21,4 +22,8 @@ export abstract class Task {
     get timeout(): number {
         return this._timeout;
     }
+}
+
+export interface TaskParams {
+    [key: string]: any;
 }
