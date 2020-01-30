@@ -1,4 +1,7 @@
 import { PlatformEvent, EventReceiver } from '../events';
+import { TaskPlanner } from './task-planner';
+
+const taskPlanner = new TaskPlanner(null, null);
 
 export function run(taskName: string) {
     return new RunnableTask(taskName);
@@ -7,7 +10,7 @@ export function run(taskName: string) {
 export class RunnableTask implements EventReceiver {
     interval: number;
     recurrent: boolean;
-    stopEvent: string;
+    cancelEvent: string;
 
     constructor(public taskName: string) {}
 
@@ -33,12 +36,19 @@ export class RunnableTask implements EventReceiver {
     }
 
     cancelOn(eventName: string) {
-        this.stopEvent = eventName;
+        this.cancelEvent = eventName;
 
         return this;
     }
 
     exec(platformEvent?: PlatformEvent) {
-        throw new Error('Not implemented');
+        taskPlanner
+            .plan(this, platformEvent)
+            .then((scheduledTask) => {
+                console.log(`Task planned: ${scheduledTask}`);
+            })
+            .catch((err) => {
+                console.error(`Error while planning ${this}: ${err}`);
+            });
     }
 }
