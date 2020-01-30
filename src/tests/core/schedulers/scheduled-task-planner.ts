@@ -2,19 +2,19 @@ import {
     SchedulerType,
     ScheduledTask
 } from '~/app/core/schedulers/scheduled-task';
-import { TaskPlanner } from '~/app/core/schedulers/task-planner';
+import { ScheduledTaskPlanner } from '~/app/core/schedulers/scheduled-task-planner';
 import { uuid } from '~/app/core/utils/uuid';
 import { setTasks } from '~/app/core/tasks/task-provider';
 import { testTasks } from '../tasks';
 import { createScheduledTaskStoreMock } from '.';
 
-describe('Task Planner', () => {
+describe('Scheduled Task Planner', () => {
     setTasks(testTasks);
 
     const schedulerType: SchedulerType = 'alarm';
     const offset = 30000; // The half of alarm scheduler's fastest triggering frequency
     const scheduledTasksStore = createScheduledTaskStoreMock();
-    let taskPlanner: TaskPlanner;
+    let taskPlanner: ScheduledTaskPlanner;
 
     const stdInterval = 60000;
     const currentTime = new Date().getTime();
@@ -58,7 +58,7 @@ describe('Task Planner', () => {
     ];
 
     beforeEach(() => {
-        taskPlanner = new TaskPlanner(
+        taskPlanner = new ScheduledTaskPlanner(
             schedulerType,
             scheduledTasksStore,
             offset,

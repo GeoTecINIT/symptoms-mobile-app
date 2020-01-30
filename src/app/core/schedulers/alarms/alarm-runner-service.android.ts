@@ -1,6 +1,6 @@
 import { unpackAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
-import { TaskRunner } from '../task-runner';
-import { TaskPlanner } from '../task-planner';
+import { ScheduledTaskRunner } from '../scheduled-task-runner';
+import { ScheduledTaskPlanner } from '../scheduled-task-planner';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
 import {
     AndroidNotification,
@@ -123,7 +123,7 @@ export class AlarmRunnerService extends android.app.Service {
 
     private async runTasks() {
         const taskStore = scheduledTasksDB;
-        const taskPlanner = new TaskPlanner(
+        const taskPlanner = new ScheduledTaskPlanner(
             'alarm',
             taskStore,
             this.timeOffset,
@@ -133,7 +133,7 @@ export class AlarmRunnerService extends android.app.Service {
         const tasksToRun = await taskPlanner.tasksToRun();
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
-            const taskRunner = new TaskRunner(tasksToRun, taskStore);
+            const taskRunner = new ScheduledTaskRunner(tasksToRun, taskStore);
             const wakeLockTimeout = taskRunner.getTimeout() * 1100;
             this.wakeLock.acquire(wakeLockTimeout);
 

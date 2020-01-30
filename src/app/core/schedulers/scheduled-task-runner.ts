@@ -3,7 +3,7 @@ import { ScheduledTasksStore } from './scheduled-tasks-store';
 import { getTask } from '../tasks/task-provider';
 import { Task } from '../tasks/task';
 
-export class TaskRunner {
+export class ScheduledTaskRunner {
     private timeouts: { [key: string]: number } = {};
     constructor(
         private scheduledTasks: Array<ScheduledTask>,

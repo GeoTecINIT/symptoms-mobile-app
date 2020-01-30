@@ -2,7 +2,7 @@ import { SchedulerType, ScheduledTask } from './scheduled-task';
 import { ScheduledTasksStore } from './scheduled-tasks-store';
 import { getTask } from '../tasks/task-provider';
 
-export class TaskPlanner {
+export class ScheduledTaskPlanner {
     private _allTasks: Array<ScheduledTask>;
 
     constructor(

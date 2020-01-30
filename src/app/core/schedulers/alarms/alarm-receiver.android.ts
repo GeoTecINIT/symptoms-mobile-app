@@ -1,4 +1,4 @@
-import { TaskPlanner } from '../task-planner';
+import { ScheduledTaskPlanner } from '../scheduled-task-planner';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
 import { scheduledTasksDB } from '../scheduled-tasks-store';
 import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
@@ -6,7 +6,7 @@ import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.andr
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
-    private taskPlanner: TaskPlanner;
+    private taskPlanner: ScheduledTaskPlanner;
     private alarmManager: AlarmManager;
     private timeOffset: number;
     private currentTime: number;
@@ -19,7 +19,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
 
         this.timeOffset = 30000;
         this.currentTime = new Date().getTime();
-        this.taskPlanner = new TaskPlanner(
+        this.taskPlanner = new ScheduledTaskPlanner(
             'alarm',
             scheduledTasksDB,
             this.timeOffset,

@@ -1,13 +1,13 @@
 import { createScheduledTaskStoreMock } from '.';
 import { setTasks } from '~/app/core/tasks/task-provider';
 import { testTasks } from '../tasks';
-import { TaskRunner } from '~/app/core/schedulers/task-runner';
+import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
 import {
     TaskToSchedule,
     ScheduledTask
 } from '~/app/core/schedulers/scheduled-task';
 
-describe('Task runner', () => {
+describe('Scheduled Task runner', () => {
     const taskStore = createScheduledTaskStoreMock();
 
     const dummyTask: TaskToSchedule = {
@@ -35,7 +35,7 @@ describe('Task runner', () => {
         expectedTimeoutTask
     ];
 
-    const taskRunner = new TaskRunner(scheduledTasks, taskStore);
+    const taskRunner = new ScheduledTaskRunner(scheduledTasks, taskStore);
     const expectedTimeout = 1000;
     setTasks(testTasks);
 
