@@ -4,15 +4,22 @@ import { TaskPlanner } from './task-planner';
 const taskPlanner = new TaskPlanner(null, null);
 
 export function run(taskName: string) {
-    return new RunnableTask(taskName);
+    return new RunnableTaskBuilder(taskName);
 }
 
-export class RunnableTask implements EventReceiver {
+export interface RunnableTask {
+    name: string;
     interval: number;
     recurrent: boolean;
     cancelEvent: string;
+}
 
-    constructor(public taskName: string) {}
+export class RunnableTaskBuilder implements EventReceiver {
+    private interval: number;
+    private recurrent: boolean;
+    private cancelEvent: string;
+
+    constructor(private taskName: string) {}
 
     now() {
         this.interval = 0;
@@ -41,9 +48,18 @@ export class RunnableTask implements EventReceiver {
         return this;
     }
 
+    build(): RunnableTask {
+        return {
+            name: this.taskName,
+            interval: this.interval,
+            recurrent: this.recurrent,
+            cancelEvent: this.cancelEvent
+        };
+    }
+
     exec(platformEvent?: PlatformEvent) {
         taskPlanner
-            .plan(this, platformEvent)
+            .plan(this.build(), platformEvent)
             .then((scheduledTask) => {
                 console.log(`Task planned: ${scheduledTask}`);
             })

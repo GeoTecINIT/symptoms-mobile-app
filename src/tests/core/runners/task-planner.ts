@@ -3,7 +3,7 @@ import {
     TaskScheduler,
     TaskRunner
 } from '~/app/core/runners/task-planner';
-import { RunnableTask } from '~/app/core/runners';
+import { RunnableTaskBuilder } from '~/app/core/runners';
 import { PlatformEvent } from '~/app/core/events';
 import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
 
@@ -18,9 +18,11 @@ describe('Task planner', () => {
         data: {}
     };
 
-    const immediateTask = new RunnableTask('dummyTask').now();
-    const recurrentTask = new RunnableTask('dummyTask').every(10);
-    const oneShotTask = new RunnableTask('dummyTask').in(10);
+    const immediateTask = new RunnableTaskBuilder('dummyTask').now().build();
+    const recurrentTask = new RunnableTaskBuilder('dummyTask')
+        .every(10)
+        .build();
+    const oneShotTask = new RunnableTaskBuilder('dummyTask').in(10).build();
 
     beforeEach(() => {
         spyOn(taskScheduler, 'schedule').and.callThrough();
@@ -54,7 +56,7 @@ describe('Task planner', () => {
 function createTaskScheduler(): TaskScheduler {
     return {
         schedule(
-            task: RunnableTask,
+            task: RunnableTaskBuilder,
             params?: PlatformEvent
         ): Promise<ScheduledTask> {
             return Promise.resolve(null);
@@ -68,7 +70,7 @@ function createTaskScheduler(): TaskScheduler {
 function createTaskRunner(): TaskRunner {
     return {
         run(
-            task: RunnableTask,
+            task: RunnableTaskBuilder,
             params?: PlatformEvent
         ): Promise<ScheduledTask> {
             return Promise.resolve(null);
