@@ -1,15 +1,15 @@
-import { uuid } from '../utils/uuid';
-import { RunnableTask } from '../runners/runnable-task';
+import { uuid } from '../../utils/uuid';
+import { RunnableTask } from '../runnable-task';
 
-export type SchedulerType = 'alarm';
+export type PlanningType = 'alarm';
 
-export class ScheduledTask {
+export class PlannedTask {
     task: string;
     interval: number;
     recurrent: boolean;
 
     constructor(
-        public type: SchedulerType,
+        public type: PlanningType,
         task: RunnableTask,
         public id = uuid(),
         public createdAt = new Date().getTime(),

@@ -1,11 +1,11 @@
 import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
 
-import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 export function createScheduledTaskStoreMock(): ScheduledTasksStore {
     return {
-        insert(scheduledTask: ScheduledTask) {
+        insert(plannedTask: PlannedTask) {
             return Promise.resolve();
         },
         delete(task: string) {

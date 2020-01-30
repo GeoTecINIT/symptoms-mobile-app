@@ -1,4 +1,4 @@
-import { ScheduledTask } from './scheduled-task';
+import { PlannedTask } from '../runners/task-planner/planned-task';
 import { ScheduledTasksStore } from './scheduled-tasks-store';
 import { getTask } from '../tasks/task-provider';
 import { Task } from '../tasks/task';
@@ -6,7 +6,7 @@ import { Task } from '../tasks/task';
 export class ScheduledTaskRunner {
     private timeouts: { [key: string]: number } = {};
     constructor(
-        private scheduledTasks: Array<ScheduledTask>,
+        private plannedTasks: Array<PlannedTask>,
         private taskStore: ScheduledTasksStore
     ) {}
 
@@ -62,14 +62,9 @@ export class ScheduledTaskRunner {
     }
 
     private getTasks() {
-        return this.scheduledTasks.map((scheduledTask) => ({
-            id: scheduledTask.id,
-            task: getTask(scheduledTask.task)
+        return this.plannedTasks.map((plannedTask) => ({
+            id: plannedTask.id,
+            task: getTask(plannedTask.task)
         }));
     }
-}
-
-interface IdTask {
-    id: string;
-    task: Task;
 }

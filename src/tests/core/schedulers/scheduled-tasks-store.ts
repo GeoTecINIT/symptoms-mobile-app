@@ -1,5 +1,5 @@
 import { scheduledTasksDB } from '~/app/core/schedulers/scheduled-tasks-store';
-import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 describe('Scheduled Tasks Store', () => {
@@ -24,31 +24,22 @@ describe('Scheduled Tasks Store', () => {
         params: {}
     };
 
-    const scheduledTask1: ScheduledTask = new ScheduledTask(
-        'alarm',
-        runnableTask1
-    );
-    const scheduledTask2: ScheduledTask = new ScheduledTask(
-        'alarm',
-        runnableTask2
-    );
-    const scheduledTask3: ScheduledTask = new ScheduledTask(
-        'alarm',
-        runnableTask3
-    );
+    const plannedTask1: PlannedTask = new PlannedTask('alarm', runnableTask1);
+    const plannedTask2: PlannedTask = new PlannedTask('alarm', runnableTask2);
+    const plannedTask3: PlannedTask = new PlannedTask('alarm', runnableTask3);
 
     beforeEach(async () => {
         await store.deleteAll();
-        await store.insert(scheduledTask1);
+        await store.insert(plannedTask1);
     });
 
-    it('saves a scheduled task permanently', async () => {
-        await store.insert(scheduledTask2);
+    it('saves a planned task permanently', async () => {
+        await store.insert(plannedTask2);
     });
 
     it('throws an error when trying to store an existing task', async () => {
         const { name, interval, recurrent } = runnableTask1;
-        await expectAsync(store.insert(scheduledTask1)).toBeRejectedWith(
+        await expectAsync(store.insert(plannedTask1)).toBeRejectedWith(
             new Error(
                 `Already stored: {name=${name}, interval=${interval}, recurrent=${recurrent}}`
             )
@@ -56,26 +47,26 @@ describe('Scheduled Tasks Store', () => {
     });
 
     it('deletes a stored task', async () => {
-        await store.delete(scheduledTask1.id);
+        await store.delete(plannedTask1.id);
         const task = await store.get(runnableTask1);
         expect(task).toBeNull();
     });
 
     it('gets a stored task by similarity criteria', async () => {
         const task = await store.get(runnableTask1);
-        expect(task).toEqual(scheduledTask1);
+        expect(task).toEqual(plannedTask1);
     });
 
     it('gets a stored task by id', async () => {
-        const task = await store.get(scheduledTask1.id);
-        expect(task).toEqual(scheduledTask1);
+        const task = await store.get(plannedTask1.id);
+        expect(task).toEqual(plannedTask1);
     });
 
     it('gets all stored task ordered by interval', async () => {
         await store.deleteAll();
-        await store.insert(scheduledTask1);
-        await store.insert(scheduledTask2);
-        await store.insert(scheduledTask3);
+        await store.insert(plannedTask1);
+        await store.insert(plannedTask2);
+        await store.insert(plannedTask3);
 
         const tasks = await store.getAllSortedByInterval('alarm');
         expect(tasks.length).toBe(3);
@@ -87,21 +78,21 @@ describe('Scheduled Tasks Store', () => {
     });
 
     it('increases error count of a task by id', async () => {
-        await store.increaseErrorCount(scheduledTask1.id);
-        const task = await store.get(scheduledTask1.id);
-        expect(task.errorCount).toBe(scheduledTask1.errorCount + 1);
+        await store.increaseErrorCount(plannedTask1.id);
+        const task = await store.get(plannedTask1.id);
+        expect(task.errorCount).toBe(plannedTask1.errorCount + 1);
     });
 
     it('increases timeout count of a task by id', async () => {
-        await store.increaseTimeoutCount(scheduledTask1.id);
-        const task = await store.get(scheduledTask1.id);
-        expect(task.timeoutCount).toBe(scheduledTask1.timeoutCount + 1);
+        await store.increaseTimeoutCount(plannedTask1.id);
+        const task = await store.get(plannedTask1.id);
+        expect(task.timeoutCount).toBe(plannedTask1.timeoutCount + 1);
     });
 
     it('updates last run of a task by id', async () => {
         const timestamp = 1000;
-        await store.updateLastRun(scheduledTask1.id, timestamp);
-        const task = await store.get(scheduledTask1.id);
+        await store.updateLastRun(plannedTask1.id, timestamp);
+        const task = await store.get(plannedTask1.id);
         expect(task.lastRun).toBe(timestamp);
     });
 

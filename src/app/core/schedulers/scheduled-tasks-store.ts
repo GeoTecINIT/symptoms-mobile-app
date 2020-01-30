@@ -1,6 +1,9 @@
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
-import { ScheduledTask, SchedulerType } from './scheduled-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '../runners/task-planner/planned-task';
 import { RunnableTask } from '../runners/runnable-task';
 
 const DB_NAME = 'symptoms-mobile';
@@ -10,9 +13,9 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
     private dbInitialized: boolean = false;
     private createDBProcedure: Promise<void>;
 
-    async insert(scheduledTask: ScheduledTask): Promise<void> {
+    async insert(plannedTask: PlannedTask): Promise<void> {
         await this.createDB();
-        const { task, interval, recurrent } = scheduledTask;
+        const { task, interval, recurrent } = plannedTask;
         const runnableTask: RunnableTask = {
             name: task,
             interval,
@@ -27,7 +30,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         }
 
         await nSQL(SCHEDULED_TASKS_TABLE)
-            .query('upsert', { ...scheduledTask })
+            .query('upsert', { ...plannedTask })
             .exec();
     }
 
@@ -39,7 +42,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
             .exec();
     }
 
-    async get(task: string | RunnableTask): Promise<ScheduledTask> {
+    async get(task: string | RunnableTask): Promise<PlannedTask> {
         await this.createDB();
 
         let whereStatement: Array<any> = ['id', '=', task];
@@ -62,29 +65,29 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
             return null;
         }
 
-        return this.scheduledTaskFromRow(rows[0]);
+        return this.plannedTaskFromRow(rows[0]);
     }
 
     // TODO: Allow filtering by type
     async getAllSortedByInterval(
-        schedulerType?: SchedulerType
-    ): Promise<Array<ScheduledTask>> {
+        planningType?: PlanningType
+    ): Promise<Array<PlannedTask>> {
         await this.createDB();
         const rows = await nSQL(SCHEDULED_TASKS_TABLE)
             .query('select')
             .orderBy(['interval ASC'])
             .exec();
 
-        return rows.map((row) => this.scheduledTaskFromRow(row));
+        return rows.map((row) => this.plannedTaskFromRow(row));
     }
 
     async increaseErrorCount(taskId: string): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(taskId);
+        const plannedTask = await this.get(taskId);
 
-        if (scheduledTask) {
+        if (plannedTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.errorCount`)
-                .query('upsert', scheduledTask.errorCount + 1)
+                .query('upsert', plannedTask.errorCount + 1)
                 .where(['id', '=', taskId])
                 .exec();
         } else {
@@ -94,11 +97,11 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
 
     async increaseTimeoutCount(taskId: string): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(taskId);
+        const plannedTask = await this.get(taskId);
 
-        if (scheduledTask) {
+        if (plannedTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.timeoutCount`)
-                .query('upsert', scheduledTask.timeoutCount + 1)
+                .query('upsert', plannedTask.timeoutCount + 1)
                 .where(['id', '=', taskId])
                 .exec();
         } else {
@@ -108,9 +111,9 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
 
     async updateLastRun(taskId: string, timestamp: number): Promise<void> {
         await this.createDB();
-        const scheduledTask = await this.get(taskId);
+        const plannedTask = await this.get(taskId);
 
-        if (scheduledTask) {
+        if (plannedTask) {
             await nSQL(`${SCHEDULED_TASKS_TABLE}.lastRun`)
                 .query('upsert', timestamp)
                 .where(['id', '=', taskId])
@@ -138,7 +141,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
                 mode: new NativeSQLite(),
                 tables: [
                     {
-                        name: 'scheduledTasks',
+                        name: SCHEDULED_TASKS_TABLE,
                         model: {
                             'id:uuid': { pk: true },
                             'type:string': {},
@@ -158,8 +161,8 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
         this.dbInitialized = true;
     }
 
-    private scheduledTaskFromRow(obj: any) {
-        return new ScheduledTask(
+    private plannedTaskFromRow(obj: any) {
+        return new PlannedTask(
             obj.type,
             {
                 name: obj.task,
@@ -177,12 +180,12 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
 }
 
 export interface ScheduledTasksStore {
-    insert(scheduledTask: ScheduledTask): Promise<void>;
+    insert(plannedTask: PlannedTask): Promise<void>;
     delete(task: string): Promise<void>;
-    get(task: RunnableTask | string): Promise<ScheduledTask>;
+    get(task: RunnableTask | string): Promise<PlannedTask>;
     getAllSortedByInterval(
-        schedulerType: SchedulerType
-    ): Promise<Array<ScheduledTask>>;
+        planningType: PlanningType
+    ): Promise<Array<PlannedTask>>;
     increaseErrorCount(task: string): Promise<void>;
     increaseTimeoutCount(task: string): Promise<void>;
     updateLastRun(task: string, timestamp: number): Promise<void>;

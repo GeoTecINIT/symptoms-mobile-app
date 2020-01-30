@@ -2,7 +2,7 @@ import { createScheduledTaskStoreMock } from '.';
 import { setTasks } from '~/app/core/tasks/task-provider';
 import { testTasks } from '../tasks';
 import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
-import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 describe('Scheduled Task runner', () => {
@@ -27,16 +27,16 @@ describe('Scheduled Task runner', () => {
         params: {}
     };
 
-    const expectedDummyTask = new ScheduledTask('alarm', dummyTask);
-    const expectedFailedTask = new ScheduledTask('alarm', failedTask);
-    const expectedTimeoutTask = new ScheduledTask('alarm', timeoutTask);
-    const scheduledTasks = [
+    const expectedDummyTask = new PlannedTask('alarm', dummyTask);
+    const expectedFailedTask = new PlannedTask('alarm', failedTask);
+    const expectedTimeoutTask = new PlannedTask('alarm', timeoutTask);
+    const plannedTasks = [
         expectedDummyTask,
         expectedFailedTask,
         expectedTimeoutTask
     ];
 
-    const taskRunner = new ScheduledTaskRunner(scheduledTasks, taskStore);
+    const taskRunner = new ScheduledTaskRunner(plannedTasks, taskStore);
     const expectedTimeout = 1000;
     setTasks(testTasks);
 

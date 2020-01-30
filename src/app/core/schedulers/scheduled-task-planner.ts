@@ -1,18 +1,21 @@
-import { SchedulerType, ScheduledTask } from './scheduled-task';
+import {
+    PlanningType,
+    PlannedTask
+} from '../runners/task-planner/planned-task';
 import { ScheduledTasksStore } from './scheduled-tasks-store';
 import { getTask } from '../tasks/task-provider';
 
 export class ScheduledTaskPlanner {
-    private _allTasks: Array<ScheduledTask>;
+    private _allTasks: Array<PlannedTask>;
 
     constructor(
-        private schedulerType: SchedulerType,
+        private planningType: PlanningType,
         private scheduledTasksStore: ScheduledTasksStore,
         private intervalOffset: number,
         private currentTime = new Date().getTime()
     ) {}
 
-    async tasksToRun(): Promise<Array<ScheduledTask>> {
+    async tasksToRun(): Promise<Array<PlannedTask>> {
         const allTasks = await this.allTasks();
 
         const tasksToRunNow = allTasks.filter((task) =>
@@ -24,8 +27,8 @@ export class ScheduledTaskPlanner {
 
     async requiresForeground(): Promise<boolean> {
         const tasksToRun = await this.tasksToRun();
-        const allRunInBackground = tasksToRun.every((scheduledTask) =>
-            getTask(scheduledTask.task).runsInBackground()
+        const allRunInBackground = tasksToRun.every((plannedTask) =>
+            getTask(plannedTask.task).runsInBackground()
         );
 
         return !allRunInBackground;
@@ -51,7 +54,7 @@ export class ScheduledTaskPlanner {
             : tasksToRunInTheFuture[0].interval;
     }
 
-    private determineIfTaskShouldBeRun(task: ScheduledTask): boolean {
+    private determineIfTaskShouldBeRun(task: PlannedTask): boolean {
         let priorExecution = task.lastRun;
         if (task.lastRun === -1) {
             priorExecution = task.createdAt;
@@ -63,10 +66,10 @@ export class ScheduledTaskPlanner {
         );
     }
 
-    private async allTasks(): Promise<Array<ScheduledTask>> {
+    private async allTasks(): Promise<Array<PlannedTask>> {
         if (!this._allTasks) {
             this._allTasks = await this.scheduledTasksStore.getAllSortedByInterval(
-                this.schedulerType
+                this.planningType
             );
         }
 

@@ -28,18 +28,18 @@ export class HomeComponent implements OnInit {
             schedule(120, 'mediumTask'),
             schedule(240, 'slowTask')
         ])
-            .then((scheduledTasks) => {
-                scheduledTasks.forEach((scheduledTask) => {
+            .then((plannedTasks) => {
+                plannedTasks.forEach((plannedTask) => {
                     console.log(
                         `Task successfully scheduled: ${JSON.stringify(
-                            scheduledTask
+                            plannedTask
                         )}`
                     );
                 });
 
                 if (!this.alarmManager.alarmUp) {
                     console.log('Alarm was not up! Scheduling...');
-                    this.alarmManager.set(scheduledTasks[0].interval);
+                    this.alarmManager.set(plannedTasks[0].interval);
                 }
             })
             .catch((err) => {

@@ -1,5 +1,5 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { ScheduledTask } from './scheduled-task';
+import { PlannedTask } from '../runners/task-planner/planned-task';
 import { checkIfTaskExists } from '../tasks/task-provider';
 import { AndroidAlarmScheduler } from './alarms/alarm-scheduler.android';
 import { AndroidAlarmManager } from './alarms/alarm-manager.android';
@@ -8,7 +8,7 @@ import { scheduledTasksDB } from './scheduled-tasks-store';
 export async function schedule(
     time: number,
     taskName: string
-): Promise<ScheduledTask> {
+): Promise<PlannedTask> {
     checkIfTaskExists(taskName);
 
     if (androidApp) {

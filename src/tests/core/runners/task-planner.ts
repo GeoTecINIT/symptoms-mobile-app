@@ -8,7 +8,7 @@ import {
     RunnableTaskBuilder
 } from '~/app/core/runners/runnable-task';
 import { PlatformEvent } from '~/app/core/events';
-import { ScheduledTask } from '~/app/core/schedulers/scheduled-task';
+import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 
 describe('Task planner', () => {
     const taskScheduler = createTaskScheduler();
@@ -63,7 +63,7 @@ function createTaskScheduler(): TaskScheduler {
         schedule(
             task: RunnableTask,
             platformEvent?: PlatformEvent
-        ): Promise<ScheduledTask> {
+        ): Promise<PlannedTask> {
             return Promise.resolve(null);
         },
         cancel(id: string): Promise<void> {
@@ -77,7 +77,7 @@ function createTaskRunner(): TaskRunner {
         run(
             task: RunnableTask,
             platformEvent?: PlatformEvent
-        ): Promise<ScheduledTask> {
+        ): Promise<PlannedTask> {
             return Promise.resolve(null);
         },
         stop(id: string): Promise<void> {
