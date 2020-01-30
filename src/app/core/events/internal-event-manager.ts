@@ -3,14 +3,7 @@ import {
     fromObject,
     EventData as NSEventData
 } from 'tns-core-modules/data/observable';
-
-export interface PlatformEvent {
-    name: string;
-    id: string;
-    data: { [key: string]: any };
-}
-
-export type EventCallback = (data: PlatformEvent) => void;
+import { EventCallback, PlatformEvent } from './events';
 
 export class InternalEventManager {
     private notificationCenter: Observable;
@@ -21,21 +14,27 @@ export class InternalEventManager {
         this.callbacks = new CallbackStore();
     }
 
-    on(eventName: string, callback: EventCallback) {
+    on(eventName: string, callback: EventCallback, thisArg?: any) {
         const callbackId: CallbackId = [eventName, callback];
         const internalCallback = (eventData: InternalEventData) =>
             callback(eventData.data);
         this.callbacks.set(callbackId, internalCallback);
-        this.notificationCenter.on(eventName, internalCallback);
+        this.notificationCenter.on(eventName, internalCallback, thisArg);
     }
 
-    off(eventName: string, callback: EventCallback) {
+    off(eventName: string, callback?: EventCallback, thisArg?: any) {
+        if (!callback) {
+            this.notificationCenter.off(eventName);
+            this.callbacks.deleteCallbackMap(eventName);
+
+            return;
+        }
         const callbackId: CallbackId = [eventName, callback];
         const internalCallback = this.callbacks.get(callbackId);
         if (!internalCallback) {
             return;
         }
-        this.notificationCenter.off(eventName, internalCallback);
+        this.notificationCenter.off(eventName, internalCallback, thisArg);
         this.callbacks.delete(callbackId);
     }
 
@@ -90,6 +89,15 @@ class CallbackStore {
         if (callbackMap.size === 0) {
             delete this.callbackTree[eventName];
         }
+    }
+
+    deleteCallbackMap(eventName: string) {
+        const callbackMap = this.callbackTree[eventName];
+        if (!callbackMap) {
+            return;
+        }
+        callbackMap.clear();
+        delete this.callbackTree[eventName];
     }
 }
 

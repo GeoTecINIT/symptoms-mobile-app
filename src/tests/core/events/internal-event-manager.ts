@@ -1,7 +1,5 @@
-import {
-    InternalEventManager,
-    EventCallback
-} from '~/app/core/events/internal-event-manager';
+import { InternalEventManager } from '~/app/core/events/internal-event-manager';
+import { EventCallback } from '~/app/core/events';
 
 describe('Internal event manager', () => {
     const eventName = 'dummyEvent';
