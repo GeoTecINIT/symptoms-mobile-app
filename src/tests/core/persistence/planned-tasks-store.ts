@@ -72,7 +72,6 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask3);
 
         const tasks = await store.getAllSortedByInterval('alarm');
-        console.log(tasks);
         expect(tasks.length).toBe(3);
         for (let i = 0; i < tasks.length - 1; i++) {
             if (tasks[i].interval > tasks[i + 1].interval) {

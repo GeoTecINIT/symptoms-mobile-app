@@ -157,6 +157,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
                         name: PLANNED_TASKS_TABLE,
                         model: {
                             'id:uuid': { pk: true },
+                            'planningType:string': {},
                             'name:string': {},
                             'params:obj': {},
                             'interval:int': {},
