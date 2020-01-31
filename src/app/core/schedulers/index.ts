@@ -3,7 +3,7 @@ import { PlannedTask } from '../runners/task-planner/planned-task';
 import { checkIfTaskExists } from '../tasks/task-provider';
 import { AndroidAlarmScheduler } from './alarms/alarm-scheduler.android';
 import { AndroidAlarmManager } from './alarms/alarm-manager.android';
-import { scheduledTasksDB } from './scheduled-tasks-store';
+import { plannedTasksDB } from '../persistence/planned-tasks-store';
 
 export async function schedule(
     time: number,
@@ -37,7 +37,7 @@ function androidAlarmScheduler() {
     if (!_androidAlarmScheduler) {
         _androidAlarmScheduler = new AndroidAlarmScheduler(
             new AndroidAlarmManager(),
-            scheduledTasksDB
+            plannedTasksDB
         );
     }
 

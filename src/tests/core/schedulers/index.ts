@@ -1,9 +1,9 @@
-import { ScheduledTasksStore } from '~/app/core/schedulers/scheduled-tasks-store';
+import { PlannedTasksStore } from '~/app/core/persistence/planned-tasks-store';
 
 import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
-export function createScheduledTaskStoreMock(): ScheduledTasksStore {
+export function createPlannedTaskStoreMock(): PlannedTasksStore {
     return {
         insert(plannedTask: PlannedTask) {
             return Promise.resolve();

@@ -1,6 +1,6 @@
 import { ScheduledTaskPlanner } from '../scheduled-task-planner';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
-import { scheduledTasksDB } from '../scheduled-tasks-store';
+import { plannedTasksDB } from '../../persistence/planned-tasks-store';
 import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
@@ -21,7 +21,7 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
         this.currentTime = new Date().getTime();
         this.taskPlanner = new ScheduledTaskPlanner(
             'alarm',
-            scheduledTasksDB,
+            plannedTasksDB,
             this.timeOffset,
             this.currentTime
         );

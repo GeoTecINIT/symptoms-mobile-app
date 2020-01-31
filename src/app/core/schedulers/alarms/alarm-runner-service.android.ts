@@ -1,7 +1,7 @@
 import { unpackAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
 import { ScheduledTaskRunner } from '../scheduled-task-runner';
 import { ScheduledTaskPlanner } from '../scheduled-task-planner';
-import { scheduledTasksDB } from '../scheduled-tasks-store';
+import { plannedTasksDB } from '../../persistence/planned-tasks-store';
 import {
     AndroidNotification,
     createNotification
@@ -122,7 +122,7 @@ export class AlarmRunnerService extends android.app.Service {
     }
 
     private async runTasks() {
-        const taskStore = scheduledTasksDB;
+        const taskStore = plannedTasksDB;
         const taskPlanner = new ScheduledTaskPlanner(
             'alarm',
             taskStore,

@@ -1,9 +1,9 @@
-import { scheduledTasksDB } from '~/app/core/schedulers/scheduled-tasks-store';
+import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
-describe('Scheduled Tasks Store', () => {
-    const store = scheduledTasksDB;
+describe('Planned Tasks Store', () => {
+    const store = plannedTasksDB;
 
     const runnableTask1: RunnableTask = {
         name: 'dummyTask1',

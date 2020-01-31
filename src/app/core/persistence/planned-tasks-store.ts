@@ -9,7 +9,7 @@ import { RunnableTask } from '../runners/runnable-task';
 const DB_NAME = 'symptoms-mobile';
 const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
 
-class ScheduledTasksDBStore implements ScheduledTasksStore {
+class PlannedTaskDBStore implements PlannedTasksStore {
     private dbInitialized: boolean = false;
     private createDBProcedure: Promise<void>;
 
@@ -182,7 +182,7 @@ class ScheduledTasksDBStore implements ScheduledTasksStore {
     }
 }
 
-export interface ScheduledTasksStore {
+export interface PlannedTasksStore {
     insert(plannedTask: PlannedTask): Promise<void>;
     delete(task: string): Promise<void>;
     get(task: RunnableTask | string): Promise<PlannedTask>;
@@ -194,4 +194,4 @@ export interface ScheduledTasksStore {
     updateLastRun(task: string, timestamp: number): Promise<void>;
 }
 
-export const scheduledTasksDB = new ScheduledTasksDBStore();
+export const plannedTasksDB = new PlannedTaskDBStore();

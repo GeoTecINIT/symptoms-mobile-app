@@ -1,5 +1,5 @@
 import { PlannedTask } from '../runners/task-planner/planned-task';
-import { ScheduledTasksStore } from './scheduled-tasks-store';
+import { PlannedTasksStore } from '../persistence/planned-tasks-store';
 import { getTask } from '../tasks/task-provider';
 import { Task } from '../tasks/task';
 
@@ -7,7 +7,7 @@ export class ScheduledTaskRunner {
     private timeouts: { [key: string]: number } = {};
     constructor(
         private plannedTasks: Array<PlannedTask>,
-        private taskStore: ScheduledTasksStore
+        private taskStore: PlannedTasksStore
     ) {}
 
     getTimeout(): number {

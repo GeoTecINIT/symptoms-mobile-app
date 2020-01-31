@@ -1,12 +1,12 @@
 import { AlarmManager } from '~/app/core/schedulers/alarms/alarm-manager.android';
 import { AndroidAlarmScheduler } from '~/app/core/schedulers/alarms/alarm-scheduler.android';
 import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
-import { createScheduledTaskStoreMock } from '..';
+import { createPlannedTaskStoreMock } from '..';
 import { RunnableTask } from '~/app/core/runners/runnable-task';
 
 describe('Android Alarm Scheduler', () => {
     const manager = createAlarmManagerMock();
-    const taskStore = createScheduledTaskStoreMock();
+    const taskStore = createPlannedTaskStoreMock();
     const androidAlarm = new AndroidAlarmScheduler(manager, taskStore);
 
     const dummyTask: RunnableTask = {

@@ -1,4 +1,4 @@
-import { ScheduledTasksStore } from '../scheduled-tasks-store';
+import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
 import { AlarmManager } from './alarm-manager.android';
 import { PlannedTask } from '../../runners/task-planner/planned-task';
 import { RunnableTask } from '../../runners/runnable-task';
@@ -6,17 +6,15 @@ import { RunnableTask } from '../../runners/runnable-task';
 export class AndroidAlarmScheduler {
     constructor(
         private alarmManager: AlarmManager,
-        private scheduledTaskStore: ScheduledTasksStore
+        private plannedTaskStore: PlannedTasksStore
     ) {}
 
     async schedule(runnableTask: RunnableTask): Promise<PlannedTask> {
-        const possibleExisting = await this.scheduledTaskStore.get(
-            runnableTask
-        );
+        const possibleExisting = await this.plannedTaskStore.get(runnableTask);
         if (possibleExisting) {
             return possibleExisting;
         }
-        const allTasks = await this.scheduledTaskStore.getAllSortedByInterval(
+        const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
             'alarm'
         );
         if (
@@ -26,17 +24,17 @@ export class AndroidAlarmScheduler {
             this.alarmManager.set(runnableTask.interval);
         }
         const plannedTask = new PlannedTask('alarm', runnableTask);
-        await this.scheduledTaskStore.insert(plannedTask);
+        await this.plannedTaskStore.insert(plannedTask);
 
         return plannedTask;
     }
 
     async cancel(id: string) {
-        const possibleExisting = await this.scheduledTaskStore.get(id);
+        const possibleExisting = await this.plannedTaskStore.get(id);
         if (!possibleExisting) {
             return;
         }
-        const allTasks = await this.scheduledTaskStore.getAllSortedByInterval(
+        const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
             'alarm'
         );
         if (allTasks.length === 1) {
@@ -47,6 +45,6 @@ export class AndroidAlarmScheduler {
         ) {
             this.alarmManager.set(allTasks[1].interval);
         }
-        await this.scheduledTaskStore.delete(id);
+        await this.plannedTaskStore.delete(id);
     }
 }

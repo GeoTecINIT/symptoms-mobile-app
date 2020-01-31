@@ -2,7 +2,7 @@ import {
     PlanningType,
     PlannedTask
 } from '../runners/task-planner/planned-task';
-import { ScheduledTasksStore } from './scheduled-tasks-store';
+import { PlannedTasksStore } from '../persistence/planned-tasks-store';
 import { getTask } from '../tasks/task-provider';
 
 export class ScheduledTaskPlanner {
@@ -10,7 +10,7 @@ export class ScheduledTaskPlanner {
 
     constructor(
         private planningType: PlanningType,
-        private scheduledTasksStore: ScheduledTasksStore,
+        private plannedTasksStore: PlannedTasksStore,
         private intervalOffset: number,
         private currentTime = new Date().getTime()
     ) {}
@@ -68,7 +68,7 @@ export class ScheduledTaskPlanner {
 
     private async allTasks(): Promise<Array<PlannedTask>> {
         if (!this._allTasks) {
-            this._allTasks = await this.scheduledTasksStore.getAllSortedByInterval(
+            this._allTasks = await this.plannedTasksStore.getAllSortedByInterval(
                 this.planningType
             );
         }
