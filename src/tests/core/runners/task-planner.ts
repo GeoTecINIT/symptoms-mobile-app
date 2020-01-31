@@ -9,11 +9,13 @@ import {
 } from '~/app/core/runners/runnable-task';
 import { PlatformEvent } from '~/app/core/events';
 import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
+import { createPlannedTaskStoreMock } from '../schedulers';
 
 describe('Task planner', () => {
     const taskScheduler = createTaskScheduler();
     const taskRunner = createTaskRunner();
-    const taskPlanner = new TaskPlanner(taskScheduler, taskRunner);
+    const taskStore = createPlannedTaskStoreMock();
+    const taskPlanner = new TaskPlanner(taskScheduler, taskRunner, taskStore);
 
     const dummyEvent: PlatformEvent = {
         name: 'dummyEvent',
@@ -28,6 +30,8 @@ describe('Task planner', () => {
         .every(10)
         .build();
     const oneShotTask = new RunnableTaskBuilder('dummyTask', {}).in(10).build();
+
+    const immediatePlannedTask = new PlannedTask('alarm', immediateTask);
 
     beforeEach(() => {
         spyOn(taskScheduler, 'schedule').and.callThrough();
@@ -55,6 +59,16 @@ describe('Task planner', () => {
             oneShotTask,
             dummyEvent
         );
+    });
+
+    it('does nothing when a task has already been scheduled', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(immediateTask)
+            .and.returnValue(Promise.resolve(immediatePlannedTask));
+        const plannedTask = await taskPlanner.plan(immediateTask, dummyEvent);
+        expect(plannedTask).toBe(immediatePlannedTask);
+        expect(taskScheduler.schedule).not.toHaveBeenCalled();
+        expect(taskRunner.run).not.toHaveBeenCalled();
     });
 });
 

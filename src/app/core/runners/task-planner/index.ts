@@ -1,6 +1,7 @@
 import { RunnableTask } from '../runnable-task';
 import { PlatformEvent } from '../../events';
 import { PlannedTask } from './planned-task';
+import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
 
 export interface TaskScheduler {
     schedule(task: RunnableTask, params?: PlatformEvent): Promise<PlannedTask>;
@@ -15,16 +16,22 @@ export interface TaskRunner {
 export class TaskPlanner {
     constructor(
         private taskScheduler: TaskScheduler,
-        private taskRunner: TaskRunner
+        private taskRunner: TaskRunner,
+        private taskStore: PlannedTasksStore
     ) {}
 
     async plan(
-        task: RunnableTask,
+        runnableTask: RunnableTask,
         params?: PlatformEvent
     ): Promise<PlannedTask> {
-        const plannedTask = await (task.interval > 0
-            ? this.taskScheduler.schedule(task, params)
-            : this.taskRunner.run(task, params));
+        const possibleExisting = await this.taskStore.get(runnableTask);
+        if (possibleExisting) {
+            return possibleExisting;
+        }
+
+        const plannedTask = await (runnableTask.interval > 0
+            ? this.taskScheduler.schedule(runnableTask, params)
+            : this.taskRunner.run(runnableTask, params));
 
         // TODO: do something with planned task id and stopEvent
 

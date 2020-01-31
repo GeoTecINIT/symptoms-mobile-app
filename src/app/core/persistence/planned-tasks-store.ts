@@ -13,7 +13,6 @@ class PlannedTaskDBStore implements PlannedTasksStore {
     private dbInitialized: boolean = false;
     private createDBProcedure: Promise<void>;
 
-    // TODO: Insert params too. Is cancel event required?
     async insert(plannedTask: PlannedTask): Promise<void> {
         await this.createDB();
         const { name, interval, recurrent, params, cancelEvent } = plannedTask;
@@ -157,9 +156,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
                     {
                         name: PLANNED_TASKS_TABLE,
                         model: {
-                            // TODO: Update schema with new fields
                             'id:uuid': { pk: true },
-                            'planningType:string': {}, // TODO: Think of if it should be planning type instead
                             'name:string': {},
                             'params:obj': {},
                             'interval:int': {},
@@ -178,7 +175,6 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         this.dbInitialized = true;
     }
 
-    // TODO: Update with params and cancelEvent if required
     private plannedTaskFromRow(obj: any) {
         return new PlannedTask(
             obj.planningType,
