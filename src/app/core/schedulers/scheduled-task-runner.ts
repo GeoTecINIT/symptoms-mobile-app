@@ -64,7 +64,7 @@ export class ScheduledTaskRunner {
     private getTasks() {
         return this.plannedTasks.map((plannedTask) => ({
             id: plannedTask.id,
-            task: getTask(plannedTask.task)
+            task: getTask(plannedTask.name)
         }));
     }
 }

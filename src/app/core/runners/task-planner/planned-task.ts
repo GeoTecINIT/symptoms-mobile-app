@@ -1,15 +1,18 @@
 import { uuid } from '../../utils/uuid';
 import { RunnableTask } from '../runnable-task';
+import { TaskParams } from '../../tasks/task';
 
 export type PlanningType = 'alarm';
 
 export class PlannedTask {
-    task: string;
+    name: string;
     interval: number;
     recurrent: boolean;
+    params: TaskParams;
+    cancelEvent: string;
 
     constructor(
-        public type: PlanningType,
+        public planningType: PlanningType,
         task: RunnableTask,
         public id = uuid(),
         public createdAt = new Date().getTime(),
@@ -17,8 +20,10 @@ export class PlannedTask {
         public errorCount = 0,
         public timeoutCount = 0
     ) {
-        this.task = task.name;
+        this.name = task.name;
         this.interval = task.interval;
         this.recurrent = task.recurrent;
+        this.params = task.params;
+        this.cancelEvent = task.cancelEvent;
     }
 }

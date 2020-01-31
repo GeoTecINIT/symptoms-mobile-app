@@ -23,16 +23,18 @@ function androidSchedule(time: number, taskName: string) {
         throw new Error('Not implemented yet');
     } else if (time < 900) {
         return androidAlarmScheduler().schedule({
-            task: taskName,
+            name: taskName,
             interval: time * 1000,
-            recurrent: true
+            recurrent: true,
+            params: {},
+            cancelEvent: 'defaultCancelEvent'
         });
     } else {
         throw new Error('Not implemented yet');
     }
 }
 
-let _androidAlarmScheduler = null;
+let _androidAlarmScheduler: AndroidAlarmScheduler = null;
 function androidAlarmScheduler() {
     if (!_androidAlarmScheduler) {
         _androidAlarmScheduler = new AndroidAlarmScheduler(

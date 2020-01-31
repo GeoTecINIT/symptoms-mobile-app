@@ -28,7 +28,7 @@ export class ScheduledTaskPlanner {
     async requiresForeground(): Promise<boolean> {
         const tasksToRun = await this.tasksToRun();
         const allRunInBackground = tasksToRun.every((plannedTask) =>
-            getTask(plannedTask.task).runsInBackground()
+            getTask(plannedTask.name).runsInBackground()
         );
 
         return !allRunInBackground;

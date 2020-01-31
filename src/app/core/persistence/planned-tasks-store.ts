@@ -7,7 +7,7 @@ import {
 import { RunnableTask } from '../runners/runnable-task';
 
 const DB_NAME = 'symptoms-mobile';
-const SCHEDULED_TASKS_TABLE = 'scheduledTasks';
+const PLANNED_TASKS_TABLE = 'plannedTasks';
 
 class PlannedTaskDBStore implements PlannedTasksStore {
     private dbInitialized: boolean = false;
@@ -16,28 +16,29 @@ class PlannedTaskDBStore implements PlannedTasksStore {
     // TODO: Insert params too. Is cancel event required?
     async insert(plannedTask: PlannedTask): Promise<void> {
         await this.createDB();
-        const { task, interval, recurrent } = plannedTask;
+        const { name, interval, recurrent, params, cancelEvent } = plannedTask;
         const runnableTask: RunnableTask = {
-            name: task,
+            name,
             interval,
             recurrent,
-            params: null
+            params,
+            cancelEvent
         };
         const possibleTask = await this.get(runnableTask);
         if (possibleTask) {
             throw new Error(
-                `Already stored: {name=${task}, interval=${interval}, recurrent=${recurrent}}`
+                `Already stored: {name=${name}, interval=${interval}, recurrent=${recurrent}}`
             );
         }
 
-        await nSQL(SCHEDULED_TASKS_TABLE)
+        await nSQL(PLANNED_TASKS_TABLE)
             .query('upsert', { ...plannedTask })
             .exec();
     }
 
     async delete(taskId: string): Promise<void> {
         await this.createDB();
-        await nSQL(SCHEDULED_TASKS_TABLE)
+        await nSQL(PLANNED_TASKS_TABLE)
             .query('delete')
             .where(['id', '=', taskId])
             .exec();
@@ -50,7 +51,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         if (typeof task !== 'string') {
             const runnableTask = task as RunnableTask;
             whereStatement = [
-                ['task', '=', runnableTask.name],
+                ['name', '=', runnableTask.name],
                 'AND',
                 ['interval', '=', runnableTask.interval],
                 'AND',
@@ -58,7 +59,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
             ];
         }
 
-        const rows = await nSQL(SCHEDULED_TASKS_TABLE)
+        const rows = await nSQL(PLANNED_TASKS_TABLE)
             .query('select')
             .where(whereStatement)
             .exec();
@@ -74,9 +75,21 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         planningType?: PlanningType
     ): Promise<Array<PlannedTask>> {
         await this.createDB();
-        const rows = await nSQL(SCHEDULED_TASKS_TABLE)
+        const rows = await nSQL(PLANNED_TASKS_TABLE)
             .query('select')
             .orderBy(['interval ASC'])
+            .exec();
+
+        return rows.map((row) => this.plannedTaskFromRow(row));
+    }
+
+    async getAllFilteredByCancelEvent(
+        cancelEvent: string
+    ): Promise<Array<PlannedTask>> {
+        await this.createDB();
+        const rows = await nSQL(PLANNED_TASKS_TABLE)
+            .query('select')
+            .where(['cancelEvent', '=', cancelEvent])
             .exec();
 
         return rows.map((row) => this.plannedTaskFromRow(row));
@@ -87,7 +100,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         const plannedTask = await this.get(taskId);
 
         if (plannedTask) {
-            await nSQL(`${SCHEDULED_TASKS_TABLE}.errorCount`)
+            await nSQL(`${PLANNED_TASKS_TABLE}.errorCount`)
                 .query('upsert', plannedTask.errorCount + 1)
                 .where(['id', '=', taskId])
                 .exec();
@@ -101,7 +114,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         const plannedTask = await this.get(taskId);
 
         if (plannedTask) {
-            await nSQL(`${SCHEDULED_TASKS_TABLE}.timeoutCount`)
+            await nSQL(`${PLANNED_TASKS_TABLE}.timeoutCount`)
                 .query('upsert', plannedTask.timeoutCount + 1)
                 .where(['id', '=', taskId])
                 .exec();
@@ -115,7 +128,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         const plannedTask = await this.get(taskId);
 
         if (plannedTask) {
-            await nSQL(`${SCHEDULED_TASKS_TABLE}.lastRun`)
+            await nSQL(`${PLANNED_TASKS_TABLE}.lastRun`)
                 .query('upsert', timestamp)
                 .where(['id', '=', taskId])
                 .exec();
@@ -126,7 +139,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
 
     async deleteAll(): Promise<void> {
         await this.createDB();
-        await nSQL(SCHEDULED_TASKS_TABLE)
+        await nSQL(PLANNED_TASKS_TABLE)
             .query('delete')
             .exec();
     }
@@ -142,18 +155,20 @@ class PlannedTaskDBStore implements PlannedTasksStore {
                 mode: new NativeSQLite(),
                 tables: [
                     {
-                        name: SCHEDULED_TASKS_TABLE,
+                        name: PLANNED_TASKS_TABLE,
                         model: {
                             // TODO: Update schema with new fields
                             'id:uuid': { pk: true },
-                            'type:string': {}, // TODO: Think of if it should be planning type instead
-                            'task:string': {},
+                            'planningType:string': {}, // TODO: Think of if it should be planning type instead
+                            'name:string': {},
+                            'params:obj': {},
                             'interval:int': {},
                             'recurrent:boolean': {},
                             'createdAt:int': {},
                             'errorCount:int': {},
                             'timeoutCount:int': {},
-                            'lastRun:int': {}
+                            'lastRun:int': {},
+                            'cancelEvent:string': {}
                         }
                     }
                 ]
@@ -166,12 +181,13 @@ class PlannedTaskDBStore implements PlannedTasksStore {
     // TODO: Update with params and cancelEvent if required
     private plannedTaskFromRow(obj: any) {
         return new PlannedTask(
-            obj.type,
+            obj.planningType,
             {
-                name: obj.task,
+                name: obj.name,
                 interval: obj.interval,
                 recurrent: obj.recurrent,
-                params: null
+                params: obj.params,
+                cancelEvent: obj.cancelEvent
             },
             obj.id,
             obj.createdAt,
@@ -188,6 +204,9 @@ export interface PlannedTasksStore {
     get(task: RunnableTask | string): Promise<PlannedTask>;
     getAllSortedByInterval(
         planningType: PlanningType
+    ): Promise<Array<PlannedTask>>;
+    getAllFilteredByCancelEvent(
+        cancelEvent: string
     ): Promise<Array<PlannedTask>>;
     increaseErrorCount(task: string): Promise<void>;
     increaseTimeoutCount(task: string): Promise<void>;

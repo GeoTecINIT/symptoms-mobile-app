@@ -17,6 +17,9 @@ export function createPlannedTaskStoreMock(): PlannedTasksStore {
         getAllSortedByInterval() {
             return Promise.resolve([]);
         },
+        getAllFilteredByCancelEvent(eventName: string) {
+            return Promise.resolve([]);
+        },
         increaseErrorCount(taskId: string) {
             return Promise.resolve();
         },

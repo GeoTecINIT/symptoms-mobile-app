@@ -9,19 +9,22 @@ describe('Planned Tasks Store', () => {
         name: 'dummyTask1',
         interval: 120000,
         recurrent: true,
-        params: {}
+        params: { param1: 'patata1' },
+        cancelEvent: 'cancelEvent'
     };
     const runnableTask2: RunnableTask = {
         name: 'dummyTask2',
         interval: 60000,
         recurrent: true,
-        params: {}
+        params: { param1: 'patata1', param2: 'patata2' },
+        cancelEvent: 'otherEvent'
     };
     const runnableTask3: RunnableTask = {
         name: 'dummyTask3',
         interval: 150000,
         recurrent: true,
-        params: {}
+        params: {},
+        cancelEvent: 'cancelEvent'
     };
 
     const plannedTask1: PlannedTask = new PlannedTask('alarm', runnableTask1);
@@ -69,12 +72,29 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask3);
 
         const tasks = await store.getAllSortedByInterval('alarm');
+        console.log(tasks);
         expect(tasks.length).toBe(3);
         for (let i = 0; i < tasks.length - 1; i++) {
             if (tasks[i].interval > tasks[i + 1].interval) {
                 fail('Tasks out of order');
             }
         }
+    });
+
+    it('gets stored tasks with the same cancelEvent', async () => {
+        await store.deleteAll();
+        await store.insert(plannedTask1);
+        await store.insert(plannedTask2);
+        await store.insert(plannedTask3);
+
+        const cancelEventTasks = await store.getAllFilteredByCancelEvent(
+            'cancelEvent'
+        );
+        const otherEventTasks = await store.getAllFilteredByCancelEvent(
+            'otherEvent'
+        );
+        expect(cancelEventTasks.length).toBe(2);
+        expect(otherEventTasks.length).toBe(1);
     });
 
     it('increases error count of a task by id', async () => {
