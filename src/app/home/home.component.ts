@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { android as androidApp } from 'tns-core-modules/application/application';
 
 import { DataService, DataItem } from '../shared/data.service';
-import { schedule } from '../core/schedulers';
-import { AndroidAlarmManager } from '../core/schedulers/alarms/alarm-manager.android';
+import { AndroidAlarmManager } from '../core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { setupNotificationChannels } from '../core/notification-manager.android';
+import { taskScheduler } from '../core/tasks/scheduler';
 
 @Component({
     selector: 'Home',
@@ -23,10 +23,27 @@ export class HomeComponent implements OnInit {
             setupNotificationChannels(androidApp.context);
         }
         this.items = this._itemService.getItems();
+
+        const scheduler = taskScheduler();
         Promise.all([
-            schedule(60, 'fastTask'),
-            schedule(120, 'mediumTask'),
-            schedule(240, 'slowTask')
+            scheduler.schedule({
+                name: 'fastTask',
+                interval: 60,
+                recurrent: true,
+                params: {}
+            }),
+            scheduler.schedule({
+                name: 'mediumTask',
+                interval: 120,
+                recurrent: true,
+                params: {}
+            }),
+            scheduler.schedule({
+                name: 'slowTask',
+                interval: 240,
+                recurrent: true,
+                params: {}
+            })
         ])
             .then((plannedTasks) => {
                 plannedTasks.forEach((plannedTask) => {

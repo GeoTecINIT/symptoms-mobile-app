@@ -6,7 +6,7 @@ import { ScheduledTaskPlanner } from '~/app/core/schedulers/scheduled-task-plann
 import { uuid } from '~/app/core/utils/uuid';
 import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '../tasks';
-import { createPlannedTaskStoreMock } from '.';
+import { createPlannedTaskStoreMock } from '../persistence';
 
 describe('Scheduled Task Planner', () => {
     setTasks(testTasks);

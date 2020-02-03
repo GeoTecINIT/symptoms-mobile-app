@@ -1,0 +1,34 @@
+import { TaskNotFoundError, setTasks } from '~/app/core/tasks/provider';
+import { testTasks } from '..';
+import { taskScheduler } from '~/app/core/tasks/scheduler';
+import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
+import { RunnableTask } from '~/app/core/tasks/runnable-task';
+
+describe('Task scheduler', () => {
+    setTasks(testTasks);
+    const scheduler = taskScheduler();
+
+    it('schedules a job in time', async () => {
+        const knownTask: RunnableTask = {
+            name: 'dummyTask',
+            interval: 60,
+            recurrent: false,
+            params: {}
+        };
+        const task = await scheduler.schedule(knownTask);
+        expect(task).not.toBeNull();
+        plannedTasksDB.delete(task.id);
+    });
+
+    it('raises an error when task is unknown', async () => {
+        const unknownTask: RunnableTask = {
+            name: 'patata',
+            interval: 60,
+            recurrent: false,
+            params: {}
+        };
+        await expectAsync(scheduler.schedule(unknownTask)).toBeRejectedWith(
+            new TaskNotFoundError(unknownTask.name)
+        );
+    });
+});

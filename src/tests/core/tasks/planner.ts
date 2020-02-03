@@ -1,15 +1,13 @@
-import {
-    TaskPlanner,
-    TaskScheduler,
-    TaskRunner
-} from '~/app/core/tasks/planner';
+import { TaskPlanner, TaskRunner } from '~/app/core/tasks/planner';
+import { TaskScheduler } from '~/app/core/tasks/scheduler';
 import {
     RunnableTask,
     RunnableTaskBuilder
 } from '~/app/core/tasks/runnable-task';
 import { PlatformEvent } from '~/app/core/events';
 import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
-import { createPlannedTaskStoreMock } from '../schedulers';
+import { createPlannedTaskStoreMock } from '../persistence';
+import { TaskNotFoundError } from '~/app/core/tasks/provider';
 
 describe('Task planner', () => {
     const taskScheduler = createTaskScheduler();
@@ -47,17 +45,23 @@ describe('Task planner', () => {
 
     it('schedules a recurrent task in time', async () => {
         await taskPlanner.plan(recurrentTask, dummyEvent);
-        expect(taskScheduler.schedule).toHaveBeenCalledWith(
-            recurrentTask,
-            dummyEvent
-        );
+        expect(taskScheduler.schedule).toHaveBeenCalledWith(recurrentTask);
     });
 
     it('schedules a one-shot task in time', async () => {
         await taskPlanner.plan(oneShotTask, dummyEvent);
-        expect(taskScheduler.schedule).toHaveBeenCalledWith(
-            oneShotTask,
-            dummyEvent
+        expect(taskScheduler.schedule).toHaveBeenCalledWith(oneShotTask);
+    });
+
+    it('raises an error when task is unknown', async () => {
+        const unknownTask: RunnableTask = {
+            name: 'patata',
+            interval: 60,
+            recurrent: false,
+            params: {}
+        };
+        await expectAsync(taskPlanner.plan(unknownTask)).toBeRejectedWith(
+            new TaskNotFoundError(unknownTask.name)
         );
     });
 
@@ -74,10 +78,7 @@ describe('Task planner', () => {
 
 function createTaskScheduler(): TaskScheduler {
     return {
-        schedule(
-            task: RunnableTask,
-            platformEvent?: PlatformEvent
-        ): Promise<PlannedTask> {
+        schedule(task: RunnableTask): Promise<PlannedTask> {
             return Promise.resolve(null);
         },
         cancel(id: string): Promise<void> {

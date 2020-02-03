@@ -1,7 +1,7 @@
-import { AlarmManager } from '~/app/core/schedulers/alarms/alarm-manager.android';
-import { AndroidAlarmScheduler } from '~/app/core/schedulers/alarms/alarm-scheduler.android';
+import { AlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
+import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
 import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
-import { createPlannedTaskStoreMock } from '..';
+import { createPlannedTaskStoreMock } from '../../../../persistence';
 import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 describe('Android Alarm Scheduler', () => {

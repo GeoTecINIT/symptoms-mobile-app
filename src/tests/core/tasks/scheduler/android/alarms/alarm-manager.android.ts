@@ -1,4 +1,4 @@
-import { AndroidAlarmManager } from '~/app/core/schedulers/alarms/alarm-manager.android';
+import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
 
 describe('Android Alarm Manager', () => {
     let systemAlarmManager: android.app.AlarmManager;

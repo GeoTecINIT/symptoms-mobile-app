@@ -1,4 +1,4 @@
-import { createPlannedTaskStoreMock } from '.';
+import { createPlannedTaskStoreMock } from '../persistence';
 import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '../tasks';
 import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';

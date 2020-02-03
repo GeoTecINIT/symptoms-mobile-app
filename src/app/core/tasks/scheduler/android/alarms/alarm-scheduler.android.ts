@@ -1,7 +1,7 @@
-import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
+import { PlannedTasksStore } from '../../../../persistence/planned-tasks-store';
 import { AlarmManager } from './alarm-manager.android';
-import { PlannedTask } from '../../tasks/planner/planned-task';
-import { RunnableTask } from '../../tasks/runnable-task';
+import { PlannedTask } from '../../../planner/planned-task';
+import { RunnableTask } from '../../../runnable-task';
 
 export class AndroidAlarmScheduler {
     constructor(

@@ -1,7 +1,7 @@
-import { ScheduledTaskPlanner } from '../scheduled-task-planner';
+import { ScheduledTaskPlanner } from '../../../../schedulers/scheduled-task-planner';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
-import { plannedTasksDB } from '../../persistence/planned-tasks-store';
-import { createAlarmRunnerServiceIntent } from '../../utils/android-intents.android';
+import { plannedTasksDB } from '../../../../persistence/planned-tasks-store';
+import { createAlarmRunnerServiceIntent } from '../../../../utils/android-intents.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
