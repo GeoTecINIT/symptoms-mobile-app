@@ -8,24 +8,20 @@ export { PlatformEvent, EventCallback, EventReceiver } from './events';
 export function on(
     eventName: string,
     eventReceiver: EventCallback | EventReceiver
-) {
-    if ('exec' in eventReceiver) {
-        internalEventManager.on(eventName, eventReceiver.exec, eventReceiver);
-    } else {
-        internalEventManager.on(eventName, eventReceiver);
+): number {
+    let receiver = eventReceiver as EventCallback;
+    if ('onReceive' in eventReceiver) {
+        receiver = (event) => eventReceiver.onReceive(event);
     }
+
+    return internalEventManager.on(eventName, receiver);
 }
 
-export function off(
-    eventName: string,
-    eventReceiver?: EventCallback | EventReceiver
-) {
-    if (!eventReceiver) {
+export function off(eventName: string, listenerId?: number) {
+    if (!listenerId) {
         internalEventManager.off(eventName);
-    } else if ('exec' in eventReceiver) {
-        internalEventManager.off(eventName, eventReceiver.exec, eventReceiver);
     } else {
-        internalEventManager.off(eventName, eventReceiver);
+        internalEventManager.off(eventName, listenerId);
     }
 }
 

@@ -33,7 +33,7 @@ export class TaskPlanner {
             ? this.taskScheduler.schedule(runnableTask, params)
             : this.taskRunner.run(runnableTask, params));
 
-        // TODO: do something with planned task id and stopEvent
+        // TODO: do something with planned task id and cancelEvent
 
         return plannedTask;
     }

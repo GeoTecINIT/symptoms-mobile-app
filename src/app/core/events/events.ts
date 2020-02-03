@@ -7,5 +7,5 @@ export interface PlatformEvent {
 export type EventCallback = (data: PlatformEvent) => void;
 
 export interface EventReceiver {
-    exec(platformEvent: PlatformEvent): void;
+    onReceive(platformEvent: PlatformEvent): void;
 }

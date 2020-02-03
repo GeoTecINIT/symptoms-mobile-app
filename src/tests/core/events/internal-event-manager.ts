@@ -8,9 +8,9 @@ describe('Internal event manager', () => {
         id: 'uniqueEventId',
         data: { param: 'patata' }
     };
+    let internalEventManager: InternalEventManager;
     let dummyCallback: EventCallback;
     let anotherDummyCallback: EventCallback;
-    let internalEventManager: InternalEventManager;
 
     beforeEach(() => {
         internalEventManager = new InternalEventManager();
@@ -18,15 +18,20 @@ describe('Internal event manager', () => {
         anotherDummyCallback = jasmine.createSpy('anotherDummyCallback');
     });
 
+    afterEach(() => {
+        internalEventManager.off(eventName);
+    });
+
     it('allows to register an event subscription', () => {
-        internalEventManager.on(eventName, dummyCallback);
+        const listenerId = internalEventManager.on(eventName, dummyCallback);
         internalEventManager.emit(platformEvent);
         expect(dummyCallback).toHaveBeenCalledWith(platformEvent);
+        expect(listenerId).toEqual(jasmine.any(Number));
     });
 
     it('allows to unregister an event subscription', () => {
-        internalEventManager.on(eventName, dummyCallback);
-        internalEventManager.off(eventName, dummyCallback);
+        const listenerId = internalEventManager.on(eventName, dummyCallback);
+        internalEventManager.off(eventName, listenerId);
         internalEventManager.emit(platformEvent);
         expect(dummyCallback).not.toHaveBeenCalled();
     });
@@ -40,9 +45,9 @@ describe('Internal event manager', () => {
     });
 
     it('allows to unregister one of the event subscriptions', () => {
-        internalEventManager.on(eventName, dummyCallback);
+        const listenerId = internalEventManager.on(eventName, dummyCallback);
         internalEventManager.on(eventName, anotherDummyCallback);
-        internalEventManager.off(eventName, dummyCallback);
+        internalEventManager.off(eventName, listenerId);
         internalEventManager.emit(platformEvent);
         expect(dummyCallback).not.toHaveBeenCalled();
         expect(anotherDummyCallback).toHaveBeenCalledWith(platformEvent);
