@@ -1,44 +1,42 @@
-import { createPlannedTaskStoreMock } from '../persistence';
 import { setTasks } from '~/app/core/tasks/provider';
-import { testTasks } from '../tasks';
-import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
+import { testTasks } from '..';
+import { createPlannedTaskStoreMock } from '../../persistence';
 import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
-import { RunnableTask } from '~/app/core/tasks/runnable-task';
+import { BatchTaskRunner } from '~/app/core/tasks/runners/batch-task-runner';
+import { CoreEvent, emit, createEvent } from '~/app/core/events';
 
-describe('Scheduled Task runner', () => {
+describe('Batch task runner', () => {
+    setTasks(testTasks);
     const taskStore = createPlannedTaskStoreMock();
 
-    const dummyTask: RunnableTask = {
+    const expectedDummyTask = new PlannedTask('alarm', {
         name: 'dummyTask',
         interval: 60000,
         recurrent: true,
         params: {}
-    };
-    const failedTask: RunnableTask = {
+    });
+    const expectedFailedTask = new PlannedTask('alarm', {
         name: 'failedTask',
         interval: 60000,
         recurrent: true,
         params: {}
-    };
-    const timeoutTask: RunnableTask = {
+    });
+    const expectedTimeoutTask = new PlannedTask('alarm', {
         name: 'timeoutTask',
         interval: 60000,
         recurrent: true,
         params: {}
-    };
-
-    const expectedDummyTask = new PlannedTask('alarm', dummyTask);
-    const expectedFailedTask = new PlannedTask('alarm', failedTask);
-    const expectedTimeoutTask = new PlannedTask('alarm', timeoutTask);
+    });
     const plannedTasks = [
         expectedDummyTask,
         expectedFailedTask,
         expectedTimeoutTask
     ];
 
-    const taskRunner = new ScheduledTaskRunner(plannedTasks, taskStore);
-    const expectedTimeout = 1000;
-    setTasks(testTasks);
+    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut);
+    const timeoutEventId = timeoutEvent.id;
+
+    const taskRunner = new BatchTaskRunner(taskStore);
 
     beforeEach(() => {
         spyOn(taskStore, 'updateLastRun').and.returnValue(Promise.resolve());
@@ -50,13 +48,8 @@ describe('Scheduled Task runner', () => {
         );
     });
 
-    it('calculates the total timeout of all the tasks to be run.', () => {
-        const timeout = taskRunner.getTimeout();
-        expect(timeout).toBe(expectedTimeout);
-    });
-
     it('executes all the tasks successfully', async () => {
-        await taskRunner.run();
+        await taskRunner.run(plannedTasks, timeoutEventId);
 
         expect(taskStore.updateLastRun).toHaveBeenCalledWith(
             expectedDummyTask.id,
@@ -73,7 +66,7 @@ describe('Scheduled Task runner', () => {
     });
 
     it('increases the error count of a task that has failed', async () => {
-        await taskRunner.run();
+        await taskRunner.run(plannedTasks, timeoutEventId);
 
         expect(taskStore.increaseErrorCount).not.toHaveBeenCalledWith(
             expectedDummyTask.id
@@ -87,7 +80,8 @@ describe('Scheduled Task runner', () => {
     });
 
     it('increases the timeout count of a task that has failed', async () => {
-        await taskRunner.run();
+        setTimeout(() => emit(timeoutEvent), 100);
+        await taskRunner.run(plannedTasks, timeoutEventId);
 
         expect(taskStore.increaseTimeoutCount).not.toHaveBeenCalledWith(
             expectedDummyTask.id

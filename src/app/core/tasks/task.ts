@@ -1,10 +1,15 @@
+import { PlatformEvent } from '../events';
+
 export abstract class Task {
     constructor(private _timeout = 15000) {}
 
     // TODO: custom run code should be in onRun instead.
     // Run it from here and check if code canRun also
     // Receives params and platformEvent (optional)
-    abstract run(): Promise<any>;
+    abstract run(
+        taskParams?: TaskParams,
+        platformEvent?: PlatformEvent
+    ): Promise<any>;
 
     canRun() {
         return true;

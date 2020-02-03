@@ -3,7 +3,13 @@ import { PlatformEvent, EventCallback, EventReceiver } from './events';
 
 const internalEventManager = new InternalEventManager();
 
-export { PlatformEvent, EventCallback, EventReceiver } from './events';
+export {
+    CoreEvent,
+    PlatformEvent,
+    EventCallback,
+    EventReceiver,
+    createEvent
+} from './events';
 
 export function on(
     eventName: string,

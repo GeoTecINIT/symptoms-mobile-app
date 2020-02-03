@@ -3,9 +3,17 @@ import {
     AndroidNotification,
     createNotification
 } from '~/app/core/notification-manager.android';
-import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
+import {
+    plannedTasksDB,
+    PlannedTasksStore
+} from '~/app/core/persistence/planned-tasks-store';
 import { ScheduledTaskPlanner } from '~/app/core/schedulers/scheduled-task-planner';
-import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
+import { BatchTaskRunner } from '../../../runners/batch-task-runner';
+import { PlatformEvent, CoreEvent, emit, createEvent } from '~/app/core/events';
+import { uuid } from '~/app/core/utils/uuid';
+
+const DEFAULT_TIMEOUT = 60000;
+const TIMEOUT_EVENT_OFFSET = 5000;
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmRunnerService')
@@ -18,6 +26,7 @@ export class AlarmRunnerService extends android.app.Service {
     private inForeground: boolean;
 
     private wakeLock: android.os.PowerManager.WakeLock;
+    private taskStore: PlannedTasksStore;
 
     onCreate() {
         super.onCreate();
@@ -29,6 +38,7 @@ export class AlarmRunnerService extends android.app.Service {
         this.inForeground = false;
 
         this.wakeLock = alarmRunnerWakeLock(this);
+        this.taskStore = plannedTasksDB;
 
         this.log('onCreate called');
     }
@@ -122,26 +132,43 @@ export class AlarmRunnerService extends android.app.Service {
     }
 
     private async runTasks() {
-        const taskStore = plannedTasksDB;
-        const taskPlanner = new ScheduledTaskPlanner(
-            'alarm',
-            taskStore,
-            this.timeOffset,
-            this.currentTime
-        );
+        const taskPlanner = this.createTaskPlanner();
 
         const tasksToRun = await taskPlanner.tasksToRun();
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
-            const taskRunner = new ScheduledTaskRunner(tasksToRun, taskStore);
-            const wakeLockTimeout = taskRunner.getTimeout() * 1100;
-            this.wakeLock.acquire(wakeLockTimeout);
+            const taskRunner = new BatchTaskRunner(this.taskStore);
+            const timeout = await this.calculateTimeout(taskPlanner);
+            const timeoutEventId = this.setExecutionTimeout(timeout);
 
             console.log(`Running ${taskCount} tasks`);
-            await taskRunner.run();
+            await taskRunner.run(tasksToRun, timeoutEventId);
         } else {
             this.log('WARNING - Service was called but no tasks were run!');
         }
+    }
+
+    private createTaskPlanner() {
+        return new ScheduledTaskPlanner(
+            'alarm',
+            this.taskStore,
+            this.timeOffset,
+            this.currentTime
+        );
+    }
+
+    private setExecutionTimeout(timeout: number): string {
+        this.wakeLock.acquire(timeout);
+        const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut);
+        setTimeout(() => emit(timeoutEvent), timeout - TIMEOUT_EVENT_OFFSET);
+
+        return timeoutEvent.id;
+    }
+
+    private async calculateTimeout(taskPlanner: ScheduledTaskPlanner) {
+        const time = await taskPlanner.nextInterval();
+
+        return Math.max(time, DEFAULT_TIMEOUT);
     }
 
     private gracefullyStop() {
