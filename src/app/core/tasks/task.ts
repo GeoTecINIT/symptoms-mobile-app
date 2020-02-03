@@ -1,8 +1,6 @@
 import { PlatformEvent } from '../events';
 
 export abstract class Task {
-    constructor(private _timeout = 15000) {}
-
     // TODO: custom run code should be in onRun instead.
     // Run it from here and check if code canRun also
     // Receives params and platformEvent (optional)
@@ -22,10 +20,6 @@ export abstract class Task {
     // TODO: Implement this please
     cancel() {
         console.log('Task cancelled!');
-    }
-
-    get timeout(): number {
-        return this._timeout;
     }
 }
 

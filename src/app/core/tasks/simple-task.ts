@@ -3,10 +3,9 @@ import { Task } from './task';
 export class SimpleTask extends Task {
     constructor(
         private functionToBeRun: () => Promise<any>,
-        private background = true,
-        timeout = 1000
+        private taskConfig: SimpleTaskConfig = { background: true }
     ) {
-        super(timeout);
+        super();
     }
 
     async run() {
@@ -14,6 +13,10 @@ export class SimpleTask extends Task {
     }
 
     runsInBackground() {
-        return this.background;
+        return this.taskConfig.background;
     }
+}
+
+interface SimpleTaskConfig {
+    background: boolean;
 }

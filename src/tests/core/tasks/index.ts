@@ -6,16 +6,14 @@ export const testTasks: Tasks = {
     dummyTask: new SimpleTask(async () => console.log('Dummy Task executed!')),
     dummyForegroundTask: new SimpleTask(
         async () => console.log('Dummy Foreground Task executed'),
-        false
+        { background: false }
     ),
     failedTask: new SimpleTask(() => {
         throw new Error('BOOOOM!');
     }),
     timeoutTask: new SimpleTask(
         () =>
-            new Promise((resolve, reject) => setTimeout(() => resolve(), 1000)),
-        true,
-        100
+            new Promise((resolve, reject) => setTimeout(() => resolve(), 1000))
     ),
     emitterTask: new SimpleTask(async () =>
         emit({

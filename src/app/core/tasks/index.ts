@@ -5,21 +5,17 @@ import { RunnableTaskBuilder } from './runnable-task';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask(async () => console.log('Fast task run!')),
-    mediumTask: new SimpleTask(
-        () =>
-            new Promise((resolve) => setTimeout(() => resolve(), 2000)).then(() =>
-                console.log('Medium task run!')
-            ),
-        true,
-        3000
+    mediumTask: new SimpleTask(() =>
+        new Promise((resolve) => setTimeout(() => resolve(), 2000)).then(() =>
+            console.log('Medium task run!')
+        )
     ),
     slowTask: new SimpleTask(
         () =>
             new Promise((resolve) =>
                 setTimeout(() => resolve(), 30000)
             ).then(() => console.log('Slow task run!')),
-        false,
-        31000
+        { background: false }
     )
 };
 

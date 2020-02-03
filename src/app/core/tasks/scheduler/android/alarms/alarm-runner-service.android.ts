@@ -150,9 +150,14 @@ export class AlarmRunnerService extends android.app.Service {
     private initializeExecutionWindow(timeout: number): PlatformEvent {
         this.wakeLock.acquire(timeout);
         const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        const { id } = startEvent;
         const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
-            id: startEvent.id
+            id
         });
+        const executionTimeout = timeout - TIMEOUT_EVENT_OFFSET;
+        this.log(
+            `Execution will timeout in ${executionTimeout}, for tasks running with execution id: ${id}`
+        );
         setTimeout(() => emit(timeoutEvent), timeout - TIMEOUT_EVENT_OFFSET);
 
         return startEvent;
