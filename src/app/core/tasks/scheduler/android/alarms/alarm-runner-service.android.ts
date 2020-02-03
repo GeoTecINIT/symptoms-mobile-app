@@ -12,7 +12,7 @@ import { BatchTaskRunner } from '../../../runners/batch-task-runner';
 import { PlatformEvent, CoreEvent, emit, createEvent } from '~/app/core/events';
 import { uuid } from '~/app/core/utils/uuid';
 
-const DEFAULT_TIMEOUT = 60000;
+const MIN_TIMEOUT = 60000;
 const TIMEOUT_EVENT_OFFSET = 5000;
 
 // WARNING: Update the other occurrences of this line each time it gets modified
@@ -121,28 +121,18 @@ export class AlarmRunnerService extends android.app.Service {
         this.log('Running in foreground');
     }
 
-    private moveToBackground() {
-        if (!this.inForeground) {
-            return;
-        }
-        const andRemoveNotification = true;
-        this.stopForeground(andRemoveNotification);
-        this.inForeground = false;
-        this.log('Running in background');
-    }
-
     private async runTasks() {
         const taskPlanner = this.createTaskPlanner();
 
         const tasksToRun = await taskPlanner.tasksToRun();
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
-            const taskRunner = new BatchTaskRunner(this.taskStore);
             const timeout = await this.calculateTimeout(taskPlanner);
-            const timeoutEventId = this.setExecutionTimeout(timeout);
+            const executionStartedEvt = this.initializeExecutionWindow(timeout);
 
+            const taskRunner = new BatchTaskRunner(this.taskStore);
             console.log(`Running ${taskCount} tasks`);
-            await taskRunner.run(tasksToRun, timeoutEventId);
+            await taskRunner.run(tasksToRun, executionStartedEvt);
         } else {
             this.log('WARNING - Service was called but no tasks were run!');
         }
@@ -157,18 +147,21 @@ export class AlarmRunnerService extends android.app.Service {
         );
     }
 
-    private setExecutionTimeout(timeout: number): string {
+    private initializeExecutionWindow(timeout: number): PlatformEvent {
         this.wakeLock.acquire(timeout);
-        const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut);
+        const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
+            id: startEvent.id
+        });
         setTimeout(() => emit(timeoutEvent), timeout - TIMEOUT_EVENT_OFFSET);
 
-        return timeoutEvent.id;
+        return startEvent;
     }
 
     private async calculateTimeout(taskPlanner: ScheduledTaskPlanner) {
-        const time = await taskPlanner.nextInterval();
+        const nextExecutionTime = await taskPlanner.nextInterval();
 
-        return Math.max(time, DEFAULT_TIMEOUT);
+        return Math.max(nextExecutionTime, MIN_TIMEOUT);
     }
 
     private gracefullyStop() {
@@ -182,6 +175,16 @@ export class AlarmRunnerService extends android.app.Service {
             this.log('Lock released');
             this.wakeLock.release();
         }
+    }
+
+    private moveToBackground() {
+        if (!this.inForeground) {
+            return;
+        }
+        const andRemoveNotification = true;
+        this.stopForeground(andRemoveNotification);
+        this.inForeground = false;
+        this.log('Running in background');
     }
 
     private log(message: string) {

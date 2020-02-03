@@ -28,8 +28,10 @@ describe('Single task runner', () => {
         params: {}
     });
 
-    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut);
-    const timeoutEventId = timeoutEvent.id;
+    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
+        id: startEvent.id
+    });
 
     const taskRunner = new SingleTaskRunner(taskStore);
 
@@ -44,7 +46,7 @@ describe('Single task runner', () => {
     });
 
     it('executes a task successfully', async () => {
-        await taskRunner.run(dummyTask, timeoutEventId);
+        await taskRunner.run(dummyTask, startEvent);
 
         expect(taskStore.updateLastRun).toHaveBeenCalledWith(
             dummyTask.id,
@@ -53,7 +55,7 @@ describe('Single task runner', () => {
     });
 
     it('increases the error count of a task that has failed', async () => {
-        await taskRunner.run(failedTask, timeoutEventId);
+        await taskRunner.run(failedTask, startEvent);
 
         expect(taskStore.increaseErrorCount).toHaveBeenCalledWith(
             failedTask.id
@@ -62,7 +64,7 @@ describe('Single task runner', () => {
 
     it('increases the timeout count of a task that has failed', async () => {
         setTimeout(() => emit(timeoutEvent), 100);
-        await taskRunner.run(timeoutTask, timeoutEventId);
+        await taskRunner.run(timeoutTask, startEvent);
 
         expect(taskStore.increaseTimeoutCount).toHaveBeenCalledWith(
             timeoutTask.id

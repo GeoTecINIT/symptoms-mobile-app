@@ -12,12 +12,11 @@ export class BatchTaskRunner {
 
     async run(
         plannedTasks: Array<PlannedTask>,
-        timeoutId: string,
-        platformEvent?: PlatformEvent
+        platformEvent: PlatformEvent
     ): Promise<void> {
         await Promise.all(
             plannedTasks.map((plannedTask) =>
-                this.taskRunner.run(plannedTask, timeoutId, platformEvent)
+                this.taskRunner.run(plannedTask, platformEvent)
             )
         );
     }

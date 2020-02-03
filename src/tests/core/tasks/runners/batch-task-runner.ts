@@ -33,8 +33,10 @@ describe('Batch task runner', () => {
         expectedTimeoutTask
     ];
 
-    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut);
-    const timeoutEventId = timeoutEvent.id;
+    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
+        id: startEvent.id
+    });
 
     const taskRunner = new BatchTaskRunner(taskStore);
 
@@ -49,7 +51,7 @@ describe('Batch task runner', () => {
     });
 
     it('executes all the tasks successfully', async () => {
-        await taskRunner.run(plannedTasks, timeoutEventId);
+        await taskRunner.run(plannedTasks, startEvent);
 
         expect(taskStore.updateLastRun).toHaveBeenCalledWith(
             expectedDummyTask.id,
@@ -66,7 +68,7 @@ describe('Batch task runner', () => {
     });
 
     it('increases the error count of a task that has failed', async () => {
-        await taskRunner.run(plannedTasks, timeoutEventId);
+        await taskRunner.run(plannedTasks, startEvent);
 
         expect(taskStore.increaseErrorCount).not.toHaveBeenCalledWith(
             expectedDummyTask.id
@@ -80,8 +82,8 @@ describe('Batch task runner', () => {
     });
 
     it('increases the timeout count of a task that has failed', async () => {
-        setTimeout(() => emit(timeoutEvent), 100);
-        await taskRunner.run(plannedTasks, timeoutEventId);
+        setTimeout(() => emit(timeoutEvent));
+        await taskRunner.run(plannedTasks, startEvent);
 
         expect(taskStore.increaseTimeoutCount).not.toHaveBeenCalledWith(
             expectedDummyTask.id

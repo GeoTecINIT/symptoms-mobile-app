@@ -9,8 +9,7 @@ export class SingleTaskRunner {
 
     async run(
         plannedTask: PlannedTask,
-        timeoutId: string,
-        platformEvent?: PlatformEvent
+        platformEvent: PlatformEvent
     ): Promise<void> {
         const { name, id, params } = plannedTask;
         const task = getTask(name);
@@ -23,7 +22,7 @@ export class SingleTaskRunner {
                 params,
                 platformEvent
             );
-            await this.runWithTimeout(id, parameterizedTask, timeoutId);
+            await this.runWithTimeout(id, parameterizedTask, platformEvent.id);
         } catch (error) {
             await this.taskStore.increaseErrorCount(id);
         }
