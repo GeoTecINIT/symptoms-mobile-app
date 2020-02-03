@@ -1,5 +1,5 @@
 import { schedule } from '~/app/core/schedulers';
-import { TaskNotFoundError, setTasks } from '~/app/core/tasks/task-provider';
+import { TaskNotFoundError, setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '../tasks';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 

@@ -1,5 +1,7 @@
-import { Task } from './task';
+import { Task, TaskParams } from './task';
 import { SimpleTask } from './simple-task';
+import { TaskPlanner } from './planner';
+import { RunnableTaskBuilder } from './runnable-task';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask(async () => console.log('Fast task run!')),
@@ -23,4 +25,10 @@ export const tasks: Tasks = {
 
 export interface Tasks {
     [key: string]: Task;
+}
+
+const taskPlanner = new TaskPlanner(null, null, null);
+
+export function run(taskName: string, params: TaskParams = {}) {
+    return new RunnableTaskBuilder(taskName, params, taskPlanner);
 }

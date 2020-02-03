@@ -1,6 +1,6 @@
-import { PlannedTask } from '../runners/task-planner/planned-task';
+import { PlannedTask } from '../tasks/planner/planned-task';
 import { PlannedTasksStore } from '../persistence/planned-tasks-store';
-import { getTask } from '../tasks/task-provider';
+import { getTask } from '../tasks/provider';
 import { Task } from '../tasks/task';
 
 export class ScheduledTaskRunner {

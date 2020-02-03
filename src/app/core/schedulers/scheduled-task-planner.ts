@@ -1,9 +1,6 @@
-import {
-    PlanningType,
-    PlannedTask
-} from '../runners/task-planner/planned-task';
+import { PlanningType, PlannedTask } from '../tasks/planner/planned-task';
 import { PlannedTasksStore } from '../persistence/planned-tasks-store';
-import { getTask } from '../tasks/task-provider';
+import { getTask } from '../tasks/provider';
 
 export class ScheduledTaskPlanner {
     private _allTasks: Array<PlannedTask>;

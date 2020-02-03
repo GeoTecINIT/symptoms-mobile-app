@@ -1,7 +1,7 @@
-import { setTasks } from '~/app/core/tasks/task-provider';
+import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '~/tests/core/tasks';
 import { on, emit, off, PlatformEvent, EventCallback } from '~/app/core/events';
-import { run } from '~/app/core/runners';
+import { run } from '~/app/core/tasks';
 import { uuid } from '~/app/core/utils/uuid';
 
 describe('Event-based task runner', () => {

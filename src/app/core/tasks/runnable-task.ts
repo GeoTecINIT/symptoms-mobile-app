@@ -1,6 +1,6 @@
-import { TaskParams } from '../tasks/task';
+import { TaskParams } from './task';
 import { EventReceiver, PlatformEvent } from '../events';
-import { TaskPlanner } from './task-planner';
+import { TaskPlanner } from './planner';
 
 export interface RunnableTask {
     name: string;

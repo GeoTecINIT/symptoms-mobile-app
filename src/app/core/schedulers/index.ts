@@ -1,6 +1,6 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { PlannedTask } from '../runners/task-planner/planned-task';
-import { checkIfTaskExists } from '../tasks/task-provider';
+import { PlannedTask } from '../tasks/planner/planned-task';
+import { checkIfTaskExists } from '../tasks/provider';
 import { AndroidAlarmScheduler } from './alarms/alarm-scheduler.android';
 import { AndroidAlarmManager } from './alarms/alarm-manager.android';
 import { plannedTasksDB } from '../persistence/planned-tasks-store';

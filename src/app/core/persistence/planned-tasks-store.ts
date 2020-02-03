@@ -1,10 +1,7 @@
 import { NativeSQLite } from '@nano-sql/adapter-sqlite-nativescript';
 import { nSQL } from '@nano-sql/core/lib/index';
-import {
-    PlannedTask,
-    PlanningType
-} from '../runners/task-planner/planned-task';
-import { RunnableTask } from '../runners/runnable-task';
+import { PlannedTask, PlanningType } from '../tasks/planner/planned-task';
+import { RunnableTask } from '../tasks/runnable-task';
 
 const DB_NAME = 'symptoms-mobile';
 const PLANNED_TASKS_TABLE = 'plannedTasks';

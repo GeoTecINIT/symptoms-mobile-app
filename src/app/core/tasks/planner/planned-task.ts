@@ -1,6 +1,6 @@
 import { uuid } from '../../utils/uuid';
 import { RunnableTask } from '../runnable-task';
-import { TaskParams } from '../../tasks/task';
+import { TaskParams } from '../task';
 
 export type PlanningType = 'alarm';
 

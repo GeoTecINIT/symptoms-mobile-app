@@ -1,7 +1,7 @@
 import { PlannedTasksStore } from '~/app/core/persistence/planned-tasks-store';
 
-import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
-import { RunnableTask } from '~/app/core/runners/runnable-task';
+import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 export function createPlannedTaskStoreMock(): PlannedTasksStore {
     return {

@@ -2,7 +2,7 @@ import {
     getTask,
     TaskNotFoundError,
     setTasks
-} from '~/app/core/tasks/task-provider';
+} from '~/app/core/tasks/provider';
 import { testTasks } from '.';
 
 describe('Task provider', () => {

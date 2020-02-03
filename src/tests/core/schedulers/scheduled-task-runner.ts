@@ -1,9 +1,9 @@
 import { createPlannedTaskStoreMock } from '.';
-import { setTasks } from '~/app/core/tasks/task-provider';
+import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '../tasks';
 import { ScheduledTaskRunner } from '~/app/core/schedulers/scheduled-task-runner';
-import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
-import { RunnableTask } from '~/app/core/runners/runnable-task';
+import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 describe('Scheduled Task runner', () => {
     const taskStore = createPlannedTaskStoreMock();

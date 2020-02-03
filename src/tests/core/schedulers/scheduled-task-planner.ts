@@ -1,10 +1,10 @@
 import {
     PlanningType,
     PlannedTask
-} from '~/app/core/runners/task-planner/planned-task';
+} from '~/app/core/tasks/planner/planned-task';
 import { ScheduledTaskPlanner } from '~/app/core/schedulers/scheduled-task-planner';
 import { uuid } from '~/app/core/utils/uuid';
-import { setTasks } from '~/app/core/tasks/task-provider';
+import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '../tasks';
 import { createPlannedTaskStoreMock } from '.';
 

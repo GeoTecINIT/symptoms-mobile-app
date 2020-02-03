@@ -2,13 +2,13 @@ import {
     TaskPlanner,
     TaskScheduler,
     TaskRunner
-} from '~/app/core/runners/task-planner';
+} from '~/app/core/tasks/planner';
 import {
     RunnableTask,
     RunnableTaskBuilder
-} from '~/app/core/runners/runnable-task';
+} from '~/app/core/tasks/runnable-task';
 import { PlatformEvent } from '~/app/core/events';
-import { PlannedTask } from '~/app/core/runners/task-planner/planned-task';
+import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
 import { createPlannedTaskStoreMock } from '../schedulers';
 
 describe('Task planner', () => {
