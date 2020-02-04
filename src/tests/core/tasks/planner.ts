@@ -1,13 +1,17 @@
-import { TaskPlanner, TaskRunner } from '~/app/core/tasks/planner';
+import { TaskPlanner } from '~/app/core/tasks/planner';
 import { TaskScheduler } from '~/app/core/tasks/scheduler';
 import {
     RunnableTask,
     RunnableTaskBuilder
 } from '~/app/core/tasks/runnable-task';
 import { PlatformEvent } from '~/app/core/events';
-import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
 import { createPlannedTaskStoreMock } from '../persistence';
 import { TaskNotFoundError } from '~/app/core/tasks/provider';
+import { TaskRunner } from '~/app/core/tasks/runners/instant-task-runner';
 
 describe('Task planner', () => {
     const taskScheduler = createTaskScheduler();
@@ -29,13 +33,14 @@ describe('Task planner', () => {
         .build();
     const oneShotTask = new RunnableTaskBuilder('dummyTask', {}).in(10).build();
 
-    const immediatePlannedTask = new PlannedTask('alarm', immediateTask);
+    const immediatePlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        immediateTask
+    );
 
     beforeEach(() => {
         spyOn(taskScheduler, 'schedule').and.callThrough();
-        // spyOn(taskScheduler, 'cancel').and.callThrough();
         spyOn(taskRunner, 'run').and.callThrough();
-        // spyOn(taskRunner, 'stop').and.callThrough();
     });
 
     it('runs a task immediately', async () => {
@@ -91,12 +96,9 @@ function createTaskRunner(): TaskRunner {
     return {
         run(
             task: RunnableTask,
-            platformEvent?: PlatformEvent
+            platformEvent: PlatformEvent
         ): Promise<PlannedTask> {
             return Promise.resolve(null);
-        },
-        stop(id: string): Promise<void> {
-            return Promise.resolve();
         }
     };
 }

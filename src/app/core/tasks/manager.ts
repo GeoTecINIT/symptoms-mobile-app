@@ -1,8 +1,8 @@
-import { PlanningType, PlannedTask } from '../tasks/planner/planned-task';
+import { PlannedTask, PlanningType } from './planner/planned-task';
 import { PlannedTasksStore } from '../persistence/planned-tasks-store';
-import { getTask } from '../tasks/provider';
+import { getTask } from './provider';
 
-export class ScheduledTaskPlanner {
+export class TaskManager {
     private _allTasks: Array<PlannedTask>;
 
     constructor(

@@ -1,12 +1,13 @@
-import { ScheduledTaskPlanner } from '../../../../schedulers/scheduled-task-planner';
+import { TaskManager } from '../../../manager';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
 import { plannedTasksDB } from '../../../../persistence/planned-tasks-store';
 import { createAlarmRunnerServiceIntent } from '../../../../utils/android-intents.android';
+import { PlanningType } from '../../../planner/planned-task';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
-    private taskPlanner: ScheduledTaskPlanner;
+    private taskManager: TaskManager;
     private alarmManager: AlarmManager;
     private timeOffset: number;
     private currentTime: number;
@@ -19,8 +20,8 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
 
         this.timeOffset = 30000;
         this.currentTime = new Date().getTime();
-        this.taskPlanner = new ScheduledTaskPlanner(
-            'alarm',
+        this.taskManager = new TaskManager(
+            PlanningType.Alarm,
             plannedTasksDB,
             this.timeOffset,
             this.currentTime
@@ -42,9 +43,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
     }
 
     private async rescheduleIfNeeded() {
-        const willContinue = await this.taskPlanner.willContinue();
+        const willContinue = await this.taskManager.willContinue();
         if (willContinue) {
-            const nextInterval = await this.taskPlanner.nextInterval();
+            const nextInterval = await this.taskManager.nextInterval();
             this.alarmManager.set(nextInterval);
             this.log(`Next alarm will be run in: ${nextInterval}`);
         } else {
@@ -53,9 +54,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
     }
 
     private async startTaskRunnerService(context: android.content.Context) {
-        const tasksToRun = await this.taskPlanner.tasksToRun();
+        const tasksToRun = await this.taskManager.tasksToRun();
         if (tasksToRun.length > 0) {
-            const requiresForeground = await this.taskPlanner.requiresForeground();
+            const requiresForeground = await this.taskManager.requiresForeground();
             this.startAlarmRunnerService(context, requiresForeground);
         } else {
             this.log('WARNING - triggered without tasks to run');

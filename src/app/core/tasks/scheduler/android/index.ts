@@ -1,7 +1,7 @@
 import { TaskScheduler } from '..';
 import { RunnableTask } from '../../runnable-task';
 import { PlatformEvent } from '~/app/core/events';
-import { PlannedTask } from '../../planner/planned-task';
+import { PlannedTask, PlanningType } from '../../planner/planned-task';
 import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
 import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
@@ -33,7 +33,7 @@ export class AndroidTaskScheduler implements TaskScheduler {
     async cancel(plannedTaskId: string): Promise<void> {
         const task = await this.tasksStore.get(plannedTaskId);
         switch (task.planningType) {
-            case 'alarm':
+            case PlanningType.Alarm:
                 return this.alarmScheduler.cancel(plannedTaskId);
             default:
                 throw new Error('Method not implemented.');

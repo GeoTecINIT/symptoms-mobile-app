@@ -1,7 +1,10 @@
 import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '..';
 import { createPlannedTaskStoreMock } from '../../persistence';
-import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
 import { SingleTaskRunner } from '~/app/core/tasks/runners/single-task-runner';
 import { CoreEvent, emit, createEvent } from '~/app/core/events';
 
@@ -9,19 +12,19 @@ describe('Single task runner', () => {
     setTasks(testTasks);
     const taskStore = createPlannedTaskStoreMock();
 
-    const dummyTask = new PlannedTask('alarm', {
+    const dummyTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
         interval: 60000,
         recurrent: true,
         params: {}
     });
-    const failedTask = new PlannedTask('alarm', {
+    const failedTask = new PlannedTask(PlanningType.Alarm, {
         name: 'failedTask',
         interval: 60000,
         recurrent: true,
         params: {}
     });
-    const timeoutTask = new PlannedTask('alarm', {
+    const timeoutTask = new PlannedTask(PlanningType.Alarm, {
         name: 'timeoutTask',
         interval: 60000,
         recurrent: true,

@@ -1,6 +1,6 @@
 import { PlannedTasksStore } from '../../../../persistence/planned-tasks-store';
 import { AlarmManager } from './alarm-manager.android';
-import { PlannedTask } from '../../../planner/planned-task';
+import { PlannedTask, PlanningType } from '../../../planner/planned-task';
 import { RunnableTask } from '../../../runnable-task';
 
 export class AndroidAlarmScheduler {
@@ -10,12 +10,13 @@ export class AndroidAlarmScheduler {
     ) {}
 
     async schedule(runnableTask: RunnableTask): Promise<PlannedTask> {
+        // TODO: move to index
         const possibleExisting = await this.plannedTaskStore.get(runnableTask);
         if (possibleExisting) {
             return possibleExisting;
         }
         const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
-            'alarm'
+            PlanningType.Alarm
         );
         if (
             allTasks.length === 0 ||
@@ -23,7 +24,7 @@ export class AndroidAlarmScheduler {
         ) {
             this.alarmManager.set(runnableTask.interval);
         }
-        const plannedTask = new PlannedTask('alarm', runnableTask);
+        const plannedTask = new PlannedTask(PlanningType.Alarm, runnableTask);
         await this.plannedTaskStore.insert(plannedTask);
 
         return plannedTask;
@@ -35,7 +36,7 @@ export class AndroidAlarmScheduler {
             return;
         }
         const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
-            'alarm'
+            PlanningType.Alarm
         );
         if (allTasks.length === 1) {
             this.alarmManager.cancel();

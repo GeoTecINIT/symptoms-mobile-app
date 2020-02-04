@@ -1,7 +1,10 @@
 import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '..';
 import { createPlannedTaskStoreMock } from '../../persistence';
-import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
 import { BatchTaskRunner } from '~/app/core/tasks/runners/batch-task-runner';
 import { CoreEvent, emit, createEvent } from '~/app/core/events';
 
@@ -9,19 +12,19 @@ describe('Batch task runner', () => {
     setTasks(testTasks);
     const taskStore = createPlannedTaskStoreMock();
 
-    const expectedDummyTask = new PlannedTask('alarm', {
+    const expectedDummyTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
         interval: 60000,
         recurrent: true,
         params: {}
     });
-    const expectedFailedTask = new PlannedTask('alarm', {
+    const expectedFailedTask = new PlannedTask(PlanningType.Alarm, {
         name: 'failedTask',
         interval: 60000,
         recurrent: true,
         params: {}
     });
-    const expectedTimeoutTask = new PlannedTask('alarm', {
+    const expectedTimeoutTask = new PlannedTask(PlanningType.Alarm, {
         name: 'timeoutTask',
         interval: 60000,
         recurrent: true,
@@ -82,7 +85,7 @@ describe('Batch task runner', () => {
     });
 
     it('increases the timeout count of a task that has failed', async () => {
-        setTimeout(() => emit(timeoutEvent));
+        setTimeout(() => emit(timeoutEvent), 500);
         await taskRunner.run(plannedTasks, startEvent);
 
         expect(taskStore.increaseTimeoutCount).not.toHaveBeenCalledWith(

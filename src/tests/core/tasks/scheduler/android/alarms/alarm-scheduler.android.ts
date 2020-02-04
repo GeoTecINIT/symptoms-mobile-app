@@ -1,6 +1,9 @@
 import { AlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
-import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
 import { createPlannedTaskStoreMock } from '../../../../persistence';
 import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
@@ -27,10 +30,13 @@ describe('Android Alarm Scheduler', () => {
         ...dummyTask,
         task: 'patata'
     };
-    const expectedTask: PlannedTask = new PlannedTask('alarm', dummyTask);
-    const lowerFreqST = new PlannedTask('alarm', lowerFreqTask);
-    const higherFreqST = new PlannedTask('alarm', higherFreqTask);
-    const equalFreqST = new PlannedTask('alarm', equalFreqTask);
+    const expectedTask: PlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        dummyTask
+    );
+    const lowerFreqST = new PlannedTask(PlanningType.Alarm, lowerFreqTask);
+    const higherFreqST = new PlannedTask(PlanningType.Alarm, higherFreqTask);
+    const equalFreqST = new PlannedTask(PlanningType.Alarm, equalFreqTask);
 
     beforeEach(() => {
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());

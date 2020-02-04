@@ -1,0 +1,90 @@
+import { setTasks, TaskNotFoundError } from '~/app/core/tasks/provider';
+import { testTasks } from '..';
+import { createPlannedTaskStoreMock } from '../../persistence';
+import { InstantTaskRunner } from '~/app/core/tasks/runners/instant-task-runner';
+import { RunnableTask } from '~/app/core/tasks/runnable-task';
+import {
+    createEvent,
+    CoreEvent,
+    PlatformEvent,
+    EventCallback,
+    on
+} from '~/app/core/events';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
+
+describe('Instant task planner', () => {
+    setTasks(testTasks);
+    const taskStore = createPlannedTaskStoreMock();
+    const taskRunner = new InstantTaskRunner(taskStore);
+
+    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+    const expectedEvent: PlatformEvent = {
+        name: 'patataCooked',
+        id: startEvent.id,
+        data: { status: 'slightlyBaked' }
+    };
+
+    const immediateTask: RunnableTask = {
+        name: 'emitterTask',
+        interval: 0,
+        recurrent: false,
+        params: {}
+    };
+    const expectedImmediateTask = new PlannedTask(
+        PlanningType.Immediate,
+        immediateTask
+    );
+
+    let eventCallback: EventCallback;
+    beforeEach(() => {
+        eventCallback = jasmine.createSpy();
+        spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
+        spyOn(taskStore, 'updateLastRun').and.returnValue(Promise.resolve());
+    });
+
+    it('throws an error when the task does not exist', async () => {
+        const unknownTask: RunnableTask = {
+            name: 'patata',
+            interval: 60,
+            recurrent: false,
+            params: {}
+        };
+        await expectAsync(
+            taskRunner.run(unknownTask, startEvent)
+        ).toBeRejectedWith(new TaskNotFoundError(unknownTask.name));
+    });
+
+    it('runs new a task immediately', async () => {
+        spyOn(taskStore, 'get').and.returnValue(Promise.resolve(null));
+
+        on(expectedEvent.name, eventCallback);
+        await taskRunner.run(immediateTask, startEvent);
+
+        expect(taskStore.get).toHaveBeenCalled();
+        expect(taskStore.insert).toHaveBeenCalled();
+        expect(taskStore.updateLastRun).toHaveBeenCalled();
+        expect(eventCallback).toHaveBeenCalledWith(expectedEvent);
+    });
+
+    it('runs a previously executed task immediately', async () => {
+        spyOn(taskStore, 'get').and.returnValue(
+            Promise.resolve(expectedImmediateTask)
+        );
+
+        on(expectedEvent.name, eventCallback);
+        await taskRunner.run(immediateTask, startEvent);
+
+        expect(taskStore.get).toHaveBeenCalled();
+        expect(taskStore.insert).not.toHaveBeenCalledWith(
+            expectedImmediateTask
+        );
+        expect(taskStore.updateLastRun).toHaveBeenCalledWith(
+            expectedImmediateTask.id,
+            jasmine.any(Number)
+        );
+        expect(eventCallback).toHaveBeenCalledWith(expectedEvent);
+    });
+});

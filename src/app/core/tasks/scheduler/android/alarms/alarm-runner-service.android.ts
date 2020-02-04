@@ -7,10 +7,10 @@ import {
     plannedTasksDB,
     PlannedTasksStore
 } from '~/app/core/persistence/planned-tasks-store';
-import { ScheduledTaskPlanner } from '~/app/core/schedulers/scheduled-task-planner';
 import { BatchTaskRunner } from '../../../runners/batch-task-runner';
 import { PlatformEvent, CoreEvent, emit, createEvent } from '~/app/core/events';
-import { uuid } from '~/app/core/utils/uuid';
+import { TaskManager } from '../../../manager';
+import { PlanningType } from '../../../planner/planned-task';
 
 const MIN_TIMEOUT = 60000;
 const TIMEOUT_EVENT_OFFSET = 5000;
@@ -122,12 +122,12 @@ export class AlarmRunnerService extends android.app.Service {
     }
 
     private async runTasks() {
-        const taskPlanner = this.createTaskPlanner();
+        const taskManager = this.createTaskManager();
 
-        const tasksToRun = await taskPlanner.tasksToRun();
+        const tasksToRun = await taskManager.tasksToRun();
         const taskCount = tasksToRun.length;
         if (taskCount > 0) {
-            const timeout = await this.calculateTimeout(taskPlanner);
+            const timeout = await this.calculateTimeout(taskManager);
             const executionStartedEvt = this.initializeExecutionWindow(timeout);
 
             const taskRunner = new BatchTaskRunner(this.taskStore);
@@ -138,9 +138,9 @@ export class AlarmRunnerService extends android.app.Service {
         }
     }
 
-    private createTaskPlanner() {
-        return new ScheduledTaskPlanner(
-            'alarm',
+    private createTaskManager() {
+        return new TaskManager(
+            PlanningType.Alarm,
             this.taskStore,
             this.timeOffset,
             this.currentTime
@@ -163,7 +163,7 @@ export class AlarmRunnerService extends android.app.Service {
         return startEvent;
     }
 
-    private async calculateTimeout(taskPlanner: ScheduledTaskPlanner) {
+    private async calculateTimeout(taskPlanner: TaskManager) {
         const nextExecutionTime = await taskPlanner.nextInterval();
 
         return Math.max(nextExecutionTime, MIN_TIMEOUT);

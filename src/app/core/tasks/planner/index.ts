@@ -4,11 +4,7 @@ import { PlannedTask } from './planned-task';
 import { TaskScheduler } from '../scheduler';
 import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../provider';
-
-export interface TaskRunner {
-    run(task: RunnableTask, params?: PlatformEvent): Promise<PlannedTask>;
-    stop(plannedTaskId: string): Promise<void>;
-}
+import { TaskRunner } from '../runners/instant-task-runner';
 
 export class TaskPlanner {
     constructor(

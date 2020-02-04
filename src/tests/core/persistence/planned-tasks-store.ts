@@ -1,5 +1,8 @@
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
-import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
+import {
+    PlannedTask,
+    PlanningType
+} from '~/app/core/tasks/planner/planned-task';
 import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 describe('Planned Tasks Store', () => {
@@ -27,9 +30,18 @@ describe('Planned Tasks Store', () => {
         cancelEvent: 'cancelEvent'
     };
 
-    const plannedTask1: PlannedTask = new PlannedTask('alarm', runnableTask1);
-    const plannedTask2: PlannedTask = new PlannedTask('alarm', runnableTask2);
-    const plannedTask3: PlannedTask = new PlannedTask('alarm', runnableTask3);
+    const plannedTask1: PlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        runnableTask1
+    );
+    const plannedTask2: PlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        runnableTask2
+    );
+    const plannedTask3: PlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        runnableTask3
+    );
 
     beforeEach(async () => {
         await store.deleteAll();
@@ -71,7 +83,7 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask2);
         await store.insert(plannedTask3);
 
-        const tasks = await store.getAllSortedByInterval('alarm');
+        const tasks = await store.getAllSortedByInterval(PlanningType.Alarm);
         expect(tasks.length).toBe(3);
         for (let i = 0; i < tasks.length - 1; i++) {
             if (tasks[i].interval > tasks[i + 1].interval) {
