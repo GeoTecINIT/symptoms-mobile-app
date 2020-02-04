@@ -14,6 +14,8 @@ export class BatchTaskRunner {
         plannedTasks: Array<PlannedTask>,
         platformEvent: PlatformEvent
     ): Promise<void> {
+        // TODO: Listen to task chain finished events, return once
+        // amount events received === amount of promises started
         await Promise.all(
             plannedTasks.map((plannedTask) =>
                 this.taskRunner.run(plannedTask, platformEvent)
