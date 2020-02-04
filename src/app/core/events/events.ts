@@ -16,12 +16,6 @@ interface EventData {
     [key: string]: any;
 }
 
-export type EventCallback = (data: PlatformEvent) => void;
-
-export interface EventReceiver {
-    onReceive(platformEvent: PlatformEvent): void;
-}
-
 export function createEvent(
     name: string,
     params: CreateEventParams = {}
