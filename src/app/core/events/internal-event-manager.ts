@@ -50,6 +50,10 @@ export class InternalEventManager {
         };
         this.notificationCenter.notify<InternalEventData>(internalEventData);
     }
+
+    hasListeners(eventName: string): boolean {
+        return this.notificationCenter.hasListeners(eventName);
+    }
 }
 
 type CallbackId = [string, number];

@@ -34,3 +34,7 @@ export function off(eventName: string, listenerId?: number) {
 export function emit(platformEvent: PlatformEvent) {
     internalEventManager.emit(platformEvent);
 }
+
+export function hasListeners(eventName: string): boolean {
+    return internalEventManager.hasListeners(eventName);
+}

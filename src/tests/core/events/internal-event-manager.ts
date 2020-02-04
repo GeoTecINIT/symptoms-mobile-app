@@ -52,4 +52,17 @@ describe('Internal event manager', () => {
         expect(dummyCallback).not.toHaveBeenCalled();
         expect(anotherDummyCallback).toHaveBeenCalledWith(platformEvent);
     });
+
+    it('allows to check if an unlistened event has listeners', () => {
+        const hasListeners = internalEventManager.hasListeners(eventName);
+
+        expect(hasListeners).toBeFalsy();
+    });
+
+    it('allows to check if a listened event has listeners', () => {
+        internalEventManager.on(eventName, dummyCallback);
+        const hasListeners = internalEventManager.hasListeners(eventName);
+
+        expect(hasListeners).toBeTruthy();
+    });
 });
