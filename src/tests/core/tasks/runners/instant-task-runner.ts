@@ -63,7 +63,7 @@ describe('Instant task planner', () => {
         on(expectedEvent.name, eventCallback);
         await taskRunner.run(immediateTask, startEvent);
 
-        expect(taskStore.get).toHaveBeenCalled();
+        expect(taskStore.get).toHaveBeenCalledTimes(2);
         expect(taskStore.insert).toHaveBeenCalled();
         expect(taskStore.updateLastRun).toHaveBeenCalled();
         expect(eventCallback).toHaveBeenCalledWith(expectedEvent);
@@ -77,7 +77,7 @@ describe('Instant task planner', () => {
         on(expectedEvent.name, eventCallback);
         await taskRunner.run(immediateTask, startEvent);
 
-        expect(taskStore.get).toHaveBeenCalled();
+        expect(taskStore.get).toHaveBeenCalledTimes(2);
         expect(taskStore.insert).not.toHaveBeenCalledWith(
             expectedImmediateTask
         );
