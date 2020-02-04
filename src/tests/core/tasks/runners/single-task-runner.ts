@@ -66,7 +66,7 @@ describe('Single task runner', () => {
     });
 
     it('increases the timeout count of a task that has failed', async () => {
-        setTimeout(() => emit(timeoutEvent), 100);
+        setTimeout(() => emit(timeoutEvent), 200);
         await taskRunner.run(timeoutTask, startEvent);
 
         expect(taskStore.increaseTimeoutCount).toHaveBeenCalledWith(

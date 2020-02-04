@@ -1,25 +1,23 @@
 import { Tasks } from '~/app/core/tasks';
 import { SimpleTask } from '~/app/core/tasks/simple-task';
-import { emit } from '~/app/core/events';
 
 export const testTasks: Tasks = {
-    dummyTask: new SimpleTask(async () => console.log('Dummy Task executed!')),
+    dummyTask: new SimpleTask('dummyTask', async () =>
+        console.log('Dummy Task executed!')
+    ),
     dummyForegroundTask: new SimpleTask(
+        'dummyForegroundTask',
         async () => console.log('Dummy Foreground Task executed'),
         { background: false }
     ),
-    failedTask: new SimpleTask(() => {
+    failedTask: new SimpleTask('failedTask', () => {
         throw new Error('BOOOOM!');
     }),
     timeoutTask: new SimpleTask(
-        () =>
-            new Promise((resolve, reject) => setTimeout(() => resolve(), 1000))
+        'timeoutTask',
+        () => new Promise((resolve) => setTimeout(() => resolve(), 2000))
     ),
-    emitterTask: new SimpleTask(async () =>
-        emit({
-            name: 'patataCooked',
-            id: 'unknown',
-            data: { status: 'slightlyBaked' }
-        })
+    emitterTask: new SimpleTask('emitterTask', async (done) =>
+        done('patataCooked', { status: 'slightlyBaked' })
     )
 };

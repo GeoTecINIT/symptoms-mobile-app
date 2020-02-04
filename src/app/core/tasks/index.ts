@@ -4,13 +4,16 @@ import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
 
 export const tasks: Tasks = {
-    fastTask: new SimpleTask(async () => console.log('Fast task run!')),
-    mediumTask: new SimpleTask(() =>
+    fastTask: new SimpleTask('fastTask', async () =>
+        console.log('Fast task run!')
+    ),
+    mediumTask: new SimpleTask('mediumTask', () =>
         new Promise((resolve) => setTimeout(() => resolve(), 2000)).then(() =>
             console.log('Medium task run!')
         )
     ),
     slowTask: new SimpleTask(
+        'slowTask',
         () =>
             new Promise((resolve) =>
                 setTimeout(() => resolve(), 30000)

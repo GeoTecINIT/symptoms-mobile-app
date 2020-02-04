@@ -1,22 +1,26 @@
-import { Task } from './task';
+import { Task, TaskConfig, TaskParams } from './task';
+import { PlatformEvent } from '../events';
+
+type SimpleTaskFunction = (
+    done: (eventName: string, data: { [key: string]: any }) => void,
+    params: TaskParams,
+    evt: PlatformEvent
+) => Promise<void>;
 
 export class SimpleTask extends Task {
     constructor(
-        private functionToBeRun: () => Promise<any>,
-        private taskConfig: SimpleTaskConfig = { background: true }
+        name: string,
+        private functionToBeRun: SimpleTaskFunction,
+        taskConfig: TaskConfig = { background: true }
     ) {
-        super();
+        super(name, taskConfig);
     }
 
-    async run() {
-        await this.functionToBeRun();
+    protected async onRun() {
+        await this.functionToBeRun(
+            (eventName, data) => this.done(eventName, data),
+            this.taskParams,
+            this.invocationEvent
+        );
     }
-
-    runsInBackground() {
-        return this.taskConfig.background;
-    }
-}
-
-interface SimpleTaskConfig {
-    background: boolean;
 }
