@@ -50,7 +50,7 @@ export abstract class Task {
                     invocationEvent
                 )}: ${err}`
             );
-            this.emitEndEvent(err);
+            this.emitEndEvent(TaskResultStatus.Error, err);
             throw err;
         }
     }
@@ -64,10 +64,11 @@ export abstract class Task {
 
     /**
      * Method to be called by the task runner if the task takes longer than expected to be
-     * executed. Should be overridden to gracefully finish a task.
+     * executed. Finishes the task chain and gracefully cancels the task through onCancel.
      */
     cancel(): void {
-        return null;
+        this.emitEndEvent(TaskResultStatus.Cancelled);
+        this.onCancel();
     }
 
     /**
@@ -84,13 +85,20 @@ export abstract class Task {
     protected abstract onRun(): Promise<void>;
 
     /**
+     * Method to be overridden to clean up resources on task cancellation
+     */
+    protected onCancel(): void {
+        return null;
+    }
+
+    /**
      * Meant to be used by the task itself. Task result must be emitted through here.
      * @param platformEvent The event containing the result of the task
      */
     protected done(eventName: string, data: { [key: string]: any } = {}) {
         this.markAsDone();
         if (!hasListeners(eventName)) {
-            this.emitEndEvent();
+            this.emitEndEvent(TaskResultStatus.Ok);
 
             return;
         }
@@ -110,10 +118,11 @@ export abstract class Task {
         console.log(`Task (${this.name}): ${message}`);
     }
 
-    private emitEndEvent(err?: Error): void {
-        const result: TaskChainResult = err
-            ? { status: 'error', reason: err }
-            : { status: 'ok' };
+    private emitEndEvent(status: TaskResultStatus, err?: Error): void {
+        const result: TaskChainResult = { status };
+        if (err) {
+            result.reason = err;
+        }
         const endEvent = createEvent(CoreEvent.TaskChainFinished, {
             id: this.invocationEvent.id,
             data: {
@@ -141,6 +150,12 @@ export interface TaskParams {
 }
 
 export interface TaskChainResult {
-    status: 'ok' | 'error';
+    status: TaskResultStatus;
     reason?: Error;
+}
+
+export enum TaskResultStatus {
+    Ok = 'ok',
+    Error = 'error',
+    Cancelled = 'cancelled'
 }

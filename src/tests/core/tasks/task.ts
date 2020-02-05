@@ -22,6 +22,11 @@ describe('Task', () => {
         throw expectedError;
     });
 
+    const timeoutTask = new SimpleTask(
+        'timeoutTask',
+        () => new Promise((resolve) => setTimeout(() => resolve(), 5000))
+    );
+
     const emitterTaskEndEvtName = 'emissionCompleted';
     const emitterTask = new SimpleTask('emitterTask', async (done) =>
         done(emitterTaskEndEvtName, { result: ':)' })
@@ -98,6 +103,25 @@ describe('Task', () => {
             name: CoreEvent.TaskChainFinished,
             id: startEvent.id,
             data: { result: { status: 'error', reason: expectedError } }
+        };
+        expect(eventCallback).toHaveBeenCalledWith(taskChainFinishedEvt);
+    });
+
+    it('can be cancelled and reports that the task chain has finished prematurely', async () => {
+        on(CoreEvent.TaskChainFinished, eventCallback);
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                timeoutTask.cancel();
+                resolve();
+            }, 100);
+            timeoutTask
+                .run({}, startEvent)
+                .then(() => reject(new Error('Task should not finish')));
+        });
+        const taskChainFinishedEvt: PlatformEvent = {
+            name: CoreEvent.TaskChainFinished,
+            id: startEvent.id,
+            data: { result: { status: 'cancelled' } }
         };
         expect(eventCallback).toHaveBeenCalledWith(taskChainFinishedEvt);
     });
