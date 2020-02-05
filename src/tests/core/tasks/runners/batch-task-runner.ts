@@ -6,7 +6,7 @@ import {
     PlanningType
 } from '~/app/core/tasks/planner/planned-task';
 import { BatchTaskRunner } from '~/app/core/tasks/runners/batch-task-runner';
-import { CoreEvent, emit, createEvent } from '~/app/core/events';
+import { CoreEvent, emit, createEvent, PlatformEvent } from '~/app/core/events';
 
 describe('Batch task runner', () => {
     setTasks(testTasks);
@@ -36,14 +36,17 @@ describe('Batch task runner', () => {
         expectedTimeoutTask
     ];
 
-    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
-    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
-        id: startEvent.id
-    });
+    let startEvent: PlatformEvent;
+    let timeoutEvent: PlatformEvent;
 
     const taskRunner = new BatchTaskRunner(taskStore);
 
     beforeEach(() => {
+        startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
+            id: startEvent.id
+        });
+
         spyOn(taskStore, 'updateLastRun').and.returnValue(Promise.resolve());
         spyOn(taskStore, 'increaseErrorCount').and.returnValue(
             Promise.resolve()

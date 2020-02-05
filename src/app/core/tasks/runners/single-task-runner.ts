@@ -9,7 +9,7 @@ export class SingleTaskRunner {
 
     async run(
         plannedTask: PlannedTask,
-        platformEvent: PlatformEvent
+        startEvent: PlatformEvent
     ): Promise<void> {
         const { name, id, params } = plannedTask;
         const task = getTask(name);
@@ -20,9 +20,9 @@ export class SingleTaskRunner {
             const parameterizedTask = new ParameterizedTask(
                 task,
                 params,
-                platformEvent
+                startEvent
             );
-            await this.runWithTimeout(id, parameterizedTask, platformEvent.id);
+            await this.runWithTimeout(id, parameterizedTask, startEvent.id);
         } catch (error) {
             await this.taskStore.increaseErrorCount(id);
         }
@@ -61,11 +61,11 @@ class ParameterizedTask {
     constructor(
         private task: Task,
         private taskParams: TaskParams,
-        private platformEvent: PlatformEvent
+        private startEvent: PlatformEvent
     ) {}
 
     run(): Promise<void> {
-        return this.task.run(this.taskParams, this.platformEvent);
+        return this.task.run(this.taskParams, this.startEvent);
     }
 
     cancel() {
