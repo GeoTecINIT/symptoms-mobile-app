@@ -1,4 +1,4 @@
-import { createAppLaunchIntent } from './utils/android-intents.android';
+import { createAppLaunchIntent } from './intents.android';
 import { localize } from 'nativescript-localize';
 
 const NotificationManagerCompat = androidx.core.app.NotificationManagerCompat;

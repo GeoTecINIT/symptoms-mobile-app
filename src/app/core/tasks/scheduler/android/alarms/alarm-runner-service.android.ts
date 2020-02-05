@@ -1,8 +1,8 @@
-import { unpackAlarmRunnerServiceIntent } from '~/app/core/utils/android-intents.android';
+import { unpackAlarmRunnerServiceIntent } from '~/app/core/android/intents.android';
 import {
     AndroidNotification,
     createNotification
-} from '~/app/core/notification-manager.android';
+} from '~/app/core/android/notification-manager.android';
 import {
     plannedTasksDB,
     PlannedTasksStore

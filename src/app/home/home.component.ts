@@ -3,7 +3,7 @@ import { android as androidApp } from 'tns-core-modules/application/application'
 
 import { DataService, DataItem } from '../shared/data.service';
 import { AndroidAlarmManager } from '../core/tasks/scheduler/android/alarms/alarm-manager.android';
-import { setupNotificationChannels } from '../core/notification-manager.android';
+import { setupNotificationChannels } from '../core/android/notification-manager.android';
 import { on, emit, createEvent } from '../core/events';
 import { run } from '../core/tasks';
 import { plannedTasksDB } from '../core/persistence/planned-tasks-store';

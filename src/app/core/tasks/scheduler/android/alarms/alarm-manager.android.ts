@@ -1,5 +1,5 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { createAlarmReceiverIntent } from '~/app/core/utils/android-intents.android';
+import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 
 export interface AlarmManager {
     set(interval: number): void;

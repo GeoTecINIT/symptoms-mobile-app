@@ -1,7 +1,7 @@
 import { TaskManager } from '../../../manager';
 import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
 import { plannedTasksDB } from '../../../../persistence/planned-tasks-store';
-import { createAlarmRunnerServiceIntent } from '../../../../utils/android-intents.android';
+import { createAlarmRunnerServiceIntent } from '../../../../android/intents.android';
 import { PlanningType } from '../../../planner/planned-task';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
