@@ -30,17 +30,21 @@ describe('Planned Tasks Store', () => {
         cancelEvent: 'cancelEvent'
     };
 
-    const plannedTask1: PlannedTask = new PlannedTask(
-        PlanningType.Alarm,
-        runnableTask1
-    );
-    const plannedTask2: PlannedTask = new PlannedTask(
-        PlanningType.Alarm,
-        runnableTask2
-    );
-    const plannedTask3: PlannedTask = new PlannedTask(
-        PlanningType.Alarm,
-        runnableTask3
+    const runnableTask4: RunnableTask = {
+        name: 'dummyTask4',
+        interval: 0,
+        recurrent: false,
+        params: {},
+        cancelEvent: 'cancelEvent'
+    };
+
+    const plannedTask1 = new PlannedTask(PlanningType.Alarm, runnableTask1);
+    const plannedTask2 = new PlannedTask(PlanningType.Alarm, runnableTask2);
+    const plannedTask3 = new PlannedTask(PlanningType.Alarm, runnableTask3);
+
+    const plannedTask4: PlannedTask = new PlannedTask(
+        PlanningType.Immediate,
+        runnableTask4
     );
 
     beforeEach(async () => {
@@ -82,6 +86,23 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask1);
         await store.insert(plannedTask2);
         await store.insert(plannedTask3);
+        await store.insert(plannedTask4);
+
+        const tasks = await store.getAllSortedByInterval();
+        expect(tasks.length).toBe(4);
+        for (let i = 0; i < tasks.length - 1; i++) {
+            if (tasks[i].interval > tasks[i + 1].interval) {
+                fail('Tasks out of order');
+            }
+        }
+    });
+
+    it('gets all stored task filtered by type and ordered by interval', async () => {
+        await store.deleteAll();
+        await store.insert(plannedTask1);
+        await store.insert(plannedTask2);
+        await store.insert(plannedTask3);
+        await store.insert(plannedTask4);
 
         const tasks = await store.getAllSortedByInterval(PlanningType.Alarm);
         expect(tasks.length).toBe(3);
@@ -97,6 +118,7 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask1);
         await store.insert(plannedTask2);
         await store.insert(plannedTask3);
+        await store.insert(plannedTask4);
 
         const cancelEventTasks = await store.getAllFilteredByCancelEvent(
             'cancelEvent'
@@ -104,7 +126,7 @@ describe('Planned Tasks Store', () => {
         const otherEventTasks = await store.getAllFilteredByCancelEvent(
             'otherEvent'
         );
-        expect(cancelEventTasks.length).toBe(2);
+        expect(cancelEventTasks.length).toBe(3);
         expect(otherEventTasks.length).toBe(1);
     });
 

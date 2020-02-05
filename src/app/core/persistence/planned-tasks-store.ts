@@ -71,10 +71,15 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         planningType?: PlanningType
     ): Promise<Array<PlannedTask>> {
         await this.createDB();
-        const rows = await nSQL(PLANNED_TASKS_TABLE)
+
+        let query = nSQL(PLANNED_TASKS_TABLE)
             .query('select')
-            .orderBy(['interval ASC'])
-            .exec();
+            .orderBy(['interval ASC']);
+        if (planningType) {
+            query = query.where(['planningType', '=', planningType]);
+        }
+
+        const rows = await query.exec();
 
         return rows.map((row) => this.plannedTaskFromRow(row));
     }
