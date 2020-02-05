@@ -6,7 +6,7 @@ import {
     PlanningType
 } from '~/app/core/tasks/planner/planned-task';
 import { SingleTaskRunner } from '~/app/core/tasks/runners/single-task-runner';
-import { CoreEvent, emit, createEvent } from '~/app/core/events';
+import { CoreEvent, emit, createEvent, PlatformEvent } from '~/app/core/events';
 
 describe('Single task runner', () => {
     setTasks(testTasks);
@@ -31,14 +31,17 @@ describe('Single task runner', () => {
         params: {}
     });
 
-    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
-    const timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
-        id: startEvent.id
-    });
+    let startEvent: PlatformEvent;
+    let timeoutEvent: PlatformEvent;
 
     const taskRunner = new SingleTaskRunner(taskStore);
 
     beforeEach(() => {
+        startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        timeoutEvent = createEvent(CoreEvent.TaskExecutionTimedOut, {
+            id: startEvent.id
+        });
+
         spyOn(taskStore, 'updateLastRun').and.returnValue(Promise.resolve());
         spyOn(taskStore, 'increaseErrorCount').and.returnValue(
             Promise.resolve()

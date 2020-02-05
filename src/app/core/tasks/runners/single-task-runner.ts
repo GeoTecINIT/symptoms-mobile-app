@@ -31,11 +31,12 @@ export class SingleTaskRunner {
     private runWithTimeout(
         id: string,
         task: ParameterizedTask,
-        timeoutId: string
+        startEventId: string
     ): Promise<void> {
         return new Promise((resolve, reject) => {
             const listenerId = on(CoreEvent.TaskExecutionTimedOut, (evt) => {
-                if (evt.id === timeoutId) {
+                if (evt.id === startEventId) {
+                    off(CoreEvent.TaskExecutionTimedOut, listenerId);
                     task.cancel();
                     this.taskStore
                         .increaseTimeoutCount(id)
@@ -43,15 +44,41 @@ export class SingleTaskRunner {
                 }
             });
 
+            let taskAlreadyRun = false;
+            let taskChainFinished = false;
+            this.waitForTaskChainToFinish(startEventId).then(() => {
+                taskChainFinished = true;
+                if (taskAlreadyRun) {
+                    resolve();
+                }
+            });
+
             task.run()
                 .then(() => {
+                    taskAlreadyRun = true;
                     off(CoreEvent.TaskExecutionTimedOut, listenerId);
-                    resolve();
+                    if (taskChainFinished) {
+                        resolve();
+                    }
                 })
                 .catch((err) => {
                     off(CoreEvent.TaskExecutionTimedOut, listenerId);
                     reject(err);
                 });
+        });
+    }
+
+    private waitForTaskChainToFinish(startEventId: string): Promise<void> {
+        return new Promise((resolve) => {
+            const listenerId = on(
+                CoreEvent.TaskChainFinished,
+                (chainFinishedEvt) => {
+                    if (chainFinishedEvt.id === startEventId) {
+                        off(CoreEvent.TaskChainFinished, listenerId);
+                        resolve();
+                    }
+                }
+            );
         });
     }
 }

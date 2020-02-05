@@ -8,7 +8,8 @@ import {
     CoreEvent,
     PlatformEvent,
     EventCallback,
-    on
+    on,
+    emit
 } from '~/app/core/events';
 import {
     PlannedTask,
@@ -20,12 +21,8 @@ describe('Instant task planner', () => {
     const taskStore = createPlannedTaskStoreMock();
     const taskRunner = new InstantTaskRunner(taskStore);
 
-    const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
-    const expectedEvent: PlatformEvent = {
-        name: 'patataCooked',
-        id: startEvent.id,
-        data: { status: 'slightlyBaked' }
-    };
+    let startEvent: PlatformEvent;
+    let expectedEvent: PlatformEvent;
 
     const immediateTask: RunnableTask = {
         name: 'emitterTask',
@@ -40,6 +37,11 @@ describe('Instant task planner', () => {
 
     let eventCallback: EventCallback;
     beforeEach(() => {
+        startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        expectedEvent = createEvent('patataCooked', {
+            id: startEvent.id,
+            data: { status: 'slightlyBaked' }
+        });
         eventCallback = jasmine.createSpy();
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
         spyOn(taskStore, 'updateLastRun').and.returnValue(Promise.resolve());
@@ -60,7 +62,10 @@ describe('Instant task planner', () => {
     it('runs new a task immediately', async () => {
         spyOn(taskStore, 'get').and.returnValue(Promise.resolve(null));
 
-        on(expectedEvent.name, eventCallback);
+        on(expectedEvent.name, (evt) => {
+            emit(createEvent(CoreEvent.TaskChainFinished, { id: evt.id }));
+            eventCallback(evt);
+        });
         await taskRunner.run(immediateTask, startEvent);
 
         expect(taskStore.get).toHaveBeenCalledTimes(2);
@@ -74,7 +79,10 @@ describe('Instant task planner', () => {
             Promise.resolve(expectedImmediateTask)
         );
 
-        on(expectedEvent.name, eventCallback);
+        on(expectedEvent.name, (evt) => {
+            emit(createEvent(CoreEvent.TaskChainFinished, { id: evt.id }));
+            eventCallback(evt);
+        });
         await taskRunner.run(immediateTask, startEvent);
 
         expect(taskStore.get).toHaveBeenCalledTimes(2);
