@@ -1,6 +1,13 @@
 import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
 import { PlannedTask } from '../planner/planned-task';
-import { PlatformEvent, on, CoreEvent, off } from '../../events';
+import {
+    PlatformEvent,
+    on,
+    CoreEvent,
+    off,
+    createEvent,
+    emit
+} from '../../events';
 import { SingleTaskRunner } from './single-task-runner';
 
 export class BatchTaskRunner {
@@ -14,42 +21,29 @@ export class BatchTaskRunner {
         plannedTasks: Array<PlannedTask>,
         startEvent: PlatformEvent
     ): Promise<void> {
-        await new Promise((resolve, reject) => {
-            this.waitAllTaskChainsToFinish(
-                startEvent.id,
-                plannedTasks.length
-            ).then(() => resolve());
-
-            Promise.all(
-                plannedTasks.map((plannedTask) =>
-                    this.taskRunner.run(plannedTask, startEvent)
-                )
-            ).catch((err) => reject(err));
-        });
+        await Promise.all(
+            plannedTasks.map((plannedTask) =>
+                this.runTaskWithCustomStartEvent(plannedTask, startEvent.id)
+            )
+        );
     }
 
-    private waitAllTaskChainsToFinish(
-        startEventId: string,
-        taskCount: number
+    private runTaskWithCustomStartEvent(
+        plannedTask: PlannedTask,
+        batchStartId: string
     ): Promise<void> {
-        return new Promise((resolve) => {
-            let finishedTasks = 0;
-
-            const listenerId = on(
-                CoreEvent.TaskChainFinished,
-                (chainFinishedEvt) => {
-                    if (chainFinishedEvt.id !== startEventId) {
-                        return;
-                    }
-
-                    finishedTasks++;
-
-                    if (finishedTasks === taskCount) {
-                        off(CoreEvent.TaskChainFinished, listenerId);
-                        resolve();
-                    }
-                }
-            );
+        const startEvent = createEvent(CoreEvent.TaskExecutionStarted);
+        const listenerId = on(CoreEvent.TaskExecutionTimedOut, (evt) => {
+            if (evt.id === batchStartId) {
+                off(CoreEvent.TaskExecutionTimedOut, listenerId);
+                emit(
+                    createEvent(CoreEvent.TaskExecutionTimedOut, {
+                        id: startEvent.id
+                    })
+                );
+            }
         });
+
+        return this.taskRunner.run(plannedTask, startEvent);
     }
 }
