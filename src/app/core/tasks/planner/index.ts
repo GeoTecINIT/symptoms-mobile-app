@@ -1,16 +1,19 @@
 import { RunnableTask } from '../runnable-task';
 import { PlatformEvent } from '../../events';
 import { PlannedTask } from './planned-task';
-import { TaskScheduler } from '../scheduler';
-import { PlannedTasksStore } from '../../persistence/planned-tasks-store';
+import { TaskScheduler, taskScheduler as getTaskScheduler } from '../scheduler';
+import {
+    PlannedTasksStore,
+    plannedTasksDB
+} from '../../persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../provider';
-import { TaskRunner } from '../runners/instant-task-runner';
+import { TaskRunner, InstantTaskRunner } from '../runners/instant-task-runner';
 
 export class TaskPlanner {
     constructor(
-        private taskScheduler: TaskScheduler,
-        private taskRunner: TaskRunner,
-        private taskStore: PlannedTasksStore
+        private taskScheduler: TaskScheduler = getTaskScheduler(),
+        private taskRunner: TaskRunner = new InstantTaskRunner(plannedTasksDB),
+        private taskStore: PlannedTasksStore = plannedTasksDB
     ) {}
 
     async plan(
@@ -20,7 +23,7 @@ export class TaskPlanner {
         checkIfTaskExists(runnableTask.name);
 
         const possibleExisting = await this.taskStore.get(runnableTask);
-        if (possibleExisting) {
+        if (possibleExisting && runnableTask.interval > 0) {
             return possibleExisting;
         }
 

@@ -29,30 +29,45 @@ describe('Event-based task runner', () => {
         eventCallback = jasmine.createSpy('eventCallback');
     });
 
-    it('runs a task at the moment an event rises', () => {
+    it('runs a task at the moment an event rises', async () => {
         on(
             'startEvent',
             run('emitterTask')
                 .now()
                 .cancelOn('stopEvent')
         );
+        const callbackPromise = new Promise((resolve) => {
+            on(expectedEvent.name, (evt) => {
+                eventCallback(evt);
+                resolve();
+            });
+        });
 
-        on(expectedEvent.name, eventCallback);
         emit(startEvent);
+        await callbackPromise;
+
         expect(eventCallback).toHaveBeenCalledWith(expectedEvent);
     });
 
-    it('does not run a task if it has been stopped', () => {
+    it('does not run a task if it has been stopped', async () => {
         on(
             'startEvent',
             run('emitterTask')
                 .now()
                 .cancelOn('stopEvent')
         );
+        const callbackPromise = new Promise((resolve, reject) => {
+            setTimeout(() => resolve(), 2000);
+            on(expectedEvent.name, (evt) => {
+                eventCallback(evt);
+                reject(new Error('Callback should not be called'));
+            });
+        });
 
-        on(expectedEvent.name, eventCallback);
         emit(stopEvent);
         emit(startEvent);
+        await callbackPromise;
+
         expect(eventCallback).not.toHaveBeenCalled();
     });
 

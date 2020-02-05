@@ -26,8 +26,11 @@ export interface Tasks {
     [key: string]: Task;
 }
 
-const taskPlanner = new TaskPlanner(null, null, null);
-
+let taskPlanner: TaskPlanner;
 export function run(taskName: string, params: TaskParams = {}) {
+    if (!taskPlanner) {
+        taskPlanner = new TaskPlanner();
+    }
+
     return new RunnableTaskBuilder(taskName, params, taskPlanner);
 }

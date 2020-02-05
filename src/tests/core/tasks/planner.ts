@@ -38,9 +38,16 @@ describe('Task planner', () => {
         immediateTask
     );
 
+    const recurrentPlannedTask = new PlannedTask(
+        PlanningType.Alarm,
+        recurrentTask
+    );
+
     beforeEach(() => {
         spyOn(taskScheduler, 'schedule').and.callThrough();
-        spyOn(taskRunner, 'run').and.callThrough();
+        spyOn(taskRunner, 'run').and.returnValue(
+            Promise.resolve(immediatePlannedTask)
+        );
     });
 
     it('runs a task immediately', async () => {
@@ -70,12 +77,22 @@ describe('Task planner', () => {
         );
     });
 
-    it('does nothing when a task has already been scheduled', async () => {
+    it('runs an immediate task already run', async () => {
         spyOn(taskStore, 'get')
             .withArgs(immediateTask)
             .and.returnValue(Promise.resolve(immediatePlannedTask));
         const plannedTask = await taskPlanner.plan(immediateTask, dummyEvent);
         expect(plannedTask).toBe(immediatePlannedTask);
+        expect(taskScheduler.schedule).not.toHaveBeenCalled();
+        expect(taskRunner.run).toHaveBeenCalled();
+    });
+
+    it('does nothing when a task has already been scheduled and its recurrent', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(recurrentTask)
+            .and.returnValue(Promise.resolve(recurrentPlannedTask));
+        const plannedTask = await taskPlanner.plan(recurrentTask, dummyEvent);
+        expect(plannedTask).toBe(recurrentPlannedTask);
         expect(taskScheduler.schedule).not.toHaveBeenCalled();
         expect(taskRunner.run).not.toHaveBeenCalled();
     });
