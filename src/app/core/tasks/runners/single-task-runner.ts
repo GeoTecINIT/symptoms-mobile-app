@@ -7,6 +7,8 @@ import { PlatformEvent, on, CoreEvent, off } from '../../events';
 export class SingleTaskRunner {
     constructor(private taskStore: PlannedTasksStore) {}
 
+    // FIXME: Discuss. Should one-shot tasks be deleted after running?
+    // What happens if an error occurs while running them?
     async run(
         plannedTask: PlannedTask,
         startEvent: PlatformEvent
@@ -17,6 +19,7 @@ export class SingleTaskRunner {
         await this.taskStore.updateLastRun(id, new Date().getTime());
 
         try {
+            // TODO: Discuss. Would it be interesting to pass plannedTaskId as a runtime parameter?
             const parameterizedTask = new ParameterizedTask(
                 task,
                 params,
