@@ -31,6 +31,9 @@ export class HomeComponent implements OnInit {
         on('startEvent', run('mediumTask').every(120));
         on('startEvent', run('slowTask').every(240));
 
+        on('slowTaskFinished', run('mediumTask').now());
+        on('mediumTaskFinished', run('fastTask').now());
+
         emit(createEvent('startEvent'));
 
         this.checkAlarm();

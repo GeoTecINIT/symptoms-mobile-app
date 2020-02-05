@@ -63,7 +63,9 @@ export class RunnableTaskBuilder implements EventReceiver {
         this.taskPlanner
             .plan(runnableTask, platformEvent)
             .then((plannedTask) => {
-                console.log(`Task planned: ${JSON.stringify(plannedTask)}`);
+                console.log(
+                    `Task successfully planned: ${JSON.stringify(plannedTask)}`
+                );
             })
             .catch((err) => {
                 console.error(
