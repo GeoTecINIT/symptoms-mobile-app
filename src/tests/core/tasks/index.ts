@@ -1,5 +1,5 @@
 import { Tasks } from '~/app/core/tasks';
-import { SimpleTask } from '~/app/core/tasks/simple-task';
+import { SimpleTask } from '~/app/core/tasks/base/simple-task';
 
 export const testTasks: Tasks = {
     dummyTask: new SimpleTask('dummyTask', async () =>
@@ -8,7 +8,7 @@ export const testTasks: Tasks = {
     dummyForegroundTask: new SimpleTask(
         'dummyForegroundTask',
         async () => console.log('Dummy Foreground Task executed'),
-        { background: false }
+        { foreground: true }
     ),
     failedTask: new SimpleTask('failedTask', () => {
         throw new Error('BOOOOM!');

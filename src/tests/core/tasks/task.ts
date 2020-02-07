@@ -6,7 +6,7 @@ import {
     off,
     PlatformEvent
 } from '~/app/core/events';
-import { SimpleTask } from '~/app/core/tasks/simple-task';
+import { SimpleTask } from '~/app/core/tasks/base/simple-task';
 
 describe('Task', () => {
     let startEvent: PlatformEvent;
@@ -46,7 +46,7 @@ describe('Task', () => {
     const foregroundDumbTask = new SimpleTask(
         'foregroundDumbTask',
         () => null,
-        { background: false }
+        { foreground: true }
     );
 
     // END Tasks definition

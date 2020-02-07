@@ -8,7 +8,7 @@ import { createPlannedTaskStoreMock } from '../persistence';
 import { TaskManager } from '~/app/core/tasks/manager';
 import { uuid } from '~/app/core/utils/uuid';
 
-describe('Manager task', () => {
+describe('Task manager', () => {
     setTasks(testTasks);
 
     const offset = 30000; // The half of alarm scheduler's fastest triggering frequency

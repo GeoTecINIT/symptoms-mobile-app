@@ -1,5 +1,5 @@
 import { Task, TaskParams } from './task';
-import { SimpleTask } from './simple-task';
+import { SimpleTask } from './base/simple-task';
 import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
 
@@ -18,7 +18,7 @@ export const tasks: Tasks = {
             new Promise((resolve) =>
                 setTimeout(() => resolve(), 30000)
             ).then(() => console.log('Slow task run!')),
-        { background: false }
+        { foreground: true }
     )
 };
 

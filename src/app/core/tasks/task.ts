@@ -18,7 +18,7 @@ export abstract class Task {
 
     constructor(
         name: string,
-        protected taskConfig: TaskConfig = { background: true }
+        protected taskConfig: TaskConfig = { foreground: false }
     ) {
         this._name = name;
         this._executionHistory = new Set();
@@ -59,7 +59,7 @@ export abstract class Task {
      * Indicates if a task runs in background (true by default). Can be configured at instantiation time.
      */
     runsInBackground(): boolean {
-        return this.taskConfig.background;
+        return !this.taskConfig.foreground;
     }
 
     /**
@@ -142,7 +142,7 @@ export abstract class Task {
 }
 
 export interface TaskConfig {
-    background: boolean;
+    foreground: boolean;
 }
 
 export interface TaskParams {

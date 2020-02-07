@@ -1,5 +1,5 @@
-import { Task, TaskConfig, TaskParams } from './task';
-import { PlatformEvent } from '../events';
+import { Task, TaskConfig, TaskParams } from '../task';
+import { PlatformEvent } from '../../events';
 
 type SimpleTaskFunction = (
     done: (eventName: string, data: { [key: string]: any }) => void,
@@ -11,7 +11,7 @@ export class SimpleTask extends Task {
     constructor(
         name: string,
         private functionToBeRun: SimpleTaskFunction,
-        taskConfig: TaskConfig = { background: true }
+        taskConfig: TaskConfig = { foreground: false }
     ) {
         super(name, taskConfig);
     }
