@@ -10,11 +10,7 @@ const ACCURACY_WEIGHT = 0.6;
 const TIME_DIFF_WEIGHT = 0.4;
 
 export class GeolocationProvider implements Provider {
-    constructor(
-        private output = (loc: Geolocation) =>
-            console.log(`Current location: ${loc}`),
-        private nativeProvider?: NativeGeolocationProvider
-    ) {
+    constructor(private nativeProvider?: NativeGeolocationProvider) {
         if (nativeProvider) {
             return;
         }
@@ -42,7 +38,7 @@ export class GeolocationProvider implements Provider {
             await this.nativeProvider.enable();
         }
     }
-    next(): [Promise<void>, ProviderInterruption] {
+    next(): [Promise<Geolocation>, ProviderInterruption] {
         const [pendingLocations, stopCollecting] = this.nativeProvider.next(
             LOCATIONS_TO_COLLECT
         );
@@ -53,7 +49,7 @@ export class GeolocationProvider implements Provider {
 
     private async processLocations(
         pendingLocations: Promise<Array<Geolocation>>
-    ) {
+    ): Promise<Geolocation> {
         const isReady = await this.isReady();
         if (!isReady) {
             throw new Error('Check if provider is ready first!');
@@ -69,7 +65,8 @@ export class GeolocationProvider implements Provider {
                     : previous,
             null
         );
-        this.output(bestLocation);
+
+        return bestLocation;
     }
 
     private geolocationError(location: Geolocation, currentTime: Date) {

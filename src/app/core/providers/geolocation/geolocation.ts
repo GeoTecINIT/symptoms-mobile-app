@@ -1,4 +1,6 @@
-export class Geolocation {
+import { RecordType, PlatformType } from '../record-type';
+
+export class Geolocation extends RecordType {
     static fromAndroidLocation(location: android.location.Location) {
         return new Geolocation(
             location.getLatitude(),
@@ -18,6 +20,8 @@ export class Geolocation {
         public bearing: number,
         public accuracy: number,
         public capturedAt: Date,
-        public createdAt = new Date()
-    ) {}
+        public begin = new Date()
+    ) {
+        super(PlatformType.Geolocation, begin, begin);
+    }
 }

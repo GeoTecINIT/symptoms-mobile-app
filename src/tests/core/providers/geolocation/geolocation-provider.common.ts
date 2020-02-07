@@ -2,9 +2,10 @@ import {
     NativeGeolocationProvider,
     GeolocationProvider
 } from '~/app/core/providers/geolocation';
+import { Geolocation } from '~/app/core/providers/geolocation/geolocation';
+import { PlatformType } from '~/app/core/providers/record-type';
 
 describe('Geolocation Provider', () => {
-    const fakeOutput = jasmine.createSpy();
     const providerInterrupt = jasmine.createSpy();
     let nativeProvider: NativeGeolocationProvider;
     let provider: GeolocationProvider;
@@ -17,7 +18,7 @@ describe('Geolocation Provider', () => {
         );
         spyOn(nativeProvider, 'enable').and.returnValue(Promise.resolve());
 
-        provider = new GeolocationProvider(fakeOutput, nativeProvider);
+        provider = new GeolocationProvider(nativeProvider);
     });
 
     it('returns true if device can provide locations', async () => {
@@ -78,12 +79,10 @@ describe('Geolocation Provider', () => {
             Promise.resolve(fakeLocations),
             providerInterrupt
         ]);
-        const [result] = provider.next();
-        await result;
+        const [resultPromise] = provider.next();
+        const result = await resultPromise;
         expect(nativeProvider.next).toHaveBeenCalledWith(measurementCount);
-        expect(fakeOutput).toHaveBeenCalledWith(
-            fakeLocations[measurementCount - 1]
-        );
+        expect(result).toEqual(fakeLocations[measurementCount - 1]);
     });
 
     it('returns null when no location is obtained', async () => {
@@ -91,9 +90,9 @@ describe('Geolocation Provider', () => {
             Promise.resolve([]),
             providerInterrupt
         ]);
-        const [result] = provider.next();
-        await result;
-        expect(fakeOutput).toHaveBeenCalledWith(null);
+        const [resultPromise] = provider.next();
+        const result = await resultPromise;
+        expect(result).toEqual(null);
     });
 
     it('stops gathering locations when requested', async () => {
@@ -127,8 +126,9 @@ function createNativeGeolocationProvider(): NativeGeolocationProvider {
     };
 }
 
-const fakeLocations = [
+const fakeLocations: Array<Geolocation> = [
     {
+        type: PlatformType.Geolocation,
         latitude: 39.9939429,
         longitude: -0.0738488,
         altitude: 133.8000030517578,
@@ -136,9 +136,11 @@ const fakeLocations = [
         bearing: 313.95758056640625,
         accuracy: 12.486000061035156,
         capturedAt: new Date('2020-01-28T15:09:59.000Z'),
-        createdAt: new Date('2020-01-28T15:10:00.057Z')
+        begin: new Date('2020-01-28T15:10:00.057Z'),
+        end: new Date('2020-01-28T15:10:00.057Z')
     },
     {
+        type: PlatformType.Geolocation,
         latitude: 39.9939409,
         longitude: -0.0738495,
         altitude: 133.8000030517578,
@@ -146,9 +148,11 @@ const fakeLocations = [
         bearing: 274.8623962402344,
         accuracy: 12.565999984741211,
         capturedAt: new Date('2020-01-28T15:10:00.000Z'),
-        createdAt: new Date('2020-01-28T15:10:01.054Z')
+        begin: new Date('2020-01-28T15:10:01.054Z'),
+        end: new Date('2020-01-28T15:10:01.054Z')
     },
     {
+        type: PlatformType.Geolocation,
         latitude: 39.9939401,
         longitude: -0.0738498,
         altitude: 133.8000030517578,
@@ -156,9 +160,11 @@ const fakeLocations = [
         bearing: 236.01693725585938,
         accuracy: 12.576000213623047,
         capturedAt: new Date('2020-01-28T15:10:01.000Z'),
-        createdAt: new Date('2020-01-28T15:10:02.057Z')
+        begin: new Date('2020-01-28T15:10:02.057Z'),
+        end: new Date('2020-01-28T15:10:02.057Z')
     },
     {
+        type: PlatformType.Geolocation,
         latitude: 39.9939143,
         longitude: -0.0738398,
         altitude: 133.8000030517578,
@@ -166,9 +172,11 @@ const fakeLocations = [
         bearing: 332.4197082519531,
         accuracy: 13.303000450134277,
         capturedAt: new Date('2020-01-28T15:10:02.000Z'),
-        createdAt: new Date('2020-01-28T15:10:03.049Z')
+        begin: new Date('2020-01-28T15:10:03.049Z'),
+        end: new Date('2020-01-28T15:10:03.049Z')
     },
     {
+        type: PlatformType.Geolocation,
         latitude: 39.9939159,
         longitude: -0.0738408,
         altitude: 133.8000030517578,
@@ -176,6 +184,7 @@ const fakeLocations = [
         bearing: 333.66839599609375,
         accuracy: 13.373000144958496,
         capturedAt: new Date('2020-01-28T15:10:03.000Z'),
-        createdAt: new Date('2020-01-28T15:10:04.068Z')
+        begin: new Date('2020-01-28T15:10:04.068Z'),
+        end: new Date('2020-01-28T15:10:04.068Z')
     }
 ];
