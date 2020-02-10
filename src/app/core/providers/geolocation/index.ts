@@ -21,13 +21,14 @@ export class GeolocationProvider implements Provider {
         }
     }
 
-    async isReady(): Promise<boolean> {
+    async checkIfIsReady(): Promise<void> {
         if (!this.nativeProvider.hasPermission()) {
-            return false;
+            throw geolocationAccessNotGrantedError;
         }
         const isEnabled = await this.nativeProvider.isEnabled();
-
-        return isEnabled;
+        if (!isEnabled) {
+            throw geolocationServicesNotEnabledError;
+        }
     }
     async prepare(): Promise<void> {
         if (!this.nativeProvider.hasPermission()) {
@@ -50,10 +51,8 @@ export class GeolocationProvider implements Provider {
     private async processLocations(
         pendingLocations: Promise<Array<Geolocation>>
     ): Promise<Geolocation> {
-        const isReady = await this.isReady();
-        if (!isReady) {
-            throw new Error('Check if provider is ready first!');
-        }
+        await this.checkIfIsReady();
+
         const locations = await pendingLocations;
         const currentTime = new Date();
         const bestLocation = locations.reduce(

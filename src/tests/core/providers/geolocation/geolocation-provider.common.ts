@@ -1,6 +1,8 @@
 import {
     NativeGeolocationProvider,
-    GeolocationProvider
+    GeolocationProvider,
+    geolocationAccessNotGrantedError,
+    geolocationServicesNotEnabledError
 } from '~/app/core/providers/geolocation';
 import { Geolocation } from '~/app/core/providers/geolocation/geolocation';
 import { PlatformType } from '~/app/core/providers/record-type';
@@ -21,37 +23,34 @@ describe('Geolocation Provider', () => {
         provider = new GeolocationProvider(nativeProvider);
     });
 
-    it('returns true if device can provide locations', async () => {
+    it('checks if device can provide locations', async () => {
         spyOn(nativeProvider, 'hasPermission').and.returnValue(true);
         spyOn(nativeProvider, 'isEnabled').and.returnValue(
             Promise.resolve(true)
         );
-        const isReady = await provider.isReady();
+        await provider.checkIfIsReady();
         expect(nativeProvider.hasPermission).toHaveBeenCalled();
         expect(nativeProvider.isEnabled).toHaveBeenCalled();
-        expect(isReady).toBeTruthy();
     });
 
-    it('returns false if geolocation access has not been granted', async () => {
+    it('throws error if geolocation access has not been granted', async () => {
         spyOn(nativeProvider, 'hasPermission').and.returnValue(false);
-        spyOn(nativeProvider, 'isEnabled').and.returnValue(
-            Promise.resolve(true)
+        await expectAsync(provider.checkIfIsReady()).toBeRejectedWith(
+            geolocationAccessNotGrantedError
         );
-        const isReady = await provider.isReady();
         expect(nativeProvider.hasPermission).toHaveBeenCalled();
-        expect(nativeProvider.isEnabled).not.toHaveBeenCalled();
-        expect(isReady).toBeFalsy();
     });
 
-    it('returns false if native location provider is not enabled', async () => {
+    it('throws error if native location provider is not enabled', async () => {
         spyOn(nativeProvider, 'hasPermission').and.returnValue(true);
         spyOn(nativeProvider, 'isEnabled').and.returnValue(
             Promise.resolve(false)
         );
-        const isReady = await provider.isReady();
+        await expectAsync(provider.checkIfIsReady()).toBeRejectedWith(
+            geolocationServicesNotEnabledError
+        );
         expect(nativeProvider.hasPermission).toHaveBeenCalled();
         expect(nativeProvider.isEnabled).toHaveBeenCalled();
-        expect(isReady).toBeFalsy();
     });
 
     it('tries to prepare device for location data collection when required', async () => {

@@ -3,6 +3,6 @@ import { RecordType } from './record-type';
 
 export interface Provider {
     next(): [Promise<RecordType>, ProviderInterruption];
-    isReady(): Promise<boolean>;
+    checkIfIsReady(): Promise<void>;
     prepare(): Promise<void>;
 }
