@@ -7,7 +7,7 @@ export const testTasks: Tasks = {
     ),
     dummyForegroundTask: new SimpleTask(
         'dummyForegroundTask',
-        async () => console.log('Dummy Foreground Task executed'),
+        async () => console.log('Dummy Foreground Task executed!'),
         { foreground: true }
     ),
     failedTask: new SimpleTask('failedTask', () => {
@@ -15,7 +15,17 @@ export const testTasks: Tasks = {
     }),
     timeoutTask: new SimpleTask(
         'timeoutTask',
-        () => new Promise((resolve) => setTimeout(() => resolve(), 2000))
+        (done, params, evt, onCancel) =>
+            new Promise((resolve) => {
+                const timeoutId = setTimeout(() => {
+                    console.log('Timeout task run!');
+                    resolve();
+                }, 2000);
+                onCancel(() => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                });
+            })
     ),
     emitterTask: new SimpleTask('emitterTask', async (done) =>
         done('patataCooked', { status: 'slightlyBaked' })

@@ -7,17 +7,33 @@ export const tasks: Tasks = {
     fastTask: new SimpleTask('fastTask', async () =>
         console.log('Fast task run!')
     ),
-    mediumTask: new SimpleTask('mediumTask', () =>
-        new Promise((resolve) => setTimeout(() => resolve(), 2000)).then(() =>
-            console.log('Medium task run!')
-        )
+    mediumTask: new SimpleTask(
+        'mediumTask',
+        (done, params, evt, onCancel) =>
+            new Promise((resolve) => {
+                const timeoutId = setTimeout(() => {
+                    console.log('Medium task run!');
+                    resolve();
+                }, 2000);
+                onCancel(() => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                });
+            })
     ),
     slowTask: new SimpleTask(
         'slowTask',
-        () =>
-            new Promise((resolve) =>
-                setTimeout(() => resolve(), 30000)
-            ).then(() => console.log('Slow task run!')),
+        (done, params, evt, onCancel) =>
+            new Promise((resolve) => {
+                const timeoutId = setTimeout(() => {
+                    console.log('Slow task run!');
+                    resolve();
+                }, 30000);
+                onCancel(() => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                });
+            }),
         { foreground: true }
     )
 };

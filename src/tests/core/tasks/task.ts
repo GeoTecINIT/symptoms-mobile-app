@@ -24,8 +24,16 @@ describe('Task', () => {
 
     const timeoutTask = new SimpleTask(
         'timeoutTask',
-        () => new Promise((resolve) => setTimeout(() => resolve(), 5000))
+        (done, param, evt, onCancel) =>
+            new Promise((resolve) => {
+                const timeoutId = setTimeout(() => resolve(), 5000);
+                onCancel(() => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                });
+            })
     );
+    const timeoutTaskEndEvtName = `${timeoutTask.name}Finished`;
 
     const emitterTaskEndEvtName = 'emissionCompleted';
     const emitterTask = new SimpleTask('emitterTask', async (done) =>
@@ -64,6 +72,7 @@ describe('Task', () => {
 
     afterEach(() => {
         off(dumbTaskEndEvtName);
+        off(timeoutTaskEndEvtName);
         off(emitterTaskEndEvtName);
         off(parameterizedTaskEndEvtName);
         off(eventualTaskEndEvtName);
@@ -109,21 +118,16 @@ describe('Task', () => {
 
     it('can be cancelled and reports that the task chain has finished prematurely', async () => {
         on(CoreEvent.TaskChainFinished, eventCallback);
-        await new Promise((resolve, reject) => {
-            setTimeout(() => {
-                timeoutTask.cancel();
-                resolve();
-            }, 100);
-            timeoutTask
-                .run({}, startEvent)
-                .then(() => reject(new Error('Task should not finish')));
-        });
+        on(timeoutTaskEndEvtName, secondaryCallback);
+        setTimeout(() => timeoutTask.cancel(), 100);
+        await timeoutTask.run({}, startEvent);
         const taskChainFinishedEvt: PlatformEvent = {
             name: CoreEvent.TaskChainFinished,
             id: startEvent.id,
             data: { result: { status: 'cancelled' } }
         };
         expect(eventCallback).toHaveBeenCalledWith(taskChainFinishedEvt);
+        expect(secondaryCallback).not.toHaveBeenCalled();
     });
 
     it('is able to emit custom end events with output data', async () => {
