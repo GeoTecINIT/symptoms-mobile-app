@@ -15,13 +15,20 @@ export abstract class Task {
 
     private _name: string;
     private _executionHistory: Set<string>;
+    private _cancelFunctions: Map<string, CancelFuntion>;
 
-    constructor(
-        name: string,
-        protected taskConfig: TaskConfig = { foreground: false }
-    ) {
+    constructor(name: string, protected taskConfig: TaskConfig = {}) {
         this._name = name;
         this._executionHistory = new Set();
+        this._cancelFunctions = new Map();
+
+        if (!taskConfig.foreground) {
+            taskConfig.foreground = false;
+        }
+
+        if (!taskConfig.outputEventName) {
+            taskConfig.outputEventName = `${name}Finished`;
+        }
     }
 
     /**
@@ -40,7 +47,7 @@ export abstract class Task {
             await this.checkIfCanRun();
             await this.onRun();
             if (!this.isDone()) {
-                this.done(`${this.name}Finished`);
+                this.done(this.taskConfig.outputEventName);
             }
         } catch (err) {
             this.log(
@@ -53,6 +60,8 @@ export abstract class Task {
             this.emitEndEvent(TaskResultStatus.Error, err);
             throw err;
         }
+
+        this.removeCancelFunction();
     }
 
     /**
@@ -68,7 +77,13 @@ export abstract class Task {
      */
     cancel(): void {
         this.emitEndEvent(TaskResultStatus.Cancelled);
-        this.onCancel();
+        if (this._cancelFunctions.has(this.invocationEvent.id)) {
+            const cancelFunction = this._cancelFunctions.get(
+                this.invocationEvent.id
+            );
+            cancelFunction();
+            this.removeCancelFunction();
+        }
     }
 
     /**
@@ -85,10 +100,16 @@ export abstract class Task {
     protected abstract onRun(): Promise<void>;
 
     /**
-     * Method to be overridden to clean up resources on task cancellation
+     * Method to be called to inject a funtion in charge of cleaning up
+     * resources on task cancellation
      */
-    protected onCancel(): void {
-        return null;
+    protected setCancelFunction(f: CancelFuntion) {
+        if (this.isDone()) {
+            f();
+
+            return;
+        }
+        this._cancelFunctions.set(this.invocationEvent.id, f);
     }
 
     /**
@@ -96,6 +117,9 @@ export abstract class Task {
      * @param platformEvent The event containing the result of the task
      */
     protected done(eventName: string, data: { [key: string]: any } = {}) {
+        if (this.isDone()) {
+            return;
+        }
         this.markAsDone();
         if (!hasListeners(eventName)) {
             this.emitEndEvent(TaskResultStatus.Ok);
@@ -119,6 +143,7 @@ export abstract class Task {
     }
 
     private emitEndEvent(status: TaskResultStatus, err?: Error): void {
+        this.markAsDone();
         const result: TaskChainResult = { status };
         if (err) {
             result.reason = err;
@@ -139,10 +164,15 @@ export abstract class Task {
     private markAsDone() {
         this._executionHistory.add(this.invocationEvent.id);
     }
+
+    private removeCancelFunction() {
+        this._cancelFunctions.delete(this.invocationEvent.id);
+    }
 }
 
 export interface TaskConfig {
-    foreground: boolean;
+    foreground?: boolean;
+    outputEventName?: string;
 }
 
 export interface TaskParams {
@@ -159,3 +189,5 @@ export enum TaskResultStatus {
     Error = 'error',
     Cancelled = 'cancelled'
 }
+
+type CancelFuntion = () => void;

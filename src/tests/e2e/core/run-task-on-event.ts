@@ -8,25 +8,28 @@ describe('Event-based task runner', () => {
     setTasks(testTasks);
 
     let eventCallback: EventCallback;
-    const startEvent: PlatformEvent = {
-        name: 'startEvent',
-        id: uuid(),
-        data: {}
-    };
 
-    const stopEvent: PlatformEvent = {
-        name: 'stopEvent',
-        id: uuid(),
-        data: {}
-    };
-    const expectedEvent: PlatformEvent = {
-        name: 'patataCooked',
-        id: startEvent.id,
-        data: { status: 'slightlyBaked' }
-    };
+    let startEvent: PlatformEvent;
+    let stopEvent: PlatformEvent;
+    let expectedEvent: PlatformEvent;
 
     beforeEach(() => {
         eventCallback = jasmine.createSpy('eventCallback');
+        startEvent = {
+            name: 'startEvent',
+            id: uuid(),
+            data: {}
+        };
+        stopEvent = {
+            name: 'stopEvent',
+            id: uuid(),
+            data: {}
+        };
+        expectedEvent = {
+            name: 'patataCooked',
+            id: startEvent.id,
+            data: { status: 'slightlyBaked' }
+        };
     });
 
     it('runs a task at the moment an event rises', async () => {

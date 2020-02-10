@@ -11,7 +11,7 @@ export class SimpleTask extends Task {
     constructor(
         name: string,
         private functionToBeRun: SimpleTaskFunction,
-        taskConfig: TaskConfig = { foreground: false }
+        taskConfig?: TaskConfig
     ) {
         super(name, taskConfig);
     }
