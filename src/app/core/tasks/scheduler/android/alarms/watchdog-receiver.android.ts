@@ -7,12 +7,15 @@ export class WatchdogReceiver extends android.content.BroadcastReceiver {
         context: android.content.Context,
         intent: android.content.Intent
     ) {
-        this.log('Watchdog triggered');
+        this.log('Checking alarm status');
 
         const alarmScheduler = new AndroidAlarmScheduler();
-        alarmScheduler.setup().catch((err) => {
-            this.log(`${err}`);
-        });
+        alarmScheduler
+            .setup()
+            .then(() => this.log('Alarm setup has run'))
+            .catch((err) => {
+                this.log(`${err}`);
+            });
     }
 
     private log(message: string) {

@@ -9,8 +9,13 @@ import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 describe('Android Alarm Scheduler', () => {
     const manager = createAlarmManagerMock();
+    const watchdog = createAlarmManagerMock();
     const taskStore = createPlannedTaskStoreMock();
-    const androidAlarm = new AndroidAlarmScheduler(manager, taskStore);
+    const androidAlarm = new AndroidAlarmScheduler(
+        manager,
+        watchdog,
+        taskStore
+    );
 
     const dummyTask: RunnableTask = {
         name: 'dummyTask',
@@ -43,6 +48,8 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'delete').and.returnValue(Promise.resolve());
         spyOn(manager, 'set');
         spyOn(manager, 'cancel');
+        spyOn(watchdog, 'set');
+        spyOn(watchdog, 'cancel');
     });
 
     it('schedules a task and an alarm when no other task exists', async () => {
@@ -58,6 +65,7 @@ describe('Android Alarm Scheduler', () => {
         expect(taskStore.get).toHaveBeenCalled();
         expect(taskStore.getAllSortedByInterval).toHaveBeenCalled();
         expect(manager.set).toHaveBeenCalled();
+        expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
     });
@@ -68,6 +76,7 @@ describe('Android Alarm Scheduler', () => {
             .and.returnValue(Promise.resolve(expectedTask));
         const scheduledTask = await androidAlarm.schedule(dummyTask);
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
         expect(scheduledTask).toBe(expectedTask);
     });
 
@@ -82,6 +91,7 @@ describe('Android Alarm Scheduler', () => {
         const scheduledTask = await androidAlarm.schedule(higherFreqTask);
 
         expect(manager.set).toHaveBeenCalledWith(higherFreqTask.interval);
+        expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
     });
@@ -98,6 +108,8 @@ describe('Android Alarm Scheduler', () => {
 
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.cancel).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
     });
@@ -128,6 +140,8 @@ describe('Android Alarm Scheduler', () => {
 
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.cancel).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
         expect(taskStore.delete).toHaveBeenCalledWith(lowerFreqPT.id);
     });
 
@@ -143,6 +157,8 @@ describe('Android Alarm Scheduler', () => {
 
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.cancel).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
         expect(taskStore.delete).toHaveBeenCalledWith(equalFreqPT.id);
     });
 
@@ -158,6 +174,8 @@ describe('Android Alarm Scheduler', () => {
 
         expect(manager.cancel).toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.cancel).toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
         expect(taskStore.delete).toHaveBeenCalledWith(expectedTask.id);
     });
 
@@ -170,11 +188,13 @@ describe('Android Alarm Scheduler', () => {
 
         expect(taskStore.delete).not.toHaveBeenCalled();
         expect(manager.cancel).not.toHaveBeenCalled();
+        expect(watchdog.cancel).not.toHaveBeenCalled();
         expect(taskStore.delete).not.toHaveBeenCalled();
     });
 
-    it('sets an alarm when there are scheduled tasks and alarm is not up', async () => {
+    it('sets an alarm when there are scheduled tasks and alarm is not up neither the watchdog', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(false);
+        spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
         spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
             Promise.resolve([expectedTask, lowerFreqPT])
         );
@@ -182,10 +202,38 @@ describe('Android Alarm Scheduler', () => {
         await androidAlarm.setup();
 
         expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
+        expect(watchdog.set).toHaveBeenCalled();
+    });
+
+    it('sets an alarm when there are scheduled tasks and alarm is not up', async () => {
+        spyOnProperty(manager, 'alarmUp').and.returnValue(false);
+        spyOnProperty(watchdog, 'alarmUp').and.returnValue(true);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask, lowerFreqPT])
+        );
+
+        await androidAlarm.setup();
+
+        expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
+        expect(watchdog.set).not.toHaveBeenCalled();
+    });
+
+    it('sets an alarm when there are scheduled tasks and watchdog is not up', async () => {
+        spyOnProperty(manager, 'alarmUp').and.returnValue(true);
+        spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask, lowerFreqPT])
+        );
+
+        await androidAlarm.setup();
+
+        expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.set).toHaveBeenCalled();
     });
 
     it('does not set an alarm when there are no scheduled tasks', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(false);
+        spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
         spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
             Promise.resolve([])
         );
@@ -193,14 +241,17 @@ describe('Android Alarm Scheduler', () => {
         await androidAlarm.setup();
 
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
     });
 
     it('does not set an alarm when alarm is already up', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(true);
+        spyOnProperty(watchdog, 'alarmUp').and.returnValue(true);
 
         await androidAlarm.setup();
 
         expect(manager.set).not.toHaveBeenCalled();
+        expect(watchdog.set).not.toHaveBeenCalled();
     });
 });
 

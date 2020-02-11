@@ -4,17 +4,19 @@ import {
 } from '../../../../persistence/planned-tasks-store';
 import { AlarmManager } from './abstract-alarm-manager.android';
 import { AndroidAlarmManager } from './alarm-manager.android';
+import { WatchdogManager } from './watchdog-manager.android';
 import { PlannedTask, PlanningType } from '../../../planner/planned-task';
 import { RunnableTask } from '../../../runnable-task';
 
 export class AndroidAlarmScheduler {
     constructor(
         private alarmManager: AlarmManager = new AndroidAlarmManager(),
+        private watchdogManager: AlarmManager = new WatchdogManager(),
         private plannedTaskStore: PlannedTasksStore = plannedTasksDB
     ) {}
 
     async setup(): Promise<void> {
-        if (this.alarmManager.alarmUp) {
+        if (this.alarmManager.alarmUp && this.watchdogManager.alarmUp) {
             return;
         }
         this.log('Alarm was not up! Scheduling...');
@@ -22,7 +24,12 @@ export class AndroidAlarmScheduler {
             PlanningType.Alarm
         );
         if (plannedTasks.length > 0) {
-            this.alarmManager.set(plannedTasks[0].interval);
+            if (!this.alarmManager.alarmUp) {
+                this.alarmManager.set(plannedTasks[0].interval);
+            }
+            if (!this.watchdogManager.alarmUp) {
+                this.watchdogManager.set();
+            }
         }
     }
 
@@ -40,6 +47,7 @@ export class AndroidAlarmScheduler {
             allTasks[0].interval > runnableTask.interval
         ) {
             this.alarmManager.set(runnableTask.interval);
+            this.watchdogManager.set();
         }
         const plannedTask = new PlannedTask(PlanningType.Alarm, runnableTask);
         await this.plannedTaskStore.insert(plannedTask);
@@ -57,6 +65,7 @@ export class AndroidAlarmScheduler {
         );
         if (allTasks.length === 1) {
             this.alarmManager.cancel();
+            this.watchdogManager.cancel();
         } else if (
             allTasks[0].interval === possibleExisting.interval &&
             allTasks[1].interval !== possibleExisting.interval

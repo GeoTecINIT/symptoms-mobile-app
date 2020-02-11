@@ -15,6 +15,9 @@ export class WatchdogManager extends AbstractAlarmManager {
     }
 
     set(): void {
+        if (this.alarmUp) {
+            this.cancel();
+        }
         const alarmType = android.app.AlarmManager.RTC_WAKEUP;
         const triggerAtMillis = new Date().getTime() + WATCHDOG_INTERVAL;
         const pendingIntent = this.getPendingIntent();
