@@ -1,12 +1,13 @@
 import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
+import { createOsAlarmManagerMock } from '.';
 
-describe('Android Alarm Manager', () => {
+describe('Android alarm manager', () => {
     let systemAlarmManager: android.app.AlarmManager;
     let alarmManager: AndroidAlarmManager;
     const interval = 60000;
 
     beforeEach(() => {
-        systemAlarmManager = createOsAlarmManagerMock() as android.app.AlarmManager;
+        systemAlarmManager = createOsAlarmManagerMock();
         alarmManager = new AndroidAlarmManager(systemAlarmManager, 23);
         spyOn(systemAlarmManager, 'setExactAndAllowWhileIdle');
         spyOn(systemAlarmManager, 'setExact');
@@ -55,24 +56,3 @@ describe('Android Alarm Manager', () => {
         alarmManager.cancel();
     });
 });
-
-function createOsAlarmManagerMock(): any {
-    return {
-        setExactAndAllowWhileIdle(
-            p0: number,
-            p1: number,
-            p2: android.app.PendingIntent
-        ): void {
-            return;
-        },
-        setExact(p0: number, p1: number, p2: android.app.PendingIntent): void {
-            return;
-        },
-        set(p0: number, p1: number, p2: android.app.PendingIntent): void {
-            return;
-        },
-        cancel(p0: android.app.PendingIntent): void {
-            return;
-        }
-    };
-}

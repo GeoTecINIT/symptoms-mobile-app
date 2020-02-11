@@ -16,6 +16,14 @@ export function createAlarmReceiverIntent(appContext: android.content.Context) {
     });
 }
 
+export function createWatchdogReceiverIntent(
+    appContext: android.content.Context
+) {
+    return createAppComponentIntent(appContext, {
+        relativeClassPath: '.alarms.WatchdogReceiver'
+    });
+}
+
 const ARS_RUN_IN_FOREGROUND = 'foreground';
 const ARS_TIME_OFFSET = 'time-offset';
 const ARS_INVOCATION_TIME = 'invocation-time';

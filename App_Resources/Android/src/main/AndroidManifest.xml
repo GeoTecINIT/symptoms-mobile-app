@@ -46,6 +46,10 @@
 			android:name=".alarms.AlarmReceiver"
 			android:exported="false"/>
 
+		<receiver
+			android:name=".alarms.WatchdogReceiver"
+			android:exported="false"/>
+
 		<service
 			android:name=".alarms.AlarmRunnerService"
 			android:exported="false"

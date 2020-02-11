@@ -33,6 +33,7 @@ const hashSalt = Date.now().toString();
 
 const ANDROID_COMPONENTS = [
   "core/tasks/scheduler/android/alarms/alarm-receiver.android.ts",
+  "core/tasks/scheduler/android/alarms/watchdog-receiver.android.ts",
   "core/tasks/scheduler/android/alarms/alarm-runner-service.android.ts"
 ];
 
