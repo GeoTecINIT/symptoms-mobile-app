@@ -34,9 +34,9 @@ describe('Android Alarm Scheduler', () => {
         PlanningType.Alarm,
         dummyTask
     );
-    const lowerFreqST = new PlannedTask(PlanningType.Alarm, lowerFreqTask);
-    const higherFreqST = new PlannedTask(PlanningType.Alarm, higherFreqTask);
-    const equalFreqST = new PlannedTask(PlanningType.Alarm, equalFreqTask);
+    const lowerFreqPT = new PlannedTask(PlanningType.Alarm, lowerFreqTask);
+    const higherFreqPT = new PlannedTask(PlanningType.Alarm, higherFreqTask);
+    const equalFreqPT = new PlannedTask(PlanningType.Alarm, equalFreqTask);
 
     beforeEach(() => {
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
@@ -104,46 +104,46 @@ describe('Android Alarm Scheduler', () => {
 
     it('removes the highest frequency scheduled task and reschedules the alarm', async () => {
         spyOn(taskStore, 'get')
-            .withArgs(higherFreqST.id)
-            .and.returnValue(Promise.resolve(higherFreqST));
+            .withArgs(higherFreqPT.id)
+            .and.returnValue(Promise.resolve(higherFreqPT));
         spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
-            Promise.resolve([higherFreqST, expectedTask])
+            Promise.resolve([higherFreqPT, expectedTask])
         );
 
-        await androidAlarm.cancel(higherFreqST.id);
+        await androidAlarm.cancel(higherFreqPT.id);
 
         expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
-        expect(taskStore.delete).toHaveBeenCalledWith(higherFreqST.id);
+        expect(taskStore.delete).toHaveBeenCalledWith(higherFreqPT.id);
     });
 
     it('removes a task different than the one with the highest frequency', async () => {
         spyOn(taskStore, 'get')
-            .withArgs(lowerFreqST.id)
-            .and.returnValue(Promise.resolve(lowerFreqST));
+            .withArgs(lowerFreqPT.id)
+            .and.returnValue(Promise.resolve(lowerFreqPT));
         spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
-            Promise.resolve([expectedTask, lowerFreqST])
+            Promise.resolve([expectedTask, lowerFreqPT])
         );
 
-        await androidAlarm.cancel(lowerFreqST.id);
+        await androidAlarm.cancel(lowerFreqPT.id);
 
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
-        expect(taskStore.delete).toHaveBeenCalledWith(lowerFreqST.id);
+        expect(taskStore.delete).toHaveBeenCalledWith(lowerFreqPT.id);
     });
 
     it('removes a task with the same frequency than the one with the highest frequency', async () => {
         spyOn(taskStore, 'get')
-            .withArgs(equalFreqST.id)
-            .and.returnValue(Promise.resolve(equalFreqST));
+            .withArgs(equalFreqPT.id)
+            .and.returnValue(Promise.resolve(equalFreqPT));
         spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
-            Promise.resolve([equalFreqST, expectedTask])
+            Promise.resolve([equalFreqPT, expectedTask])
         );
 
-        await androidAlarm.cancel(equalFreqST.id);
+        await androidAlarm.cancel(equalFreqPT.id);
 
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
-        expect(taskStore.delete).toHaveBeenCalledWith(equalFreqST.id);
+        expect(taskStore.delete).toHaveBeenCalledWith(equalFreqPT.id);
     });
 
     it('removes the only remaining task and cancels the alarm', async () => {
@@ -172,10 +172,41 @@ describe('Android Alarm Scheduler', () => {
         expect(manager.cancel).not.toHaveBeenCalled();
         expect(taskStore.delete).not.toHaveBeenCalled();
     });
+
+    it('sets an alarm when there are scheduled tasks and alarm is not up', async () => {
+        spyOnProperty(manager, 'alarmUp').and.returnValue(false);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([expectedTask, lowerFreqPT])
+        );
+
+        await androidAlarm.setup();
+
+        expect(manager.set).toHaveBeenCalled();
+    });
+
+    it('does not set an alarm when there are no scheduled tasks', async () => {
+        spyOnProperty(manager, 'alarmUp').and.returnValue(false);
+        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+            Promise.resolve([])
+        );
+
+        await androidAlarm.setup();
+
+        expect(manager.set).not.toHaveBeenCalled();
+    });
+
+    it('does not set an alarm when alarm is already up', async () => {
+        spyOnProperty(manager, 'alarmUp').and.returnValue(true);
+
+        await androidAlarm.setup();
+
+        expect(manager.set).not.toHaveBeenCalled();
+    });
 });
 
 function createAlarmManagerMock(): AlarmManager {
     return {
+        alarmUp: false,
         set(interval: number) {
             return null;
         },

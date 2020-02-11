@@ -9,6 +9,10 @@ export class AndroidAlarmScheduler {
         private plannedTaskStore: PlannedTasksStore
     ) {}
 
+    async setup() {
+        return;
+    }
+
     async schedule(runnableTask: RunnableTask): Promise<PlannedTask> {
         // TODO: move to index
         const possibleExisting = await this.plannedTaskStore.get(runnableTask);
