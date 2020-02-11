@@ -10,39 +10,33 @@ const ACCURACY_WEIGHT = 0.6;
 const TIME_DIFF_WEIGHT = 0.4;
 
 export class GeolocationProvider implements Provider {
-    constructor(private nativeProvider?: NativeGeolocationProvider) {
-        if (nativeProvider) {
-            return;
-        }
-        if (androidApp) {
-            nativeProvider = new AndroidGeolocationProvider();
-        } else {
-            throw new Error('Not implemented');
-        }
-    }
+    constructor(private nativeProvider?: NativeGeolocationProvider) {}
 
     async checkIfIsReady(): Promise<void> {
-        if (!this.nativeProvider.hasPermission()) {
+        const nativeProvider = this.getNativeProvider();
+        if (!nativeProvider.hasPermission()) {
             throw geolocationAccessNotGrantedError;
         }
-        const isEnabled = await this.nativeProvider.isEnabled();
+        const isEnabled = await nativeProvider.isEnabled();
         if (!isEnabled) {
             throw geolocationServicesNotEnabledError;
         }
     }
     async prepare(): Promise<void> {
-        if (!this.nativeProvider.hasPermission()) {
-            await this.nativeProvider.requestPermission();
+        const nativeProvider = this.getNativeProvider();
+        if (!nativeProvider.hasPermission()) {
+            await nativeProvider.requestPermission();
         }
-        const isEnabled = await this.nativeProvider.isEnabled();
+        const isEnabled = await nativeProvider.isEnabled();
         if (!isEnabled) {
-            await this.nativeProvider.enable();
+            await nativeProvider.enable();
         }
     }
     next(): [Promise<Geolocation>, ProviderInterruption] {
-        const [pendingLocations, stopCollecting] = this.nativeProvider.next(
-            LOCATIONS_TO_COLLECT
-        );
+        const [
+            pendingLocations,
+            stopCollecting
+        ] = this.getNativeProvider().next(LOCATIONS_TO_COLLECT);
         const processLocations = this.processLocations(pendingLocations);
 
         return [processLocations, stopCollecting];
@@ -73,6 +67,19 @@ export class GeolocationProvider implements Provider {
         const timeDiff = (currentTime.getTime() - capturedAt.getTime()) / 1000;
 
         return accuracy * ACCURACY_WEIGHT + timeDiff * TIME_DIFF_WEIGHT;
+    }
+
+    private getNativeProvider() {
+        if (this.nativeProvider) {
+            return this.nativeProvider;
+        }
+        if (androidApp) {
+            this.nativeProvider = new AndroidGeolocationProvider();
+        } else {
+            throw new Error('Not implemented');
+        }
+
+        return this.nativeProvider;
     }
 }
 

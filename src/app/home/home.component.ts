@@ -30,11 +30,13 @@ export class HomeComponent implements OnInit {
         this.items = this._itemService.getItems();
 
         on('startEvent', run('fastTask').every(60));
+        on('startEvent', run('acquireGeolocation').every(60));
         on('startEvent', run('mediumTask').every(120));
         on('startEvent', run('slowTask').every(240));
 
         on('slowTaskFinished', run('mediumTask').now());
         on('mediumTaskFinished', run('fastTask').now());
+        on('geolocationAcquired', run('printGeolocation').now());
 
         emit(createEvent('startEvent'));
 

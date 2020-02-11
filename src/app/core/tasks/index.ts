@@ -2,6 +2,8 @@ import { Task, TaskParams } from './task';
 import { SimpleTask } from './base/simple-task';
 import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
+import { ProviderTask } from './base/provider-task';
+import { GeolocationProvider } from '../providers/geolocation';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask('fastTask', async () =>
@@ -35,6 +37,19 @@ export const tasks: Tasks = {
                 });
             }),
         { foreground: true }
+    ),
+    acquireGeolocation: new ProviderTask(
+        'acquireGeolocation',
+        new GeolocationProvider(),
+        { foreground: true }
+    ),
+    printGeolocation: new SimpleTask(
+        'printGeolocation',
+        async (done, params, evt) => {
+            console.log(
+                `Last location acquire: ${JSON.stringify(evt.data.record)}`
+            );
+        }
     )
 };
 
