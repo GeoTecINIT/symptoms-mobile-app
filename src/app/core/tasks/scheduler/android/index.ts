@@ -1,18 +1,13 @@
 import { TaskScheduler } from '..';
 import { RunnableTask } from '../../runnable-task';
-import { PlatformEvent } from '~/app/core/events';
 import { PlannedTask, PlanningType } from '../../planner/planned-task';
 import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
-import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../../provider';
 
 export class AndroidTaskScheduler implements TaskScheduler {
     constructor(
-        private alarmScheduler = new AndroidAlarmScheduler(
-            new AndroidAlarmManager(),
-            plannedTasksDB
-        ),
+        private alarmScheduler = new AndroidAlarmScheduler(),
         private tasksStore = plannedTasksDB
     ) {}
 

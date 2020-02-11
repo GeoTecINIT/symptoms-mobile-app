@@ -181,7 +181,7 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.setup();
 
-        expect(manager.set).toHaveBeenCalled();
+        expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
     });
 
     it('does not set an alarm when there are no scheduled tasks', async () => {
@@ -206,7 +206,9 @@ describe('Android Alarm Scheduler', () => {
 
 function createAlarmManagerMock(): AlarmManager {
     return {
-        alarmUp: false,
+        get alarmUp() {
+            return false;
+        },
         set(interval: number) {
             return null;
         },

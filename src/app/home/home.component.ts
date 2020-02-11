@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { android as androidApp } from 'tns-core-modules/application/application';
 
 import { DataService, DataItem } from '../shared/data.service';
-import { AndroidAlarmManager } from '../core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { setupNotificationChannels } from '../core/android/notification-manager.android';
 import { on, emit, createEvent } from '../core/events';
 import { run } from '../core/tasks';
-import { plannedTasksDB } from '../core/persistence/planned-tasks-store';
-import { PlanningType } from '../core/tasks/planner/planned-task';
+import { AndroidAlarmScheduler } from '../core/tasks/scheduler/android/alarms/alarm-scheduler.android';
 
 @Component({
     selector: 'Home',
@@ -15,10 +13,10 @@ import { PlanningType } from '../core/tasks/planner/planned-task';
 })
 export class HomeComponent implements OnInit {
     items: Array<DataItem>;
-    private alarmManager: AndroidAlarmManager;
+    private alarmScheduler: AndroidAlarmScheduler;
 
     constructor(private _itemService: DataService) {
-        this.alarmManager = new AndroidAlarmManager();
+        this.alarmScheduler = new AndroidAlarmScheduler();
     }
 
     ngOnInit(): void {
@@ -45,14 +43,7 @@ export class HomeComponent implements OnInit {
 
     private async checkAlarm() {
         await this.setupTimeout();
-
-        if (!this.alarmManager.alarmUp) {
-            console.log('Alarm was not up! Scheduling...');
-            const plannedTasks = await plannedTasksDB.getAllSortedByInterval(
-                PlanningType.Alarm
-            );
-            this.alarmManager.set(plannedTasks[0].interval);
-        }
+        await this.alarmScheduler.setup();
     }
 
     private setupTimeout() {
