@@ -2,7 +2,8 @@ import {
     PlannedTasksStore,
     plannedTasksDB
 } from '../../../../persistence/planned-tasks-store';
-import { AlarmManager, AndroidAlarmManager } from './alarm-manager.android';
+import { AlarmManager } from './abstract-alarm-manager.android';
+import { AndroidAlarmManager } from './alarm-manager.android';
 import { PlannedTask, PlanningType } from '../../../planner/planned-task';
 import { RunnableTask } from '../../../runnable-task';
 

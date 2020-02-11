@@ -1,4 +1,4 @@
-import { AlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
+import { AlarmManager } from '~/app/core/tasks/scheduler/android/alarms/abstract-alarm-manager.android';
 import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
 import {
     PlannedTask,
