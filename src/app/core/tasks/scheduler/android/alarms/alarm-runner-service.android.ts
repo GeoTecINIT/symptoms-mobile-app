@@ -49,8 +49,8 @@ export class AlarmRunnerService extends android.app.Service {
         startId: number
     ): number {
         super.onStartCommand(intent, flags, startId);
-        this.log('Service called');
-        const startFlag = android.app.Service.START_STICKY;
+        this.log(`Service called {flags=${flags}, startId=${startId}}`);
+        const startFlag = android.app.Service.START_REDELIVER_INTENT;
 
         if (this.alreadyRunning(startId)) {
             return startFlag;
@@ -173,7 +173,7 @@ export class AlarmRunnerService extends android.app.Service {
         this.moveToBackground();
         if (this.started) {
             this.log('Stopping service');
-            this.stopSelf(1);
+            this.killWithFire();
             this.started = false;
         }
         if (this.wakeLock.isHeld()) {
@@ -190,6 +190,23 @@ export class AlarmRunnerService extends android.app.Service {
         this.stopForeground(andRemoveNotification);
         this.inForeground = false;
         this.log('Running in background');
+    }
+
+    /**
+     * WHY? Sometimes onStartCommand is not called with new startIds
+     * (different from 1) when the service gets destroyed and restarted
+     * this ensures the service is killed when the work is done
+     */
+    private killWithFire() {
+        let startId = 1;
+        let last = false;
+        while (!last) {
+            last = this.stopSelfResult(startId);
+            if (!last) {
+                startId++;
+            }
+        }
+        this.log(`Done (startId=${startId})`);
     }
 
     private log(message: string) {
