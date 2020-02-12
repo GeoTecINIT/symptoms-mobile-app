@@ -11,7 +11,7 @@ import { TaskRunner, InstantTaskRunner } from '../runners/instant-task-runner';
 
 export class TaskPlanner {
     constructor(
-        private taskScheduler: TaskScheduler = getTaskScheduler(),
+        private taskScheduler?: TaskScheduler,
         private taskRunner: TaskRunner = new InstantTaskRunner(plannedTasksDB),
         private taskStore: PlannedTasksStore = plannedTasksDB
     ) {}
@@ -28,11 +28,19 @@ export class TaskPlanner {
         }
 
         const plannedTask = await (runnableTask.interval > 0
-            ? this.taskScheduler.schedule(runnableTask)
+            ? this.getTaskScheduler().schedule(runnableTask)
             : this.taskRunner.run(runnableTask, platformEvent));
 
         // TODO: do something with planned task id and cancelEvent
 
         return plannedTask;
+    }
+
+    private getTaskScheduler(): TaskScheduler {
+        if (!this.taskScheduler) {
+            this.taskScheduler = getTaskScheduler();
+        }
+
+        return this.taskScheduler;
     }
 }
