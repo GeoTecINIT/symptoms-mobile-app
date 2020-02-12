@@ -90,8 +90,16 @@ export abstract class Task {
      * Runs task pre run checks (does nothing by default). Should be overridden if certain
      * conditions must be met. Exceptions are expected in case certain task precondition is not met.
      */
-    protected checkIfCanRun(): Promise<void> {
-        return null;
+    checkIfCanRun(): Promise<void> {
+        return Promise.resolve();
+    }
+
+    /**
+     * Performs actions in order to prepare the task for execution. Should be overridden if certain
+     * custom actions have to be done.
+     */
+    prepare(): Promise<void> {
+        return Promise.resolve();
     }
 
     /**

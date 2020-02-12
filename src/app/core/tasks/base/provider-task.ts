@@ -9,12 +9,17 @@ export class ProviderTask extends Task {
         this._provider = provider;
     }
 
+    // TODO: Perhaps this is no longer needed
     get provider(): Provider {
         return this._provider;
     }
 
-    protected async checkIfCanRun(): Promise<void> {
+    async checkIfCanRun(): Promise<void> {
         await this.provider.checkIfIsReady();
+    }
+
+    async prepare(): Promise<void> {
+        await this._provider.prepare();
     }
 
     protected async onRun(): Promise<void> {
