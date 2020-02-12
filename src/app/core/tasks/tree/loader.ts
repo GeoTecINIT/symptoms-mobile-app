@@ -32,6 +32,7 @@ export class TaskTreeLoader {
         const planTaskToBeRun = (taskName: string) =>
             this.trackTaskGoingToBeRun(taskName);
 
+        this.log('Loading task tree');
         this.loadingTaskTree = taskTree.describe(
             createEventListener,
             planTaskToBeRun
@@ -47,6 +48,7 @@ export class TaskTreeLoader {
 
     async prepare(): Promise<void> {
         const tasksToBePrepared = await this.tasksToBePrepared();
+        this.log(`${tasksToBePrepared.length} are up to be prepared`);
 
         await Promise.all(tasksToBePrepared.map((task) => task.prepare()));
     }
@@ -58,6 +60,9 @@ export class TaskTreeLoader {
         return this.describedTaskRunner(taskName);
     }
 
+    // TODO: Could be good to make this public, so developers using it
+    // can check the names of the tasks to be prepared and show messages
+    // to the users accordingly
     private async tasksToBePrepared(): Promise<Array<Task>> {
         if (!this.loadingTaskTree) {
             throw new Error('Load a task tree first!');
@@ -83,6 +88,10 @@ export class TaskTreeLoader {
         } catch (err) {
             return true;
         }
+    }
+
+    private log(message: string) {
+        console.log(`TaskTreeLoader: ${message}`);
     }
 }
 

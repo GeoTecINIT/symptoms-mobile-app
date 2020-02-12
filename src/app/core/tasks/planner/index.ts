@@ -27,6 +27,8 @@ export class TaskPlanner {
             return possibleExisting;
         }
 
+        // FIXME: Scheduled tasks break the task chain since they do not report
+        // that the task chain has finished. Add an event emitter here
         const plannedTask = await (runnableTask.interval > 0
             ? this.getTaskScheduler().schedule(runnableTask)
             : this.taskRunner.run(runnableTask, platformEvent));

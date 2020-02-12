@@ -5,6 +5,7 @@ import { externalEventHandler } from './core/events/external-event-handler';
 import { setupNotificationChannels } from './core/android/notification-manager.android';
 import { emit, createEvent } from './core/events';
 import { AndroidAlarmScheduler } from './core/tasks/scheduler/android/alarms/alarm-scheduler.android';
+import { taskTreeLoader } from './core/tasks/tree/loader';
 
 @Component({
     selector: 'ns-app',
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
             this.checkAlarm();
         }
 
-        emit(createEvent('startEvent'));
+        this.emitStartEvent();
     }
 
     private async checkAlarm() {
@@ -35,5 +36,15 @@ export class AppComponent implements OnInit {
 
     private setupTimeout() {
         return new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    }
+
+    // FIXME: This has to be better handled with a view informing the user
+    // about the permissions to be asked
+    private async emitStartEvent() {
+        const isReady = await taskTreeLoader.isReady();
+        if (!isReady) {
+            await taskTreeLoader.prepare();
+        }
+        emit(createEvent('startEvent'));
     }
 }
