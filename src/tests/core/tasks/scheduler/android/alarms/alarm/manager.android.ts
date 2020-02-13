@@ -1,5 +1,5 @@
-import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
-import { createOsAlarmManagerMock } from '.';
+import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm/manager.android';
+import { createOsAlarmManagerMock } from '..';
 import { PowerSavingsManager } from '~/app/core/tasks/scheduler/android/alarms/power-savings-manager.android';
 
 describe('Android alarm manager', () => {

@@ -12,8 +12,6 @@ export class HomeComponent implements OnInit {
     constructor(private _itemService: DataService) {}
 
     ngOnInit(): void {
-        // TODO: Discuss. Would be interesting to have a mechanism where
-        // things to be done at startup time could be registered?
         this.items = this._itemService.getItems();
     }
 }

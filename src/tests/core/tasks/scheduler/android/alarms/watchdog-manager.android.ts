@@ -1,4 +1,4 @@
-import { WatchdogManager } from '~/app/core/tasks/scheduler/android/alarms/watchdog-manager.android';
+import { WatchdogManager } from '~/app/core/tasks/scheduler/android/alarms/watchdog/manager.android';
 import { createOsAlarmManagerMock } from '.';
 
 describe('Android watchdog manager', () => {

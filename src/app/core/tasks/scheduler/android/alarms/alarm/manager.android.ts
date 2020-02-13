@@ -1,7 +1,7 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
-import { AbstractAlarmManager } from './abstract-alarm-manager.android';
-import { PowerSavingsManager } from './power-savings-manager.android';
+import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
+import { PowerSavingsManager } from '../power-savings-manager.android';
 
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 

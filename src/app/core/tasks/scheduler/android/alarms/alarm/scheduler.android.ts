@@ -1,12 +1,12 @@
 import {
     PlannedTasksStore,
     plannedTasksDB
-} from '../../../../persistence/planned-tasks-store';
-import { AlarmManager } from './abstract-alarm-manager.android';
-import { AndroidAlarmManager } from './alarm-manager.android';
-import { WatchdogManager } from './watchdog-manager.android';
-import { PlannedTask, PlanningType } from '../../../planner/planned-task';
-import { RunnableTask } from '../../../runnable-task';
+} from '../../../../../persistence/planned-tasks-store';
+import { AlarmManager } from '../abstract-alarm-manager.android';
+import { AndroidAlarmManager } from './manager.android';
+import { WatchdogManager } from '../watchdog/manager.android';
+import { PlannedTask, PlanningType } from '../../../../planner/planned-task';
+import { RunnableTask } from '../../../../runnable-task';
 
 export class AndroidAlarmScheduler {
     constructor(

@@ -7,10 +7,10 @@ import {
     plannedTasksDB,
     PlannedTasksStore
 } from '~/app/core/persistence/planned-tasks-store';
-import { BatchTaskRunner } from '../../../runners/batch-task-runner';
+import { BatchTaskRunner } from '../../../../runners/batch-task-runner';
 import { PlatformEvent, CoreEvent, emit, createEvent } from '~/app/core/events';
-import { TaskManager } from '../../../manager';
-import { PlanningType } from '../../../planner/planned-task';
+import { TaskManager } from '../../../../manager';
+import { PlanningType } from '../../../../planner/planned-task';
 
 const MIN_TIMEOUT = 60000;
 const TIMEOUT_EVENT_OFFSET = 5000;

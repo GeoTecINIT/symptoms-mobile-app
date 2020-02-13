@@ -1,7 +1,7 @@
 import { TaskScheduler } from '..';
 import { RunnableTask } from '../../runnable-task';
 import { PlannedTask, PlanningType } from '../../planner/planned-task';
-import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm-scheduler.android';
+import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm/scheduler.android';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../../provider';
 

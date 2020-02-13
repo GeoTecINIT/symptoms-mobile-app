@@ -1,5 +1,5 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
-import { AbstractAlarmManager } from './abstract-alarm-manager.android';
+import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { createWatchdogReceiverIntent } from '~/app/core/android/intents.android';
 
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;

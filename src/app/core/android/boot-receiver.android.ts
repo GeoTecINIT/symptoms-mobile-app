@@ -1,4 +1,4 @@
-import { AndroidAlarmScheduler } from '../tasks/scheduler/android/alarms/alarm-scheduler.android';
+import { AndroidAlarmScheduler } from '../tasks/scheduler/android/alarms/alarm/scheduler.android';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.BootReceiver')
