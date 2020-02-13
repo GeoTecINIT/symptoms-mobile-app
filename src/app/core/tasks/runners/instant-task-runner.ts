@@ -12,6 +12,8 @@ export class InstantTaskRunner implements TaskRunner {
         this.taskRunner = new SingleTaskRunner(taskStore);
     }
 
+    // FIXME: Instant task runner currently does not support the fork
+    // of tasks from a single event in a reliable way
     async run(
         task: RunnableTask,
         platformEvent: PlatformEvent
