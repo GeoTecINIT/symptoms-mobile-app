@@ -19,7 +19,7 @@ export class TaskPlanner {
 
     async plan(
         runnableTask: RunnableTask,
-        platformEvent: PlatformEvent
+        platformEvent?: PlatformEvent
     ): Promise<PlannedTask> {
         try {
             checkIfTaskExists(runnableTask.name);
@@ -31,7 +31,7 @@ export class TaskPlanner {
 
             return plannedTask;
         } catch (err) {
-            this.emitTaskChainFinised(platformEvent.id, err);
+            this.emitTaskChainFinished(platformEvent, err);
             throw err;
         }
     }
@@ -49,7 +49,7 @@ export class TaskPlanner {
     ): Promise<PlannedTask> {
         const possibleExisting = await this.taskStore.get(runnableTask);
         if (possibleExisting) {
-            this.emitTaskChainFinised(platformEvent.id);
+            this.emitTaskChainFinished(platformEvent);
 
             return possibleExisting;
         }
@@ -57,19 +57,25 @@ export class TaskPlanner {
         const plannedTask = await this.getTaskScheduler().schedule(
             runnableTask
         );
-        this.emitTaskChainFinised(platformEvent.id);
+        this.emitTaskChainFinished(platformEvent);
 
         return plannedTask;
     }
 
-    private emitTaskChainFinised(id: string, error?: Error) {
+    private emitTaskChainFinished(
+        platformEvent?: PlatformEvent,
+        error?: Error
+    ) {
+        if (!platformEvent) {
+            return;
+        }
         let result: TaskChainResult = { status: TaskResultStatus.Ok };
         if (error) {
             result = { status: TaskResultStatus.Error, reason: error };
         }
         emit(
             createEvent(CoreEvent.TaskChainFinished, {
-                id,
+                id: platformEvent.id,
                 data: { result }
             })
         );

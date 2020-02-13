@@ -4,6 +4,7 @@ import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
 import { ProviderTask } from './base/provider-task';
 import { GeolocationProvider } from '../providers/geolocation';
+import { toSeconds } from '../utils/time-converter';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask('fastTask', async () =>
@@ -49,6 +50,17 @@ export const tasks: Tasks = {
             console.log(
                 `Last location acquire: ${JSON.stringify(evt.data.record)}`
             );
+        }
+    ),
+    incrementalTask: new SimpleTask(
+        'incrementalTask',
+        async (done, params, evt, onCancel, runAgainIn) => {
+            const execCount = params.execCount ? params.execCount : 1;
+            const execTime = toSeconds(execCount, 'minutes');
+            console.log(`Incremental task: Task run after ${execTime} seconds`);
+            runAgainIn(toSeconds(execCount + 1, 'minutes'), {
+                execCount: execCount + 1
+            });
         }
     )
 };

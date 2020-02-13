@@ -19,7 +19,6 @@ export class SingleTaskRunner {
         await this.taskStore.updateLastRun(id, new Date().getTime());
 
         try {
-            // TODO: Discuss. Would it be interesting to pass plannedTaskId as a runtime parameter?
             const parameterizedTask = new ParameterizedTask(
                 task,
                 params,

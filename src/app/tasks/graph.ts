@@ -9,14 +9,15 @@ class DemoTaskGraph implements TaskGraph {
         on: TaskEventBinder,
         run: RunnableTaskDescriptor
     ): Promise<void> {
-        on('startEvent', run('fastTask').every(60));
-        on('startEvent', run('acquireGeolocation').every(60));
-        on('startEvent', run('mediumTask').every(120));
-        on('startEvent', run('slowTask').every(240));
+        on('startEvent', run('fastTask').every(1, 'minutes'));
+        on('startEvent', run('acquireGeolocation').every(1, 'minutes'));
+        on('startEvent', run('mediumTask').every(2, 'minutes'));
+        on('startEvent', run('slowTask').every(4, 'minutes'));
+        on('startEvent', run('incrementalTask').in(1, 'minutes'));
 
-        on('slowTaskFinished', run('mediumTask').now());
-        on('mediumTaskFinished', run('fastTask').now());
-        on('geolocationAcquired', run('printGeolocation').now());
+        on('slowTaskFinished', run('mediumTask'));
+        on('mediumTaskFinished', run('fastTask'));
+        on('geolocationAcquired', run('printGeolocation'));
     }
 }
 

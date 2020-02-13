@@ -5,6 +5,7 @@ import {
     emit,
     hasListeners
 } from '../events';
+import { run } from '.';
 
 export abstract class Task {
     get name(): string {
@@ -15,7 +16,7 @@ export abstract class Task {
 
     private _name: string;
     private _executionHistory: Set<string>;
-    private _cancelFunctions: Map<string, CancelFuntion>;
+    private _cancelFunctions: Map<string, CancelFunction>;
 
     constructor(name: string, protected taskConfig: TaskConfig = {}) {
         this._name = name;
@@ -103,15 +104,28 @@ export abstract class Task {
     }
 
     /**
+     * Run the task again within a certain amount of time. WARNING: it won't work
+     * if the amount of time is exactly the same than for the current run. In that
+     * situation use a recurrent task instead.
+     * @param seconds amount of seconds in which the task will be executed again
+     * @param params optional parameters that will be passed to the task
+     */
+    runAgainIn(seconds: number, params?: TaskParams) {
+        run(this.name, params ? params : this.taskParams)
+            .in(seconds)
+            .plan();
+    }
+
+    /**
      * The content of the task to be executed
      */
     protected abstract onRun(): Promise<void>;
 
     /**
-     * Method to be called to inject a funtion in charge of cleaning up
+     * Method to be called to inject a function in charge of cleaning up
      * resources on task cancellation
      */
-    protected setCancelFunction(f: CancelFuntion) {
+    protected setCancelFunction(f: CancelFunction) {
         if (this.isDone()) {
             f();
 
@@ -198,4 +212,4 @@ export enum TaskResultStatus {
     Cancelled = 'cancelled'
 }
 
-type CancelFuntion = () => void;
+type CancelFunction = () => void;

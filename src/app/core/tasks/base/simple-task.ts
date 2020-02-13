@@ -5,7 +5,8 @@ type SimpleTaskFunction = (
     done: (eventName: string, data: { [key: string]: any }) => void,
     params: TaskParams,
     evt: PlatformEvent,
-    onCancel: (f: () => void) => void
+    onCancel: (f: () => void) => void,
+    runAgainIn: (seconds: number, params?: TaskParams) => void
 ) => Promise<void>;
 
 export class SimpleTask extends Task {
@@ -23,7 +24,8 @@ export class SimpleTask extends Task {
             (eventName, data) => this.done(eventName, data),
             this.taskParams,
             this.invocationEvent,
-            onCancel
+            onCancel,
+            (seconds, params) => this.runAgainIn(seconds, params)
         );
     }
 }
