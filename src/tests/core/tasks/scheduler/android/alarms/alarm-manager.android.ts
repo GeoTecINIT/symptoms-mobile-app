@@ -1,18 +1,26 @@
 import { AndroidAlarmManager } from '~/app/core/tasks/scheduler/android/alarms/alarm-manager.android';
 import { createOsAlarmManagerMock } from '.';
+import { PowerSavingsManager } from '~/app/core/tasks/scheduler/android/alarms/power-savings-manager.android';
 
 describe('Android alarm manager', () => {
+    const powerSavingsManager = createPowerSavingsManagerMock();
     let systemAlarmManager: android.app.AlarmManager;
     let alarmManager: AndroidAlarmManager;
     const interval = 60000;
 
     beforeEach(() => {
         systemAlarmManager = createOsAlarmManagerMock();
-        alarmManager = new AndroidAlarmManager(systemAlarmManager, 23);
+        alarmManager = new AndroidAlarmManager(
+            systemAlarmManager,
+            powerSavingsManager,
+            23
+        );
         spyOn(systemAlarmManager, 'setExactAndAllowWhileIdle');
         spyOn(systemAlarmManager, 'setExact');
         spyOn(systemAlarmManager, 'set');
         spyOn(systemAlarmManager, 'cancel');
+        spyOn(powerSavingsManager, 'requestDeactivation');
+        spyOn(powerSavingsManager, 'areDisabled').and.returnValue(false);
     });
 
     it('sets an alarm with the given interval', () => {
@@ -21,10 +29,16 @@ describe('Android alarm manager', () => {
         expect(systemAlarmManager.setExact).not.toHaveBeenCalled();
         expect(systemAlarmManager.set).not.toHaveBeenCalled();
         expect(alarmManager.alarmUp).toBeTruthy();
+        expect(powerSavingsManager.areDisabled).toHaveBeenCalled();
+        expect(powerSavingsManager.requestDeactivation).toHaveBeenCalled();
     });
 
     it('sets an exact alarm when SDK version is over 18 and bellow 23', () => {
-        alarmManager = new AndroidAlarmManager(systemAlarmManager, 20);
+        alarmManager = new AndroidAlarmManager(
+            systemAlarmManager,
+            powerSavingsManager,
+            20
+        );
         alarmManager.set(interval);
         expect(
             systemAlarmManager.setExactAndAllowWhileIdle
@@ -35,7 +49,11 @@ describe('Android alarm manager', () => {
     });
 
     it('sets a regular alarm when skd version is bellow 19', () => {
-        alarmManager = new AndroidAlarmManager(systemAlarmManager, 17);
+        alarmManager = new AndroidAlarmManager(
+            systemAlarmManager,
+            powerSavingsManager,
+            17
+        );
         alarmManager.set(interval);
         expect(
             systemAlarmManager.setExactAndAllowWhileIdle
@@ -56,3 +74,16 @@ describe('Android alarm manager', () => {
         alarmManager.cancel();
     });
 });
+
+function createPowerSavingsManagerMock(): PowerSavingsManager {
+    const powerSavingsManager = {
+        requestDeactivation() {
+            return null;
+        },
+        areDisabled() {
+            return true;
+        }
+    };
+
+    return powerSavingsManager as PowerSavingsManager;
+}
