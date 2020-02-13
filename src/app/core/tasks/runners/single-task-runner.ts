@@ -4,11 +4,11 @@ import { getTask } from '../provider';
 import { Task, TaskParams } from '../task';
 import { PlatformEvent, on, CoreEvent, off } from '../../events';
 
+const FAILURE_THRESHOLD = 3;
+
 export class SingleTaskRunner {
     constructor(private taskStore: PlannedTasksStore) {}
 
-    // FIXME: Discuss. Should one-shot tasks be deleted after running?
-    // What happens if an error occurs while running them?
     async run(
         plannedTask: PlannedTask,
         startEvent: PlatformEvent
@@ -28,6 +28,10 @@ export class SingleTaskRunner {
             await this.runWithTimeout(id, parameterizedTask, startEvent.id);
         } catch (error) {
             await this.taskStore.increaseErrorCount(id);
+        }
+
+        if (!plannedTask.recurrent && plannedTask.interval > 0) {
+            await this.handleOneShotTask(plannedTask.id);
         }
     }
 
@@ -83,6 +87,22 @@ export class SingleTaskRunner {
                 }
             );
         });
+    }
+
+    private async handleOneShotTask(id: string): Promise<void> {
+        const { errorCount, timeoutCount } = await this.taskStore.get(id);
+
+        if (errorCount === 0 && timeoutCount === 0) {
+            await this.taskStore.delete(id);
+        } else if (
+            errorCount > FAILURE_THRESHOLD ||
+            timeoutCount > FAILURE_THRESHOLD
+        ) {
+            console.log(
+                `SingleTaskRunner: one-shot planned task id:${id} discarded after {errorCount:${errorCount}, timeoutCount:${timeoutCount}}`
+            );
+            await this.taskStore.delete(id);
+        }
     }
 }
 
