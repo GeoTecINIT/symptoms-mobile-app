@@ -66,7 +66,6 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         return this.plannedTaskFromRow(rows[0]);
     }
 
-    // TODO: Allow filtering by type
     async getAllSortedByInterval(
         planningType?: PlanningType
     ): Promise<Array<PlannedTask>> {

@@ -4,7 +4,14 @@ import {
     RunnableTask,
     RunnableTaskBuilder
 } from '~/app/core/tasks/runnable-task';
-import { PlatformEvent } from '~/app/core/events';
+import {
+    PlatformEvent,
+    CoreEvent,
+    EventCallback,
+    on,
+    createEvent,
+    off
+} from '~/app/core/events';
 import {
     PlannedTask,
     PlanningType
@@ -43,11 +50,14 @@ describe('Task planner', () => {
         recurrentTask
     );
 
+    let dummyCallback: EventCallback;
+
     beforeEach(() => {
         spyOn(taskScheduler, 'schedule').and.callThrough();
         spyOn(taskRunner, 'run').and.returnValue(
             Promise.resolve(immediatePlannedTask)
         );
+        dummyCallback = jasmine.createSpy();
     });
 
     it('runs a task immediately', async () => {
@@ -56,13 +66,17 @@ describe('Task planner', () => {
     });
 
     it('schedules a recurrent task in time', async () => {
+        on(CoreEvent.TaskChainFinished, dummyCallback);
         await taskPlanner.plan(recurrentTask, dummyEvent);
         expect(taskScheduler.schedule).toHaveBeenCalledWith(recurrentTask);
+        expect(dummyCallback).toHaveBeenCalled();
     });
 
     it('schedules a one-shot task in time', async () => {
+        on(CoreEvent.TaskChainFinished, dummyCallback);
         await taskPlanner.plan(oneShotTask, dummyEvent);
         expect(taskScheduler.schedule).toHaveBeenCalledWith(oneShotTask);
+        expect(dummyCallback).toHaveBeenCalled();
     });
 
     it('raises an error when task is unknown', async () => {
@@ -72,9 +86,20 @@ describe('Task planner', () => {
             recurrent: false,
             params: {}
         };
-        await expectAsync(taskPlanner.plan(unknownTask)).toBeRejectedWith(
-            new TaskNotFoundError(unknownTask.name)
-        );
+        const errorEvent = createEvent(CoreEvent.TaskChainFinished, {
+            id: dummyEvent.id,
+            data: {
+                result: {
+                    status: 'error',
+                    reason: new TaskNotFoundError(unknownTask.name)
+                }
+            }
+        });
+        on(CoreEvent.TaskChainFinished, dummyCallback);
+        await expectAsync(
+            taskPlanner.plan(unknownTask, dummyEvent)
+        ).toBeRejectedWith(new TaskNotFoundError(unknownTask.name));
+        expect(dummyCallback).toHaveBeenCalledWith(errorEvent);
     });
 
     it('runs an immediate task already run', async () => {
@@ -95,6 +120,10 @@ describe('Task planner', () => {
         expect(plannedTask).toBe(recurrentPlannedTask);
         expect(taskScheduler.schedule).not.toHaveBeenCalled();
         expect(taskRunner.run).not.toHaveBeenCalled();
+    });
+
+    afterEach(() => {
+        off(CoreEvent.TaskChainFinished);
     });
 });
 

@@ -1,5 +1,5 @@
 import { RunnableTask } from '../runnable-task';
-import { PlatformEvent } from '../../events';
+import { PlatformEvent, emit, CoreEvent, createEvent } from '../../events';
 import { PlannedTask } from './planned-task';
 import { TaskScheduler, taskScheduler as getTaskScheduler } from '../scheduler';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../../persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../provider';
 import { TaskRunner, InstantTaskRunner } from '../runners/instant-task-runner';
+import { TaskResultStatus, TaskChainResult } from '../task';
 
 export class TaskPlanner {
     constructor(
@@ -18,24 +19,60 @@ export class TaskPlanner {
 
     async plan(
         runnableTask: RunnableTask,
-        platformEvent?: PlatformEvent
+        platformEvent: PlatformEvent
     ): Promise<PlannedTask> {
-        checkIfTaskExists(runnableTask.name);
+        try {
+            checkIfTaskExists(runnableTask.name);
 
+            const plannedTask = await (runnableTask.interval > 0
+                ? this.planScheduled(runnableTask, platformEvent)
+                : this.planImmediate(runnableTask, platformEvent));
+            // TODO: do something with planned task id and cancelEvent
+
+            return plannedTask;
+        } catch (err) {
+            this.emitTaskChainFinised(platformEvent.id, err);
+            throw err;
+        }
+    }
+
+    private planImmediate(
+        runnableTask: RunnableTask,
+        platformEvent: PlatformEvent
+    ): Promise<PlannedTask> {
+        return this.taskRunner.run(runnableTask, platformEvent);
+    }
+
+    private async planScheduled(
+        runnableTask: RunnableTask,
+        platformEvent: PlatformEvent
+    ): Promise<PlannedTask> {
         const possibleExisting = await this.taskStore.get(runnableTask);
-        if (possibleExisting && runnableTask.interval > 0) {
+        if (possibleExisting) {
+            this.emitTaskChainFinised(platformEvent.id);
+
             return possibleExisting;
         }
 
-        // FIXME: Scheduled tasks break the task chain since they do not report
-        // that the task chain has finished. Add an event emitter here
-        const plannedTask = await (runnableTask.interval > 0
-            ? this.getTaskScheduler().schedule(runnableTask)
-            : this.taskRunner.run(runnableTask, platformEvent));
-
-        // TODO: do something with planned task id and cancelEvent
+        const plannedTask = await this.getTaskScheduler().schedule(
+            runnableTask
+        );
+        this.emitTaskChainFinised(platformEvent.id);
 
         return plannedTask;
+    }
+
+    private emitTaskChainFinised(id: string, error?: Error) {
+        let result: TaskChainResult = { status: TaskResultStatus.Ok };
+        if (error) {
+            result = { status: TaskResultStatus.Error, reason: error };
+        }
+        emit(
+            createEvent(CoreEvent.TaskChainFinished, {
+                id,
+                data: { result }
+            })
+        );
     }
 
     private getTaskScheduler(): TaskScheduler {
