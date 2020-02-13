@@ -4,6 +4,7 @@ import { PlannedTask, PlanningType } from '../../planner/planned-task';
 import { AndroidAlarmScheduler } from '~/app/core/tasks/scheduler/android/alarms/alarm/scheduler.android';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 import { checkIfTaskExists } from '../../provider';
+import { toSeconds } from '~/app/core/utils/time-converter';
 
 export class AndroidTaskScheduler implements TaskScheduler {
     constructor(
@@ -16,9 +17,9 @@ export class AndroidTaskScheduler implements TaskScheduler {
 
         const time = task.interval;
         const taskToSchedule = { ...task, interval: time * 1000 };
-        if (time >= 5 && time < 60) {
+        if (time >= 5 && time < toSeconds(1, 'minutes')) {
             throw new Error('Not implemented yet');
-        } else if (time < 900) {
+        } else if (time < toSeconds(15, 'minutes')) {
             return this.alarmScheduler.schedule(taskToSchedule);
         } else {
             throw new Error('Not implemented yet');

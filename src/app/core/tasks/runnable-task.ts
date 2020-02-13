@@ -1,6 +1,10 @@
 import { TaskParams } from './task';
 import { EventReceiver, PlatformEvent } from '../events';
 import { TaskPlanner } from './planner';
+import { TimeUnit, toSeconds } from '../utils/time-converter';
+
+// TODO: Update once a real default cancel event exists!
+const DEFAULT_CANCEL_EVENT = 'unknown';
 
 export interface RunnableTask {
     name: string;
@@ -19,7 +23,11 @@ export class RunnableTaskBuilder implements EventReceiver {
         private taskName: string,
         private params: TaskParams,
         private taskPlanner?: TaskPlanner
-    ) {}
+    ) {
+        this.interval = 0;
+        this.recurrent = false;
+        this.cancelEvent = DEFAULT_CANCEL_EVENT;
+    }
 
     now() {
         this.interval = 0;
@@ -28,14 +36,16 @@ export class RunnableTaskBuilder implements EventReceiver {
         return this;
     }
 
-    every(seconds: number) {
+    every(time: number, timeUnit?: TimeUnit) {
+        const seconds = timeUnit ? toSeconds(time, timeUnit) : time;
         this.interval = seconds;
         this.recurrent = true;
 
         return this;
     }
 
-    in(seconds: number) {
+    in(time: number, timeUnit?: TimeUnit) {
+        const seconds = timeUnit ? toSeconds(time, timeUnit) : time;
         this.interval = seconds;
         this.recurrent = false;
 
@@ -58,7 +68,7 @@ export class RunnableTaskBuilder implements EventReceiver {
         };
     }
 
-    onReceive(platformEvent?: PlatformEvent) {
+    plan(platformEvent?: PlatformEvent) {
         const runnableTask = this.build();
         this.taskPlanner
             .plan(runnableTask, platformEvent)
@@ -74,5 +84,9 @@ export class RunnableTaskBuilder implements EventReceiver {
                     )}: ${err}`
                 );
             });
+    }
+
+    onReceive(platformEvent: PlatformEvent) {
+        this.plan(platformEvent);
     }
 }
