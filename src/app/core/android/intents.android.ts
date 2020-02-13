@@ -1,4 +1,4 @@
-const appPackage = 'es.uji.geotec.symptomsapp';
+export const appPackage = 'es.uji.geotec.symptomsapp';
 
 export function createAppLaunchIntent(appContext: android.content.Context) {
     const intent = createAppComponentIntent(appContext, {
@@ -22,6 +22,13 @@ export function createWatchdogReceiverIntent(
     return createAppComponentIntent(appContext, {
         relativeClassPath: '.alarms.WatchdogReceiver'
     });
+}
+
+export function createSavingsDeactivationIntent() {
+    return new android.content.Intent(
+        android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        android.net.Uri.parse(`package:${appPackage}`)
+    );
 }
 
 const ARS_RUN_IN_FOREGROUND = 'foreground';
