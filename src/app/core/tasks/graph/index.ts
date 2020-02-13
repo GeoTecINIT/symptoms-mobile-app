@@ -1,15 +1,15 @@
 import { RunnableTaskBuilder } from '../runnable-task';
 import { TaskParams } from '../task';
 
-export type EventListenerCreator = (
+export type TaskEventBinder = (
     eventName: string,
     taskBuilder: RunnableTaskBuilder
 ) => void;
-export type DescribedTaskRunner = (
+export type RunnableTaskDescriptor = (
     taskName: string,
     params?: TaskParams
 ) => RunnableTaskBuilder;
 
-export interface TaskTree {
-    describe(on: EventListenerCreator, run: DescribedTaskRunner): Promise<void>;
+export interface TaskGraph {
+    describe(on: TaskEventBinder, run: RunnableTaskDescriptor): Promise<void>;
 }

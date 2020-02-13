@@ -5,7 +5,7 @@ import { externalEventHandler } from './core/events/external-event-handler';
 import { setupNotificationChannels } from './core/android/notification-manager.android';
 import { emit, createEvent } from './core/events';
 import { AndroidAlarmScheduler } from './core/tasks/scheduler/android/alarms/alarm-scheduler.android';
-import { taskTreeLoader } from './core/tasks/tree/loader';
+import { taskGraph } from './core/tasks/graph/loader';
 
 @Component({
     selector: 'ns-app',
@@ -41,9 +41,9 @@ export class AppComponent implements OnInit {
     // FIXME: This has to be better handled with a view informing the user
     // about the permissions to be asked
     private async emitStartEvent() {
-        const isReady = await taskTreeLoader.isReady();
+        const isReady = await taskGraph.isReady();
         if (!isReady) {
-            await taskTreeLoader.prepare();
+            await taskGraph.prepare();
         }
         emit(createEvent('startEvent'));
     }

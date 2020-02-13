@@ -1,12 +1,12 @@
 import { Tasks } from '~/app/core/tasks';
 import { SimpleTask } from '~/app/core/tasks/base/simple-task';
 import {
-    TaskTree,
-    EventListenerCreator,
-    DescribedTaskRunner
-} from '~/app/core/tasks/tree';
+    TaskGraph,
+    TaskEventBinder,
+    RunnableTaskDescriptor
+} from '~/app/core/tasks/graph';
 import { Task } from '~/app/core/tasks/task';
-import { TaskTreeLoader } from '~/app/core/tasks/tree/loader';
+import { TaskGraphLoader } from '~/app/core/tasks/graph/loader';
 import { RunnableTaskBuilder } from '~/app/core/tasks/runnable-task';
 
 describe('Task tree loader', () => {
@@ -28,7 +28,7 @@ describe('Task tree loader', () => {
         acquireOtherData
     };
 
-    const taskTree: TaskTree = {
+    const taskTree: TaskGraph = {
         async describe(on, run) {
             on('startEvent', run('acquireData').every(60));
             on('dataAcquired', run('printAcquiredData').now());
@@ -37,10 +37,10 @@ describe('Task tree loader', () => {
         }
     };
 
-    let eventListenerCreator: EventListenerCreator;
-    let describedTaskRunner: DescribedTaskRunner;
+    let eventListenerCreator: TaskEventBinder;
+    let describedTaskRunner: RunnableTaskDescriptor;
     let taskProvider: (taskName: string) => Task;
-    let treeLoader: TaskTreeLoader;
+    let treeLoader: TaskGraphLoader;
 
     beforeEach(() => {
         eventListenerCreator = jasmine.createSpy('eventListenerCreator');
@@ -53,7 +53,7 @@ describe('Task tree loader', () => {
         taskProvider = jasmine
             .createSpy('taskProvider', (taskName: string) => tasks[taskName])
             .and.callThrough();
-        treeLoader = new TaskTreeLoader(
+        treeLoader = new TaskGraphLoader(
             eventListenerCreator,
             describedTaskRunner,
             (_: string) => null,

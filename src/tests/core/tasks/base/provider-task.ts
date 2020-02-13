@@ -73,9 +73,4 @@ describe('Provider task', () => {
             providerTask.run(taskParams, invocationEvent)
         ).toBeRejectedWith(new Error('Something go wrong'));
     });
-
-    it('returns the provider contained inside it', () => {
-        const returnedProvider = providerTask.provider;
-        expect(returnedProvider).toBe(provider);
-    });
 });

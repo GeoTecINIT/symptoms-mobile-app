@@ -1,13 +1,13 @@
 import {
-    TaskTree,
-    EventListenerCreator,
-    DescribedTaskRunner
-} from '../core/tasks/tree';
+    TaskGraph,
+    TaskEventBinder,
+    RunnableTaskDescriptor
+} from '../core/tasks/graph';
 
-class DemoTaskTree implements TaskTree {
+class DemoTaskGraph implements TaskGraph {
     async describe(
-        on: EventListenerCreator,
-        run: DescribedTaskRunner
+        on: TaskEventBinder,
+        run: RunnableTaskDescriptor
     ): Promise<void> {
         on('startEvent', run('fastTask').every(60));
         on('startEvent', run('acquireGeolocation').every(60));
@@ -20,4 +20,4 @@ class DemoTaskTree implements TaskTree {
     }
 }
 
-export const taskTree = new DemoTaskTree();
+export const demoTaskGraph = new DemoTaskGraph();

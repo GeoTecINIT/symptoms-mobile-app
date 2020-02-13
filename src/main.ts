@@ -3,9 +3,9 @@ import { platformNativeScriptDynamic } from 'nativescript-angular/platform';
 
 import { AppModule } from './app/app.module';
 
-import { taskTreeLoader } from './app/core/tasks/tree/loader';
-import { taskTree } from './app/tasks/tree';
+import { taskGraph } from './app/core/tasks/graph/loader';
+import { demoTaskGraph } from './app/tasks/graph';
 
-taskTreeLoader.load(taskTree);
+taskGraph.load(demoTaskGraph);
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);

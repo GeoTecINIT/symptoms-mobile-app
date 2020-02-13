@@ -2,16 +2,12 @@ import { Task, TaskConfig } from '../task';
 import { Provider } from '../../providers/provider';
 
 export class ProviderTask extends Task {
-    private _provider: Provider;
-
-    constructor(name: string, provider: Provider, taskConfig?: TaskConfig) {
+    constructor(
+        name: string,
+        private provider: Provider,
+        taskConfig?: TaskConfig
+    ) {
         super(name, taskConfig);
-        this._provider = provider;
-    }
-
-    // TODO: Perhaps this is no longer needed
-    get provider(): Provider {
-        return this._provider;
     }
 
     async checkIfCanRun(): Promise<void> {
@@ -19,7 +15,7 @@ export class ProviderTask extends Task {
     }
 
     async prepare(): Promise<void> {
-        await this._provider.prepare();
+        await this.provider.prepare();
     }
 
     protected async onRun(): Promise<void> {
