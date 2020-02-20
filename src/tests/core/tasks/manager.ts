@@ -22,7 +22,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(currentTime - stdInterval + offset),
+            startAt: -1,
             interval: stdInterval,
             recurrent: false,
             params: {}
@@ -34,7 +34,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(currentTime - stdInterval + offset),
+            startAt: -1,
             interval: 2 * stdInterval,
             recurrent: false,
             params: {}
@@ -46,7 +46,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyForegroundTask',
-            startAt: new Date(currentTime - 2 * stdInterval + offset),
+            startAt: -1,
             interval: stdInterval + offset,
             recurrent: true,
             params: {}
@@ -59,7 +59,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(currentTime - 4 * stdInterval),
+            startAt: -1,
             interval: 2 * stdInterval,
             recurrent: true,
             params: {}
@@ -189,7 +189,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(initialTime),
+            startAt: -1,
             interval: minute,
             recurrent: true,
             params: {}
@@ -201,7 +201,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(initialTime),
+            startAt: -1,
             interval: 2 * minute,
             recurrent: true,
             params: {}
@@ -213,7 +213,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(initialTime),
+            startAt: -1,
             interval: 3 * minute,
             recurrent: true,
             params: {}
@@ -225,7 +225,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
-            startAt: new Date(initialTime),
+            startAt: -1,
             interval: 5 * minute,
             recurrent: true,
             params: {}

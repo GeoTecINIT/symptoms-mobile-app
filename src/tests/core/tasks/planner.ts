@@ -82,6 +82,7 @@ describe('Task planner', () => {
     it('raises an error when task is unknown', async () => {
         const unknownTask: RunnableTask = {
             name: 'patata',
+            startAt: -1,
             interval: 60,
             recurrent: false,
             params: {}

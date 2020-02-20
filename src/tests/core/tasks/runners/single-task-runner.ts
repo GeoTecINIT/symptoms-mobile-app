@@ -14,24 +14,28 @@ describe('Single task runner', () => {
 
     const dummyTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
+        startAt: -1,
         interval: 60000,
         recurrent: true,
         params: {}
     });
     const dummyOneShotTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
+        startAt: -1,
         interval: 60000,
         recurrent: false,
         params: {}
     });
     const dummyImmediateTask = new PlannedTask(PlanningType.Immediate, {
         name: 'dummyTask',
+        startAt: -1,
         interval: 0,
         recurrent: false,
         params: {}
     });
     const failedTask = new PlannedTask(PlanningType.Alarm, {
         name: 'failedTask',
+        startAt: -1,
         interval: 60000,
         recurrent: false,
         params: {}
@@ -39,6 +43,7 @@ describe('Single task runner', () => {
     failedTask.errorCount = 1;
     const timeoutTask = new PlannedTask(PlanningType.Alarm, {
         name: 'timeoutTask',
+        startAt: -1,
         interval: 60000,
         recurrent: false,
         params: {}

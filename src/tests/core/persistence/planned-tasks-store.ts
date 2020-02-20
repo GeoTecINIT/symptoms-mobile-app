@@ -1,4 +1,7 @@
-import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
+import {
+    plannedTasksDB,
+    PlannedTaskAlreadyExistsError
+} from '~/app/core/persistence/planned-tasks-store';
 import {
     PlannedTask,
     PlanningType
@@ -10,6 +13,7 @@ describe('Planned Tasks Store', () => {
 
     const runnableTask1: RunnableTask = {
         name: 'dummyTask1',
+        startAt: -1,
         interval: 120000,
         recurrent: true,
         params: { param1: 'patata1' },
@@ -17,6 +21,7 @@ describe('Planned Tasks Store', () => {
     };
     const runnableTask2: RunnableTask = {
         name: 'dummyTask2',
+        startAt: new Date().getTime(),
         interval: 60000,
         recurrent: true,
         params: { param1: 'patata1', param2: 'patata2' },
@@ -24,6 +29,7 @@ describe('Planned Tasks Store', () => {
     };
     const runnableTask3: RunnableTask = {
         name: 'dummyTask3',
+        startAt: new Date().getTime() + 900000,
         interval: 150000,
         recurrent: true,
         params: {},
@@ -32,6 +38,7 @@ describe('Planned Tasks Store', () => {
 
     const runnableTask4: RunnableTask = {
         name: 'dummyTask4',
+        startAt: new Date().getTime() + 28e6,
         interval: 0,
         recurrent: false,
         params: {},
@@ -57,11 +64,8 @@ describe('Planned Tasks Store', () => {
     });
 
     it('throws an error when trying to store an existing task', async () => {
-        const { name, interval, recurrent } = runnableTask1;
         await expectAsync(store.insert(plannedTask1)).toBeRejectedWith(
-            new Error(
-                `Already stored: {name=${name}, interval=${interval}, recurrent=${recurrent}}`
-            )
+            new PlannedTaskAlreadyExistsError(plannedTask1)
         );
     });
 

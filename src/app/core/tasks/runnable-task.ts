@@ -8,7 +8,7 @@ const DEFAULT_CANCEL_EVENT = 'unknown';
 
 export interface RunnableTask {
     name: string;
-    startAt: Date;
+    startAt: number;
     interval: number;
     recurrent: boolean;
     params: TaskParams;
@@ -26,7 +26,7 @@ interface DelayedRunnableTaskBuilder extends ReadyRunnableTaskBuilder {
 }
 
 export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
-    private startAt: Date;
+    private startAt: number;
     private interval: number;
     private recurrent: boolean;
     private cancelEvent: string;
@@ -36,7 +36,7 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
         private params: TaskParams,
         private taskPlanner?: TaskPlanner
     ) {
-        this.startAt = new Date();
+        this.startAt = -1;
         this.interval = 0;
         this.recurrent = false;
         this.cancelEvent = DEFAULT_CANCEL_EVENT;
@@ -66,7 +66,7 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
     }
 
     at(date: Date): DelayedRunnableTaskBuilder {
-        this.startAt = date;
+        this.startAt = date.getTime();
 
         return this;
     }

@@ -19,6 +19,7 @@ describe('Android Alarm Scheduler', () => {
 
     const dummyTask: RunnableTask = {
         name: 'dummyTask',
+        startAt: -1,
         interval: 120000,
         recurrent: true,
         params: {}

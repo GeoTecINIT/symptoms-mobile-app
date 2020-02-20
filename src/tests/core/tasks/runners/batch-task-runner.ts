@@ -14,18 +14,21 @@ describe('Batch task runner', () => {
 
     const expectedDummyTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
+        startAt: -1,
         interval: 60000,
         recurrent: true,
         params: {}
     });
     const expectedFailedTask = new PlannedTask(PlanningType.Alarm, {
         name: 'failedTask',
+        startAt: -1,
         interval: 60000,
         recurrent: true,
         params: {}
     });
     const expectedTimeoutTask = new PlannedTask(PlanningType.Alarm, {
         name: 'timeoutTask',
+        startAt: -1,
         interval: 60000,
         recurrent: true,
         params: {}

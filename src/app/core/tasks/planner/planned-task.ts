@@ -9,6 +9,7 @@ export enum PlanningType {
 
 export class PlannedTask {
     name: string;
+    startAt: number;
     interval: number;
     recurrent: boolean;
     params: TaskParams;
@@ -24,6 +25,7 @@ export class PlannedTask {
         public timeoutCount = 0
     ) {
         this.name = task.name;
+        this.startAt = task.startAt;
         this.interval = task.interval;
         this.recurrent = task.recurrent;
         this.params = task.params;

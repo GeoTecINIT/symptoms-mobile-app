@@ -12,19 +12,28 @@ class PlannedTaskDBStore implements PlannedTasksStore {
 
     async insert(plannedTask: PlannedTask): Promise<void> {
         await this.createDB();
-        const { name, interval, recurrent, params, cancelEvent } = plannedTask;
+
+        const {
+            name,
+            startAt,
+            interval,
+            recurrent,
+            params,
+            cancelEvent
+        } = plannedTask;
+
         const runnableTask: RunnableTask = {
             name,
+            startAt,
             interval,
             recurrent,
             params,
             cancelEvent
         };
+
         const possibleTask = await this.get(runnableTask);
         if (possibleTask) {
-            throw new Error(
-                `Already stored: {name=${name}, interval=${interval}, recurrent=${recurrent}}`
-            );
+            throw new PlannedTaskAlreadyExistsError(plannedTask);
         }
 
         await nSQL(PLANNED_TASKS_TABLE)
@@ -48,6 +57,8 @@ class PlannedTaskDBStore implements PlannedTasksStore {
             const runnableTask = task as RunnableTask;
             whereStatement = [
                 ['name', '=', runnableTask.name],
+                'AND',
+                ['startAt', '=', runnableTask.startAt],
                 'AND',
                 ['interval', '=', runnableTask.interval],
                 'AND',
@@ -160,6 +171,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
                             'id:uuid': { pk: true },
                             'planningType:string': {},
                             'name:string': {},
+                            'startAt:int': {},
                             'params:obj': {},
                             'interval:int': {},
                             'recurrent:boolean': {},
@@ -182,6 +194,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
             obj.planningType,
             {
                 name: obj.name,
+                startAt: obj.startAt,
                 interval: obj.interval,
                 recurrent: obj.recurrent,
                 params: obj.params,
@@ -212,3 +225,12 @@ export interface PlannedTasksStore {
 }
 
 export const plannedTasksDB = new PlannedTaskDBStore();
+
+// tslint:disable-next-line:max-classes-per-file
+export class PlannedTaskAlreadyExistsError extends Error {
+    constructor({ name, startAt, interval, recurrent }: PlannedTask) {
+        super(
+            `Already stored: {name=${name}, startAt=${startAt}, interval=${interval}, recurrent=${recurrent}}`
+        );
+    }
+}

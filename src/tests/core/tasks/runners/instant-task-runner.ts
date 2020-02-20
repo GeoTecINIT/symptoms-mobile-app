@@ -26,6 +26,7 @@ describe('Instant task planner', () => {
 
     const immediateTask: RunnableTask = {
         name: 'emitterTask',
+        startAt: -1,
         interval: 0,
         recurrent: false,
         params: {}
@@ -50,6 +51,7 @@ describe('Instant task planner', () => {
     it('throws an error when the task does not exist', async () => {
         const unknownTask: RunnableTask = {
             name: 'patata',
+            startAt: -1,
             interval: 60,
             recurrent: false,
             params: {}
