@@ -24,7 +24,8 @@ export class TaskPlanner {
         try {
             checkIfTaskExists(runnableTask.name);
 
-            const plannedTask = await (runnableTask.interval > 0
+            const plannedTask = await (runnableTask.interval > 0 ||
+            runnableTask.startAt !== -1
                 ? this.planScheduled(runnableTask, platformEvent)
                 : this.planImmediate(runnableTask, platformEvent));
             // TODO: do something with planned task id and cancelEvent

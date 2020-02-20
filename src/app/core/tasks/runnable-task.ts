@@ -66,7 +66,9 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
     }
 
     at(date: Date): DelayedRunnableTaskBuilder {
-        this.startAt = date.getTime();
+        if (date > new Date()) {
+            this.startAt = date.getTime();
+        }
 
         return this;
     }

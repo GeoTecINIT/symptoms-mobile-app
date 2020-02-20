@@ -39,6 +39,9 @@ describe('Task planner', () => {
         .every(10)
         .build();
     const oneShotTask = new RunnableTaskBuilder('dummyTask', {}).in(10).build();
+    const delayedTask = new RunnableTaskBuilder('dummyTask', {})
+        .at(new Date(new Date().getTime() + 3600 * 1000))
+        .build();
 
     const immediatePlannedTask = new PlannedTask(
         PlanningType.Alarm,
@@ -76,6 +79,13 @@ describe('Task planner', () => {
         on(CoreEvent.TaskChainFinished, dummyCallback);
         await taskPlanner.plan(oneShotTask, dummyEvent);
         expect(taskScheduler.schedule).toHaveBeenCalledWith(oneShotTask);
+        expect(dummyCallback).toHaveBeenCalled();
+    });
+
+    it('schedules a delayed task in time', async () => {
+        on(CoreEvent.TaskChainFinished, dummyCallback);
+        await taskPlanner.plan(delayedTask, dummyEvent);
+        expect(taskScheduler.schedule).toHaveBeenCalledWith(delayedTask);
         expect(dummyCallback).toHaveBeenCalled();
     });
 
