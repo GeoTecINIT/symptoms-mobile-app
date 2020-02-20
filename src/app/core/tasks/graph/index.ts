@@ -1,9 +1,12 @@
-import { RunnableTaskBuilder } from '../runnable-task';
+import {
+    RunnableTaskBuilder,
+    ReadyRunnableTaskBuilder
+} from '../runnable-task';
 import { TaskParams } from '../task';
 
 export type TaskEventBinder = (
     eventName: string,
-    taskBuilder: RunnableTaskBuilder
+    taskBuilder: ReadyRunnableTaskBuilder
 ) => void;
 export type RunnableTaskDescriptor = (
     taskName: string,

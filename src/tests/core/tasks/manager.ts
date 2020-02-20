@@ -22,6 +22,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(currentTime - stdInterval + offset),
             interval: stdInterval,
             recurrent: false,
             params: {}
@@ -33,6 +34,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(currentTime - stdInterval + offset),
             interval: 2 * stdInterval,
             recurrent: false,
             params: {}
@@ -44,6 +46,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyForegroundTask',
+            startAt: new Date(currentTime - 2 * stdInterval + offset),
             interval: stdInterval + offset,
             recurrent: true,
             params: {}
@@ -56,6 +59,7 @@ describe('Task manager', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(currentTime - 4 * stdInterval),
             interval: 2 * stdInterval,
             recurrent: true,
             params: {}
@@ -185,6 +189,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(initialTime),
             interval: minute,
             recurrent: true,
             params: {}
@@ -196,6 +201,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(initialTime),
             interval: 2 * minute,
             recurrent: true,
             params: {}
@@ -207,6 +213,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(initialTime),
             interval: 3 * minute,
             recurrent: true,
             params: {}
@@ -218,6 +225,7 @@ describe('Tasks manager next interval', () => {
         PlanningType.Alarm,
         {
             name: 'dummyTask',
+            startAt: new Date(initialTime),
             interval: 5 * minute,
             recurrent: true,
             params: {}

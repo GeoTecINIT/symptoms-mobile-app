@@ -8,13 +8,25 @@ const DEFAULT_CANCEL_EVENT = 'unknown';
 
 export interface RunnableTask {
     name: string;
+    startAt: Date;
     interval: number;
     recurrent: boolean;
     params: TaskParams;
     cancelEvent?: string;
 }
 
-export class RunnableTaskBuilder implements EventReceiver {
+export interface ReadyRunnableTaskBuilder extends EventReceiver {
+    cancelOn(eventName: string): ReadyRunnableTaskBuilder;
+    build(): RunnableTask;
+    plan(platformEvent?: PlatformEvent): void;
+}
+
+interface DelayedRunnableTaskBuilder extends ReadyRunnableTaskBuilder {
+    every(time: number, timeUnit?: TimeUnit): ReadyRunnableTaskBuilder;
+}
+
+export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
+    private startAt: Date;
     private interval: number;
     private recurrent: boolean;
     private cancelEvent: string;
@@ -24,19 +36,20 @@ export class RunnableTaskBuilder implements EventReceiver {
         private params: TaskParams,
         private taskPlanner?: TaskPlanner
     ) {
+        this.startAt = new Date();
         this.interval = 0;
         this.recurrent = false;
         this.cancelEvent = DEFAULT_CANCEL_EVENT;
     }
 
-    now() {
+    now(): ReadyRunnableTaskBuilder {
         this.interval = 0;
         this.recurrent = false;
 
         return this;
     }
 
-    every(time: number, timeUnit?: TimeUnit) {
+    every(time: number, timeUnit?: TimeUnit): ReadyRunnableTaskBuilder {
         const seconds = timeUnit ? toSeconds(time, timeUnit) : time;
         this.interval = seconds;
         this.recurrent = true;
@@ -44,7 +57,7 @@ export class RunnableTaskBuilder implements EventReceiver {
         return this;
     }
 
-    in(time: number, timeUnit?: TimeUnit) {
+    in(time: number, timeUnit?: TimeUnit): ReadyRunnableTaskBuilder {
         const seconds = timeUnit ? toSeconds(time, timeUnit) : time;
         this.interval = seconds;
         this.recurrent = false;
@@ -52,7 +65,13 @@ export class RunnableTaskBuilder implements EventReceiver {
         return this;
     }
 
-    cancelOn(eventName: string) {
+    at(date: Date): DelayedRunnableTaskBuilder {
+        this.startAt = date;
+
+        return this;
+    }
+
+    cancelOn(eventName: string): ReadyRunnableTaskBuilder {
         this.cancelEvent = eventName;
 
         return this;
@@ -61,6 +80,7 @@ export class RunnableTaskBuilder implements EventReceiver {
     build(): RunnableTask {
         return {
             name: this.taskName,
+            startAt: this.startAt,
             interval: this.interval,
             recurrent: this.recurrent,
             cancelEvent: this.cancelEvent,
