@@ -163,7 +163,7 @@ describe('Task manager', () => {
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const nextInterval = await taskPlanner.nextInterval();
-        expect(nextInterval).toBe(recurrentTaskToBeRun.interval);
+        expect(nextInterval).toBe(offset);
     });
 
     it('returns -1 when a next execution is not required', async () => {
@@ -172,5 +172,275 @@ describe('Task manager', () => {
             .and.returnValue(Promise.resolve([ephemeralTaskToBeRun]));
         const nextInterval = await taskPlanner.nextInterval();
         expect(nextInterval).toBe(-1);
+    });
+});
+
+describe('Tasks manager next interval', () => {
+    const minute = 60000;
+    const initialTime = new Date().getTime();
+    const plannedTasksStore = createPlannedTaskStoreMock();
+    let taskPlanner: TaskManager;
+
+    const task1Minutes = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            interval: minute,
+            recurrent: true,
+            params: {}
+        },
+        uuid(),
+        initialTime
+    );
+    const task2Minutes = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            interval: 2 * minute,
+            recurrent: true,
+            params: {}
+        },
+        uuid(),
+        initialTime
+    );
+    const task3Minutes = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            interval: 3 * minute,
+            recurrent: true,
+            params: {}
+        },
+        uuid(),
+        initialTime
+    );
+    const task5Minutes = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            interval: 5 * minute,
+            recurrent: true,
+            params: {}
+        },
+        uuid(),
+        initialTime
+    );
+
+    const testCases = [
+        {
+            firstMinutes: 2,
+            firstExecution: 'first',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: -1 },
+                { task: task3Minutes, lastRun: -1 },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 2,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'first',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: initialTime + 2 * minute },
+                { task: task3Minutes, lastRun: -1 },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 3,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 2,
+            firstExecution: 'second',
+            secondMinutes: 3,
+            secondExecution: 'first',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: initialTime + 2 * minute },
+                { task: task3Minutes, lastRun: initialTime + 3 * minute },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 4,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 5,
+            firstExecution: 'first',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: initialTime + 4 * minute },
+                { task: task3Minutes, lastRun: initialTime + 3 * minute },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 5,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 2,
+            firstExecution: 'third',
+            secondMinutes: 3,
+            secondExecution: 'second',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: initialTime + 4 * minute },
+                { task: task3Minutes, lastRun: initialTime + 3 * minute },
+                { task: task5Minutes, lastRun: initialTime + 5 * minute }
+            ],
+            currentMinute: 6,
+            expectedResult: 2
+        },
+        {
+            firstMinutes: 2,
+            firstExecution: 'fourth',
+            case: '2-3-5',
+            tasks: [
+                { task: task2Minutes, lastRun: initialTime + 6 * minute },
+                { task: task3Minutes, lastRun: initialTime + 6 * minute },
+                { task: task5Minutes, lastRun: initialTime + 5 * minute }
+            ],
+            currentMinute: 8,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'first',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: -1 },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 3,
+            expectedResult: 2
+        },
+        {
+            firstMinutes: 5,
+            firstExecution: 'first',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 3 * minute },
+                { task: task5Minutes, lastRun: -1 }
+            ],
+            currentMinute: 5,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'second',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 3 * minute },
+                { task: task5Minutes, lastRun: initialTime + 5 * minute }
+            ],
+            currentMinute: 6,
+            expectedResult: 3
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'third',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 6 * minute },
+                { task: task5Minutes, lastRun: initialTime + 5 * minute }
+            ],
+            currentMinute: 9,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 5,
+            firstExecution: 'second',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 9 * minute },
+                { task: task5Minutes, lastRun: initialTime + 5 * minute }
+            ],
+            currentMinute: 10,
+            expectedResult: 2
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'fourth',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 9 * minute },
+                { task: task5Minutes, lastRun: initialTime + 10 * minute }
+            ],
+            currentMinute: 12,
+            expectedResult: 3
+        },
+        {
+            firstMinutes: 3,
+            firstExecution: 'fifth',
+            secondMinutes: 5,
+            secondExecution: 'third',
+            case: '3-5',
+            tasks: [
+                { task: task3Minutes, lastRun: initialTime + 12 * minute },
+                { task: task5Minutes, lastRun: initialTime + 10 * minute }
+            ],
+            currentMinute: 15,
+            expectedResult: 3
+        },
+        {
+            firstMinutes: 1,
+            firstExecution: 'first',
+            case: '1-2',
+            tasks: [
+                { task: task1Minutes, lastRun: -1 },
+                { task: task2Minutes, lastRun: -1 }
+            ],
+            currentMinute: 1,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 1,
+            firstExecution: 'second',
+            secondMinutes: 2,
+            secondExecution: 'first',
+            case: '1-2',
+            tasks: [
+                { task: task1Minutes, lastRun: initialTime + minute },
+                { task: task2Minutes, lastRun: -1 }
+            ],
+            currentMinute: 2,
+            expectedResult: 1
+        },
+        {
+            firstMinutes: 1,
+            firstExecution: 'third',
+            case: '1-2',
+            tasks: [
+                { task: task1Minutes, lastRun: initialTime + 2 * minute },
+                { task: task2Minutes, lastRun: initialTime + 2 * minute }
+            ],
+            currentMinute: 3,
+            expectedResult: 1
+        }
+    ];
+
+    testCases.forEach((test) => {
+        it(`calculates interval after ${test.firstMinutes} minutes task ${
+            test.firstExecution
+        }${
+            test.secondMinutes
+                ? ` and ${test.secondMinutes} minutes task ${test.secondExecution}`
+                : ''
+        } execution (case ${test.case})`, async () => {
+            test.tasks.forEach(({ task, lastRun }) => (task.lastRun = lastRun));
+            const sortedTasks = test.tasks.map(({ task }) => task);
+
+            taskPlanner = new TaskManager(
+                PlanningType.Alarm,
+                plannedTasksStore,
+                minute / 2,
+                initialTime + test.currentMinute * minute
+            );
+            spyOn(plannedTasksStore, 'getAllSortedByInterval')
+                .withArgs(PlanningType.Alarm)
+                .and.returnValue(Promise.resolve(sortedTasks));
+            const nextInterval = await taskPlanner.nextInterval();
+            expect(nextInterval).toBe(test.expectedResult * minute);
+        });
     });
 });

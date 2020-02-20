@@ -46,16 +46,26 @@ export class TaskManager {
             (task) => task.recurrent || !this.determineIfTaskShouldBeRun(task)
         );
 
-        return tasksToRunInTheFuture.length === 0
-            ? -1
-            : tasksToRunInTheFuture[0].interval;
+        if (tasksToRunInTheFuture.length === 0) {
+            return -1;
+        }
+
+        const nextIntervals = tasksToRunInTheFuture.map((task) => {
+            let next = this.getLastRun(task) + task.interval - this.currentTime;
+            if (next < this.intervalOffset) {
+                next += task.interval;
+            }
+
+            return next;
+        });
+
+        const sortedIntervals = nextIntervals.sort((i1, i2) => i1 - i2);
+
+        return sortedIntervals[0];
     }
 
     private determineIfTaskShouldBeRun(task: PlannedTask): boolean {
-        let priorExecution = task.lastRun;
-        if (task.lastRun === -1) {
-            priorExecution = task.createdAt;
-        }
+        const priorExecution = this.getLastRun(task);
 
         return (
             this.currentTime >=
@@ -71,5 +81,9 @@ export class TaskManager {
         }
 
         return this._allTasks;
+    }
+
+    private getLastRun(task: PlannedTask) {
+        return task.lastRun === -1 ? task.createdAt : task.lastRun;
     }
 }

@@ -5,6 +5,8 @@ import { plannedTasksDB } from '../../../../../persistence/planned-tasks-store';
 import { createAlarmRunnerServiceIntent } from '../../../../../android/intents.android';
 import { PlanningType } from '../../../../planner/planned-task';
 
+const MIN_INTERVAL = 60000;
+
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.AlarmReceiver')
 export class AlarmReceiver extends android.content.BroadcastReceiver {
@@ -46,7 +48,9 @@ export class AlarmReceiver extends android.content.BroadcastReceiver {
     private async rescheduleIfNeeded() {
         const willContinue = await this.taskManager.willContinue();
         if (willContinue) {
-            const nextInterval = await this.taskManager.nextInterval();
+            let nextInterval = await this.taskManager.nextInterval();
+            nextInterval =
+                nextInterval > MIN_INTERVAL ? nextInterval : MIN_INTERVAL;
             this.alarmManager.set(nextInterval);
             this.log(`Next alarm will be run in: ${nextInterval}`);
         } else {
