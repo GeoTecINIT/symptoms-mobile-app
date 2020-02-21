@@ -15,6 +15,10 @@ export class PlannedTask {
     params: TaskParams;
     cancelEvent: string;
 
+    get lastUpdate(): number {
+        return this.lastRun !== -1 ? this.lastRun : this.createdAt;
+    }
+
     constructor(
         public planningType: PlanningType,
         task: RunnableTask,
@@ -30,5 +34,13 @@ export class PlannedTask {
         this.recurrent = task.recurrent;
         this.params = task.params;
         this.cancelEvent = task.cancelEvent;
+    }
+
+    nextRun(now: number = new Date().getTime()): number {
+        if (this.startAt !== -1 && now < this.startAt) {
+            return this.startAt - now;
+        }
+
+        return this.interval - (now - this.lastUpdate);
     }
 }

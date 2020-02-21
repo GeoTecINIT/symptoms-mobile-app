@@ -51,7 +51,7 @@ export class TaskManager {
         }
 
         const nextIntervals = tasksToRunInTheFuture.map((task) => {
-            let next = this.getLastRun(task) + task.interval - this.currentTime;
+            let next = task.nextRun(this.currentTime);
             if (next < this.intervalOffset) {
                 next += task.interval;
             }
@@ -65,11 +65,9 @@ export class TaskManager {
     }
 
     private determineIfTaskShouldBeRun(task: PlannedTask): boolean {
-        const priorExecution = this.getLastRun(task);
-
         return (
             this.currentTime >=
-            priorExecution + task.interval - this.intervalOffset
+            task.lastUpdate + task.interval - this.intervalOffset
         );
     }
 
@@ -81,9 +79,5 @@ export class TaskManager {
         }
 
         return this._allTasks;
-    }
-
-    private getLastRun(task: PlannedTask) {
-        return task.lastRun === -1 ? task.createdAt : task.lastRun;
     }
 }
