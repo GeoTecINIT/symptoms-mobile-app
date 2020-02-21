@@ -12,40 +12,20 @@ describe('Android Alarm Scheduler', () => {
     const watchdog = createAlarmManagerMock();
     const taskStore = createPlannedTaskStoreMock();
 
-    const now = new Date().getTime();
     const androidAlarm = new AndroidAlarmScheduler(
         manager,
         watchdog,
         taskStore
     );
 
-    const dummyTask: RunnableTask = {
-        name: 'dummyTask',
-        startAt: -1,
-        interval: 120000,
-        recurrent: true,
-        params: {}
-    };
-    const dummyDelayedTask: RunnableTask = {
-        ...dummyTask,
-        startAt: now + 75000
-    };
-    const closeDelayedTask: RunnableTask = {
-        ...dummyTask,
-        startAt: now + 30000
-    };
-    const lowerFreqTask = {
-        ...dummyTask,
-        interval: dummyTask.interval * 2
-    };
-    const higherFreqTask = {
-        ...dummyTask,
-        interval: dummyTask.interval / 2
-    };
-    const equalFreqTask = {
-        ...dummyTask,
-        task: 'patata'
-    };
+    let now: number;
+    let dummyTask: RunnableTask;
+    let dummyDelayedTask: RunnableTask;
+    let closeDelayedTask: RunnableTask;
+    let lowerFreqTask: RunnableTask;
+    let higherFreqTask: RunnableTask;
+    let equalFreqTask: RunnableTask;
+
     let expectedTask: PlannedTask;
     let expectedDelayedTask: PlannedTask;
     let closeDelayedPT: PlannedTask;
@@ -54,7 +34,34 @@ describe('Android Alarm Scheduler', () => {
     let equalFreqPT: PlannedTask;
 
     beforeEach(() => {
-        // TODO: Move the runnable task and now creation here too
+        now = new Date().getTime();
+        dummyTask = {
+            name: 'dummyTask',
+            startAt: -1,
+            interval: 120000,
+            recurrent: true,
+            params: {}
+        };
+        dummyDelayedTask = {
+            ...dummyTask,
+            startAt: now + 75000
+        };
+        closeDelayedTask = {
+            ...dummyTask,
+            startAt: now + 30000
+        };
+        lowerFreqTask = {
+            ...dummyTask,
+            interval: dummyTask.interval * 2
+        };
+        higherFreqTask = {
+            ...dummyTask,
+            interval: dummyTask.interval / 2
+        };
+        equalFreqTask = {
+            ...dummyTask,
+            name: 'patata'
+        };
 
         expectedTask = createPlannedTask(dummyTask);
         expectedDelayedTask = createPlannedTask(dummyDelayedTask);
@@ -62,6 +69,7 @@ describe('Android Alarm Scheduler', () => {
         lowerFreqPT = createPlannedTask(lowerFreqTask);
         higherFreqPT = createPlannedTask(higherFreqTask);
         equalFreqPT = createPlannedTask(equalFreqTask);
+        equalFreqPT.createdAt = expectedTask.createdAt;
 
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
         spyOn(taskStore, 'delete').and.returnValue(Promise.resolve());
@@ -84,6 +92,9 @@ describe('Android Alarm Scheduler', () => {
         expect(taskStore.get).toHaveBeenCalled();
         expect(taskStore.getAllSortedByNextRun).toHaveBeenCalled();
         expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(manager.set, dummyTask.interval, 1000)
+        ).toBeTruthy();
         expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
@@ -109,7 +120,10 @@ describe('Android Alarm Scheduler', () => {
 
         const scheduledTask = await androidAlarm.schedule(higherFreqTask);
         console.log(higherFreqPT.nextRun(now));
-        expect(manager.set).toHaveBeenCalledWith(higherFreqTask.interval);
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(manager.set, higherFreqTask.interval, 1000)
+        ).toBeTruthy();
         expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
@@ -211,9 +225,14 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.cancel(higherFreqPT.id);
 
-        expect(manager.set).toHaveBeenCalledWith(
-            expectedDelayedTask.nextRun(now)
-        );
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(
+                manager.set,
+                expectedDelayedTask.nextRun(now),
+                1000
+            )
+        ).toBeTruthy();
         expect(taskStore.delete).toHaveBeenCalledWith(higherFreqPT.id);
     });
 
