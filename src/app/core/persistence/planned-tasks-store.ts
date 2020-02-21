@@ -77,21 +77,21 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         return this.plannedTaskFromRow(rows[0]);
     }
 
-    async getAllSortedByInterval(
+    async getAllSortedByNextRun(
         planningType?: PlanningType
     ): Promise<Array<PlannedTask>> {
         await this.createDB();
 
-        let query = nSQL(PLANNED_TASKS_TABLE)
-            .query('select')
-            .orderBy(['interval ASC']);
+        let query = nSQL(PLANNED_TASKS_TABLE).query('select');
         if (planningType) {
             query = query.where(['planningType', '=', planningType]);
         }
 
         const rows = await query.exec();
+        const plannedTasks = rows.map((row) => this.plannedTaskFromRow(row));
+        const now = new Date().getTime();
 
-        return rows.map((row) => this.plannedTaskFromRow(row));
+        return plannedTasks.sort((t1, t2) => t1.nextRun(now) - t2.nextRun(now));
     }
 
     async getAllFilteredByCancelEvent(
@@ -213,7 +213,7 @@ export interface PlannedTasksStore {
     insert(plannedTask: PlannedTask): Promise<void>;
     delete(task: string): Promise<void>;
     get(task: RunnableTask | string): Promise<PlannedTask>;
-    getAllSortedByInterval(
+    getAllSortedByNextRun(
         planningType: PlanningType
     ): Promise<Array<PlannedTask>>;
     getAllFilteredByCancelEvent(

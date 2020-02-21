@@ -73,7 +73,7 @@ export class TaskManager {
 
     private async allTasks(): Promise<Array<PlannedTask>> {
         if (!this._allTasks) {
-            this._allTasks = await this.plannedTasksStore.getAllSortedByInterval(
+            this._allTasks = await this.plannedTasksStore.getAllSortedByNextRun(
                 this.planningType
             );
         }

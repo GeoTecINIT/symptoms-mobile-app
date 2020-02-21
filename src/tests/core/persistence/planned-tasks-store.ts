@@ -92,10 +92,11 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask3);
         await store.insert(plannedTask4);
 
-        const tasks = await store.getAllSortedByInterval();
+        const tasks = await store.getAllSortedByNextRun();
         expect(tasks.length).toBe(4);
+        const now = new Date().getTime();
         for (let i = 0; i < tasks.length - 1; i++) {
-            if (tasks[i].interval > tasks[i + 1].interval) {
+            if (tasks[i].nextRun(now) > tasks[i + 1].nextRun(now)) {
                 fail('Tasks out of order');
             }
         }
@@ -108,10 +109,11 @@ describe('Planned Tasks Store', () => {
         await store.insert(plannedTask3);
         await store.insert(plannedTask4);
 
-        const tasks = await store.getAllSortedByInterval(PlanningType.Alarm);
+        const tasks = await store.getAllSortedByNextRun(PlanningType.Alarm);
         expect(tasks.length).toBe(3);
+        const now = new Date().getTime();
         for (let i = 0; i < tasks.length - 1; i++) {
-            if (tasks[i].interval > tasks[i + 1].interval) {
+            if (tasks[i].nextRun(now) > tasks[i + 1].nextRun(now)) {
                 fail('Tasks out of order');
             }
         }
@@ -155,7 +157,7 @@ describe('Planned Tasks Store', () => {
 
     it('deletes all the stored tasks', async () => {
         await store.deleteAll();
-        const tasks = await store.getAllSortedByInterval();
+        const tasks = await store.getAllSortedByNextRun();
         expect(tasks.length).toBe(0);
     });
 

@@ -57,14 +57,14 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(dummyTask)
             .and.returnValue(Promise.resolve(null));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([])
         );
 
         const scheduledTask = await androidAlarm.schedule(dummyTask);
 
         expect(taskStore.get).toHaveBeenCalled();
-        expect(taskStore.getAllSortedByInterval).toHaveBeenCalled();
+        expect(taskStore.getAllSortedByNextRun).toHaveBeenCalled();
         expect(manager.set).toHaveBeenCalled();
         expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(higherFreqTask)
             .and.returnValue(Promise.resolve(null));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask])
         );
 
@@ -101,7 +101,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(lowerFreqTask)
             .and.returnValue(Promise.resolve(null));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask])
         );
 
@@ -119,7 +119,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(higherFreqPT.id)
             .and.returnValue(Promise.resolve(higherFreqPT));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([higherFreqPT, expectedTask])
         );
 
@@ -133,7 +133,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(lowerFreqPT.id)
             .and.returnValue(Promise.resolve(lowerFreqPT));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask, lowerFreqPT])
         );
 
@@ -150,7 +150,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(equalFreqPT.id)
             .and.returnValue(Promise.resolve(equalFreqPT));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([equalFreqPT, expectedTask])
         );
 
@@ -167,7 +167,7 @@ describe('Android Alarm Scheduler', () => {
         spyOn(taskStore, 'get')
             .withArgs(expectedTask.id)
             .and.returnValue(Promise.resolve(expectedTask));
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask])
         );
 
@@ -196,7 +196,7 @@ describe('Android Alarm Scheduler', () => {
     it('sets an alarm when there are scheduled tasks and alarm is not up neither the watchdog', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(false);
         spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask, lowerFreqPT])
         );
 
@@ -209,7 +209,7 @@ describe('Android Alarm Scheduler', () => {
     it('sets an alarm when there are scheduled tasks and alarm is not up', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(false);
         spyOnProperty(watchdog, 'alarmUp').and.returnValue(true);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask, lowerFreqPT])
         );
 
@@ -222,7 +222,7 @@ describe('Android Alarm Scheduler', () => {
     it('sets an alarm when there are scheduled tasks and watchdog is not up', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(true);
         spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([expectedTask, lowerFreqPT])
         );
 
@@ -235,7 +235,7 @@ describe('Android Alarm Scheduler', () => {
     it('does not set an alarm when there are no scheduled tasks', async () => {
         spyOnProperty(manager, 'alarmUp').and.returnValue(false);
         spyOnProperty(watchdog, 'alarmUp').and.returnValue(false);
-        spyOn(taskStore, 'getAllSortedByInterval').and.returnValue(
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
             Promise.resolve([])
         );
 

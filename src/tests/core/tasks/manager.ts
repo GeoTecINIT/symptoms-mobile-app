@@ -86,7 +86,7 @@ describe('Task manager', () => {
     });
 
     it('lists the tasks to be run for a given type', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const tasks = await taskPlanner.tasksToRun();
@@ -94,7 +94,7 @@ describe('Task manager', () => {
     });
 
     it('returns an empty list when no tasks need to be run', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(
                 Promise.resolve([
@@ -107,7 +107,7 @@ describe('Task manager', () => {
     });
 
     it('checks if at least a task to be run requires foreground execution', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const requiresForeground = await taskPlanner.requiresForeground();
@@ -115,7 +115,7 @@ describe('Task manager', () => {
     });
 
     it('returns false when no tasks need to be run in the foreground', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(
                 Promise.resolve([
@@ -129,7 +129,7 @@ describe('Task manager', () => {
     });
 
     it('determines if there are tasks that will require another run', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const willContinue = await taskPlanner.willContinue();
@@ -137,7 +137,7 @@ describe('Task manager', () => {
     });
 
     it('returns false when no tasks need to be run', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve([]));
         const willContinue = await taskPlanner.willContinue();
@@ -145,7 +145,7 @@ describe('Task manager', () => {
     });
 
     it('returns false when all the tasks are finite and fit in this execution window', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve([ephemeralTaskToBeRun]));
         const willContinue = await taskPlanner.willContinue();
@@ -153,7 +153,7 @@ describe('Task manager', () => {
     });
 
     it('returns true when all the tasks are finite but do not fit in this execution window', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(
                 Promise.resolve([ephemeralTaskToBeRun, ephemeralTaskNotToBeRun])
@@ -163,7 +163,7 @@ describe('Task manager', () => {
     });
 
     it('calculates the time until the next execution of the planner', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const nextInterval = await taskPlanner.nextInterval();
@@ -171,7 +171,7 @@ describe('Task manager', () => {
     });
 
     it('returns -1 when a next execution is not required', async () => {
-        spyOn(plannedTasksStore, 'getAllSortedByInterval')
+        spyOn(plannedTasksStore, 'getAllSortedByNextRun')
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve([ephemeralTaskToBeRun]));
         const nextInterval = await taskPlanner.nextInterval();
@@ -444,7 +444,7 @@ describe('Tasks manager next interval', () => {
                 minute / 2,
                 initialTime + test.currentMinute * minute
             );
-            spyOn(plannedTasksStore, 'getAllSortedByInterval')
+            spyOn(plannedTasksStore, 'getAllSortedByNextRun')
                 .withArgs(PlanningType.Alarm)
                 .and.returnValue(Promise.resolve(sortedTasks));
             const nextInterval = await taskPlanner.nextInterval();

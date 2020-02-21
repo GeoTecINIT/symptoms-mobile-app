@@ -20,7 +20,7 @@ export class AndroidAlarmScheduler {
             return;
         }
         this.log('Alarm was not up! Scheduling...');
-        const plannedTasks = await this.plannedTaskStore.getAllSortedByInterval(
+        const plannedTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
         if (plannedTasks.length > 0) {
@@ -39,7 +39,7 @@ export class AndroidAlarmScheduler {
         if (possibleExisting) {
             return possibleExisting;
         }
-        const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
+        const allTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
         if (
@@ -60,7 +60,7 @@ export class AndroidAlarmScheduler {
         if (!possibleExisting) {
             return;
         }
-        const allTasks = await this.plannedTaskStore.getAllSortedByInterval(
+        const allTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
         if (allTasks.length === 1) {
