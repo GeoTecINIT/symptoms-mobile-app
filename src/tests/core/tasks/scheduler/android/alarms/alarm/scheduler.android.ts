@@ -11,6 +11,8 @@ describe('Android Alarm Scheduler', () => {
     const manager = createAlarmManagerMock();
     const watchdog = createAlarmManagerMock();
     const taskStore = createPlannedTaskStoreMock();
+
+    const now = new Date().getTime();
     const androidAlarm = new AndroidAlarmScheduler(
         manager,
         watchdog,
@@ -24,6 +26,14 @@ describe('Android Alarm Scheduler', () => {
         recurrent: true,
         params: {}
     };
+    const dummyDelayedTask: RunnableTask = {
+        ...dummyTask,
+        startAt: now + 75000
+    };
+    const closeDelayedTask: RunnableTask = {
+        ...dummyTask,
+        startAt: now + 30000
+    };
     const lowerFreqTask = {
         ...dummyTask,
         interval: dummyTask.interval * 2
@@ -36,15 +46,23 @@ describe('Android Alarm Scheduler', () => {
         ...dummyTask,
         task: 'patata'
     };
-    const expectedTask: PlannedTask = new PlannedTask(
-        PlanningType.Alarm,
-        dummyTask
-    );
-    const lowerFreqPT = new PlannedTask(PlanningType.Alarm, lowerFreqTask);
-    const higherFreqPT = new PlannedTask(PlanningType.Alarm, higherFreqTask);
-    const equalFreqPT = new PlannedTask(PlanningType.Alarm, equalFreqTask);
+    let expectedTask: PlannedTask;
+    let expectedDelayedTask: PlannedTask;
+    let closeDelayedPT: PlannedTask;
+    let lowerFreqPT: PlannedTask;
+    let higherFreqPT: PlannedTask;
+    let equalFreqPT: PlannedTask;
 
     beforeEach(() => {
+        // TODO: Move the runnable task and now creation here too
+
+        expectedTask = createPlannedTask(dummyTask);
+        expectedDelayedTask = createPlannedTask(dummyDelayedTask);
+        closeDelayedPT = createPlannedTask(closeDelayedTask);
+        lowerFreqPT = createPlannedTask(lowerFreqTask);
+        higherFreqPT = createPlannedTask(higherFreqTask);
+        equalFreqPT = createPlannedTask(equalFreqTask);
+
         spyOn(taskStore, 'insert').and.returnValue(Promise.resolve());
         spyOn(taskStore, 'delete').and.returnValue(Promise.resolve());
         spyOn(manager, 'set');
@@ -90,8 +108,31 @@ describe('Android Alarm Scheduler', () => {
         );
 
         const scheduledTask = await androidAlarm.schedule(higherFreqTask);
-
+        console.log(higherFreqPT.nextRun(now));
         expect(manager.set).toHaveBeenCalledWith(higherFreqTask.interval);
+        expect(watchdog.set).toHaveBeenCalled();
+        expect(taskStore.insert).toHaveBeenCalled();
+        expect(scheduledTask).not.toBeNull();
+    });
+
+    it('schedules a task and reschedules an alarm when the task starts earlier than the scheduled ones', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(dummyDelayedTask)
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
+
+        const scheduledTask = await androidAlarm.schedule(dummyDelayedTask);
+
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(
+                manager.set,
+                expectedDelayedTask.nextRun(now),
+                1000
+            )
+        ).toBeTruthy();
         expect(watchdog.set).toHaveBeenCalled();
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
@@ -107,10 +148,38 @@ describe('Android Alarm Scheduler', () => {
 
         const scheduledTask = await androidAlarm.schedule(lowerFreqTask);
 
-        expect(manager.cancel).not.toHaveBeenCalled();
         expect(manager.set).not.toHaveBeenCalled();
-        expect(watchdog.cancel).not.toHaveBeenCalled();
         expect(watchdog.set).not.toHaveBeenCalled();
+        expect(taskStore.insert).toHaveBeenCalled();
+        expect(scheduledTask).not.toBeNull();
+    });
+
+    it('does not reschedule the alarm when it is going to be scheduled in less than 60 seconds', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(higherFreqTask)
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
+            Promise.resolve([closeDelayedPT])
+        );
+
+        const scheduledTask = await androidAlarm.schedule(higherFreqTask);
+
+        expect(manager.set).not.toHaveBeenCalled();
+        expect(taskStore.insert).toHaveBeenCalled();
+        expect(scheduledTask).not.toBeNull();
+    });
+
+    it('schedules a delayed task in 60 seconds when it has to start in less than 60 seconds', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(closeDelayedTask)
+            .and.returnValue(Promise.resolve(null));
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
+            Promise.resolve([expectedTask])
+        );
+
+        const scheduledTask = await androidAlarm.schedule(closeDelayedTask);
+
+        expect(manager.set).toHaveBeenCalledWith(60000);
         expect(taskStore.insert).toHaveBeenCalled();
         expect(scheduledTask).not.toBeNull();
     });
@@ -125,7 +194,26 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.cancel(higherFreqPT.id);
 
-        expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(manager.set, expectedTask.interval, 1000)
+        ).toBeTruthy();
+        expect(taskStore.delete).toHaveBeenCalledWith(higherFreqPT.id);
+    });
+
+    it('removes the highest frequency scheduled task and reschedules the alarm with delayed task nextRun', async () => {
+        spyOn(taskStore, 'get')
+            .withArgs(higherFreqPT.id)
+            .and.returnValue(Promise.resolve(higherFreqPT));
+        spyOn(taskStore, 'getAllSortedByNextRun').and.returnValue(
+            Promise.resolve([higherFreqPT, expectedDelayedTask])
+        );
+
+        await androidAlarm.cancel(higherFreqPT.id);
+
+        expect(manager.set).toHaveBeenCalledWith(
+            expectedDelayedTask.nextRun(now)
+        );
         expect(taskStore.delete).toHaveBeenCalledWith(higherFreqPT.id);
     });
 
@@ -202,7 +290,10 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.setup();
 
-        expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(manager.set, expectedTask.interval, 1000)
+        ).toBeTruthy();
         expect(watchdog.set).toHaveBeenCalled();
     });
 
@@ -215,7 +306,10 @@ describe('Android Alarm Scheduler', () => {
 
         await androidAlarm.setup();
 
-        expect(manager.set).toHaveBeenCalledWith(expectedTask.interval);
+        expect(manager.set).toHaveBeenCalled();
+        expect(
+            isLastCallCloseTo(manager.set, expectedTask.interval, 1000)
+        ).toBeTruthy();
         expect(watchdog.set).not.toHaveBeenCalled();
     });
 
@@ -268,4 +362,14 @@ function createAlarmManagerMock(): AlarmManager {
             return null;
         }
     };
+}
+
+function createPlannedTask(task: RunnableTask) {
+    return new PlannedTask(PlanningType.Alarm, task);
+}
+
+function isLastCallCloseTo(spy: any, num: number, threshold: number): boolean {
+    const lastArg = (spy as jasmine.Spy).calls.mostRecent().args[0];
+
+    return lastArg > num - threshold && lastArg <= num;
 }

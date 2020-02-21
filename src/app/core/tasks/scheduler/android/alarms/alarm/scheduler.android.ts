@@ -8,6 +8,8 @@ import { WatchdogManager } from '../watchdog/manager.android';
 import { PlannedTask, PlanningType } from '../../../../planner/planned-task';
 import { RunnableTask } from '../../../../runnable-task';
 
+const MIN_ALARM_INTERVAL = 60000;
+
 export class AndroidAlarmScheduler {
     constructor(
         private alarmManager: AlarmManager = new AndroidAlarmManager(),
@@ -25,7 +27,9 @@ export class AndroidAlarmScheduler {
         );
         if (plannedTasks.length > 0) {
             if (!this.alarmManager.alarmUp) {
-                this.alarmManager.set(plannedTasks[0].interval);
+                this.alarmManager.set(
+                    this.calculateAlarmInterval(plannedTasks[0])
+                );
             }
             if (!this.watchdogManager.alarmUp) {
                 this.watchdogManager.set();
@@ -42,14 +46,15 @@ export class AndroidAlarmScheduler {
         const allTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
+        const now = new Date().getTime();
+        const plannedTask = new PlannedTask(PlanningType.Alarm, runnableTask);
         if (
             allTasks.length === 0 ||
-            allTasks[0].interval > runnableTask.interval
+            allTasks[0].nextRun(now) > plannedTask.nextRun(now)
         ) {
-            this.alarmManager.set(runnableTask.interval);
+            this.alarmManager.set(this.calculateAlarmInterval(plannedTask));
             this.watchdogManager.set();
         }
-        const plannedTask = new PlannedTask(PlanningType.Alarm, runnableTask);
         await this.plannedTaskStore.insert(plannedTask);
 
         return plannedTask;
@@ -63,16 +68,23 @@ export class AndroidAlarmScheduler {
         const allTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
+        const now = new Date().getTime();
         if (allTasks.length === 1) {
             this.alarmManager.cancel();
             this.watchdogManager.cancel();
         } else if (
-            allTasks[0].interval === possibleExisting.interval &&
-            allTasks[1].interval !== possibleExisting.interval
+            allTasks[0].nextRun(now) === possibleExisting.nextRun(now) &&
+            allTasks[1].nextRun(now) !== possibleExisting.nextRun(now)
         ) {
-            this.alarmManager.set(allTasks[1].interval);
+            this.alarmManager.set(this.calculateAlarmInterval(allTasks[1]));
         }
         await this.plannedTaskStore.delete(id);
+    }
+
+    private calculateAlarmInterval(plannedTask: PlannedTask): number {
+        const nextRun = plannedTask.nextRun();
+
+        return nextRun > MIN_ALARM_INTERVAL ? nextRun : MIN_ALARM_INTERVAL;
     }
 
     private log(message: string) {
