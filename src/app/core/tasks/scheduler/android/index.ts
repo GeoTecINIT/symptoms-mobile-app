@@ -19,10 +19,8 @@ export class AndroidTaskScheduler implements TaskScheduler {
         const taskToSchedule = { ...task, interval: time * 1000 };
         if (time >= 5 && time < toSeconds(1, 'minutes')) {
             throw new Error('Not implemented yet');
-        } else if (time < toSeconds(15, 'minutes')) {
-            return this.alarmScheduler.schedule(taskToSchedule);
         } else {
-            throw new Error('Not implemented yet');
+            return this.alarmScheduler.schedule(taskToSchedule);
         }
     }
 

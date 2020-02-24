@@ -65,6 +65,12 @@ export class TaskManager {
     }
 
     private determineIfTaskShouldBeRun(task: PlannedTask): boolean {
+        if (this.currentTime < task.startAt - this.intervalOffset) {
+            return false;
+        } else if (task.lastUpdate < task.startAt) {
+            return true;
+        }
+
         return (
             this.currentTime >=
             task.lastUpdate + task.interval - this.intervalOffset

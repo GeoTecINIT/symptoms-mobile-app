@@ -18,6 +18,7 @@ describe('Task manager', () => {
     const stdInterval = 60000;
     const currentTime = new Date().getTime();
 
+    // To be run in 30s
     const ephemeralTaskToBeRun = new PlannedTask(
         PlanningType.Alarm,
         {
@@ -30,6 +31,8 @@ describe('Task manager', () => {
         uuid(),
         currentTime - stdInterval + offset
     );
+
+    // To be run in 90s
     const ephemeralTaskNotToBeRun = new PlannedTask(
         PlanningType.Alarm,
         {
@@ -42,6 +45,8 @@ describe('Task manager', () => {
         uuid(),
         currentTime - stdInterval + offset
     );
+
+    // To be run in 30s
     const recurrentTaskToBeRun = new PlannedTask(
         PlanningType.Alarm,
         {
@@ -55,6 +60,8 @@ describe('Task manager', () => {
         currentTime - 2 * stdInterval + offset,
         currentTime - stdInterval
     );
+
+    // To be run in 60s
     const recurrentTaskNotToBeRun = new PlannedTask(
         PlanningType.Alarm,
         {
@@ -69,11 +76,41 @@ describe('Task manager', () => {
         currentTime - stdInterval
     );
 
+    // To be run in 30s
+    const delayedTaskToBeRun = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            startAt: currentTime + offset,
+            interval: 2 * stdInterval,
+            recurrent: true,
+            params: {}
+        },
+        uuid(),
+        currentTime - stdInterval
+    );
+
+    // To be run in 90s
+    const delayedTaskNotToBeRun = new PlannedTask(
+        PlanningType.Alarm,
+        {
+            name: 'dummyTask',
+            startAt: currentTime + stdInterval + offset,
+            interval: 0,
+            recurrent: false,
+            params: {}
+        },
+        uuid(),
+        currentTime - 2 * stdInterval
+    );
+
     const sortedTasks = [
         ephemeralTaskToBeRun,
         recurrentTaskToBeRun,
+        delayedTaskToBeRun,
+        recurrentTaskNotToBeRun,
         ephemeralTaskNotToBeRun,
-        recurrentTaskNotToBeRun
+        delayedTaskNotToBeRun
     ];
 
     beforeEach(() => {
@@ -90,7 +127,11 @@ describe('Task manager', () => {
             .withArgs(PlanningType.Alarm)
             .and.returnValue(Promise.resolve(sortedTasks));
         const tasks = await taskPlanner.tasksToRun();
-        expect(tasks).toEqual([ephemeralTaskToBeRun, recurrentTaskToBeRun]);
+        expect(tasks).toEqual([
+            ephemeralTaskToBeRun,
+            recurrentTaskToBeRun,
+            delayedTaskToBeRun
+        ]);
     });
 
     it('returns an empty list when no tasks need to be run', async () => {
@@ -99,7 +140,8 @@ describe('Task manager', () => {
             .and.returnValue(
                 Promise.resolve([
                     ephemeralTaskNotToBeRun,
-                    recurrentTaskNotToBeRun
+                    recurrentTaskNotToBeRun,
+                    delayedTaskNotToBeRun
                 ])
             );
         const tasks = await taskPlanner.tasksToRun();
