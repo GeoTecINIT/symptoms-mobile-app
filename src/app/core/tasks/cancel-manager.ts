@@ -2,7 +2,7 @@ import {
     PlannedTasksStore,
     plannedTasksDB
 } from '../persistence/planned-tasks-store';
-import { TaskScheduler } from './scheduler';
+import { TaskScheduler, taskScheduler as getTaskScheduler } from './scheduler';
 
 export class TaskCancelManager {
     constructor(
@@ -10,7 +10,15 @@ export class TaskCancelManager {
         private taskScheduler?: TaskScheduler
     ) {}
 
-    init() {
+    async init(): Promise<void> {
         throw new Error('Not implemented');
+    }
+
+    private getTaskScheduler(): TaskScheduler {
+        if (!this.taskScheduler) {
+            this.taskScheduler = getTaskScheduler();
+        }
+
+        return this.taskScheduler;
     }
 }

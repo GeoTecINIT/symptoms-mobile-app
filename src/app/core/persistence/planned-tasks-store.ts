@@ -227,6 +227,7 @@ export interface PlannedTasksStore {
     getAllSortedByNextRun(
         planningType: PlanningType
     ): Promise<Array<PlannedTask>>;
+    getAllCancelEvents(): Promise<Array<string>>;
     getAllFilteredByCancelEvent(
         cancelEvent: string
     ): Promise<Array<PlannedTask>>;

@@ -17,6 +17,9 @@ export function createPlannedTaskStoreMock(): PlannedTasksStore {
         getAllSortedByNextRun() {
             return Promise.resolve([]);
         },
+        getAllCancelEvents() {
+            return Promise.resolve([]);
+        },
         getAllFilteredByCancelEvent(eventName: string) {
             return Promise.resolve([]);
         },

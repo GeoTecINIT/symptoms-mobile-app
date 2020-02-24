@@ -13,7 +13,9 @@ export class InstantTaskRunner implements TaskRunner {
     }
 
     // FIXME: Instant task runner currently does not support the fork
-    // of tasks from a single event in a reliable way
+    // of tasks from a single event in a reliable way.
+    // Possible solution: create an in-memory graph at TaskGraphLoader
+    // and check and control forks here.
     async run(
         task: RunnableTask,
         platformEvent: PlatformEvent
