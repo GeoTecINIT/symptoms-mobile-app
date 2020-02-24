@@ -1,11 +1,17 @@
 import { setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '~/tests/core/tasks';
 import { on, emit, off, PlatformEvent, EventCallback } from '~/app/core/events';
-import { run } from '~/app/core/tasks';
 import { uuid } from '~/app/core/utils/uuid';
+import { TaskGraphLoader } from '~/app/core/tasks/graph/loader';
+import {
+    TaskEventBinder,
+    RunnableTaskDescriptor
+} from '~/app/core/tasks/graph';
 
 describe('Event-based task runner', () => {
     setTasks(testTasks);
+
+    let taskGraph: TaskGraphLoader;
 
     let eventCallback: EventCallback;
 
@@ -14,6 +20,7 @@ describe('Event-based task runner', () => {
     let expectedEvent: PlatformEvent;
 
     beforeEach(() => {
+        taskGraph = new TaskGraphLoader();
         eventCallback = jasmine.createSpy('eventCallback');
         startEvent = {
             name: 'startEvent',
@@ -33,12 +40,7 @@ describe('Event-based task runner', () => {
     });
 
     it('runs a task at the moment an event rises', async () => {
-        on(
-            'startEvent',
-            run('emitterTask')
-                .now()
-                .cancelOn('stopEvent')
-        );
+        await taskGraph.load(testTaskGraph);
         const callbackPromise = new Promise((resolve) => {
             on(expectedEvent.name, (evt) => {
                 eventCallback(evt);
@@ -53,12 +55,7 @@ describe('Event-based task runner', () => {
     });
 
     it('does not run a task if it has been stopped', async () => {
-        on(
-            'startEvent',
-            run('emitterTask')
-                .now()
-                .cancelOn('stopEvent')
-        );
+        await taskGraph.load(testTaskGraph);
         const callbackPromise = new Promise((resolve, reject) => {
             setTimeout(() => resolve(), 2000);
             on(expectedEvent.name, (evt) => {
@@ -80,3 +77,14 @@ describe('Event-based task runner', () => {
         off(expectedEvent.name);
     });
 });
+
+const testTaskGraph = {
+    async describe(onEvt: TaskEventBinder, run: RunnableTaskDescriptor) {
+        onEvt(
+            'startEvent',
+            run('emitterTask')
+                .now()
+                .cancelOn('stopEvent')
+        );
+    }
+};

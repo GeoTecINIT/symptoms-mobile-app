@@ -1,10 +1,18 @@
-import { TaskGraph, TaskEventBinder, RunnableTaskDescriptor } from '.';
+import { TaskGraph, RunnableTaskDescriptor } from '.';
 import { Task } from '../task';
-import { on } from '../../events';
+import { on, off } from '../../events';
 import { run } from '..';
 import { getTask, checkIfTaskExists } from '../provider';
-import { RunnableTaskBuilder } from '../runnable-task';
+import {
+    RunnableTaskBuilder,
+    ReadyRunnableTaskBuilder
+} from '../runnable-task';
 
+type TaskEventBinder = (
+    eventName: string,
+    taskBuilder: ReadyRunnableTaskBuilder
+) => number;
+type TaskEventUnbinder = (eventName: string, listenerId: number) => void;
 type TaskVerifier = (taskName: string) => void;
 type TaskProvider = (taskName: string) => Task;
 
@@ -14,6 +22,7 @@ export class TaskGraphLoader {
 
     constructor(
         private taskEventBinder: TaskEventBinder = on,
+        private taskEventUnbinder: TaskEventUnbinder = off,
         private runnableTaskDescriptor: RunnableTaskDescriptor = run,
         private taskVerifier: TaskVerifier = checkIfTaskExists,
         private taskProvider: TaskProvider = getTask
@@ -30,7 +39,7 @@ export class TaskGraphLoader {
         const createEventListener = (
             eventName: string,
             taskBuilder: RunnableTaskBuilder
-        ) => this.taskEventBinder(eventName, taskBuilder);
+        ) => this.bindTaskToStartAndCancelEvent(eventName, taskBuilder);
         const planTaskToBeRun = (taskName: string) =>
             this.trackTaskGoingToBeRun(taskName);
 
@@ -40,6 +49,8 @@ export class TaskGraphLoader {
             planTaskToBeRun
         );
         await this.loadingTaskGraph;
+
+        // TODO: Init task cancellation manager
     }
 
     async isReady(): Promise<boolean> {
@@ -70,6 +81,19 @@ export class TaskGraphLoader {
         }
 
         return tasksToBePrepared;
+    }
+
+    private bindTaskToStartAndCancelEvent(
+        eventName: string,
+        taskBuilder: ReadyRunnableTaskBuilder
+    ) {
+        const listenerId = this.taskEventBinder(eventName, taskBuilder);
+
+        const cancelEvent = taskBuilder.build().cancelEvent;
+        const cancelListenerId = on(taskBuilder.build().cancelEvent, () => {
+            off(cancelEvent, cancelListenerId);
+            this.taskEventUnbinder(eventName, listenerId);
+        });
     }
 
     private trackTaskGoingToBeRun(taskName: string) {

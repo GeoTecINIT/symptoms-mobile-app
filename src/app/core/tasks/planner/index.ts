@@ -28,7 +28,6 @@ export class TaskPlanner {
             runnableTask.startAt !== -1
                 ? this.planScheduled(runnableTask, platformEvent)
                 : this.planImmediate(runnableTask, platformEvent));
-            // TODO: do something with planned task id and cancelEvent
 
             return plannedTask;
         } catch (err) {
@@ -59,6 +58,9 @@ export class TaskPlanner {
             runnableTask
         );
         this.emitTaskChainFinished(platformEvent);
+
+        // TODO: notify the task cancellation manager about
+        // the new cancellation event
 
         return plannedTask;
     }

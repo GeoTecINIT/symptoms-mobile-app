@@ -1,10 +1,7 @@
 import { TaskParams } from './task';
-import { EventReceiver, PlatformEvent } from '../events';
+import { EventReceiver, PlatformEvent, CoreEvent } from '../events';
 import { TaskPlanner } from './planner';
 import { TimeUnit, toSeconds } from '../utils/time-converter';
-
-// TODO: Update once a real default cancel event exists!
-const DEFAULT_CANCEL_EVENT = 'unknown';
 
 export interface RunnableTask {
     name: string;
@@ -39,7 +36,7 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
         this.startAt = -1;
         this.interval = 0;
         this.recurrent = false;
-        this.cancelEvent = DEFAULT_CANCEL_EVENT;
+        this.cancelEvent = CoreEvent.DefaultCancelEvent;
     }
 
     now(): ReadyRunnableTaskBuilder {

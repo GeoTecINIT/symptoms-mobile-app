@@ -1,13 +1,13 @@
 import { Tasks } from '~/app/core/tasks';
 import { SimpleTask } from '~/app/core/tasks/base/simple-task';
-import {
-    TaskGraph,
-    TaskEventBinder,
-    RunnableTaskDescriptor
-} from '~/app/core/tasks/graph';
+import { TaskGraph, RunnableTaskDescriptor } from '~/app/core/tasks/graph';
 import { Task } from '~/app/core/tasks/task';
 import { TaskGraphLoader } from '~/app/core/tasks/graph/loader';
-import { RunnableTaskBuilder } from '~/app/core/tasks/runnable-task';
+import {
+    RunnableTaskBuilder,
+    ReadyRunnableTaskBuilder
+} from '~/app/core/tasks/runnable-task';
+import { CoreEvent, emit, createEvent } from '~/app/core/events';
 
 describe('Task tree loader', () => {
     const errorMsg = 'Task is not ready';
@@ -28,22 +28,49 @@ describe('Task tree loader', () => {
         acquireOtherData
     };
 
+    const listenerIds = {
+        acquireData: 0,
+        printAcquiredData: 1,
+        acquireOtherData: 2
+    };
+
     const taskTree: TaskGraph = {
         async describe(on, run) {
-            on('startEvent', run('acquireData').every(60));
-            on('dataAcquired', run('printAcquiredData').now());
+            on(
+                'startEvent',
+                run('acquireData')
+                    .every(60)
+                    .cancelOn('endEvent')
+            );
+            on('dataAcquired', run('printAcquiredData'));
 
-            on('startEvent', run('acquireOtherData').every(120));
+            on(
+                'startEvent',
+                run('acquireOtherData')
+                    .every(120)
+                    .cancelOn('endEvent')
+            );
         }
     };
 
-    let eventListenerCreator: TaskEventBinder;
+    let eventListenerCreator: (
+        eventName: string,
+        taskBuilder: ReadyRunnableTaskBuilder
+    ) => number;
+    let eventListenerDestroyer: (eventName: string, listenerId: number) => void;
     let describedTaskRunner: RunnableTaskDescriptor;
     let taskProvider: (taskName: string) => Task;
     let treeLoader: TaskGraphLoader;
 
     beforeEach(() => {
-        eventListenerCreator = jasmine.createSpy('eventListenerCreator');
+        eventListenerCreator = jasmine
+            .createSpy(
+                'eventListenerCreator',
+                (eventName: string, taskBuilder: ReadyRunnableTaskBuilder) =>
+                    listenerIds[taskBuilder.build().name]
+            )
+            .and.callThrough();
+        eventListenerDestroyer = jasmine.createSpy('eventListenerDestroyer');
         describedTaskRunner = jasmine
             .createSpy(
                 'describedTaskRunner',
@@ -55,6 +82,7 @@ describe('Task tree loader', () => {
             .and.callThrough();
         treeLoader = new TaskGraphLoader(
             eventListenerCreator,
+            eventListenerDestroyer,
             describedTaskRunner,
             (_: string) => null,
             taskProvider
@@ -75,6 +103,28 @@ describe('Task tree loader', () => {
         );
         expect(describedTaskRunner).toHaveBeenCalledWith('acquireData');
         expect(describedTaskRunner).toHaveBeenCalledWith('printAcquiredData');
+    });
+
+    it('unbinds tasks from its start event when cancel event gets emitted', async () => {
+        await treeLoader.load(taskTree);
+        emit(createEvent('endEvent'));
+        expect(eventListenerDestroyer).toHaveBeenCalledWith(
+            'startEvent',
+            listenerIds.acquireData
+        );
+        expect(eventListenerDestroyer).toHaveBeenCalledWith(
+            'startEvent',
+            listenerIds.acquireOtherData
+        );
+    });
+
+    it('unbinds tasks from its start event when default cancel event gets emitted', async () => {
+        await treeLoader.load(taskTree);
+        emit(createEvent(CoreEvent.DefaultCancelEvent));
+        expect(eventListenerDestroyer).toHaveBeenCalledWith(
+            'dataAcquired',
+            listenerIds.printAcquiredData
+        );
     });
 
     it('returns that is not ready when at least one task is not', async () => {

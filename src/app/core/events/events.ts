@@ -3,7 +3,8 @@ import { uuid } from '../utils/uuid';
 export enum CoreEvent {
     TaskExecutionStarted = 'taskExecutionStarted',
     TaskExecutionTimedOut = 'taskExecutionTimedOut',
-    TaskChainFinished = 'taskChainFinished'
+    TaskChainFinished = 'taskChainFinished',
+    DefaultCancelEvent = 'defaultCancelEvent'
 }
 
 export interface PlatformEvent {
