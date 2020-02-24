@@ -94,6 +94,17 @@ class PlannedTaskDBStore implements PlannedTasksStore {
         return plannedTasks.sort((t1, t2) => t1.nextRun(now) - t2.nextRun(now));
     }
 
+    async getAllCancelEvents(): Promise<Array<string>> {
+        await this.createDB();
+
+        const rows = await nSQL(PLANNED_TASKS_TABLE)
+            .query('select')
+            .distinct(['cancelEvent'])
+            .exec();
+
+        return rows.map((row) => row.cancelEvent);
+    }
+
     async getAllFilteredByCancelEvent(
         cancelEvent: string
     ): Promise<Array<PlannedTask>> {

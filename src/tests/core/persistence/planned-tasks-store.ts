@@ -119,6 +119,19 @@ describe('Planned Tasks Store', () => {
         }
     });
 
+    it('gets a unique set of cancellation events of the stored tasks', async () => {
+        await store.deleteAll();
+        await store.insert(plannedTask1);
+        await store.insert(plannedTask2);
+        await store.insert(plannedTask3);
+        await store.insert(plannedTask4);
+
+        const cancellationEvents = await store.getAllCancelEvents();
+        expect(cancellationEvents.length).toBe(2);
+        expect(cancellationEvents.indexOf('cancelEvent') !== -1);
+        expect(cancellationEvents.indexOf('otherEvent') !== -1);
+    });
+
     it('gets stored tasks with the same cancelEvent', async () => {
         await store.deleteAll();
         await store.insert(plannedTask1);
