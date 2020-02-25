@@ -18,9 +18,7 @@ export class TaskCancelManager {
             const listenerId = on(eventName, (evt) => {
                 const evtName = evt.name;
                 off(evtName, listenerId);
-                this.cancelByEventName(evtName).catch((err) => {
-                    console.log(`TaskCancelManager: Error -> ${err}`);
-                });
+                this.cancelByEventName(evtName);
             });
         });
     }
@@ -33,11 +31,24 @@ export class TaskCancelManager {
     }
 
     private async cancelTask(task: PlannedTask): Promise<void> {
-        if (task.planningType === PlanningType.Alarm) {
-            console.log(this.taskScheduler);
-            await this.getTaskScheduler().cancel(task.id);
-        } else {
-            await this.taskStore.delete(task.id);
+        try {
+            if (task.planningType === PlanningType.Alarm) {
+                console.log(this.taskScheduler);
+                await this.getTaskScheduler().cancel(task.id);
+            } else {
+                await this.taskStore.delete(task.id);
+            }
+        } catch (err) {
+            const { id, name, startAt, interval, recurrent } = task;
+            console.log(
+                `TaskCancelManager: Error canceling task: ${JSON.stringify({
+                    id,
+                    name,
+                    startAt,
+                    interval,
+                    recurrent
+                })} -> ${err}`
+            );
         }
     }
 

@@ -222,7 +222,7 @@ class PlannedTaskDBStore implements PlannedTasksStore {
 
 export interface PlannedTasksStore {
     insert(plannedTask: PlannedTask): Promise<void>;
-    delete(task: string): Promise<void>;
+    delete(taskId: string): Promise<void>;
     get(task: RunnableTask | string): Promise<PlannedTask>;
     getAllSortedByNextRun(
         planningType: PlanningType
@@ -231,9 +231,9 @@ export interface PlannedTasksStore {
     getAllFilteredByCancelEvent(
         cancelEvent: string
     ): Promise<Array<PlannedTask>>;
-    increaseErrorCount(task: string): Promise<void>;
-    increaseTimeoutCount(task: string): Promise<void>;
-    updateLastRun(task: string, timestamp: number): Promise<void>;
+    increaseErrorCount(taskId: string): Promise<void>;
+    increaseTimeoutCount(taskId: string): Promise<void>;
+    updateLastRun(taskId: string, timestamp: number): Promise<void>;
 }
 
 export const plannedTasksDB = new PlannedTaskDBStore();
