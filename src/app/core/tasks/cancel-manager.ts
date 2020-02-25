@@ -45,13 +45,15 @@ export class TaskCancelManager {
         const tasks = await this.taskStore.getAllFilteredByCancelEvent(
             eventName
         );
-        await Promise.all(tasks.map((task) => this.cancelTask(task)));
+
+        for (const task of tasks) {
+            await this.cancelTask(task);
+        }
     }
 
     private async cancelTask(task: PlannedTask): Promise<void> {
         try {
             if (task.planningType === PlanningType.Alarm) {
-                console.log(this.taskScheduler);
                 await this.getTaskScheduler().cancel(task.id);
             } else {
                 await this.taskStore.delete(task.id);

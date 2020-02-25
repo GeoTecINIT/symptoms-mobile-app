@@ -74,14 +74,20 @@ describe('Task cancel manager', () => {
 
     it('cancels scheduled tasks when its cancellation event gets received', async () => {
         const fetchPromise = new Promise((resolve) => {
+            let cancelCount = 0;
             spyOn(taskStore, 'getAllFilteredByCancelEvent')
                 .withArgs(cancelScheduledTasks)
                 .and.returnValue(
                     Promise.resolve([firstScheduledTask, secondScheduledTask])
                 );
-            spyOn(taskScheduler, 'cancel').and.returnValue(
-                Promise.resolve().then(() => resolve())
-            );
+            spyOn(taskScheduler, 'cancel').and.callFake(() => {
+                cancelCount++;
+                if (cancelCount === 2) {
+                    resolve();
+                }
+
+                return Promise.resolve();
+            });
         });
 
         await cancelManager.init();
@@ -101,14 +107,20 @@ describe('Task cancel manager', () => {
 
     it('removes immediate tasks data when its cancellation event gets received', async () => {
         const fetchPromise = new Promise((resolve) => {
+            let cancelCount = 0;
             spyOn(taskStore, 'getAllFilteredByCancelEvent')
                 .withArgs(cancelImmediateTasks)
                 .and.returnValue(
                     Promise.resolve([firstImmediateTask, secondImmediateTask])
                 );
-            spyOn(taskStore, 'delete').and.returnValue(
-                Promise.resolve().then(() => resolve())
-            );
+            spyOn(taskStore, 'delete').and.callFake(() => {
+                cancelCount++;
+                if (cancelCount === 2) {
+                    resolve();
+                }
+
+                return Promise.resolve();
+            });
         });
 
         await cancelManager.init();
