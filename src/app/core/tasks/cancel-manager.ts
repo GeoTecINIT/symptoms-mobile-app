@@ -7,19 +7,36 @@ import { on, off } from '../events';
 import { PlannedTask, PlanningType } from './planner/planned-task';
 
 export class TaskCancelManager {
+    private cancelEvents: Set<string>;
+
     constructor(
         private taskStore: PlannedTasksStore = plannedTasksDB,
         private taskScheduler?: TaskScheduler
-    ) {}
+    ) {
+        this.cancelEvents = new Set();
+    }
 
     async init(): Promise<void> {
         const cancelEvents = await this.taskStore.getAllCancelEvents();
-        cancelEvents.forEach((eventName) => {
-            const listenerId = on(eventName, (evt) => {
-                const evtName = evt.name;
-                off(evtName, listenerId);
-                this.cancelByEventName(evtName);
-            });
+        cancelEvents.forEach((cancelEvent) => {
+            this.listenToCancelEvent(cancelEvent);
+        });
+    }
+
+    add(plannedTask: PlannedTask) {
+        this.listenToCancelEvent(plannedTask.cancelEvent);
+    }
+
+    private listenToCancelEvent(cancelEvent: string) {
+        if (this.cancelEvents.has(cancelEvent)) {
+            return;
+        }
+        this.cancelEvents.add(cancelEvent);
+
+        const listenerId = on(cancelEvent, (evt) => {
+            const evtName = evt.name;
+            off(evtName, listenerId);
+            this.cancelByEventName(evtName);
         });
     }
 

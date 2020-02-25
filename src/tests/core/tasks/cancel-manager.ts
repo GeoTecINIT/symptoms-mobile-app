@@ -11,10 +11,11 @@ import {
 describe('Task cancel manager', () => {
     const taskStore = createPlannedTaskStoreMock();
     const taskScheduler = createTaskSchedulerMock();
-    const cancelManager = new TaskCancelManager(taskStore, taskScheduler);
+    let cancelManager: TaskCancelManager;
 
     const cancelScheduledTasks = 'cancelScheduledTasks';
     const cancelImmediateTasks = 'cancelImmediateTasks';
+    const cancelExtraImmediateTasks = 'cancelExtraImmediateTasks';
 
     const firstScheduledTask = new PlannedTask(PlanningType.Alarm, {
         name: 'dummyTask',
@@ -48,7 +49,17 @@ describe('Task cancel manager', () => {
         params: {}
     });
 
+    const extraImmediateTask = new PlannedTask(PlanningType.Immediate, {
+        name: 'yetAnotherDummyTask',
+        startAt: -1,
+        interval: 0,
+        recurrent: false,
+        params: {},
+        cancelEvent: cancelExtraImmediateTasks
+    });
+
     beforeEach(() => {
+        cancelManager = new TaskCancelManager(taskStore, taskScheduler);
         spyOn(taskStore, 'getAllCancelEvents').and.returnValue(
             Promise.resolve([cancelScheduledTasks, cancelImmediateTasks])
         );
@@ -111,9 +122,30 @@ describe('Task cancel manager', () => {
         expect(taskStore.delete).toHaveBeenCalledWith(secondImmediateTask.id);
     });
 
+    it('removes after-init immediate tasks data when its cancellation event gets received', async () => {
+        const fetchPromise = new Promise((resolve) => {
+            spyOn(taskStore, 'getAllFilteredByCancelEvent')
+                .withArgs(cancelExtraImmediateTasks)
+                .and.returnValue(Promise.resolve([extraImmediateTask]));
+            spyOn(taskStore, 'delete').and.returnValue(
+                Promise.resolve().then(() => resolve())
+            );
+        });
+
+        cancelManager.add(extraImmediateTask);
+        emit(createEvent(cancelExtraImmediateTasks));
+        await fetchPromise;
+
+        expect(taskStore.getAllFilteredByCancelEvent).toHaveBeenCalledWith(
+            cancelExtraImmediateTasks
+        );
+        expect(taskStore.delete).toHaveBeenCalledWith(extraImmediateTask.id);
+    });
+
     afterEach(() => {
         off(cancelScheduledTasks);
         off(cancelImmediateTasks);
+        off(cancelExtraImmediateTasks);
     });
 });
 
