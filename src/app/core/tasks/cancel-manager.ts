@@ -36,6 +36,7 @@ export class TaskCancelManager {
         const listenerId = on(cancelEvent, (evt) => {
             const evtName = evt.name;
             off(evtName, listenerId);
+            this.cancelEvents.delete(evtName);
             this.cancelByEventName(evtName);
         });
     }

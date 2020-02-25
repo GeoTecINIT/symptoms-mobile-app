@@ -7,6 +7,7 @@ import {
     RunnableTaskBuilder,
     ReadyRunnableTaskBuilder
 } from '../runnable-task';
+import { TaskCancelManager, taskCancelManager } from '../cancel-manager';
 
 type TaskEventBinder = (
     eventName: string,
@@ -25,7 +26,8 @@ export class TaskGraphLoader {
         private taskEventUnbinder: TaskEventUnbinder = off,
         private runnableTaskDescriptor: RunnableTaskDescriptor = run,
         private taskVerifier: TaskVerifier = checkIfTaskExists,
-        private taskProvider: TaskProvider = getTask
+        private taskProvider: TaskProvider = getTask,
+        private cancelManager: TaskCancelManager = taskCancelManager
     ) {
         this.graphTasks = new Set();
     }
@@ -49,8 +51,7 @@ export class TaskGraphLoader {
             planTaskToBeRun
         );
         await this.loadingTaskGraph;
-
-        // TODO: Init task cancellation manager
+        await this.cancelManager.init();
     }
 
     async isReady(): Promise<boolean> {

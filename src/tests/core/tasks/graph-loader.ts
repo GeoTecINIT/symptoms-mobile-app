@@ -8,6 +8,7 @@ import {
     ReadyRunnableTaskBuilder
 } from '~/app/core/tasks/runnable-task';
 import { CoreEvent, emit, createEvent } from '~/app/core/events';
+import { createTaskCancelManagerMock } from '.';
 
 describe('Task tree loader', () => {
     const errorMsg = 'Task is not ready';
@@ -60,7 +61,8 @@ describe('Task tree loader', () => {
     let eventListenerDestroyer: (eventName: string, listenerId: number) => void;
     let describedTaskRunner: RunnableTaskDescriptor;
     let taskProvider: (taskName: string) => Task;
-    let treeLoader: TaskGraphLoader;
+    let graphLoader: TaskGraphLoader;
+    const cancelManager = createTaskCancelManagerMock();
 
     beforeEach(() => {
         eventListenerCreator = jasmine
@@ -80,19 +82,21 @@ describe('Task tree loader', () => {
         taskProvider = jasmine
             .createSpy('taskProvider', (taskName: string) => tasks[taskName])
             .and.callThrough();
-        treeLoader = new TaskGraphLoader(
+        graphLoader = new TaskGraphLoader(
             eventListenerCreator,
             eventListenerDestroyer,
             describedTaskRunner,
             (_: string) => null,
-            taskProvider
+            taskProvider,
+            cancelManager
         );
+        spyOn(cancelManager, 'init');
         spyOn(acquireData, 'prepare').and.returnValue(Promise.resolve());
         spyOn(acquireOtherData, 'prepare').and.returnValue(Promise.resolve());
     });
 
     it('loads a task tree without errors', async () => {
-        await treeLoader.load(taskTree);
+        await graphLoader.load(taskTree);
         expect(eventListenerCreator).toHaveBeenCalledWith(
             'startEvent',
             jasmine.any(RunnableTaskBuilder)
@@ -103,10 +107,11 @@ describe('Task tree loader', () => {
         );
         expect(describedTaskRunner).toHaveBeenCalledWith('acquireData');
         expect(describedTaskRunner).toHaveBeenCalledWith('printAcquiredData');
+        expect(cancelManager.init).toHaveBeenCalled();
     });
 
     it('unbinds tasks from its start event when cancel event gets emitted', async () => {
-        await treeLoader.load(taskTree);
+        await graphLoader.load(taskTree);
         emit(createEvent('endEvent'));
         expect(eventListenerDestroyer).toHaveBeenCalledWith(
             'startEvent',
@@ -119,7 +124,7 @@ describe('Task tree loader', () => {
     });
 
     it('unbinds tasks from its start event when default cancel event gets emitted', async () => {
-        await treeLoader.load(taskTree);
+        await graphLoader.load(taskTree);
         emit(createEvent(CoreEvent.DefaultCancelEvent));
         expect(eventListenerDestroyer).toHaveBeenCalledWith(
             'dataAcquired',
@@ -132,8 +137,8 @@ describe('Task tree loader', () => {
         spyOn(acquireOtherData, 'checkIfCanRun').and.returnValue(
             Promise.resolve()
         );
-        await treeLoader.load(taskTree);
-        const isReady = await treeLoader.isReady();
+        await graphLoader.load(taskTree);
+        const isReady = await graphLoader.isReady();
         expect(isReady).toBeFalsy();
     });
 
@@ -142,16 +147,16 @@ describe('Task tree loader', () => {
         spyOn(acquireOtherData, 'checkIfCanRun').and.returnValue(
             Promise.resolve()
         );
-        await treeLoader.load(taskTree);
-        const isReady = await treeLoader.isReady();
+        await graphLoader.load(taskTree);
+        const isReady = await graphLoader.isReady();
         expect(isReady).toBeTruthy();
     });
 
     it('prepares a loaded task tree if needed', async () => {
         spyOn(acquireData, 'checkIfCanRun').and.throwError(errorMsg);
         spyOn(acquireOtherData, 'checkIfCanRun').and.throwError(errorMsg);
-        await treeLoader.load(taskTree);
-        await treeLoader.prepare();
+        await graphLoader.load(taskTree);
+        await graphLoader.prepare();
         expect(acquireData.prepare).toHaveBeenCalled();
         expect(acquireOtherData.prepare).toHaveBeenCalled();
     });
@@ -161,8 +166,8 @@ describe('Task tree loader', () => {
         spyOn(acquireOtherData, 'checkIfCanRun').and.returnValue(
             Promise.resolve()
         );
-        await treeLoader.load(taskTree);
-        await treeLoader.prepare();
+        await graphLoader.load(taskTree);
+        await graphLoader.prepare();
         expect(acquireData.prepare).not.toHaveBeenCalled();
         expect(acquireOtherData.prepare).not.toHaveBeenCalled();
     });
