@@ -1,5 +1,7 @@
 import { Tasks } from '~/app/core/tasks';
 import { SimpleTask } from '~/app/core/tasks/base/simple-task';
+import { TaskCancelManager } from '~/app/core/tasks/cancel-manager';
+import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
 
 export const testTasks: Tasks = {
     dummyTask: new SimpleTask('dummyTask', async () =>
@@ -31,3 +33,16 @@ export const testTasks: Tasks = {
         done('patataCooked', { status: 'slightlyBaked' })
     )
 };
+
+export function createTaskCancelManagerMock(): TaskCancelManager {
+    const cancelManager = {
+        init() {
+            return Promise.resolve();
+        },
+        add(plannedTask: PlannedTask) {
+            return null;
+        }
+    };
+
+    return cancelManager as TaskCancelManager;
+}

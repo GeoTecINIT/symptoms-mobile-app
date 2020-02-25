@@ -17,14 +17,21 @@ import {
     PlanningType
 } from '~/app/core/tasks/planner/planned-task';
 import { createPlannedTaskStoreMock } from '../persistence';
+import { createTaskCancelManagerMock } from '.';
 import { TaskNotFoundError } from '~/app/core/tasks/provider';
 import { TaskRunner } from '~/app/core/tasks/runners/instant-task-runner';
 
 describe('Task planner', () => {
-    const taskScheduler = createTaskScheduler();
-    const taskRunner = createTaskRunner();
+    const taskScheduler = createTaskSchedulerMock();
+    const taskRunner = createTaskRunnerMock();
     const taskStore = createPlannedTaskStoreMock();
-    const taskPlanner = new TaskPlanner(taskScheduler, taskRunner, taskStore);
+    const cancelManager = createTaskCancelManagerMock();
+    const taskPlanner = new TaskPlanner(
+        taskScheduler,
+        taskRunner,
+        taskStore,
+        cancelManager
+    );
 
     const dummyEvent: PlatformEvent = {
         name: 'dummyEvent',
@@ -44,7 +51,7 @@ describe('Task planner', () => {
         .build();
 
     const immediatePlannedTask = new PlannedTask(
-        PlanningType.Alarm,
+        PlanningType.Immediate,
         immediateTask
     );
 
@@ -56,16 +63,20 @@ describe('Task planner', () => {
     let dummyCallback: EventCallback;
 
     beforeEach(() => {
-        spyOn(taskScheduler, 'schedule').and.callThrough();
+        spyOn(taskScheduler, 'schedule').and.returnValue(
+            Promise.resolve(recurrentPlannedTask)
+        );
         spyOn(taskRunner, 'run').and.returnValue(
             Promise.resolve(immediatePlannedTask)
         );
+        spyOn(cancelManager, 'add');
         dummyCallback = jasmine.createSpy();
     });
 
     it('runs a task immediately', async () => {
         await taskPlanner.plan(immediateTask, dummyEvent);
         expect(taskRunner.run).toHaveBeenCalledWith(immediateTask, dummyEvent);
+        expect(cancelManager.add).toHaveBeenCalledWith(immediatePlannedTask);
     });
 
     it('schedules a recurrent task in time', async () => {
@@ -73,6 +84,7 @@ describe('Task planner', () => {
         await taskPlanner.plan(recurrentTask, dummyEvent);
         expect(taskScheduler.schedule).toHaveBeenCalledWith(recurrentTask);
         expect(dummyCallback).toHaveBeenCalled();
+        expect(cancelManager.add).toHaveBeenCalledWith(recurrentPlannedTask);
     });
 
     it('schedules a one-shot task in time', async () => {
@@ -121,6 +133,7 @@ describe('Task planner', () => {
         expect(plannedTask).toBe(immediatePlannedTask);
         expect(taskScheduler.schedule).not.toHaveBeenCalled();
         expect(taskRunner.run).toHaveBeenCalled();
+        expect(cancelManager.add).not.toHaveBeenCalled();
     });
 
     it('does nothing when a task has already been scheduled and its recurrent', async () => {
@@ -131,6 +144,7 @@ describe('Task planner', () => {
         expect(plannedTask).toBe(recurrentPlannedTask);
         expect(taskScheduler.schedule).not.toHaveBeenCalled();
         expect(taskRunner.run).not.toHaveBeenCalled();
+        expect(cancelManager.add).not.toHaveBeenCalled();
     });
 
     afterEach(() => {
@@ -138,7 +152,7 @@ describe('Task planner', () => {
     });
 });
 
-function createTaskScheduler(): TaskScheduler {
+function createTaskSchedulerMock(): TaskScheduler {
     return {
         schedule(task: RunnableTask): Promise<PlannedTask> {
             return Promise.resolve(null);
@@ -149,7 +163,7 @@ function createTaskScheduler(): TaskScheduler {
     };
 }
 
-function createTaskRunner(): TaskRunner {
+function createTaskRunnerMock(): TaskRunner {
     return {
         run(
             task: RunnableTask,

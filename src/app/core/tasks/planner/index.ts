@@ -9,12 +9,14 @@ import {
 import { checkIfTaskExists } from '../provider';
 import { TaskRunner, InstantTaskRunner } from '../runners/instant-task-runner';
 import { TaskResultStatus, TaskChainResult } from '../task';
+import { TaskCancelManager, taskCancelManager } from '../cancel-manager';
 
 export class TaskPlanner {
     constructor(
         private taskScheduler?: TaskScheduler,
         private taskRunner: TaskRunner = new InstantTaskRunner(plannedTasksDB),
-        private taskStore: PlannedTasksStore = plannedTasksDB
+        private taskStore: PlannedTasksStore = plannedTasksDB,
+        private cancelManager: TaskCancelManager = taskCancelManager
     ) {}
 
     async plan(
@@ -36,11 +38,20 @@ export class TaskPlanner {
         }
     }
 
-    private planImmediate(
+    private async planImmediate(
         runnableTask: RunnableTask,
         platformEvent: PlatformEvent
     ): Promise<PlannedTask> {
-        return this.taskRunner.run(runnableTask, platformEvent);
+        const existedBefore = await this.taskStore.get(runnableTask);
+        const plannedTask = await this.taskRunner.run(
+            runnableTask,
+            platformEvent
+        );
+        if (!existedBefore) {
+            this.cancelManager.add(plannedTask);
+        }
+
+        return plannedTask;
     }
 
     private async planScheduled(
@@ -58,9 +69,7 @@ export class TaskPlanner {
             runnableTask
         );
         this.emitTaskChainFinished(platformEvent);
-
-        // TODO: notify the task cancellation manager about
-        // the new cancellation event
+        this.cancelManager.add(plannedTask);
 
         return plannedTask;
     }

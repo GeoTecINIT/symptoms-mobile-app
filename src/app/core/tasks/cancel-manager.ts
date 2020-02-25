@@ -77,3 +77,5 @@ export class TaskCancelManager {
         return this.taskScheduler;
     }
 }
+
+export const taskCancelManager = new TaskCancelManager();
