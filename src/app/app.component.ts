@@ -12,8 +12,6 @@ import { taskGraph } from './core/tasks/graph/loader';
     templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
-    private alarmScheduler: AndroidAlarmScheduler;
-
     constructor() {
         // Use the component constructor to inject providers.
     }
@@ -24,29 +22,8 @@ export class AppComponent implements OnInit {
         if (androidApp) {
             externalEventHandler.init();
             setupNotificationChannels(androidApp.context);
-            this.alarmScheduler = new AndroidAlarmScheduler();
-            this.checkAlarm();
+            const alarmScheduler = new AndroidAlarmScheduler();
+            alarmScheduler.setup();
         }
-
-        this.emitStartEvent();
-    }
-
-    private async checkAlarm() {
-        await this.setupTimeout();
-        await this.alarmScheduler.setup();
-    }
-
-    private setupTimeout() {
-        return new Promise((resolve) => setTimeout(() => resolve(), 2000));
-    }
-
-    // FIXME: This has to be better handled with a view informing the user
-    // about the permissions to be asked
-    private async emitStartEvent() {
-        const isReady = await taskGraph.isReady();
-        if (!isReady) {
-            await taskGraph.prepare();
-        }
-        emit(createEvent('startEvent'));
     }
 }

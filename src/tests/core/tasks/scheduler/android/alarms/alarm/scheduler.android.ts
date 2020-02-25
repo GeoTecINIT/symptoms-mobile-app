@@ -119,7 +119,6 @@ describe('Android Alarm Scheduler', () => {
         );
 
         const scheduledTask = await androidAlarm.schedule(higherFreqTask);
-        console.log(higherFreqPT.nextRun(now));
         expect(manager.set).toHaveBeenCalled();
         expect(
             isLastCallCloseTo(manager.set, higherFreqTask.interval, 1000)

@@ -21,17 +21,18 @@ export class AndroidAlarmScheduler {
         if (this.alarmManager.alarmUp && this.watchdogManager.alarmUp) {
             return;
         }
-        this.log('Alarm was not up! Scheduling...');
         const plannedTasks = await this.plannedTaskStore.getAllSortedByNextRun(
             PlanningType.Alarm
         );
         if (plannedTasks.length > 0) {
             if (!this.alarmManager.alarmUp) {
+                this.log('Alarm was not up! Scheduling...');
                 this.alarmManager.set(
                     this.calculateAlarmInterval(plannedTasks[0])
                 );
             }
             if (!this.watchdogManager.alarmUp) {
+                this.log('Watchdog was not up! Initializing...');
                 this.watchdogManager.set();
             }
         }

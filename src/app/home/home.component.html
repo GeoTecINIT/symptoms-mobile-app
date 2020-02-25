@@ -1,13 +1,28 @@
 <ActionBar>
-    <Label text="Home"></Label>
+  <Label text="Home"></Label>
 </ActionBar>
 
-<GridLayout>
-    <ListView [items]="items">
+<!-- <GridLayout>
+  <ListView [items]="items">
         <ng-template let-item="item">
             <StackLayout>
                 <Label [nsRouterLink]="['../item', item.id]" [text]="item.name"></Label>
             </StackLayout>
         </ng-template>
     </ListView>
-</GridLayout>
+</GridLayout> -->
+
+<FlexboxLayout flexDirection="column" justifyContent="center">
+  <StackLayout>
+    <Button
+      text="Emit start event"
+      (tap)="onTapStart()"
+      class="c-bg-lime -rounded-lg"
+    ></Button>
+    <Button
+      text="Emit stop event"
+      (tap)="onTapStop()"
+      class="c-bg-orange -rounded-lg"
+    ></Button>
+  </StackLayout>
+</FlexboxLayout>
