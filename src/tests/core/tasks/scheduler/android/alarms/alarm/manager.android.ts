@@ -24,6 +24,16 @@ describe('Android alarm manager', () => {
     });
 
     it('sets an alarm with the given interval', () => {
+        alarmManager.set(15 * 60 * 1000);
+        expect(systemAlarmManager.setExactAndAllowWhileIdle).toHaveBeenCalled();
+        expect(systemAlarmManager.setExact).not.toHaveBeenCalled();
+        expect(systemAlarmManager.set).not.toHaveBeenCalled();
+        expect(alarmManager.alarmUp).toBeTruthy();
+        expect(powerSavingsManager.areDisabled).not.toHaveBeenCalled();
+        expect(powerSavingsManager.requestDeactivation).not.toHaveBeenCalled();
+    });
+
+    it('sets an alarm with a low interval and asks to disable battery savings', () => {
         alarmManager.set(interval);
         expect(systemAlarmManager.setExactAndAllowWhileIdle).toHaveBeenCalled();
         expect(systemAlarmManager.setExact).not.toHaveBeenCalled();

@@ -3,6 +3,7 @@ import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { PowerSavingsManager } from '../power-savings-manager.android';
 
+const BATTERY_SAVINGS_THRESHOLD = 15 * 60 * 1000;
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 
 export class AndroidAlarmManager extends AbstractAlarmManager {
@@ -17,7 +18,9 @@ export class AndroidAlarmManager extends AbstractAlarmManager {
     }
 
     set(interval: number): void {
-        this.checkPowerSavings();
+        if (interval < BATTERY_SAVINGS_THRESHOLD) {
+            this.checkPowerSavings();
+        }
 
         if (this.alarmUp) {
             this.cancel();
