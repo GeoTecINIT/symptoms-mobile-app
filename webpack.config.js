@@ -205,8 +205,9 @@ module.exports = env => {
   );
 
   nsWebpack.processAppComponents(appComponents, platform);
+  const mode = production ? "production" : "development";
   const config = {
-    mode: production ? "production" : "development",
+    mode,
     context: appFullPath,
     externals,
     watchOptions: {
@@ -375,6 +376,7 @@ module.exports = env => {
       // Define useful constants like TNS_WEBPACK
       new webpack.DefinePlugin({
         "global.TNS_WEBPACK": "true",
+        "global.ENV_NAME": JSON.stringify(mode || "development"),
         process: "global.process"
       }),
       // Remove all files from the out dir.

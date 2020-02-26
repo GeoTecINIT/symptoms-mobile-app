@@ -1,15 +1,18 @@
-import { getConfig, setEnvironment } from '~/app/core/config';
+import { getConfig, setEnvironment, Environment } from '~/app/core/config';
 
 describe('Config', () => {
-    it('returns production environment by default', () => {
-        setEnvironment('prod');
+    it('returns development environment by default', () => {
         const conf = getConfig();
-        expect(conf.production).toBe(true);
+        expect(conf.production).toBeFalsy();
     });
 
     it('changes environment when required', () => {
-        setEnvironment('test');
+        const previous = global.ENV_NAME as Environment;
+        setEnvironment('production');
+
         const conf = getConfig();
-        expect(conf.production).toBe(false);
+        expect(conf.production).toBeTruthy();
+
+        setEnvironment(previous);
     });
 });
