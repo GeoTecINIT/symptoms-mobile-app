@@ -1,6 +1,6 @@
-import { AbstractLogger } from './abstract';
+import { Logger } from './common';
 
-export class ProdLogger extends AbstractLogger {
+export class ProdLogger extends Logger {
     protected logDebug(message: string): void {
         throw new Error('Method not implemented.');
     }

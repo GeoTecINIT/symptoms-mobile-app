@@ -1,4 +1,4 @@
-export abstract class AbstractLogger {
+export abstract class Logger {
     constructor(private tag: string) {}
 
     debug(message: string) {
