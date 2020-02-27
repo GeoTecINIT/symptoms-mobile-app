@@ -1,23 +1,23 @@
 import { Logger } from './common';
 
 export class DevLogger extends Logger {
-    constructor(tag: string, private console: Console = console) {
+    constructor(tag: string) {
         super(tag);
     }
 
     protected logDebug(message: string): void {
-        this.console.debug(message);
+        console.info(message);
     }
 
     protected logInfo(message: string): void {
-        this.console.info(message);
+        console.info(message);
     }
 
     protected logWarning(message: string): void {
-        this.console.warn(message);
+        console.warn(message);
     }
 
     protected logError(message: string): void {
-        this.console.error(message);
+        console.error(message);
     }
 }

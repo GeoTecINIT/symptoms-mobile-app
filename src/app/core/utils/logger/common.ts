@@ -1,19 +1,19 @@
 export abstract class Logger {
     constructor(private tag: string) {}
 
-    debug(message: string) {
+    debug(message: any) {
         this.logDebug(this.formatMessage(LogType.Debug, message));
     }
 
-    info(message: string) {
+    info(message: any) {
         this.logInfo(this.formatMessage(LogType.Info, message));
     }
 
-    warn(message: string) {
+    warn(message: any) {
         this.logWarning(this.formatMessage(LogType.Warning, message));
     }
 
-    error(message: string) {
+    error(message: any) {
         this.logError(this.formatMessage(LogType.Error, message));
     }
 
