@@ -7,12 +7,12 @@ describe('Config', () => {
     });
 
     it('changes environment when required', () => {
-        const previous = global.ENV_NAME as Environment;
         setEnvironment('production');
-
         const conf = getConfig();
         expect(conf.production).toBeTruthy();
+    });
 
-        setEnvironment(previous);
+    afterEach(() => {
+        setEnvironment('development');
     });
 });
