@@ -1,4 +1,6 @@
 import * as app from 'tns-core-modules/application';
+import { Logger } from '../utils/logger/common';
+import { getLogger } from '../utils/logger';
 
 // FIXME: This class only serves as a demonstrator of what is possible.
 // It should be modified in order to allow subscribing to filtered
@@ -7,19 +9,24 @@ class ExternalEventHandler {
     private initialized: boolean;
     private lastIntent: android.content.Intent;
 
+    private logger: Logger;
+
+    constructor() {
+        this.logger = getLogger('ExternalEventHandler');
+    }
+
     init() {
         if (this.initialized) {
             return;
         }
-        this.initialized = true;
+
         this.setupExternalEventListener();
-        console.log('External event handler configured!');
+        this.logger.debug('Configured!');
     }
 
     private setupExternalEventListener() {
-        app.android.on(
-            app.AndroidApplication.activityResumedEvent,
-            this.externalEventListener
+        app.android.on(app.AndroidApplication.activityResumedEvent, (args) =>
+            this.externalEventListener(args)
         );
     }
 
@@ -29,7 +36,7 @@ class ExternalEventHandler {
             return;
         }
         this.lastIntent = intent;
-        console.log(intent);
+        this.logger.debug(`${intent}`);
         console.log(intent.getStringExtra('action'));
     }
 }
