@@ -7,15 +7,20 @@ import { AndroidAlarmManager } from './manager.android';
 import { WatchdogManager } from '../watchdog/manager.android';
 import { PlannedTask, PlanningType } from '../../../../planner/planned-task';
 import { RunnableTask } from '../../../../runnable-task';
+import { Logger, getLogger } from '~/app/core/utils/logger';
 
 const MIN_ALARM_INTERVAL = 60000;
 
 export class AndroidAlarmScheduler {
+    private logger: Logger;
+
     constructor(
         private alarmManager: AlarmManager = new AndroidAlarmManager(),
         private watchdogManager: AlarmManager = new WatchdogManager(),
         private plannedTaskStore: PlannedTasksStore = plannedTasksDB
-    ) {}
+    ) {
+        this.logger = getLogger('AndroidAlarmScheduler');
+    }
 
     async setup(): Promise<void> {
         if (this.alarmManager.alarmUp && this.watchdogManager.alarmUp) {
@@ -26,13 +31,13 @@ export class AndroidAlarmScheduler {
         );
         if (plannedTasks.length > 0) {
             if (!this.alarmManager.alarmUp) {
-                this.log('Alarm was not up! Scheduling...');
+                this.logger.info('Alarm was not up! Scheduling...');
                 this.alarmManager.set(
                     this.calculateAlarmInterval(plannedTasks[0])
                 );
             }
             if (!this.watchdogManager.alarmUp) {
-                this.log('Watchdog was not up! Initializing...');
+                this.logger.info('Watchdog was not up! Initializing...');
                 this.watchdogManager.set();
             }
         }
@@ -54,9 +59,12 @@ export class AndroidAlarmScheduler {
             allTasks[0].nextRun(now) > plannedTask.nextRun(now)
         ) {
             this.alarmManager.set(this.calculateAlarmInterval(plannedTask));
-            this.watchdogManager.set();
+            if (!this.watchdogManager.alarmUp) {
+                this.watchdogManager.set();
+            }
         }
         await this.plannedTaskStore.insert(plannedTask);
+        this.logger.info(`Task scheduled: ${JSON.stringify(plannedTask)}`);
 
         return plannedTask;
     }
@@ -80,15 +88,12 @@ export class AndroidAlarmScheduler {
             this.alarmManager.set(this.calculateAlarmInterval(allTasks[1]));
         }
         await this.plannedTaskStore.delete(id);
+        this.logger.info(`Task with id=${id} has been canceled`);
     }
 
     private calculateAlarmInterval(plannedTask: PlannedTask): number {
         const nextRun = plannedTask.nextRun();
 
         return nextRun > MIN_ALARM_INTERVAL ? nextRun : MIN_ALARM_INTERVAL;
-    }
-
-    private log(message: string) {
-        console.log(`AndroidAlarmScheduler: ${message}`);
     }
 }

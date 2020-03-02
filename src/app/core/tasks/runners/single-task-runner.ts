@@ -3,11 +3,16 @@ import { PlannedTask } from '../planner/planned-task';
 import { getTask } from '../provider';
 import { Task, TaskParams } from '../task';
 import { PlatformEvent, on, CoreEvent, off } from '../../events';
+import { Logger, getLogger } from '../../utils/logger';
 
 const FAILURE_THRESHOLD = 3;
 
 export class SingleTaskRunner {
-    constructor(private taskStore: PlannedTasksStore) {}
+    private logger: Logger;
+
+    constructor(private taskStore: PlannedTasksStore) {
+        this.logger = getLogger('SingleTaskRunner');
+    }
 
     async run(
         plannedTask: PlannedTask,
@@ -97,8 +102,8 @@ export class SingleTaskRunner {
             errorCount > FAILURE_THRESHOLD ||
             timeoutCount > FAILURE_THRESHOLD
         ) {
-            console.log(
-                `SingleTaskRunner: one-shot planned task id:${id} discarded after {errorCount:${errorCount}, timeoutCount:${timeoutCount}}`
+            this.logger.warn(
+                `One-shot planned task id:${id} discarded after {errorCount:${errorCount}, timeoutCount:${timeoutCount}}`
             );
             await this.taskStore.delete(id);
         }

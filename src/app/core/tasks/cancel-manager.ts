@@ -5,15 +5,19 @@ import {
 import { TaskScheduler, taskScheduler as getTaskScheduler } from './scheduler';
 import { on, off } from '../events';
 import { PlannedTask, PlanningType } from './planner/planned-task';
+import { Logger, getLogger } from '../utils/logger';
 
 export class TaskCancelManager {
     private cancelEvents: Set<string>;
+
+    private logger: Logger;
 
     constructor(
         private taskStore: PlannedTasksStore = plannedTasksDB,
         private taskScheduler?: TaskScheduler
     ) {
         this.cancelEvents = new Set();
+        this.logger = getLogger('TaskCancelManager');
     }
 
     async init(): Promise<void> {
@@ -60,8 +64,8 @@ export class TaskCancelManager {
             }
         } catch (err) {
             const { id, name, startAt, interval, recurrent } = task;
-            console.log(
-                `TaskCancelManager: Error canceling task: ${JSON.stringify({
+            this.logger.error(
+                `Error canceling task: ${JSON.stringify({
                     id,
                     name,
                     startAt,

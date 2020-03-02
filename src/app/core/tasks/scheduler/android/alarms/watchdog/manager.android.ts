@@ -1,6 +1,7 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { createWatchdogReceiverIntent } from '~/app/core/android/intents.android';
+import { getLogger } from '~/app/core/utils/logger';
 
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 const WATCHDOG_INTERVAL = 15 * 60 * 1000;
@@ -11,7 +12,11 @@ export class WatchdogManager extends AbstractAlarmManager {
             ALARM_SERVICE
         ) as android.app.AlarmManager
     ) {
-        super(osAlarmManager, createWatchdogReceiverIntent(androidApp.context));
+        super(
+            osAlarmManager,
+            createWatchdogReceiverIntent(androidApp.context),
+            getLogger('WatchdogManager')
+        );
     }
 
     set(): void {
@@ -28,5 +33,7 @@ export class WatchdogManager extends AbstractAlarmManager {
             WATCHDOG_INTERVAL,
             pendingIntent
         );
+
+        this.logger.info(`Watchdog will run every ${WATCHDOG_INTERVAL} ms`);
     }
 }

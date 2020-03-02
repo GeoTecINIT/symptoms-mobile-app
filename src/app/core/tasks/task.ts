@@ -6,6 +6,7 @@ import {
     hasListeners
 } from '../events';
 import { run } from '.';
+import { Logger, getLogger } from '../utils/logger';
 
 export abstract class Task {
     get name(): string {
@@ -17,6 +18,8 @@ export abstract class Task {
     private _name: string;
     private _executionHistory: Set<string>;
     private _cancelFunctions: Map<string, CancelFunction>;
+
+    private _logger: Logger;
 
     constructor(name: string, protected taskConfig: TaskConfig = {}) {
         this._name = name;
@@ -30,6 +33,8 @@ export abstract class Task {
         if (!taskConfig.outputEventName) {
             taskConfig.outputEventName = `${name}Finished`;
         }
+
+        this._logger = getLogger(`Task (${name})`);
     }
 
     /**
@@ -44,6 +49,7 @@ export abstract class Task {
         this.taskParams = taskParams;
         this.invocationEvent = invocationEvent;
 
+        this.log(`Run triggered by ${invocationEvent.name} event`);
         try {
             await this.checkIfCanRun();
             await this.onRun();
@@ -51,7 +57,7 @@ export abstract class Task {
                 this.done(this.taskConfig.outputEventName);
             }
         } catch (err) {
-            this.log(
+            this._logger.error(
                 `Execution failed with params ${JSON.stringify(
                     taskParams
                 )} and invocation event ${JSON.stringify(
@@ -85,6 +91,7 @@ export abstract class Task {
             cancelFunction();
             this.removeCancelFunction();
         }
+        this.log('Cancelled');
     }
 
     /**
@@ -114,6 +121,7 @@ export abstract class Task {
         run(this.name, params ? params : this.taskParams)
             .in(seconds)
             .plan();
+        this.log(`Will run again in ${seconds} s`);
     }
 
     /**
@@ -154,14 +162,18 @@ export abstract class Task {
             id: this.invocationEvent.id,
             data
         });
+
+        this.log(`Finished running with ${eventName} event`);
     }
 
     /**
      * Meant to be used by the task itself. Logs should be printed through here.
      * @param message The message to be printed
      */
-    protected log(message: string) {
-        console.log(`Task (${this.name}): ${message}`);
+    protected log(message: any) {
+        this._logger.info(
+            `${message} (invocationId=${this.invocationEvent.id})`
+        );
     }
 
     private emitEndEvent(status: TaskResultStatus, err?: Error): void {
@@ -212,4 +224,4 @@ export enum TaskResultStatus {
     Cancelled = 'cancelled'
 }
 
-type CancelFunction = () => void;
+export type CancelFunction = () => void;

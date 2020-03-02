@@ -3,16 +3,21 @@ import {
     appPackage,
     createSavingsDeactivationIntent
 } from '~/app/core/android/intents.android';
+import { Logger, getLogger } from '~/app/core/utils/logger';
 
 const POWER_SERVICE = android.content.Context.POWER_SERVICE;
 
 export class PowerSavingsManager {
+    private logger: Logger;
+
     constructor(
         private powerManager: android.os.PowerManager = androidApp.context.getSystemService(
             POWER_SERVICE
         ),
         private skdVersion = android.os.Build.VERSION.SDK_INT
-    ) {}
+    ) {
+        this.logger = getLogger('PowerSavingsManager');
+    }
 
     // TODO: Evaluate what to do with devices not running Android Stock layer
     requestDeactivation(): void {
@@ -21,8 +26,8 @@ export class PowerSavingsManager {
         }
 
         if (androidApp.foregroundActivity === null) {
-            console.log(
-                'PowerSavingsManager: Battery savings can not be enabled in background'
+            this.logger.warn(
+                'Battery savings can not be enabled in background'
             );
 
             return;

@@ -1,4 +1,5 @@
 import { AndroidAlarmScheduler } from '../alarm/scheduler.android';
+import { getLogger } from '~/app/core/utils/logger';
 
 // WARNING: Update the other occurrences of this line each time it gets modified
 @JavaProxy('es.uji.geotec.symptomsapp.alarms.WatchdogReceiver')
@@ -7,18 +8,15 @@ export class WatchdogReceiver extends android.content.BroadcastReceiver {
         context: android.content.Context,
         intent: android.content.Intent
     ) {
-        this.log('Checking alarm status');
+        const logger = getLogger('WatchdogReceiver');
+        logger.info('Checking alarm status');
 
         const alarmScheduler = new AndroidAlarmScheduler();
         alarmScheduler
             .setup()
-            .then(() => this.log('Alarm setup has run'))
+            .then(() => logger.debug('Alarm setup has run'))
             .catch((err) => {
-                this.log(`${err}`);
+                logger.error(err);
             });
-    }
-
-    private log(message: string) {
-        console.log(`WatchdogReceiver: ${message}`);
     }
 }

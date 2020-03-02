@@ -1,4 +1,5 @@
 import { android as androidApp } from 'tns-core-modules/application/application';
+import { Logger } from '~/app/core/utils/logger';
 
 export interface AlarmManager {
     alarmUp: boolean;
@@ -11,7 +12,8 @@ export abstract class AbstractAlarmManager implements AlarmManager {
 
     constructor(
         protected osAlarmManager: android.app.AlarmManager,
-        private receiverIntent: android.content.Intent
+        private receiverIntent: android.content.Intent,
+        protected logger: Logger
     ) {}
 
     get alarmUp(): boolean {
@@ -35,6 +37,7 @@ export abstract class AbstractAlarmManager implements AlarmManager {
         this.osAlarmManager.cancel(pendingIntent);
         pendingIntent.cancel();
         this.pendingIntent = null;
+        this.logger.info('Alarm has been cancelled');
     }
 
     protected getPendingIntent(): android.app.PendingIntent {

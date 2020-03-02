@@ -11,3 +11,5 @@ export function getLogger(tag: string): Logger {
 
     return new DevLogger(tag);
 }
+
+export { Logger } from './common';

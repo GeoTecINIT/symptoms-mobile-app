@@ -11,6 +11,7 @@ import { BatchTaskRunner } from '../../../../runners/batch-task-runner';
 import { PlatformEvent, CoreEvent, emit, createEvent } from '~/app/core/events';
 import { TaskManager } from '../../../../manager';
 import { PlanningType } from '../../../../planner/planned-task';
+import { Logger, getLogger } from '~/app/core/utils/logger';
 
 const MIN_TIMEOUT = 60000;
 const TIMEOUT_EVENT_OFFSET = 5000;
@@ -26,7 +27,10 @@ export class AlarmRunnerService extends android.app.Service {
     private inForeground: boolean;
 
     private wakeLock: android.os.PowerManager.WakeLock;
+    private timeoutId: number;
     private taskStore: PlannedTasksStore;
+
+    private logger: Logger;
 
     onCreate() {
         super.onCreate();
@@ -40,7 +44,8 @@ export class AlarmRunnerService extends android.app.Service {
         this.wakeLock = alarmRunnerWakeLock(this);
         this.taskStore = plannedTasksDB;
 
-        this.log('onCreate called');
+        this.logger = getLogger('AlarmRunnerService');
+        this.logger.debug('onCreate called');
     }
 
     onStartCommand(
@@ -49,7 +54,7 @@ export class AlarmRunnerService extends android.app.Service {
         startId: number
     ): number {
         super.onStartCommand(intent, flags, startId);
-        this.log(`Service called {flags=${flags}, startId=${startId}}`);
+        this.logger.info(`Service called {flags=${flags}, startId=${startId}}`);
         const startFlag = android.app.Service.START_REDELIVER_INTENT;
 
         if (this.alreadyRunning(startId)) {
@@ -63,11 +68,11 @@ export class AlarmRunnerService extends android.app.Service {
 
         this.runTasks()
             .then(() => {
-                this.log('Tasks finished running');
+                this.logger.debug('Tasks finished running');
                 this.gracefullyStop();
             })
             .catch((err) => {
-                this.log(`ERROR - While running tasks ${err}`);
+                this.logger.error(`Error while running tasks ${err}`);
                 this.gracefullyStop();
             });
 
@@ -79,7 +84,7 @@ export class AlarmRunnerService extends android.app.Service {
     }
 
     onDestroy() {
-        this.log('onDestroy called');
+        this.logger.debug('onDestroy called');
         this.gracefullyStop();
         super.onDestroy();
     }
@@ -87,12 +92,12 @@ export class AlarmRunnerService extends android.app.Service {
     private alreadyRunning(startId: number) {
         if (startId === 1) {
             this.started = true;
-            this.log('Service started');
+            this.logger.debug('Service started');
 
             return false;
         }
-        this.log(
-            `WARNING - Service already running! Dismissing call -> startId: ${startId}!`
+        this.logger.warn(
+            `Service already running! Dismissing call -> startId: ${startId}!`
         );
         this.stopSelf(startId);
 
@@ -101,7 +106,7 @@ export class AlarmRunnerService extends android.app.Service {
 
     private extractInvocationArguments(intent: android.content.Intent) {
         const args = unpackAlarmRunnerServiceIntent(intent);
-        this.log(
+        this.logger.info(
             `InvocationParams {runsInForeground=${args.runInForeground}, offset=${args.timeOffset}, invocationTime=${args.invocationTime}}`
         );
         this.runsInForeground = args.runInForeground;
@@ -118,7 +123,7 @@ export class AlarmRunnerService extends android.app.Service {
             createNotification(this, AndroidNotification.BehaviorTracking)
         );
         this.inForeground = true;
-        this.log('Running in foreground');
+        this.logger.debug('Running in foreground');
     }
 
     private async runTasks() {
@@ -131,10 +136,10 @@ export class AlarmRunnerService extends android.app.Service {
             const executionStartedEvt = this.initializeExecutionWindow(timeout);
 
             const taskRunner = new BatchTaskRunner(this.taskStore);
-            console.log(`Running ${taskCount} tasks`);
+            this.logger.info(`Running ${taskCount} tasks`);
             await taskRunner.run(tasksToRun, executionStartedEvt);
         } else {
-            this.log('WARNING - Service was called but no tasks were run!');
+            this.logger.warn('Service was called but no tasks were run!');
         }
     }
 
@@ -155,10 +160,15 @@ export class AlarmRunnerService extends android.app.Service {
             id
         });
         const executionTimeout = timeout - TIMEOUT_EVENT_OFFSET;
-        this.log(
+        this.logger.info(
             `Execution will timeout in ${executionTimeout}, for tasks running with execution id: ${id}`
         );
-        setTimeout(() => emit(timeoutEvent), timeout - TIMEOUT_EVENT_OFFSET);
+        this.timeoutId = setTimeout(() => {
+            emit(timeoutEvent);
+            this.logger.warn(
+                `Execution timed out for tasks running with execution id: ${id}`
+            );
+        }, timeout - TIMEOUT_EVENT_OFFSET);
 
         return startEvent;
     }
@@ -172,12 +182,15 @@ export class AlarmRunnerService extends android.app.Service {
     private gracefullyStop() {
         this.moveToBackground();
         if (this.started) {
-            this.log('Stopping service');
+            this.logger.debug('Stopping service');
             this.killWithFire();
             this.started = false;
         }
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
         if (this.wakeLock.isHeld()) {
-            this.log('Lock released');
+            this.logger.debug('Lock released');
             this.wakeLock.release();
         }
     }
@@ -189,7 +202,7 @@ export class AlarmRunnerService extends android.app.Service {
         const andRemoveNotification = true;
         this.stopForeground(andRemoveNotification);
         this.inForeground = false;
-        this.log('Running in background');
+        this.logger.debug('Running in background');
     }
 
     /**
@@ -206,11 +219,7 @@ export class AlarmRunnerService extends android.app.Service {
                 startId++;
             }
         }
-        this.log(`Done (startId=${startId})`);
-    }
-
-    private log(message: string) {
-        console.log(`AlarmRunnerService: ${message}`);
+        this.logger.info(`Done running (startId=${startId})`);
     }
 }
 

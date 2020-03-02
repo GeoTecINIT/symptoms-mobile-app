@@ -2,6 +2,7 @@ import { android as androidApp } from 'tns-core-modules/application/application'
 import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { PowerSavingsManager } from '../power-savings-manager.android';
+import { Logger, getLogger } from '~/app/core/utils/logger';
 
 const BATTERY_SAVINGS_THRESHOLD = 15 * 60 * 1000;
 const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
@@ -14,7 +15,11 @@ export class AndroidAlarmManager extends AbstractAlarmManager {
         private powerManager = new PowerSavingsManager(),
         private sdkVersion = android.os.Build.VERSION.SDK_INT
     ) {
-        super(osAlarmManager, createAlarmReceiverIntent(androidApp.context));
+        super(
+            osAlarmManager,
+            createAlarmReceiverIntent(androidApp.context),
+            getLogger('AndroidAlarmManager')
+        );
     }
 
     set(interval: number): void {
@@ -44,6 +49,8 @@ export class AndroidAlarmManager extends AbstractAlarmManager {
         } else {
             this.osAlarmManager.set(alarmType, triggerAtMillis, pendingIntent);
         }
+
+        this.logger.info(`Alarm will be triggered in ${interval} ms`);
     }
 
     private checkPowerSavings(): void {

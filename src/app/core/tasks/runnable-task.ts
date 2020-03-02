@@ -2,6 +2,7 @@ import { TaskParams } from './task';
 import { EventReceiver, PlatformEvent, CoreEvent } from '../events';
 import { TaskPlanner } from './planner';
 import { TimeUnit, toSeconds } from '../utils/time-converter';
+import { Logger, getLogger } from '../utils/logger';
 
 export interface RunnableTask {
     name: string;
@@ -28,6 +29,8 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
     private recurrent: boolean;
     private cancelEvent: string;
 
+    private logger: Logger;
+
     constructor(
         private taskName: string,
         private params: TaskParams,
@@ -37,6 +40,8 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
         this.interval = 0;
         this.recurrent = false;
         this.cancelEvent = CoreEvent.DefaultCancelEvent;
+
+        this.logger = getLogger('RunnableTaskBuilder');
     }
 
     now(): ReadyRunnableTaskBuilder {
@@ -92,12 +97,12 @@ export class RunnableTaskBuilder implements ReadyRunnableTaskBuilder {
         this.taskPlanner
             .plan(runnableTask, platformEvent)
             .then((plannedTask) => {
-                console.log(
-                    `Task successfully planned: ${JSON.stringify(plannedTask)}`
+                this.logger.info(
+                    `Task planned: ${JSON.stringify(plannedTask)}`
                 );
             })
             .catch((err) => {
-                console.error(
+                this.logger.error(
                     `Error while planning ${JSON.stringify(
                         runnableTask
                     )}: ${err}`

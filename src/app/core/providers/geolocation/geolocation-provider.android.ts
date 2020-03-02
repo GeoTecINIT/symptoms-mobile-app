@@ -12,6 +12,7 @@ import {
     ProviderInterruption,
     ProviderInterrupter
 } from '../provider-interrupter';
+import { Logger, getLogger } from '../../utils/logger';
 
 const REQUEST_AT_LEAST_EVERY = 1000;
 const REQUEST_EVERY = 100;
@@ -31,6 +32,8 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
     private fusedLocationClient: FusedLocationProviderClient;
     private settingsClient: LocationSettingsClient;
 
+    private logger: Logger;
+
     constructor() {
         this.fusedLocationClient = location.LocationServices.getFusedLocationProviderClient(
             androidApp.context
@@ -38,6 +41,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         this.settingsClient = location.LocationServices.getSettingsClient(
             androidApp.context
         );
+        this.logger = getLogger('AndroidGeolocationProvider');
     }
 
     async isEnabled(): Promise<boolean> {
@@ -59,7 +63,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
                 typeof ex.getStatusCode !== 'function' ||
                 ex.getStatusCode() !== RESOLUTION_REQUIRED
             ) {
-                console.log(`AndroidGeolocationProvider: ${ex}`);
+                this.logger.error(ex);
                 throw geolocationServicesNotEnabledError;
             }
 
