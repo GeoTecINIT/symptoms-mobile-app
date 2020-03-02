@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "956576921484",
+    "firebase_url": "https://symptoms-dev.firebaseio.com",
+    "project_id": "symptoms-dev",
+    "storage_bucket": "symptoms-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956576921484:android:df7f1e24dbeef6a0",
+        "android_client_info": {
+          "package_name": "com.geotec.nacho.mensajesgeolocalizados"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjKAO_7s9SPvK_-IVd8CFl3s4nPcsijs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956576921484:android:2c33e6ccc2c0493e7b48a9",
+        "android_client_info": {
+          "package_name": "es.uji.geotec.symptomsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjKAO_7s9SPvK_-IVd8CFl3s4nPcsijs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
