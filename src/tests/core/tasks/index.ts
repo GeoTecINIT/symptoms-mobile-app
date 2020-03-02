@@ -4,12 +4,12 @@ import { TaskCancelManager } from '~/app/core/tasks/cancel-manager';
 import { PlannedTask } from '~/app/core/tasks/planner/planned-task';
 
 export const testTasks: Tasks = {
-    dummyTask: new SimpleTask('dummyTask', async () =>
-        console.log('Dummy Task executed!')
+    dummyTask: new SimpleTask('dummyTask', async ({ log }) =>
+        log('Dummy Task executed!')
     ),
     dummyForegroundTask: new SimpleTask(
         'dummyForegroundTask',
-        async () => console.log('Dummy Foreground Task executed!'),
+        async ({ log }) => log('Dummy Foreground Task executed!'),
         { foreground: true }
     ),
     failedTask: new SimpleTask('failedTask', () => {
@@ -17,10 +17,10 @@ export const testTasks: Tasks = {
     }),
     timeoutTask: new SimpleTask(
         'timeoutTask',
-        (done, params, evt, onCancel) =>
+        ({ log, onCancel }) =>
             new Promise((resolve) => {
                 const timeoutId = setTimeout(() => {
-                    console.log('Timeout task run!');
+                    log('Timeout task run!');
                     resolve();
                 }, 2000);
                 onCancel(() => {
@@ -29,7 +29,7 @@ export const testTasks: Tasks = {
                 });
             })
     ),
-    emitterTask: new SimpleTask('emitterTask', async (done) =>
+    emitterTask: new SimpleTask('emitterTask', async ({ done }) =>
         done('patataCooked', { status: 'slightlyBaked' })
     )
 };

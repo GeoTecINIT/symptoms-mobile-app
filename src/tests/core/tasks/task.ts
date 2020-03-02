@@ -24,7 +24,7 @@ describe('Task', () => {
 
     const timeoutTask = new SimpleTask(
         'timeoutTask',
-        (done, param, evt, onCancel) =>
+        ({ onCancel }) =>
             new Promise((resolve) => {
                 const timeoutId = setTimeout(() => resolve(), 5000);
                 onCancel(() => {
@@ -36,18 +36,19 @@ describe('Task', () => {
     const timeoutTaskEndEvtName = `${timeoutTask.name}Finished`;
 
     const emitterTaskEndEvtName = 'emissionCompleted';
-    const emitterTask = new SimpleTask('emitterTask', async (done) =>
+    const emitterTask = new SimpleTask('emitterTask', async ({ done }) =>
         done(emitterTaskEndEvtName, { result: ':)' })
     );
 
     const parameterizedTaskEndEvtName = 'completedWithParams';
     const parameterizedTask = new SimpleTask(
         'parameterizedTask',
-        async (done, params) => done(parameterizedTaskEndEvtName, { params })
+        async ({ done, params }) =>
+            done(parameterizedTaskEndEvtName, { params })
     );
 
     const eventualTaskEndEvtName = 'completedWithEventData';
-    const eventualTask = new SimpleTask('eventualTask', async (done, _, evt) =>
+    const eventualTask = new SimpleTask('eventualTask', async ({ done, evt }) =>
         done(eventualTaskEndEvtName, { eventData: evt.data })
     );
 

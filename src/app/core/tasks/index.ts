@@ -1,21 +1,23 @@
 import { Task, TaskParams } from './task';
 import { SimpleTask } from './base/simple-task';
-import { TaskPlanner } from './planner';
-import { RunnableTaskBuilder } from './runnable-task';
+
 import { ProviderTask } from './base/provider-task';
 import { GeolocationProvider } from '../providers/geolocation';
 import { toSeconds } from '../utils/time-converter';
 
+import { TaskPlanner } from './planner';
+import { RunnableTaskBuilder } from './runnable-task';
+
 export const tasks: Tasks = {
-    fastTask: new SimpleTask('fastTask', async () =>
-        console.log('Fast task run!')
+    fastTask: new SimpleTask('fastTask', async ({ log }) =>
+        log('Fast task run!')
     ),
     mediumTask: new SimpleTask(
         'mediumTask',
-        (done, params, evt, onCancel) =>
+        ({ log, onCancel }) =>
             new Promise((resolve) => {
                 const timeoutId = setTimeout(() => {
-                    console.log('Medium task run!');
+                    log('Medium task run!');
                     resolve();
                 }, 2000);
                 onCancel(() => {
@@ -26,10 +28,10 @@ export const tasks: Tasks = {
     ),
     slowTask: new SimpleTask(
         'slowTask',
-        (done, params, evt, onCancel) =>
+        ({ log, onCancel }) =>
             new Promise((resolve) => {
                 const timeoutId = setTimeout(() => {
-                    console.log('Slow task run!');
+                    log('Slow task run!');
                     resolve();
                 }, 30000);
                 onCancel(() => {
@@ -46,18 +48,16 @@ export const tasks: Tasks = {
     ),
     printGeolocation: new SimpleTask(
         'printGeolocation',
-        async (done, params, evt) => {
-            console.log(
-                `Last location acquire: ${JSON.stringify(evt.data.record)}`
-            );
+        async ({ log, evt }) => {
+            log(`Last location: ${JSON.stringify(evt.data.record)}`);
         }
     ),
     incrementalTask: new SimpleTask(
         'incrementalTask',
-        async (done, params, evt, onCancel, runAgainIn) => {
+        async ({ params, log, runAgainIn }) => {
             const execCount = params.execCount ? params.execCount : 1;
             const execTime = toSeconds(execCount, 'minutes');
-            console.log(`Incremental task: Task run after ${execTime} seconds`);
+            log(`Incremental task: Task run after ${execTime} seconds`);
             runAgainIn(toSeconds(execCount + 1, 'minutes'), {
                 execCount: execCount + 1
             });

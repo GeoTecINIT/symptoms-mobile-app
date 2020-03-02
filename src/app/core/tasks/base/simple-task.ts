@@ -1,31 +1,45 @@
-import { Task, TaskConfig, TaskParams } from '../task';
+import { Task, TaskConfig, TaskParams, CancelFunction } from '../task';
 import { PlatformEvent } from '../../events';
 
-type SimpleTaskFunction = (
-    done: (eventName: string, data: { [key: string]: any }) => void,
-    params: TaskParams,
-    evt: PlatformEvent,
-    onCancel: (f: () => void) => void,
-    runAgainIn: (seconds: number, params?: TaskParams) => void
-) => Promise<void>;
+type SimpleTaskFunction = (ctx: SimpleTaskContext) => Promise<void>;
 
 export class SimpleTask extends Task {
     constructor(
         name: string,
-        private functionToBeRun: SimpleTaskFunction,
+        private functionToRun: SimpleTaskFunction,
         taskConfig?: TaskConfig
     ) {
         super(name, taskConfig);
     }
 
     protected async onRun() {
+        const params = this.taskParams;
+        const evt = this.invocationEvent;
+
+        const done = (eventName: string, data: { [key: string]: any }) =>
+            this.done(eventName, data);
         const onCancel = (f: () => void) => this.setCancelFunction(f);
-        await this.functionToBeRun(
-            (eventName, data) => this.done(eventName, data),
-            this.taskParams,
-            this.invocationEvent,
+        const runAgainIn = (seconds: number, taskParams: TaskParams) =>
+            this.runAgainIn(seconds, taskParams);
+        const log = (message: any) => this.log(message);
+
+        const ctx: SimpleTaskContext = {
+            params,
+            evt,
+            done,
             onCancel,
-            (seconds, params) => this.runAgainIn(seconds, params)
-        );
+            runAgainIn,
+            log
+        };
+        await this.functionToRun(ctx);
     }
+}
+
+interface SimpleTaskContext {
+    params: TaskParams;
+    evt: PlatformEvent;
+    done(eventName: string, data: { [key: string]: any }): void;
+    onCancel(cancelFunction: CancelFunction): void;
+    runAgainIn(seconds: number, params?: TaskParams): void;
+    log(message: any): void;
 }
