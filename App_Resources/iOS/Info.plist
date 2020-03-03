@@ -47,5 +47,9 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>firebase_crashlytics_collection_enabled</key>
+  	<string>false</string>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<false/>
 </dict>
 </plist>
