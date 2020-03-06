@@ -117,7 +117,7 @@ export abstract class Task {
      * @param seconds amount of seconds in which the task will be executed again
      * @param params optional parameters that will be passed to the task
      */
-    runAgainIn(seconds: number, params?: TaskParams) {
+    protected runAgainIn(seconds: number, params?: TaskParams) {
         run(this.name, params ? params : this.taskParams)
             .in(seconds)
             .plan();
