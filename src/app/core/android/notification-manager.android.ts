@@ -1,8 +1,6 @@
 import { createAppLaunchIntent } from './intents.android';
 import { localize } from 'nativescript-localize';
 
-const NotificationManagerCompat = androidx.core.app.NotificationManagerCompat;
-
 // Member numbers are notification unique ids, only the first one is needed
 export enum AndroidNotification {
     BehaviorTracking = 1000
@@ -10,29 +8,35 @@ export enum AndroidNotification {
 
 const BEHAVIOR_TRACKING_PREFIX = 'notifications.behavior-tracking';
 
-const NOTIFICATION_CHANNELS: Map<
-    AndroidNotification,
-    NotificationChannel
-> = new Map([
-    [
-        AndroidNotification.BehaviorTracking,
-        {
-            id: 'BEHAVIOR_TRACKING',
-            name: localize(BEHAVIOR_TRACKING_PREFIX + '.channel.name'),
-            description: localize(
-                BEHAVIOR_TRACKING_PREFIX + '.channel.description'
-            ),
-            priority: NotificationManagerCompat.IMPORTANCE_LOW
-        }
-    ]
-]);
+let _notificationChannels: Map<AndroidNotification, NotificationChannel>;
+function notificationChannels(): Map<AndroidNotification, NotificationChannel> {
+    if (!_notificationChannels) {
+        const NotificationManagerCompat =
+            androidx.core.app.NotificationManagerCompat;
+        _notificationChannels = new Map([
+            [
+                AndroidNotification.BehaviorTracking,
+                {
+                    id: 'BEHAVIOR_TRACKING',
+                    name: localize(BEHAVIOR_TRACKING_PREFIX + '.channel.name'),
+                    description: localize(
+                        BEHAVIOR_TRACKING_PREFIX + '.channel.description'
+                    ),
+                    priority: NotificationManagerCompat.IMPORTANCE_LOW
+                }
+            ]
+        ]);
+    }
+
+    return _notificationChannels;
+}
 
 export function setupNotificationChannels(context: android.content.Context) {
     const sdkInt = android.os.Build.VERSION.SDK_INT;
     if (sdkInt < android.os.Build.VERSION_CODES.O) {
         return;
     }
-    for (const channel of NOTIFICATION_CHANNELS.values()) {
+    for (const channel of notificationChannels().values()) {
         setupNotificationChannel(context, channel);
     }
 }
@@ -83,6 +87,8 @@ function setupNotificationChannel(
     const ch = new android.app.NotificationChannel(id, name, priority);
     ch.setDescription(description);
 
+    const NotificationManagerCompat =
+        androidx.core.app.NotificationManagerCompat;
     if (priority === NotificationManagerCompat.IMPORTANCE_HIGH) {
         ch.enableLights(true);
         ch.setLightColor(android.graphics.Color.RED);
@@ -99,7 +105,7 @@ function initializeNotificationBuilder(
     title: string,
     content: string
 ) {
-    const { id, priority } = NOTIFICATION_CHANNELS.get(type);
+    const { id, priority } = notificationChannels().get(type);
     const iconId = context
         .getResources()
         .getIdentifier(

@@ -2,15 +2,14 @@ import { android as androidApp } from 'tns-core-modules/application/application'
 import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { PowerSavingsManager } from '../power-savings-manager.android';
-import { Logger, getLogger } from '~/app/core/utils/logger';
+import { getLogger } from '~/app/core/utils/logger';
 
 const BATTERY_SAVINGS_THRESHOLD = 15 * 60 * 1000;
-const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 
 export class AndroidAlarmManager extends AbstractAlarmManager {
     constructor(
         osAlarmManager = androidApp.context.getSystemService(
-            ALARM_SERVICE
+            android.content.Context.ALARM_SERVICE
         ) as android.app.AlarmManager,
         private powerManager = new PowerSavingsManager(),
         private sdkVersion = android.os.Build.VERSION.SDK_INT

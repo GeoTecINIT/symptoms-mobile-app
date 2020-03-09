@@ -3,13 +3,12 @@ import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { createWatchdogReceiverIntent } from '~/app/core/android/intents.android';
 import { getLogger } from '~/app/core/utils/logger';
 
-const ALARM_SERVICE = android.content.Context.ALARM_SERVICE;
 const WATCHDOG_INTERVAL = 15 * 60 * 1000;
 
 export class WatchdogManager extends AbstractAlarmManager {
     constructor(
         osAlarmManager = androidApp.context.getSystemService(
-            ALARM_SERVICE
+            android.content.Context.ALARM_SERVICE
         ) as android.app.AlarmManager
     ) {
         super(

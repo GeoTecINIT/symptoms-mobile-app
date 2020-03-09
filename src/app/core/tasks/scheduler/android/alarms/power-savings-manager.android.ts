@@ -5,14 +5,12 @@ import {
 } from '~/app/core/android/intents.android';
 import { Logger, getLogger } from '~/app/core/utils/logger';
 
-const POWER_SERVICE = android.content.Context.POWER_SERVICE;
-
 export class PowerSavingsManager {
     private logger: Logger;
 
     constructor(
         private powerManager: android.os.PowerManager = androidApp.context.getSystemService(
-            POWER_SERVICE
+            android.content.Context.POWER_SERVICE
         ),
         private skdVersion = android.os.Build.VERSION.SDK_INT
     ) {
