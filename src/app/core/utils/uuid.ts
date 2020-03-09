@@ -4,6 +4,6 @@ export function uuid() {
     if (androidApp) {
         return java.util.UUID.randomUUID().toString();
     } else {
-        throw new Error('Not implemented');
+        return NSUUID.UUID().UUIDString.toLowerCase();
     }
 }
