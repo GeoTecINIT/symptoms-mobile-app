@@ -19,22 +19,15 @@ const REQUEST_EVERY = 100;
 const RESOLUTION_REQUIRED = 6;
 const REQUEST_ENABLE_LOCATION = 53;
 
-const OnSuccessListener = com.google.android.gms.tasks.OnSuccessListener;
-const OnFailureListener = com.google.android.gms.tasks.OnFailureListener;
-const location = com.google.android.gms.location;
-type LocationRequest = com.google.android.gms.location.LocationRequest;
-type LocationResult = com.google.android.gms.location.LocationResult;
-type FusedLocationProviderClient = com.google.android.gms.location.FusedLocationProviderClient;
-type LocationSettingsClient = com.google.android.gms.location.SettingsClient;
-
 export class AndroidGeolocationProvider implements NativeGeolocationProvider {
-    private locationRequest: LocationRequest;
-    private fusedLocationClient: FusedLocationProviderClient;
-    private settingsClient: LocationSettingsClient;
+    private locationRequest: com.google.android.gms.location.LocationRequest;
+    private fusedLocationClient: com.google.android.gms.location.FusedLocationProviderClient;
+    private settingsClient: com.google.android.gms.location.SettingsClient;
 
     private logger: Logger;
 
     constructor() {
+        const location = com.google.android.gms.location;
         this.fusedLocationClient = location.LocationServices.getFusedLocationProviderClient(
             androidApp.context
         );
@@ -114,6 +107,10 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
 
     private async getLastKnownLocation(): Promise<Geolocation> {
         await this.canGetLocations();
+        const OnSuccessListener =
+            com.google.android.gms.tasks.OnSuccessListener;
+        const OnFailureListener =
+            com.google.android.gms.tasks.OnFailureListener;
 
         return new Promise((resolve, reject) => {
             this.fusedLocationClient
@@ -137,9 +134,14 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
     }
 
     private checkLocationSettings(): Promise<void> {
+        const location = com.google.android.gms.location;
         const settingsRequest = new location.LocationSettingsRequest.Builder()
             .addLocationRequest(this.getLocationRequest())
             .build();
+        const OnSuccessListener =
+            com.google.android.gms.tasks.OnSuccessListener;
+        const OnFailureListener =
+            com.google.android.gms.tasks.OnFailureListener;
 
         return new Promise((resolve, reject) => {
             this.settingsClient
@@ -168,7 +170,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         return new Promise((resolve) => {
             const locations: Array<Geolocation> = [];
 
-            const callback = new GeolocationCallback((geolocation) => {
+            const callback = this.createGeolocationCallback((geolocation) => {
                 locations.push(geolocation);
                 if (locations.length === quantity) {
                     this.stopListeningLocations(callback);
@@ -184,7 +186,9 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         });
     }
 
-    private startListeningLocations(callback: GeolocationCallback) {
+    private startListeningLocations(
+        callback: com.google.android.gms.location.LocationCallback
+    ) {
         this.fusedLocationClient.requestLocationUpdates(
             this.getLocationRequest(),
             callback,
@@ -192,7 +196,9 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         );
     }
 
-    private stopListeningLocations(callback: GeolocationCallback) {
+    private stopListeningLocations(
+        callback: com.google.android.gms.location.LocationCallback
+    ) {
         this.fusedLocationClient.removeLocationUpdates(callback);
     }
 
@@ -206,7 +212,8 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         }
     }
 
-    private getLocationRequest(): LocationRequest {
+    private getLocationRequest(): com.google.android.gms.location.LocationRequest {
+        const location = com.google.android.gms.location;
         if (!this.locationRequest) {
             this.locationRequest = new location.LocationRequest();
             this.locationRequest.setInterval(REQUEST_AT_LEAST_EVERY);
@@ -218,23 +225,34 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
 
         return this.locationRequest;
     }
-}
 
-// tslint:disable-next-line:max-classes-per-file
-class GeolocationCallback extends location.LocationCallback {
-    constructor(private onNextGeolocation: (location: Geolocation) => void) {
-        super();
+    private createGeolocationCallback(
+        geolocationAcquired: (location: Geolocation) => void
+    ) {
+        // tslint:disable-next-line:max-classes-per-file
+        const geolocationCallback = class extends com.google.android.gms
+            .location.LocationCallback {
+            constructor(
+                private onNextGeolocation: (location: Geolocation) => void
+            ) {
+                super();
 
-        return global.__native(this);
-    }
+                return global.__native(this);
+            }
 
-    onLocationResult(result: LocationResult) {
-        if (!result) {
-            return;
-        }
-        const geolocation = Geolocation.fromAndroidLocation(
-            result.getLastLocation()
-        );
-        this.onNextGeolocation(geolocation);
+            onLocationResult(
+                result: com.google.android.gms.location.LocationResult
+            ) {
+                if (!result) {
+                    return;
+                }
+                const geolocation = Geolocation.fromAndroidLocation(
+                    result.getLastLocation()
+                );
+                this.onNextGeolocation(geolocation);
+            }
+        };
+
+        return new geolocationCallback(geolocationAcquired);
     }
 }

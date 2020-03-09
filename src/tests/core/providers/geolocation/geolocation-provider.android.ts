@@ -2,6 +2,9 @@ import { AndroidGeolocationProvider } from '~/app/core/providers/geolocation/geo
 import { geolocationAccessNotGrantedError } from '~/app/core/providers/geolocation';
 
 describe('Android Geolocation Provider', () => {
+    if (typeof android === 'undefined') {
+        return;
+    }
     const geolocationProvider = new AndroidGeolocationProvider();
 
     const ORIGINAL_INTERVAL = jasmine.DEFAULT_TIMEOUT_INTERVAL;
