@@ -2,6 +2,9 @@ import { WatchdogManager } from '~/app/core/tasks/scheduler/android/alarms/watch
 import { createOsAlarmManagerMock } from '.';
 
 describe('Android watchdog manager', () => {
+    if (typeof android === 'undefined') {
+        return;
+    }
     let systemAlarmManager: android.app.AlarmManager;
     let watchdogManager: WatchdogManager;
     const interval = 15 * 60 * 1000;

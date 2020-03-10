@@ -3,6 +3,10 @@ import { createOsAlarmManagerMock } from '..';
 import { PowerSavingsManager } from '~/app/core/tasks/scheduler/android/alarms/power-savings-manager.android';
 
 describe('Android alarm manager', () => {
+    if (typeof android === 'undefined') {
+        return;
+    }
+
     const powerSavingsManager = createPowerSavingsManagerMock();
     let systemAlarmManager: android.app.AlarmManager;
     let alarmManager: AndroidAlarmManager;

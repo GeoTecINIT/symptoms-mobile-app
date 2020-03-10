@@ -1,6 +1,10 @@
 import { PowerSavingsManager } from '~/app/core/tasks/scheduler/android/alarms/power-savings-manager.android';
 
 describe('Power savings manager', () => {
+    if (typeof android === 'undefined') {
+        return;
+    }
+
     const osPowerManager = createOsPowerManagerMock();
 
     beforeEach(() => {
