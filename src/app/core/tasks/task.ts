@@ -5,7 +5,6 @@ import {
     emit,
     hasListeners
 } from '../events';
-import { run } from '.';
 import { Logger, getLogger } from '../utils/logger';
 
 export abstract class Task {
@@ -118,9 +117,7 @@ export abstract class Task {
      * @param params optional parameters that will be passed to the task
      */
     protected runAgainIn(seconds: number, params?: TaskParams) {
-        run(this.name, params ? params : this.taskParams)
-            .in(seconds)
-            .plan();
+        defer(this.name, seconds, params ? params : this.taskParams);
         this.log(`Will run again in ${seconds} s`);
     }
 
@@ -225,3 +222,13 @@ export enum TaskResultStatus {
 }
 
 export type CancelFunction = () => void;
+export type TaskDeferrer = (
+    taskName: string,
+    seconds: number,
+    taskParams: TaskParams
+) => void;
+
+let defer: TaskDeferrer;
+export function setTaskDeferrer(taskDeferrer: TaskDeferrer) {
+    defer = taskDeferrer;
+}
