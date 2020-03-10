@@ -49,12 +49,10 @@ export class ProdLogger extends Logger {
                 new NSError({
                     domain: 'es.uji.geotec.symptomsapp',
                     code: 42,
-                    userInfo: NSDictionary.dictionaryWithObjectsAndKeys<
+                    userInfo: NSDictionary.dictionaryWithObjectForKey<
                         string,
                         string
-                    >({
-                        NSLocalizedUserMessage: message
-                    })
+                    >(message, NSLocalizedDescriptionKey)
                 })
             );
         }
