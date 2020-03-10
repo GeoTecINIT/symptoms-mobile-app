@@ -1,12 +1,17 @@
 import { TaskNotFoundError, setTasks } from '~/app/core/tasks/provider';
 import { testTasks } from '..';
-import { taskScheduler } from '~/app/core/tasks/scheduler';
+import { TaskScheduler, taskScheduler } from '~/app/core/tasks/scheduler';
 import { plannedTasksDB } from '~/app/core/persistence/planned-tasks-store';
 import { RunnableTask } from '~/app/core/tasks/runnable-task';
 
 describe('Task scheduler', () => {
     setTasks(testTasks);
-    const scheduler = taskScheduler();
+
+    let scheduler: TaskScheduler;
+
+    beforeEach(() => {
+        scheduler = taskScheduler();
+    });
 
     it('schedules a job in time', async () => {
         const knownTask: RunnableTask = {
