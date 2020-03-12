@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService, DataItem } from '../shared/data.service';
 import { taskGraph } from '../core/tasks/graph/loader';
 import { emit, createEvent } from '../core/events';
-import { firebaseInstance } from '../core/utils/firebase';
+import { firebaseManager } from '../core/utils/firebase';
 
 @Component({
     selector: 'Home',
@@ -18,8 +18,8 @@ export class HomeComponent implements OnInit {
         this.items = this._itemService.getItems();
 
         // FIXME: Ask user consent before doing this
-        if (!firebaseInstance.dataCollectionEnabled) {
-            firebaseInstance.enableUsageDataCollection();
+        if (!firebaseManager.dataCollectionEnabled) {
+            firebaseManager.enableUsageDataCollection();
         }
     }
 

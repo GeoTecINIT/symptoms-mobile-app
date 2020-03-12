@@ -51,6 +51,12 @@ export class FirebaseManager {
         fb.crashlytics.setCrashlyticsCollectionEnabled(no);
         fb.analytics.setAnalyticsCollectionEnabled(no);
     }
+
+    async getInstance() {
+        await this.init();
+
+        return fb;
+    }
 }
 
-export const firebaseInstance = new FirebaseManager();
+export const firebaseManager = new FirebaseManager();
