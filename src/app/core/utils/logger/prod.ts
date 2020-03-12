@@ -1,12 +1,12 @@
 import { Logger } from './common';
-import { FirebaseManager, firebaseInstance } from '../firebase';
+import { FirebaseManager, firebaseManager } from '../firebase';
 import { DevLogger } from './dev';
 import { isAndroid } from 'tns-core-modules/platform';
 
 export class ProdLogger extends Logger {
     constructor(
         tag: string,
-        private firebase: FirebaseManager = firebaseInstance,
+        private firebase: FirebaseManager = firebaseManager,
         private auxLogger: Logger = new DevLogger(tag)
     ) {
         super(tag);

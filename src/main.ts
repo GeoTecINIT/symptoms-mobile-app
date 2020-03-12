@@ -3,12 +3,12 @@ import { platformNativeScriptDynamic } from 'nativescript-angular/platform';
 
 import { AppModule } from './app/app.module';
 
-import { firebaseInstance } from './app/core/utils/firebase';
+import { firebaseManager } from './app/core/utils/firebase';
 
 import { taskGraph } from './app/core/tasks/graph/loader';
 import { demoTaskGraph } from './app/tasks/graph';
 
-firebaseInstance.init();
+firebaseManager.init();
 
 taskGraph.load(demoTaskGraph);
 
