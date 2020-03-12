@@ -135,8 +135,8 @@ const fakeLocations: Array<Geolocation> = [
         bearing: 313.95758056640625,
         accuracy: 12.486000061035156,
         capturedAt: new Date('2020-01-28T15:09:59.000Z'),
-        begin: new Date('2020-01-28T15:10:00.057Z'),
-        end: new Date('2020-01-28T15:10:00.057Z')
+        startsAt: new Date('2020-01-28T15:10:00.057Z'),
+        endsAt: new Date('2020-01-28T15:10:00.057Z')
     },
     {
         type: PlatformType.Geolocation,
@@ -147,8 +147,8 @@ const fakeLocations: Array<Geolocation> = [
         bearing: 274.8623962402344,
         accuracy: 12.565999984741211,
         capturedAt: new Date('2020-01-28T15:10:00.000Z'),
-        begin: new Date('2020-01-28T15:10:01.054Z'),
-        end: new Date('2020-01-28T15:10:01.054Z')
+        startsAt: new Date('2020-01-28T15:10:01.054Z'),
+        endsAt: new Date('2020-01-28T15:10:01.054Z')
     },
     {
         type: PlatformType.Geolocation,
@@ -159,8 +159,8 @@ const fakeLocations: Array<Geolocation> = [
         bearing: 236.01693725585938,
         accuracy: 12.576000213623047,
         capturedAt: new Date('2020-01-28T15:10:01.000Z'),
-        begin: new Date('2020-01-28T15:10:02.057Z'),
-        end: new Date('2020-01-28T15:10:02.057Z')
+        startsAt: new Date('2020-01-28T15:10:02.057Z'),
+        endsAt: new Date('2020-01-28T15:10:02.057Z')
     },
     {
         type: PlatformType.Geolocation,
@@ -171,8 +171,8 @@ const fakeLocations: Array<Geolocation> = [
         bearing: 332.4197082519531,
         accuracy: 13.303000450134277,
         capturedAt: new Date('2020-01-28T15:10:02.000Z'),
-        begin: new Date('2020-01-28T15:10:03.049Z'),
-        end: new Date('2020-01-28T15:10:03.049Z')
+        startsAt: new Date('2020-01-28T15:10:03.049Z'),
+        endsAt: new Date('2020-01-28T15:10:03.049Z')
     },
     {
         type: PlatformType.Geolocation,
@@ -183,7 +183,7 @@ const fakeLocations: Array<Geolocation> = [
         bearing: 333.66839599609375,
         accuracy: 13.373000144958496,
         capturedAt: new Date('2020-01-28T15:10:03.000Z'),
-        begin: new Date('2020-01-28T15:10:04.068Z'),
-        end: new Date('2020-01-28T15:10:04.068Z')
+        startsAt: new Date('2020-01-28T15:10:04.068Z'),
+        endsAt: new Date('2020-01-28T15:10:04.068Z')
     }
 ];
