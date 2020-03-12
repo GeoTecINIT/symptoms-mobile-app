@@ -20,8 +20,8 @@ export class Geolocation extends RecordType {
         public bearing: number,
         public accuracy: number,
         public capturedAt: Date,
-        public begin = new Date()
+        public startsAt = new Date()
     ) {
-        super(PlatformType.Geolocation, begin, begin);
+        super(PlatformType.Geolocation, startsAt, startsAt);
     }
 }
