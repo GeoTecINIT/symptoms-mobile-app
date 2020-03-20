@@ -7,10 +7,16 @@ import { toSeconds } from '../utils/time-converter';
 
 import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
+import { planningTimestamp } from '../persistence/planning-timestamp';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask('fastTask', async ({ log }) =>
-        log('Fast task run!')
+        log(
+            `Alarm was planned at ${
+                planningTimestamp.previous
+            } (now: ${Date.now()}). Difference is ${Date.now() -
+                planningTimestamp.previous} ms`
+        )
     ),
     mediumTask: new SimpleTask(
         'mediumTask',
