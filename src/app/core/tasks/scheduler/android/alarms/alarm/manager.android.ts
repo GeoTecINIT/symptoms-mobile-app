@@ -3,6 +3,7 @@ import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { PowerSavingsManager } from '../power-savings-manager.android';
 import { getLogger } from '~/app/core/utils/logger';
+import { planningTimestamp } from '~/app/core/persistence/planning-timestamp';
 
 const BATTERY_SAVINGS_THRESHOLD = 15 * 60 * 1000;
 
@@ -49,6 +50,7 @@ export class AndroidAlarmManager extends AbstractAlarmManager {
             this.osAlarmManager.set(alarmType, triggerAtMillis, pendingIntent);
         }
 
+        planningTimestamp.updateCurrent();
         this.logger.info(`Alarm will be triggered in ${interval} ms`);
     }
 
