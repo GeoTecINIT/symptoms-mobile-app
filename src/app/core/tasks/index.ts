@@ -7,7 +7,7 @@ import { toSeconds } from '../utils/time-converter';
 
 import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
-import { planningTimestamp } from '../persistence/planning-timestamp';
+import { planningTimestamp } from './scheduler/planning-timestamp';
 
 export const tasks: Tasks = {
     fastTask: new SimpleTask('fastTask', async ({ log }) =>

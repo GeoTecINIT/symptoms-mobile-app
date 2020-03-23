@@ -3,7 +3,7 @@ import { createAlarmReceiverIntent } from '~/app/core/android/intents.android';
 import { AbstractAlarmManager } from '../abstract-alarm-manager.android';
 import { PowerSavingsManager } from '../power-savings-manager.android';
 import { getLogger } from '~/app/core/utils/logger';
-import { planningTimestamp } from '~/app/core/persistence/planning-timestamp';
+import { planningTimestamp } from '~/app/core/tasks/scheduler/planning-timestamp';
 
 const BATTERY_SAVINGS_THRESHOLD = 15 * 60 * 1000;
 
