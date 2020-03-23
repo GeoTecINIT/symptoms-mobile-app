@@ -1,4 +1,4 @@
-import { planningTimestamp } from '~/app/core/persistence/planning-timestamp';
+import { planningTimestamp } from '~/app/core/tasks/scheduler/planning-timestamp';
 
 const A_BIT = 100;
 
