@@ -1,22 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DataService, DataItem } from '../shared/data.service';
-import { taskGraph } from '../core/tasks/graph/loader';
-import { emit, createEvent } from '../core/events';
 import { firebaseManager } from '../core/utils/firebase';
+
+import { Experiment, currentExperiment } from '../experiment';
 
 @Component({
     selector: 'Home',
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-    items: Array<DataItem>;
-
-    constructor(private _itemService: DataService) {}
+    experiment: Experiment;
 
     ngOnInit(): void {
-        this.items = this._itemService.getItems();
-
+        this.experiment = currentExperiment.get();
         // FIXME: Ask user consent before doing this
         if (!firebaseManager.dataCollectionEnabled) {
             firebaseManager.enableUsageDataCollection();
@@ -24,20 +21,15 @@ export class HomeComponent implements OnInit {
     }
 
     onTapStart() {
-        this.emitStartEvent();
+        if (!this.experiment.name) {
+            alert('Please, introduce a name for the experiment');
+
+            return;
+        }
+        this.experiment = currentExperiment.start(this.experiment.name);
     }
 
     onTapStop() {
-        emit(createEvent('stopEvent'));
-    }
-
-    // FIXME: This has to be better handled with a view informing the user
-    // about the permissions to be asked
-    private async emitStartEvent() {
-        const isReady = await taskGraph.isReady();
-        if (!isReady) {
-            await taskGraph.prepare();
-        }
-        emit(createEvent('startEvent'));
+        this.experiment = currentExperiment.finish();
     }
 }
