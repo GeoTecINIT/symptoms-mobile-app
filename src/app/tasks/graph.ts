@@ -11,32 +11,23 @@ class DemoTaskGraph implements TaskGraph {
     ): Promise<void> {
         on(
             'startEvent',
-            run('fastTask')
+            run('logDummyTaskExecutionStart')
                 .every(1, 'minutes')
                 .cancelOn('stopEvent')
         );
         on(
             'startEvent',
-            run('acquireGeolocation')
+            run('logGPSTaskExecutionStart')
                 .every(1, 'minutes')
-                .cancelOn('stopEvent')
-        );
-        on(
-            'startEvent',
-            run('mediumTask')
-                .every(2, 'minutes')
-                .cancelOn('stopEvent')
-        );
-        on(
-            'startEvent',
-            run('slowTask')
-                .every(4, 'minutes')
                 .cancelOn('stopEvent')
         );
 
-        on('slowTaskFinished', run('mediumTask'));
-        on('mediumTaskFinished', run('fastTask'));
-        on('geolocationAcquired', run('printGeolocation'));
+        on('dummyTaskExecutionStartLogged', run('acquireBatteryLevel'));
+
+        on('gpsTaskExecutionStartLogged', run('acquireGeolocation'));
+        on('geolocationAcquired', run('acquireBatteryLevel'));
+
+        on('batteryLevelAcquired', run('logTaskExecutionEnd'));
     }
 }
 
