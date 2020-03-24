@@ -1,73 +1,21 @@
 import { Task, TaskParams, setTaskDeferrer } from './task';
-import { SimpleTask } from './base/simple-task';
 
 import { ProviderTask } from './base/provider-task';
 import { GeolocationProvider } from '../providers/geolocation';
-import { toSeconds } from '../utils/time-converter';
+import { BatteryProvider } from '../providers/battery';
 
 import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
-import { planningTimestamp } from './scheduler/planning-timestamp';
 
 export const tasks: Tasks = {
-    fastTask: new SimpleTask('fastTask', async ({ log }) =>
-        log(
-            `Alarm was planned at ${
-                planningTimestamp.previous
-            } (now: ${Date.now()}). Difference is ${Date.now() -
-                planningTimestamp.previous} ms`
-        )
-    ),
-    mediumTask: new SimpleTask(
-        'mediumTask',
-        ({ log, onCancel }) =>
-            new Promise((resolve) => {
-                const timeoutId = setTimeout(() => {
-                    log('Medium task run!');
-                    resolve();
-                }, 2000);
-                onCancel(() => {
-                    clearTimeout(timeoutId);
-                    resolve();
-                });
-            })
-    ),
-    slowTask: new SimpleTask(
-        'slowTask',
-        ({ log, onCancel }) =>
-            new Promise((resolve) => {
-                const timeoutId = setTimeout(() => {
-                    log('Slow task run!');
-                    resolve();
-                }, 30000);
-                onCancel(() => {
-                    clearTimeout(timeoutId);
-                    resolve();
-                });
-            }),
-        { foreground: true }
-    ),
     acquireGeolocation: new ProviderTask(
         'acquireGeolocation',
         new GeolocationProvider(),
         { foreground: true }
     ),
-    printGeolocation: new SimpleTask(
-        'printGeolocation',
-        async ({ log, evt }) => {
-            log(`Last location: ${JSON.stringify(evt.data.record)}`);
-        }
-    ),
-    incrementalTask: new SimpleTask(
-        'incrementalTask',
-        async ({ params, log, runAgainIn }) => {
-            const execCount = params.execCount ? params.execCount : 1;
-            const execTime = toSeconds(execCount, 'minutes');
-            log(`Incremental task: Task run after ${execTime} seconds`);
-            runAgainIn(toSeconds(execCount + 1, 'minutes'), {
-                execCount: execCount + 1
-            });
-        }
+    acquireBatteryLevel: new ProviderTask(
+        'acquireBatteryLevel',
+        new BatteryProvider()
     )
 };
 
