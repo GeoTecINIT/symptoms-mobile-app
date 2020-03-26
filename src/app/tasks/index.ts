@@ -6,7 +6,7 @@ import { logExecutionEndTask } from '../experiment/log-execution-end-task';
 import { ExperimentTask } from '../experiment/experiment-tasks';
 
 export const appTasks = [
-    new LogTaskExecutionStart(ExperimentTask.Dummy),
+    new LogTaskExecutionStart(ExperimentTask.Dummy, { foreground: true }),
     new LogTaskExecutionStart(ExperimentTask.GPS, { foreground: true }),
     logExecutionEndTask,
     new SimpleTask('fastTask', async ({ log }) => log('Fast task run!')),

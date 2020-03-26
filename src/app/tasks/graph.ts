@@ -15,17 +15,17 @@ class DemoTaskGraph implements TaskGraph {
                 .every(1, 'minutes')
                 .cancelOn('stopEvent')
         );
-        on(
+        /* on(
             'startEvent',
             run('logGPSTaskExecutionStart')
                 .every(1, 'minutes')
                 .cancelOn('stopEvent')
-        );
+        ); */
 
         on('dummyTaskExecutionStartLogged', run('acquireBatteryLevel'));
 
-        on('gpsTaskExecutionStartLogged', run('acquireGeolocation'));
-        on('geolocationAcquired', run('acquireBatteryLevel'));
+        // on('gpsTaskExecutionStartLogged', run('acquireGeolocation'));
+        // on('geolocationAcquired', run('acquireBatteryLevel'));
 
         on('batteryLevelAcquired', run('logTaskExecutionEnd'));
     }
