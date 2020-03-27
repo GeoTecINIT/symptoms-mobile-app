@@ -5,11 +5,15 @@ import { AppModule } from './app/app.module';
 
 import { firebaseManager } from './app/core/utils/firebase';
 
+import { registerTasks } from './app/core/tasks/provider';
+import { appTasks } from './app/tasks';
+
 import { taskGraph } from './app/core/tasks/graph/loader';
 import { demoTaskGraph } from './app/tasks/graph';
 
 firebaseManager.init();
 
+registerTasks(appTasks);
 taskGraph.load(demoTaskGraph);
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);

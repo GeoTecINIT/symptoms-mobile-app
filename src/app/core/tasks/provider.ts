@@ -18,6 +18,19 @@ export function checkIfTaskExists(name: string) {
     }
 }
 
+export function registerTasks(newTasks: Array<Task>) {
+    const tasks = getTasks();
+    for (const task of newTasks) {
+        if (tasks[task.name]) {
+            throw new Error(
+                `Task (${task.name}) name collides with an existing task.
+                Cannot guarantee the correct operation of the system, aborting`
+            );
+        }
+        tasks[task.name] = task;
+    }
+}
+
 export function setTasks(t: Tasks) {
     _tasks = t;
 }
