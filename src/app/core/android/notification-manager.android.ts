@@ -33,7 +33,7 @@ function notificationChannels(): Map<AndroidNotification, NotificationChannel> {
 
 export function setupNotificationChannels(context: android.content.Context) {
     const sdkInt = android.os.Build.VERSION.SDK_INT;
-    if (sdkInt < android.os.Build.VERSION_CODES.O) {
+    if (sdkInt < 26) {
         return;
     }
     for (const channel of notificationChannels().values()) {
