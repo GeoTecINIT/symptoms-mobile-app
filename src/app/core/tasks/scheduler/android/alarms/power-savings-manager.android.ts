@@ -23,7 +23,7 @@ export class PowerSavingsManager {
             return;
         }
 
-        if (androidApp.foregroundActivity === null) {
+        if (!androidApp.foregroundActivity) {
             this.logger.warn(
                 'Battery savings can not be enabled in background'
             );
@@ -31,7 +31,7 @@ export class PowerSavingsManager {
             return;
         }
         const intent = createSavingsDeactivationIntent();
-        androidApp.context.startActivity(intent);
+        androidApp.foregroundActivity.startActivity(intent);
     }
 
     areDisabled(): boolean {
