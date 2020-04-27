@@ -1,6 +1,5 @@
-import { SimpleTask } from '../core/tasks/base/simple-task';
+import { SimpleTask, TaskConfig } from 'nativescript-task-dispatcher/tasks';
 import { ExperimentTask } from './experiment-tasks';
-import { TaskConfig } from '../core/tasks/task';
 import { taskExecutionRegistry } from './task-execution-registry';
 
 export class LogTaskExecutionStart extends SimpleTask {

@@ -1,11 +1,19 @@
-import { SimpleTask } from '../core/tasks/base/simple-task';
-import { toSeconds } from '../core/utils/time-converter';
+import { Task, SimpleTask } from 'nativescript-task-dispatcher/tasks';
+import { toSeconds } from 'nativescript-task-dispatcher/utils/time-converter';
+
+import { ProviderTask } from '../core/tasks/base/provider-task';
+import { GeolocationProvider } from '../core/providers/geolocation';
+import { BatteryProvider } from '../core/providers/battery';
 
 import { LogTaskExecutionStart } from '../experiment/log-execution-start-task';
 import { logExecutionEndTask } from '../experiment/log-execution-end-task';
 import { ExperimentTask } from '../experiment/experiment-tasks';
 
-export const appTasks = [
+export const appTasks: Array<Task> = [
+    new ProviderTask('acquireGeolocation', new GeolocationProvider(), {
+        foreground: true
+    }),
+    new ProviderTask('acquireBatteryLevel', new BatteryProvider()),
     new LogTaskExecutionStart(ExperimentTask.Dummy, { foreground: true }),
     new LogTaskExecutionStart(ExperimentTask.GPS, { foreground: true }),
     logExecutionEndTask,

@@ -1,12 +1,12 @@
 import {
     TaskGraph,
-    TaskEventBinder,
+    EventListenerGenerator,
     RunnableTaskDescriptor
-} from '../core/tasks/graph';
+} from 'nativescript-task-dispatcher/tasks/graph';
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
-        on: TaskEventBinder,
+        on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
         on(
@@ -15,17 +15,17 @@ class DemoTaskGraph implements TaskGraph {
                 .every(1, 'minutes')
                 .cancelOn('stopEvent')
         );
-        /* on(
+        on(
             'startEvent',
             run('logGPSTaskExecutionStart')
                 .every(1, 'minutes')
                 .cancelOn('stopEvent')
-        ); */
+        );
 
         on('dummyTaskExecutionStartLogged', run('acquireBatteryLevel'));
 
-        // on('gpsTaskExecutionStartLogged', run('acquireGeolocation'));
-        // on('geolocationAcquired', run('acquireBatteryLevel'));
+        on('gpsTaskExecutionStartLogged', run('acquireGeolocation'));
+        on('geolocationAcquired', run('acquireBatteryLevel'));
 
         on('batteryLevelAcquired', run('logTaskExecutionEnd'));
     }

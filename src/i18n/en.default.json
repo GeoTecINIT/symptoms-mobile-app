@@ -15,5 +15,9 @@
   },
   "permissions": {
     "location": "In order to offer you a better treatment, we need to access to your location."
-  }
+  },
+  "task_dispatcher_location_usage_channel_name": "Background location",
+  "task_dispatcher_location_usage_channel_description": "Indicates when the app is accessing your location in background",
+  "task_dispatcher_location_usage_notification_title": "SyMptOMS is using your location",
+  "task_dispatcher_location_usage_notification_content": ""
 }

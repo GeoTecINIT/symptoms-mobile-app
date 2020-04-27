@@ -1,4 +1,4 @@
-import { Task, TaskConfig } from '../task';
+import { Task, TaskConfig } from 'nativescript-task-dispatcher/tasks';
 import { Provider } from '../../providers/provider';
 
 export class ProviderTask extends Task {

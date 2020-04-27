@@ -6,13 +6,11 @@ import { AppModule } from './app/app.module';
 import { firebaseManager } from './app/core/utils/firebase';
 
 import { appTasks } from './app/tasks';
-import { taskGraph } from './app/core/tasks/graph/loader';
 import { demoTaskGraph } from './app/tasks/graph';
-import { registerTasks } from './app/core/tasks/provider';
+import { taskDispatcher } from 'nativescript-task-dispatcher';
 
 firebaseManager.init();
 
-registerTasks(appTasks);
-taskGraph.load(demoTaskGraph);
+taskDispatcher.init(appTasks, demoTaskGraph, { enableLogging: true });
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);
