@@ -6,8 +6,8 @@ import {
     remove
 } from 'tns-core-modules/application-settings';
 
-import { taskGraph } from '../core/tasks/graph/loader';
-import { emit, createEvent } from '../core/events';
+import { taskDispatcher } from 'nativescript-task-dispatcher';
+import { emit, createEvent } from 'nativescript-task-dispatcher/events';
 
 import { Experiment } from './experiment';
 
@@ -68,9 +68,9 @@ class CurrentExperiment {
     // FIXME: This has to be better handled with a view informing the user
     // about the permissions to be asked
     private async emitStartEvent() {
-        const isReady = await taskGraph.isReady();
+        const isReady = await taskDispatcher.isReady();
         if (!isReady) {
-            await taskGraph.prepare();
+            await taskDispatcher.prepare();
         }
         emit(createEvent('startEvent'));
     }

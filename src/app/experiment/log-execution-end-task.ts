@@ -1,7 +1,7 @@
-import { SimpleTask } from '../core/tasks/base/simple-task';
+import { SimpleTask } from 'nativescript-task-dispatcher/tasks';
 import { BatteryLevel } from '../core/providers/battery/battery-level';
 
-import { planningTimestamp } from '../core/tasks/scheduler/planning-timestamp';
+import { planningTimestamp } from 'nativescript-task-dispatcher/internal/tasks/scheduler/planning-timestamp';
 import { taskExecutionRegistry } from './task-execution-registry';
 import { ExecutionEntry } from './execution-entry';
 

@@ -8,7 +8,7 @@ import { TaskPlanner } from './planner';
 import { RunnableTaskBuilder } from './runnable-task';
 
 export const tasks: Tasks = {
-    acquireGeolocation: new ProviderTask(
+    /* acquireGeolocation: new ProviderTask(
         'acquireGeolocation',
         new GeolocationProvider(),
         { foreground: true }
@@ -16,7 +16,7 @@ export const tasks: Tasks = {
     acquireBatteryLevel: new ProviderTask(
         'acquireBatteryLevel',
         new BatteryProvider()
-    )
+    ) */
 };
 
 export interface Tasks {
@@ -29,7 +29,5 @@ export function run(taskName: string, params: TaskParams = {}) {
 }
 
 setTaskDeferrer((taskName, seconds, params) =>
-    run(taskName, params)
-        .in(seconds)
-        .plan()
+    run(taskName, params).in(seconds).plan()
 );
