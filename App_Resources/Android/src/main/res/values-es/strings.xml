@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="task_dispatcher_location_usage_notification_content">""</string>
-  <string name="task_dispatcher_location_usage_notification_title">"SyMptOMS está accediendo a tu ubicación"</string>
-  <string name="task_dispatcher_location_usage_channel_description">"Indica cuando la app está accediendo a tu ubicación en segundo plano"</string>
-  <string name="task_dispatcher_location_usage_channel_name">"Ubicación en segundo plano"</string>
+  <string name="task_dispatcher_notification_content">""</string>
+  <string name="task_dispatcher_notification_title">"SyMptOMS está accediendo a tu ubicación"</string>
+  <string name="task_dispatcher_channel_description">"Indica cuando la app está accediendo a tu ubicación en segundo plano"</string>
+  <string name="task_dispatcher_channel_name">"Ubicación en segundo plano"</string>
   <string name="_permissions_location_Z1ENI0b">"Para ofrecerte un mejor tratamiento, necesitamos acceder a tu ubicación."</string>
   <string name="_notifications_behavior_tracking_tracking_notification_content_Z1Ga1oc">""</string>
   <string name="_notifications_behavior_tracking_tracking_notification_title_Z2g6y23">"Comprobando ubicación"</string>

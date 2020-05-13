@@ -1,5 +1,11 @@
-import { Task, TaskConfig } from 'nativescript-task-dispatcher/tasks';
-import { Provider } from '../../providers/provider';
+import {
+    Task,
+    TaskConfig,
+    TaskParams,
+    TaskOutcome,
+} from "nativescript-task-dispatcher/tasks";
+import { Provider } from "../../providers/provider";
+import { DispatchableEvent } from "nativescript-task-dispatcher/events";
 
 export class ProviderTask extends Task {
     constructor(
@@ -18,11 +24,15 @@ export class ProviderTask extends Task {
         await this.provider.prepare();
     }
 
-    protected async onRun(): Promise<void> {
+    protected async onRun(
+        taskParams: TaskParams,
+        invocationEvent: DispatchableEvent
+    ): Promise<TaskOutcome> {
         await this.checkIfCanRun();
         const [recordPromise, stopRecording] = this.provider.next();
         this.setCancelFunction(() => stopRecording());
         const record = await recordPromise;
-        this.done(`${record.type}Acquired`, { record });
+
+        return { eventName: `${record.type}Acquired`, result: { record } };
     }
 }

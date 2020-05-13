@@ -16,8 +16,8 @@
   "permissions": {
     "location": "Para ofrecerte un mejor tratamiento, necesitamos acceder a tu ubicación."
   },
-  "task_dispatcher_location_usage_channel_name": "Ubicación en segundo plano",
-  "task_dispatcher_location_usage_channel_description": "Indica cuando la app está accediendo a tu ubicación en segundo plano",
-  "task_dispatcher_location_usage_notification_title": "SyMptOMS está accediendo a tu ubicación",
-  "task_dispatcher_location_usage_notification_content": ""
+  "task_dispatcher_channel_name": "Ubicación en segundo plano",
+  "task_dispatcher_channel_description": "Indica cuando la app está accediendo a tu ubicación en segundo plano",
+  "task_dispatcher_notification_title": "SyMptOMS está accediendo a tu ubicación",
+  "task_dispatcher_notification_content": ""
 }
