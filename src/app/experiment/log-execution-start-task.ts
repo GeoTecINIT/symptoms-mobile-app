@@ -1,18 +1,20 @@
-import { SimpleTask, TaskConfig } from 'nativescript-task-dispatcher/tasks';
-import { ExperimentTask } from './experiment-tasks';
-import { taskExecutionRegistry } from './task-execution-registry';
+import { SimpleTask, TaskConfig } from "nativescript-task-dispatcher/tasks";
+import { ExperimentTask } from "./experiment-tasks";
+import { taskExecutionRegistry } from "./task-execution-registry";
 
 export class LogTaskExecutionStart extends SimpleTask {
-    constructor(experimentTask: ExperimentTask, taskConfig?: TaskConfig) {
+    constructor(experimentTask: ExperimentTask) {
         super(
             `log${titlelize(experimentTask)}TaskExecutionStart`,
             async ({ evt }) => {
                 taskExecutionRegistry.logStart(evt.id, experimentTask);
-                this.done(
-                    `${experimentTask.toLowerCase()}TaskExecutionStartLogged`
-                );
             },
-            taskConfig
+            {
+                foreground: true,
+                outputEventNames: [
+                    `${experimentTask.toLowerCase()}TaskExecutionStartLogged`,
+                ],
+            }
         );
     }
 }
