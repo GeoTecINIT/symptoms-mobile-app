@@ -1,4 +1,4 @@
-import { SimpleTask, TaskConfig } from "nativescript-task-dispatcher/tasks";
+import { SimpleTask } from "nativescript-task-dispatcher/tasks";
 import { ExperimentTask } from "./experiment-tasks";
 import { taskExecutionRegistry } from "./task-execution-registry";
 

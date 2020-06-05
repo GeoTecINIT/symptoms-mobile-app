@@ -1,4 +1,4 @@
-import { ExperimentTask } from './experiment-tasks';
+import { ExperimentTask } from "./experiment-tasks";
 
 export interface ExecutionEntry {
     planning_timestamp: number;

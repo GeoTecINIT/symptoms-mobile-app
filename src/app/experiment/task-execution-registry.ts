@@ -1,4 +1,4 @@
-import { ExperimentTask } from './experiment-tasks';
+import { ExperimentTask } from "./experiment-tasks";
 
 class TaskExecutionRegistry {
     private taskExecutions: Map<string, TaskExecutionRegister>;
@@ -11,7 +11,7 @@ class TaskExecutionRegistry {
         const startTime = new Date().getTime();
         const execRegister: TaskExecutionRegister = {
             task,
-            startTime
+            startTime,
         };
         this.taskExecutions.set(eventId, execRegister);
     }
