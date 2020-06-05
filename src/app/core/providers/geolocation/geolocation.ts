@@ -1,4 +1,4 @@
-import { RecordType, PlatformType } from '../record-type';
+import { RecordType, PlatformType } from "../record-type";
 
 export class Geolocation extends RecordType {
     static fromAndroidLocation(location: android.location.Location) {

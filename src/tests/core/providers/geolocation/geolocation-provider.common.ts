@@ -2,12 +2,12 @@ import {
     NativeGeolocationProvider,
     GeolocationProvider,
     geolocationAccessNotGrantedError,
-    geolocationServicesNotEnabledError
-} from '~/app/core/providers/geolocation';
-import { Geolocation } from '~/app/core/providers/geolocation/geolocation';
-import { PlatformType } from '~/app/core/providers/record-type';
+    geolocationServicesNotEnabledError,
+} from "~/app/core/providers/geolocation";
+import { Geolocation } from "~/app/core/providers/geolocation/geolocation";
+import { PlatformType } from "~/app/core/providers/record-type";
 
-describe('Geolocation Provider', () => {
+describe("Geolocation Provider", () => {
     const providerInterrupt = jasmine.createSpy();
     let nativeProvider: NativeGeolocationProvider;
     let provider: GeolocationProvider;
@@ -15,17 +15,17 @@ describe('Geolocation Provider', () => {
 
     beforeEach(() => {
         nativeProvider = createNativeGeolocationProvider();
-        spyOn(nativeProvider, 'requestPermission').and.returnValue(
+        spyOn(nativeProvider, "requestPermission").and.returnValue(
             Promise.resolve()
         );
-        spyOn(nativeProvider, 'enable').and.returnValue(Promise.resolve());
+        spyOn(nativeProvider, "enable").and.returnValue(Promise.resolve());
 
         provider = new GeolocationProvider(nativeProvider);
     });
 
-    it('checks if device can provide locations', async () => {
-        spyOn(nativeProvider, 'hasPermission').and.returnValue(true);
-        spyOn(nativeProvider, 'isEnabled').and.returnValue(
+    it("checks if device can provide locations", async () => {
+        spyOn(nativeProvider, "hasPermission").and.returnValue(true);
+        spyOn(nativeProvider, "isEnabled").and.returnValue(
             Promise.resolve(true)
         );
         await provider.checkIfIsReady();
@@ -33,17 +33,17 @@ describe('Geolocation Provider', () => {
         expect(nativeProvider.isEnabled).toHaveBeenCalled();
     });
 
-    it('throws error if geolocation access has not been granted', async () => {
-        spyOn(nativeProvider, 'hasPermission').and.returnValue(false);
+    it("throws error if geolocation access has not been granted", async () => {
+        spyOn(nativeProvider, "hasPermission").and.returnValue(false);
         await expectAsync(provider.checkIfIsReady()).toBeRejectedWith(
             geolocationAccessNotGrantedError
         );
         expect(nativeProvider.hasPermission).toHaveBeenCalled();
     });
 
-    it('throws error if native location provider is not enabled', async () => {
-        spyOn(nativeProvider, 'hasPermission').and.returnValue(true);
-        spyOn(nativeProvider, 'isEnabled').and.returnValue(
+    it("throws error if native location provider is not enabled", async () => {
+        spyOn(nativeProvider, "hasPermission").and.returnValue(true);
+        spyOn(nativeProvider, "isEnabled").and.returnValue(
             Promise.resolve(false)
         );
         await expectAsync(provider.checkIfIsReady()).toBeRejectedWith(
@@ -53,9 +53,9 @@ describe('Geolocation Provider', () => {
         expect(nativeProvider.isEnabled).toHaveBeenCalled();
     });
 
-    it('tries to prepare device for location data collection when required', async () => {
-        spyOn(nativeProvider, 'hasPermission').and.returnValue(false);
-        spyOn(nativeProvider, 'isEnabled').and.returnValue(
+    it("tries to prepare device for location data collection when required", async () => {
+        spyOn(nativeProvider, "hasPermission").and.returnValue(false);
+        spyOn(nativeProvider, "isEnabled").and.returnValue(
             Promise.resolve(false)
         );
         await provider.prepare();
@@ -63,9 +63,9 @@ describe('Geolocation Provider', () => {
         expect(nativeProvider.enable).toHaveBeenCalled();
     });
 
-    it('does not try to prepare device for location data collection when not required', async () => {
-        spyOn(nativeProvider, 'hasPermission').and.returnValue(true);
-        spyOn(nativeProvider, 'isEnabled').and.returnValue(
+    it("does not try to prepare device for location data collection when not required", async () => {
+        spyOn(nativeProvider, "hasPermission").and.returnValue(true);
+        spyOn(nativeProvider, "isEnabled").and.returnValue(
             Promise.resolve(true)
         );
         await provider.prepare();
@@ -73,10 +73,10 @@ describe('Geolocation Provider', () => {
         expect(nativeProvider.enable).not.toHaveBeenCalled();
     });
 
-    it('calculates the best location among 5 location updates', async () => {
-        spyOn(nativeProvider, 'next').and.returnValue([
+    it("calculates the best location among 5 location updates", async () => {
+        spyOn(nativeProvider, "next").and.returnValue([
             Promise.resolve(fakeLocations),
-            providerInterrupt
+            providerInterrupt,
         ]);
         const [resultPromise] = provider.next();
         const result = await resultPromise;
@@ -84,20 +84,20 @@ describe('Geolocation Provider', () => {
         expect(result).toEqual(fakeLocations[measurementCount - 1]);
     });
 
-    it('returns null when no location is obtained', async () => {
-        spyOn(nativeProvider, 'next').and.returnValue([
+    it("returns null when no location is obtained", async () => {
+        spyOn(nativeProvider, "next").and.returnValue([
             Promise.resolve([]),
-            providerInterrupt
+            providerInterrupt,
         ]);
         const [resultPromise] = provider.next();
         const result = await resultPromise;
         expect(result).toEqual(null);
     });
 
-    it('stops gathering locations when requested', async () => {
-        spyOn(nativeProvider, 'next').and.returnValue([
+    it("stops gathering locations when requested", async () => {
+        spyOn(nativeProvider, "next").and.returnValue([
             Promise.resolve([]),
-            providerInterrupt
+            providerInterrupt,
         ]);
         const [_, stopCollecting] = provider.next();
         stopCollecting();
@@ -121,7 +121,7 @@ function createNativeGeolocationProvider(): NativeGeolocationProvider {
         },
         next(qty: number) {
             return [Promise.resolve([]), () => null];
-        }
+        },
     };
 }
 
@@ -134,9 +134,9 @@ const fakeLocations: Array<Geolocation> = [
         speed: 0.10904105752706528,
         bearing: 313.95758056640625,
         accuracy: 12.486000061035156,
-        capturedAt: new Date('2020-01-28T15:09:59.000Z'),
-        startsAt: new Date('2020-01-28T15:10:00.057Z'),
-        endsAt: new Date('2020-01-28T15:10:00.057Z')
+        capturedAt: new Date("2020-01-28T15:09:59.000Z"),
+        startsAt: new Date("2020-01-28T15:10:00.057Z"),
+        endsAt: new Date("2020-01-28T15:10:00.057Z"),
     },
     {
         type: PlatformType.Geolocation,
@@ -146,9 +146,9 @@ const fakeLocations: Array<Geolocation> = [
         speed: 0.07058636844158173,
         bearing: 274.8623962402344,
         accuracy: 12.565999984741211,
-        capturedAt: new Date('2020-01-28T15:10:00.000Z'),
-        startsAt: new Date('2020-01-28T15:10:01.054Z'),
-        endsAt: new Date('2020-01-28T15:10:01.054Z')
+        capturedAt: new Date("2020-01-28T15:10:00.000Z"),
+        startsAt: new Date("2020-01-28T15:10:01.054Z"),
+        endsAt: new Date("2020-01-28T15:10:01.054Z"),
     },
     {
         type: PlatformType.Geolocation,
@@ -158,9 +158,9 @@ const fakeLocations: Array<Geolocation> = [
         speed: 0.05994986742734909,
         bearing: 236.01693725585938,
         accuracy: 12.576000213623047,
-        capturedAt: new Date('2020-01-28T15:10:01.000Z'),
-        startsAt: new Date('2020-01-28T15:10:02.057Z'),
-        endsAt: new Date('2020-01-28T15:10:02.057Z')
+        capturedAt: new Date("2020-01-28T15:10:01.000Z"),
+        startsAt: new Date("2020-01-28T15:10:02.057Z"),
+        endsAt: new Date("2020-01-28T15:10:02.057Z"),
     },
     {
         type: PlatformType.Geolocation,
@@ -170,9 +170,9 @@ const fakeLocations: Array<Geolocation> = [
         speed: 0.0035138472449034452,
         bearing: 332.4197082519531,
         accuracy: 13.303000450134277,
-        capturedAt: new Date('2020-01-28T15:10:02.000Z'),
-        startsAt: new Date('2020-01-28T15:10:03.049Z'),
-        endsAt: new Date('2020-01-28T15:10:03.049Z')
+        capturedAt: new Date("2020-01-28T15:10:02.000Z"),
+        startsAt: new Date("2020-01-28T15:10:03.049Z"),
+        endsAt: new Date("2020-01-28T15:10:03.049Z"),
     },
     {
         type: PlatformType.Geolocation,
@@ -182,8 +182,8 @@ const fakeLocations: Array<Geolocation> = [
         speed: 0.046229247003793716,
         bearing: 333.66839599609375,
         accuracy: 13.373000144958496,
-        capturedAt: new Date('2020-01-28T15:10:03.000Z'),
-        startsAt: new Date('2020-01-28T15:10:04.068Z'),
-        endsAt: new Date('2020-01-28T15:10:04.068Z')
-    }
+        capturedAt: new Date("2020-01-28T15:10:03.000Z"),
+        startsAt: new Date("2020-01-28T15:10:04.068Z"),
+        endsAt: new Date("2020-01-28T15:10:04.068Z"),
+    },
 ];

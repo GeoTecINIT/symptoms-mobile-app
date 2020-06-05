@@ -1,7 +1,7 @@
-import { getConfig } from '../../config';
-import { Logger } from './common';
-import { DevLogger } from './dev';
-import { ProdLogger } from './prod';
+import { getConfig } from "../../config";
+import { Logger } from "nativescript-task-dispatcher/utils/logger";
+import { DevLogger } from "./dev";
+import { ProdLogger } from "./prod";
 
 export function getLogger(tag: string): Logger {
     const production = getConfig().production;
@@ -12,4 +12,4 @@ export function getLogger(tag: string): Logger {
     return new DevLogger(tag);
 }
 
-export { Logger } from './common';
+export { Logger } from "./common";

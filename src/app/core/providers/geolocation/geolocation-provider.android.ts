@@ -1,18 +1,18 @@
-import { hasPermission, requestPermission } from 'nativescript-permissions';
-import { localize } from 'nativescript-localize';
-import { android as androidApp } from 'tns-core-modules/application/application';
+import { hasPermission, requestPermission } from "nativescript-permissions";
+import { localize } from "nativescript-localize";
+import { android as androidApp } from "tns-core-modules/application/application";
 
-import { Geolocation } from './geolocation';
+import { Geolocation } from "./geolocation";
 import {
     NativeGeolocationProvider,
     geolocationAccessNotGrantedError,
-    geolocationServicesNotEnabledError
-} from '.';
+    geolocationServicesNotEnabledError,
+} from ".";
 import {
     ProviderInterruption,
-    ProviderInterrupter
-} from '../provider-interrupter';
-import { Logger, getLogger } from '../../utils/logger';
+    ProviderInterrupter,
+} from "../provider-interrupter";
+import { Logger, getLogger } from "../../utils/logger";
 
 const REQUEST_AT_LEAST_EVERY = 1000;
 const REQUEST_EVERY = 100;
@@ -34,7 +34,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         this.settingsClient = location.LocationServices.getSettingsClient(
             androidApp.context
         );
-        this.logger = getLogger('AndroidGeolocationProvider');
+        this.logger = getLogger("AndroidGeolocationProvider");
     }
 
     async isEnabled(): Promise<boolean> {
@@ -53,7 +53,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         } catch (ex) {
             if (
                 androidApp.foregroundActivity === null ||
-                typeof ex.getStatusCode !== 'function' ||
+                typeof ex.getStatusCode !== "function" ||
                 ex.getStatusCode() !== RESOLUTION_REQUIRED
             ) {
                 this.logger.error(ex);
@@ -82,7 +82,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         try {
             return await requestPermission(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
-                localize('permissions.location')
+                localize("permissions.location")
             );
         } catch (e) {
             throw geolocationAccessNotGrantedError;
@@ -122,12 +122,12 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
                                 loc
                                     ? Geolocation.fromAndroidLocation(loc)
                                     : null
-                            )
+                            ),
                     })
                 )
                 .addOnFailureListener(
                     new OnFailureListener({
-                        onFailure: (ex) => reject(ex)
+                        onFailure: (ex) => reject(ex),
                     })
                 );
         });
@@ -148,14 +148,14 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
                 .checkLocationSettings(settingsRequest)
                 .addOnSuccessListener(
                     new OnSuccessListener({
-                        onSuccess: () => resolve()
+                        onSuccess: () => resolve(),
                     })
                 )
                 .addOnFailureListener(
                     new OnFailureListener({
                         onFailure: (ex: any) => {
                             reject(ex);
-                        }
+                        },
                     })
                 );
         });

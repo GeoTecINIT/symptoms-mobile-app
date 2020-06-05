@@ -1,5 +1,5 @@
-import * as app from 'tns-core-modules/application';
-import { Logger, getLogger } from '../utils/logger';
+import * as app from "tns-core-modules/application";
+import { Logger, getLogger } from "../utils/logger";
 
 // FIXME: This class only serves as a demonstrator of what is possible.
 // It should be modified in order to allow subscribing to filtered
@@ -11,7 +11,7 @@ class ExternalEventHandler {
     private logger: Logger;
 
     constructor() {
-        this.logger = getLogger('ExternalEventHandler');
+        this.logger = getLogger("ExternalEventHandler");
     }
 
     init() {
@@ -20,7 +20,7 @@ class ExternalEventHandler {
         }
 
         this.setupExternalEventListener();
-        this.logger.debug('Configured!');
+        this.logger.debug("Configured!");
     }
 
     private setupExternalEventListener() {
@@ -36,7 +36,7 @@ class ExternalEventHandler {
         }
         this.lastIntent = intent;
         this.logger.debug(`${intent}`);
-        this.logger.debug(intent.getStringExtra('action'));
+        this.logger.debug(intent.getStringExtra("action"));
     }
 }
 
