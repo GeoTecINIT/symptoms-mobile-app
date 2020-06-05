@@ -1,4 +1,4 @@
 export enum ExperimentTask {
-    Dummy = 'dummy',
-    GPS = 'GPS'
+    Dummy = "dummy",
+    GPS = "GPS",
 }

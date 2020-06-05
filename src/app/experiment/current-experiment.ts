@@ -3,25 +3,24 @@ import {
     setString,
     getNumber,
     setNumber,
-    remove
-} from 'tns-core-modules/application-settings';
+    remove,
+} from "tns-core-modules/application-settings";
 
-import { taskDispatcher } from 'nativescript-task-dispatcher';
-import { emit, createEvent } from 'nativescript-task-dispatcher/events';
+import { taskDispatcher } from "nativescript-task-dispatcher";
 
-import { Experiment } from './experiment';
+import { Experiment } from "./experiment";
 
-const CURRENT_EXPERIMENT_NAME = 'CURRENT_EXPERIMENT_NAME';
-const CURRENT_EXPERIMENT_DATE = 'CURRENT_EXPERIMENT_DATE';
+const CURRENT_EXPERIMENT_NAME = "CURRENT_EXPERIMENT_NAME";
+const CURRENT_EXPERIMENT_DATE = "CURRENT_EXPERIMENT_DATE";
 
-const FILE_EXT = '.csv';
+const FILE_EXT = ".csv";
 
 class CurrentExperiment {
-    private name = getString(CURRENT_EXPERIMENT_NAME, '');
+    private name = getString(CURRENT_EXPERIMENT_NAME, "");
     private timestamp = getNumber(CURRENT_EXPERIMENT_DATE, -1);
 
     start(name: string) {
-        if (name.trim() === '' && !this.get().isRunning) {
+        if (name.trim() === "" && !this.get().isRunning) {
             return;
         }
 
@@ -42,24 +41,24 @@ class CurrentExperiment {
     }
 
     get(): Experiment {
-        if (this.name === '') {
+        if (this.name === "") {
             return {
                 isRunning: false,
-                name: ''
+                name: "",
             };
         }
 
         return {
             isRunning: true,
             name: this.name,
-            startedAt: new Date(this.timestamp)
+            startedAt: new Date(this.timestamp),
         };
     }
 
     getLogFileName(): string {
         const currExp = this.get();
         if (!currExp.isRunning) {
-            throw new Error('No experiment is running!');
+            throw new Error("No experiment is running!");
         }
 
         return `${currExp.name}_${formatDate(currExp.startedAt)}${FILE_EXT}`;
@@ -72,11 +71,11 @@ class CurrentExperiment {
         if (!isReady) {
             await taskDispatcher.prepare();
         }
-        emit(createEvent('startEvent'));
+        taskDispatcher.emitEvent("startEvent");
     }
 
     private emitStopEvent() {
-        emit(createEvent('stopEvent'));
+        taskDispatcher.emitEvent("stopEvent");
     }
 
     private setName(name: string) {
@@ -91,7 +90,7 @@ class CurrentExperiment {
     }
 
     private clear() {
-        this.name = '';
+        this.name = "";
         remove(CURRENT_EXPERIMENT_NAME);
         this.timestamp = -1;
         remove(CURRENT_EXPERIMENT_DATE);
@@ -110,7 +109,7 @@ function formatDate(d: Date) {
 }
 
 function twoDigitFormat(num: number): string {
-    return ('0' + num).slice(-2);
+    return ("0" + num).slice(-2);
 }
 
 export const currentExperiment = new CurrentExperiment();

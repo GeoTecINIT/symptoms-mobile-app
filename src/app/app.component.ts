@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { android as androidApp } from 'tns-core-modules/application/application';
+import { Component, OnInit } from "@angular/core";
+import { android as androidApp } from "tns-core-modules/application/application";
 
-import { externalEventHandler } from './core/events/external-event-handler';
+import { externalEventHandler } from "./core/events/external-event-handler";
 
 @Component({
-    selector: 'ns-app',
-    templateUrl: 'app.component.html'
+    selector: "ns-app",
+    templateUrl: "app.component.html",
 })
 export class AppComponent implements OnInit {
     constructor() {
