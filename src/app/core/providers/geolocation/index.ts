@@ -1,10 +1,12 @@
 import { android as androidApp } from "tns-core-modules/application/application";
 
+import { Provider } from "../provider";
+import { getLogger, Logger } from "../../utils/logger";
+
 import { Geolocation } from "./geolocation";
 import { ProviderInterruption } from "../provider-interrupter";
-import { Provider } from "../provider";
 import { AndroidGeolocationProvider } from "./geolocation-provider.android";
-import { getLogger, Logger } from "../../utils/logger";
+import { PlatformType } from "../record-type";
 
 const LOCATIONS_TO_COLLECT = 5;
 const ACCURACY_WEIGHT = 0.6;
@@ -12,6 +14,10 @@ const TIME_DIFF_WEIGHT = 0.4;
 
 export class GeolocationProvider implements Provider {
     private logger: Logger;
+
+    get provides() {
+        return PlatformType.Geolocation;
+    }
 
     constructor(private nativeProvider?: NativeGeolocationProvider) {
         this.logger = getLogger("GeolocationProvider");

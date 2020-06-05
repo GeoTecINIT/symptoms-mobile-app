@@ -1,9 +1,14 @@
 import { Provider } from "../provider";
+import { PlatformType } from "../record-type";
 import { BatteryLevel } from "./battery-level";
 import { ProviderInterruption } from "../provider-interrupter";
 import { android as androidApp } from "tns-core-modules/application/application";
 
 export class BatteryProvider implements Provider {
+    get provides() {
+        return PlatformType.BatteryLevel;
+    }
+
     constructor(private sdkVersion?: number) {
         if (androidApp && !this.sdkVersion) {
             this.sdkVersion = android.os.Build.VERSION.SDK_INT;

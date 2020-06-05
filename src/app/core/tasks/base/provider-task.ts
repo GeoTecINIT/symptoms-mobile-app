@@ -13,7 +13,13 @@ export class ProviderTask extends Task {
         private provider: Provider,
         taskConfig?: TaskConfig
     ) {
-        super(name, taskConfig);
+        super(name, {
+            ...taskConfig,
+            // Override declared output events with:
+            // {recordType}Acquired
+            // Where recordType is the provider output type
+            outputEventNames: [`${provider.provides}Acquired`],
+        });
     }
 
     async checkIfCanRun(): Promise<void> {
@@ -33,6 +39,6 @@ export class ProviderTask extends Task {
         this.setCancelFunction(() => stopRecording());
         const record = await recordPromise;
 
-        return { eventName: `${record.type}Acquired`, result: { record } };
+        return { eventName: this.outputEventNames[0], result: { record } };
     }
 }
