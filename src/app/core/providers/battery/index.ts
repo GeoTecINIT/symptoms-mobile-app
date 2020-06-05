@@ -1,7 +1,7 @@
-import { Provider } from '../provider';
-import { BatteryLevel } from './battery-level';
-import { ProviderInterruption } from '../provider-interrupter';
-import { android as androidApp } from 'tns-core-modules/application/application';
+import { Provider } from "../provider";
+import { BatteryLevel } from "./battery-level";
+import { ProviderInterruption } from "../provider-interrupter";
+import { android as androidApp } from "tns-core-modules/application/application";
 
 export class BatteryProvider implements Provider {
     constructor(private sdkVersion?: number) {

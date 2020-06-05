@@ -1,4 +1,4 @@
-import { Provider } from '~/app/core/providers/provider';
+import { Provider } from "~/app/core/providers/provider";
 
 export function createProviderMock(): Provider {
     return {
@@ -10,6 +10,6 @@ export function createProviderMock(): Provider {
         },
         prepare() {
             return Promise.resolve();
-        }
+        },
     };
 }

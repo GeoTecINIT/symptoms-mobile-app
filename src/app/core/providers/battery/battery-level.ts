@@ -1,4 +1,4 @@
-import { RecordType, PlatformType } from '../record-type';
+import { RecordType, PlatformType } from "../record-type";
 
 export class BatteryLevel extends RecordType {
     static fromPercentage(level: number) {

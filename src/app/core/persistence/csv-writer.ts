@@ -1,10 +1,10 @@
-import { knownFolders, Folder, File } from 'tns-core-modules/file-system';
+import { knownFolders, Folder } from "tns-core-modules/file-system";
 
-const SEPARATOR = ',';
+const SEPARATOR = ",";
 
 export class CSVWriter {
     private folder: Folder;
-    private textToWrite = '';
+    private textToWrite = "";
 
     constructor(folderName: string, private fileName: string) {
         const documents = knownFolders.documents();
@@ -28,29 +28,29 @@ export class CSVWriter {
         const headers = this.getSortedDictKeys(dict);
         const row = headers.reduce((prev, curr) => {
             const formatted = this.formatValue(dict[curr]);
-            if (prev === '') {
+            if (prev === "") {
                 return formatted;
             }
 
             return `${prev},${formatted}`;
-        }, '');
+        }, "");
         this.writeLine(row);
     }
 
     private formatValue(value: any): string {
         switch (typeof value) {
-            case 'string':
-                return `"${value.replace('"', '\\"')}"`;
-            case 'number':
+            case "string":
+                return `"${value.replace(`"`, `\\"`)}"`;
+            case "number":
                 return `${value}`;
         }
     }
 
     private writeLine(line: string) {
-        if (this.textToWrite === '') {
+        if (this.textToWrite === "") {
             this.textToWrite = line;
         } else {
-            this.textToWrite = this.textToWrite + '\n' + line;
+            this.textToWrite = this.textToWrite + "\n" + line;
         }
     }
 
@@ -59,16 +59,16 @@ export class CSVWriter {
         const { exists, file } = this.getFile();
         if (exists) {
             const existingContent = await file.readText();
-            fileContent = existingContent + '\n' + fileContent;
+            fileContent = existingContent + "\n" + fileContent;
         }
         await file.writeText(fileContent);
-        this.textToWrite = '';
+        this.textToWrite = "";
     }
 
     private getFile() {
         return {
             exists: this.folder.contains(this.fileName),
-            file: this.folder.getFile(this.fileName)
+            file: this.folder.getFile(this.fileName),
         };
     }
 

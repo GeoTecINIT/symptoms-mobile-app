@@ -1,9 +1,9 @@
-import { Logger } from './common';
-import { FirebaseManager, firebaseManager } from '../firebase';
-import { DevLogger } from './dev';
-import { isAndroid } from 'tns-core-modules/platform';
+import { AbstractLogger, Logger } from "./common";
+import { FirebaseManager, firebaseManager } from "../firebase";
+import { DevLogger } from "./dev";
+import { isAndroid } from "tns-core-modules/platform";
 
-export class ProdLogger extends Logger {
+export class ProdLogger extends AbstractLogger {
     constructor(
         tag: string,
         private firebase: FirebaseManager = firebaseManager,
@@ -47,12 +47,12 @@ export class ProdLogger extends Logger {
         } else {
             crashlytics.sendCrashLog(
                 new NSError({
-                    domain: 'es.uji.geotec.symptomsapp',
+                    domain: "es.uji.geotec.symptomsapp",
                     code: 42,
                     userInfo: NSDictionary.dictionaryWithObjectForKey<
                         string,
                         string
-                    >(message, NSLocalizedDescriptionKey)
+                    >(message, NSLocalizedDescriptionKey),
                 })
             );
         }

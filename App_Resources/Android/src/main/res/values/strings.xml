@@ -5,10 +5,6 @@
   <string name="task_dispatcher_channel_description">"Indicates when the app is accessing your location in background"</string>
   <string name="task_dispatcher_channel_name">"Background location"</string>
   <string name="_permissions_location_Z1ENI0b">"In order to offer you a better treatment, we need to access to your location."</string>
-  <string name="_notifications_behavior_tracking_tracking_notification_content_Z1Ga1oc">""</string>
-  <string name="_notifications_behavior_tracking_tracking_notification_title_Z2g6y23">"Checking location"</string>
-  <string name="_notifications_behavior_tracking_channel_description_Z1BwLPx">"Indicates when a background behavior analysis is running"</string>
-  <string name="_notifications_behavior_tracking_channel_name_1p93Ye">"Behavior analysis"</string>
   <string name="_title_activity_kimera_PKGla">"SyMptOMS"</string>
   <string name="_app_name_1k3Sbz">"SyMptOMS"</string>
   <string name="app_name">"SyMptOMS"</string>

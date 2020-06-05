@@ -1,6 +1,6 @@
 export enum PlatformType {
-    Geolocation = 'geolocation',
-    BatteryLevel = 'batteryLevel'
+    Geolocation = "geolocation",
+    BatteryLevel = "batteryLevel",
 }
 
 export class RecordType {
