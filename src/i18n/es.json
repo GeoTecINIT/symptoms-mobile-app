@@ -1,19 +1,11 @@
 {
   "app.name": "SyMptOMS",
   "title.activity.kimera": "SyMptOMS",
-  "notifications": {
-    "behavior-tracking": {
-      "channel": {
-        "name": "Análisis de comportamiento",
-        "description": "Indica cuando se está ejecutando un análisis de comportamiento en segundo plano"
-      },
-      "tracking-notification": {
-        "title": "Comprobando ubicación",
-        "content": ""
-      }
-    }
-  },
   "permissions": {
     "location": "Para ofrecerte un mejor tratamiento, necesitamos acceder a tu ubicación."
-  }
+  },
+  "task_dispatcher_channel_name": "Ubicación en segundo plano",
+  "task_dispatcher_channel_description": "Indica cuando la app está accediendo a tu ubicación en segundo plano",
+  "task_dispatcher_notification_title": "SyMptOMS está accediendo a tu ubicación",
+  "task_dispatcher_notification_content": ""
 }

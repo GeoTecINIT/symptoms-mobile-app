@@ -1,16 +1,27 @@
-import { android as androidApp } from 'tns-core-modules/application/application';
+import { android as androidApp } from "tns-core-modules/application/application";
 
-import { Geolocation } from './geolocation';
-import { ProviderInterruption } from '../provider-interrupter';
-import { Provider } from '../provider';
-import { AndroidGeolocationProvider } from './geolocation-provider.android';
+import { Provider } from "../provider";
+import { getLogger, Logger } from "../../utils/logger";
+
+import { Geolocation } from "./geolocation";
+import { ProviderInterruption } from "../provider-interrupter";
+import { AndroidGeolocationProvider } from "./geolocation-provider.android";
+import { PlatformType } from "../record-type";
 
 const LOCATIONS_TO_COLLECT = 5;
 const ACCURACY_WEIGHT = 0.6;
 const TIME_DIFF_WEIGHT = 0.4;
 
 export class GeolocationProvider implements Provider {
-    constructor(private nativeProvider?: NativeGeolocationProvider) {}
+    private logger: Logger;
+
+    get provides() {
+        return PlatformType.Geolocation;
+    }
+
+    constructor(private nativeProvider?: NativeGeolocationProvider) {
+        this.logger = getLogger("GeolocationProvider");
+    }
 
     async checkIfIsReady(): Promise<void> {
         const nativeProvider = this.getNativeProvider();
@@ -35,7 +46,7 @@ export class GeolocationProvider implements Provider {
     next(): [Promise<Geolocation>, ProviderInterruption] {
         const [
             pendingLocations,
-            stopCollecting
+            stopCollecting,
         ] = this.getNativeProvider().next(LOCATIONS_TO_COLLECT);
         const processLocations = this.processLocations(pendingLocations);
 
@@ -49,6 +60,17 @@ export class GeolocationProvider implements Provider {
 
         const locations = await pendingLocations;
         const currentTime = new Date();
+
+        locations.forEach((geolocation) => {
+            const score = this.geolocationScore(geolocation, currentTime);
+            this.logger.info(
+                `Captured geolocation: ${JSON.stringify({
+                    score,
+                    ...geolocation,
+                })}`
+            );
+        });
+
         const bestLocation = locations.reduce(
             (previous, current) =>
                 !previous ||
@@ -60,6 +82,23 @@ export class GeolocationProvider implements Provider {
         );
 
         return bestLocation;
+    }
+
+    private geolocationScore(location: Geolocation, currentTime: Date) {
+        const { accuracy, capturedAt } = location;
+        const timeDiff = (currentTime.getTime() - capturedAt.getTime()) / 1000;
+
+        const limitedAccuracy = Math.min(accuracy, 65);
+        const limitedTimeDiff = Math.min(Math.max(timeDiff, 0), 60);
+
+        const accuracyScore = 1 - limitedAccuracy / 65;
+        const timeDiffScore = 1 - limitedTimeDiff / 60;
+
+        this.logger.info(
+            `Geolocation score: accuracy=${limitedAccuracy}, timeDiff=${timeDiff}, accScore=${accuracyScore}, tdScore=${timeDiffScore}`
+        );
+
+        return ((accuracyScore + timeDiffScore) / 2) * 10;
     }
 
     private geolocationError(location: Geolocation, currentTime: Date) {
@@ -76,7 +115,7 @@ export class GeolocationProvider implements Provider {
         if (androidApp) {
             this.nativeProvider = new AndroidGeolocationProvider();
         } else {
-            throw new Error('Not implemented');
+            throw new Error("Not implemented");
         }
 
         return this.nativeProvider;
@@ -92,9 +131,9 @@ export interface NativeGeolocationProvider {
 }
 
 export const geolocationAccessNotGrantedError = new Error(
-    'Geolocation permission was not granted'
+    "Geolocation permission was not granted"
 );
 
 export const geolocationServicesNotEnabledError = new Error(
-    'Geolocation services are disabled'
+    "Geolocation services are disabled"
 );

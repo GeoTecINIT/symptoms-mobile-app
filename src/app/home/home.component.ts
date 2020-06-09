@@ -1,43 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { DataService, DataItem } from '../shared/data.service';
-import { taskGraph } from '../core/tasks/graph/loader';
-import { emit, createEvent } from '../core/events';
-import { firebaseManager } from '../core/utils/firebase';
+import { firebaseManager } from "../core/utils/firebase";
+
+import { Experiment, currentExperiment } from "../experiment";
+import { taskDispatcher } from "nativescript-task-dispatcher";
+import { Logger, getLogger } from "../core/utils/logger";
 
 @Component({
-    selector: 'Home',
-    templateUrl: './home.component.html'
+    selector: "Home",
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-    items: Array<DataItem>;
-
-    constructor(private _itemService: DataService) {}
+    experiment: Experiment;
+    logger: Logger;
 
     ngOnInit(): void {
-        this.items = this._itemService.getItems();
-
+        this.logger = getLogger("HomeComponent");
+        this.experiment = currentExperiment.get();
         // FIXME: Ask user consent before doing this
         if (!firebaseManager.dataCollectionEnabled) {
             firebaseManager.enableUsageDataCollection();
         }
+        this.checkTasksReadiness();
     }
 
     onTapStart() {
-        this.emitStartEvent();
+        if (!this.experiment.name) {
+            alert("Please, introduce a name for the experiment");
+
+            return;
+        }
+        this.experiment = currentExperiment.start(this.experiment.name);
     }
 
     onTapStop() {
-        emit(createEvent('stopEvent'));
+        this.experiment = currentExperiment.finish();
     }
 
-    // FIXME: This has to be better handled with a view informing the user
-    // about the permissions to be asked
-    private async emitStartEvent() {
-        const isReady = await taskGraph.isReady();
+    private async checkTasksReadiness() {
+        const isReady = await taskDispatcher.isReady();
         if (!isReady) {
-            await taskGraph.prepare();
+            const tasksToPrepare = await taskDispatcher.tasksNotReady;
+            this.logger.info(
+                `Up to prepare: ${tasksToPrepare.map((task) => task.name)}`
+            );
+            await taskDispatcher.prepare();
         }
-        emit(createEvent('startEvent'));
     }
 }

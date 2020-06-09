@@ -12,7 +12,11 @@
   "license": "SEE LICENSE IN LICENSE.MD",
   "repository": "github.com/GeoTecINIT/symptoms-mobile-app.git",
   "scripts": {
-    "lint": "tslint \"src/**/*.ts\""
+    "lint": "tslint \"src/**/*.ts\"",
+    "android": "tns run android --watch",
+    "ios": "tns run ios --watch",
+    "test.android": "tns test android --watch",
+    "test.ios": "tns test ios --watch"
   },
   "dependencies": {
     "@angular/animations": "~8.2.0",
@@ -29,6 +33,7 @@
     "nativescript-localize": "^4.2.0",
     "nativescript-permissions": "^1.3.8",
     "nativescript-plugin-firebase": "^10.5.0",
+    "nativescript-task-dispatcher": "^1.0.0",
     "nativescript-unit-test-runner": "^0.7.0",
     "reflect-metadata": "~0.1.12",
     "rxjs": "^6.4.0",
