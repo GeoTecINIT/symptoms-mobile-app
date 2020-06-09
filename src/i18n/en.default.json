@@ -1,19 +1,11 @@
 {
   "app.name": "SyMptOMS",
   "title.activity.kimera": "SyMptOMS",
-  "notifications": {
-    "behavior-tracking": {
-      "channel": {
-        "name": "Behavior analysis",
-        "description": "Indicates when a background behavior analysis is running"
-      },
-      "tracking-notification": {
-        "title": "Checking location",
-        "content": ""
-      }
-    }
-  },
   "permissions": {
     "location": "In order to offer you a better treatment, we need to access to your location."
-  }
+  },
+  "task_dispatcher_channel_name": "Background location",
+  "task_dispatcher_channel_description": "Indicates when the app is accessing your location in background",
+  "task_dispatcher_notification_title": "SyMptOMS is using your location",
+  "task_dispatcher_notification_content": ""
 }

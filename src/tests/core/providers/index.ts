@@ -1,7 +1,9 @@
-import { Provider } from '~/app/core/providers/provider';
+import { Provider } from "~/app/core/providers/provider";
+import { PlatformType } from "~/app/core/providers/record-type";
 
 export function createProviderMock(): Provider {
     return {
+        provides: PlatformType.Geolocation,
         next() {
             return [Promise.resolve(null), null];
         },
@@ -10,6 +12,6 @@ export function createProviderMock(): Provider {
         },
         prepare() {
             return Promise.resolve();
-        }
+        },
     };
 }

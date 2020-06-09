@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { android as androidApp } from 'tns-core-modules/application/application';
+import { Component, OnInit } from "@angular/core";
+import { android as androidApp } from "tns-core-modules/application/application";
 
-import { externalEventHandler } from './core/events/external-event-handler';
-import { setupNotificationChannels } from './core/android/notification-manager.android';
-import { AndroidAlarmScheduler } from './core/tasks/scheduler/android/alarms/alarm/scheduler.android';
+import { externalEventHandler } from "./core/events/external-event-handler";
 
 @Component({
-    selector: 'ns-app',
-    templateUrl: 'app.component.html'
+    selector: "ns-app",
+    templateUrl: "app.component.html",
 })
 export class AppComponent implements OnInit {
     constructor() {
@@ -19,9 +17,9 @@ export class AppComponent implements OnInit {
         // where things to be done at startup time could be registered?
         if (androidApp) {
             externalEventHandler.init();
-            setupNotificationChannels(androidApp.context);
-            const alarmScheduler = new AndroidAlarmScheduler();
-            alarmScheduler.setup();
+            // setupNotificationChannels(androidApp.context);
+            // const alarmScheduler = new AndroidAlarmScheduler();
+            // alarmScheduler.setup();
         }
     }
 }

@@ -1,42 +1,33 @@
 import {
     TaskGraph,
-    TaskEventBinder,
-    RunnableTaskDescriptor
-} from '../core/tasks/graph';
+    EventListenerGenerator,
+    RunnableTaskDescriptor,
+} from "nativescript-task-dispatcher/tasks/graph";
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
-        on: TaskEventBinder,
+        on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
         on(
-            'startEvent',
-            run('fastTask')
-                .every(1, 'minutes')
-                .cancelOn('stopEvent')
+            "startEvent",
+            run("logDummyTaskExecutionStart")
+                .every(1, "minutes")
+                .cancelOn("stopEvent")
         );
         on(
-            'startEvent',
-            run('acquireGeolocation')
-                .every(1, 'minutes')
-                .cancelOn('stopEvent')
-        );
-        on(
-            'startEvent',
-            run('mediumTask')
-                .every(2, 'minutes')
-                .cancelOn('stopEvent')
-        );
-        on(
-            'startEvent',
-            run('slowTask')
-                .every(4, 'minutes')
-                .cancelOn('stopEvent')
+            "startEvent",
+            run("logGPSTaskExecutionStart")
+                .every(1, "minutes")
+                .cancelOn("stopEvent")
         );
 
-        on('slowTaskFinished', run('mediumTask'));
-        on('mediumTaskFinished', run('fastTask'));
-        on('geolocationAcquired', run('printGeolocation'));
+        on("dummyTaskExecutionStartLogged", run("acquireBatteryLevel"));
+
+        on("gpsTaskExecutionStartLogged", run("acquireGeolocation"));
+        on("geolocationAcquired", run("acquireBatteryLevel"));
+
+        on("batteryLevelAcquired", run("logTaskExecutionEnd"));
     }
 }
 

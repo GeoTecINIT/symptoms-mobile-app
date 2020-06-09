@@ -1,7 +1,7 @@
-import * as fb from 'nativescript-plugin-firebase';
-import { getBoolean, setBoolean } from 'tns-core-modules/application-settings';
+import * as fb from "nativescript-plugin-firebase";
+import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
 
-const DATA_COLLECTION_ENABLED = 'firebase-manager/dataCollectionEnabled';
+const DATA_COLLECTION_ENABLED = "firebase-manager/dataCollectionEnabled";
 
 export class FirebaseManager {
     private initialized = false;
@@ -18,7 +18,7 @@ export class FirebaseManager {
         if (!this.initPromise) {
             this.initPromise = fb.init({
                 crashlyticsCollectionEnabled: this.dataCollectionEnabled,
-                analyticsCollectionEnabled: this.dataCollectionEnabled
+                analyticsCollectionEnabled: this.dataCollectionEnabled,
             });
         }
         await this.initPromise;

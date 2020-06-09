@@ -12,17 +12,34 @@
     </ListView>
 </GridLayout> -->
 
-<FlexboxLayout flexDirection="column" justifyContent="center">
-  <StackLayout>
+<FlexboxLayout
+  *ngIf="experiment"
+  flexDirection="column"
+  justifyContent="center"
+>
+  <StackLayout *ngIf="!experiment.isRunning; else experimentRunning">
+    <TextField
+      hint="Enter experiment name"
+      [(ngModel)]="experiment.name"
+      autocorrect="false"
+    ></TextField>
     <Button
-      text="Emit start event"
+      text="Start experiment"
       (tap)="onTapStart()"
       class="c-bg-lime -rounded-lg"
     ></Button>
-    <Button
-      text="Emit stop event"
-      (tap)="onTapStop()"
-      class="c-bg-orange -rounded-lg"
-    ></Button>
   </StackLayout>
+  <ng-template #experimentRunning>
+    <StackLayout>
+      <Label
+        text="Currently running {{ experiment.name }} experiment"
+        textWrap="true"
+      ></Label>
+      <Button
+        text="Stop experiment"
+        (tap)="onTapStop()"
+        class="c-bg-orange -rounded-lg"
+      ></Button>
+    </StackLayout>
+  </ng-template>
 </FlexboxLayout>

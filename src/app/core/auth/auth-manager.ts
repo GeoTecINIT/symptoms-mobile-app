@@ -1,5 +1,5 @@
-import { FirebaseManager, firebaseManager } from '../utils/firebase';
-import { Logger, getLogger } from '../utils/logger';
+import { FirebaseManager, firebaseManager } from "../utils/firebase";
+import { Logger, getLogger } from "../utils/logger";
 
 class AuthManager implements AuthManager {
     private logger: Logger;
@@ -8,7 +8,7 @@ class AuthManager implements AuthManager {
     private initialized = false;
 
     constructor() {
-        this.logger = getLogger('AuthManager');
+        this.logger = getLogger("AuthManager");
         this.firebaseManager = firebaseManager;
     }
 
@@ -19,7 +19,7 @@ class AuthManager implements AuthManager {
         if (!this.initPromise) {
             const firebase = await firebaseManager.getInstance();
             this.initPromise = firebase.login({
-                type: firebase.LoginType.ANONYMOUS
+                type: firebase.LoginType.ANONYMOUS,
             });
         }
         const user = await this.initPromise;
@@ -46,14 +46,14 @@ class AuthManager implements AuthManager {
         const {
             uid,
             additionalUserInfo: { isNewUser },
-            metadata: { creationTimestamp, lastSignInTimestamp }
+            metadata: { creationTimestamp, lastSignInTimestamp },
         } = user;
 
         return {
             id: uid,
             isNew: isNewUser,
             createdAt: creationTimestamp,
-            lastLogin: lastSignInTimestamp
+            lastLogin: lastSignInTimestamp,
         };
     }
 }
