@@ -13,10 +13,10 @@
   "repository": "github.com/GeoTecINIT/symptoms-mobile-app.git",
   "scripts": {
     "lint": "tslint \"src/**/*.ts\"",
-    "android": "tns run android --watch",
-    "ios": "tns run ios --watch",
-    "test.android": "tns test android --watch",
-    "test.ios": "tns test ios --watch"
+    "android": "npm i && tns run android --watch",
+    "ios": "npm i && tns run ios --watch",
+    "test.android": "npm i && tns test android --watch",
+    "test.ios": "npm i && tns test ios --watch"
   },
   "dependencies": {
     "@angular/animations": "~8.2.0",
