@@ -9,7 +9,7 @@ describe("Android Geolocation Provider", () => {
 
     const ORIGINAL_INTERVAL = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     beforeAll(() => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
     });
 
     afterAll(() => {
