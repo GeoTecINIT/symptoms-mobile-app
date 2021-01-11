@@ -21,7 +21,10 @@ describe("Provider task", () => {
         invocationEvent = createEvent("dummyEvent");
         expectedRecordEvent = createEvent(
             `${expectedRecordType.type}Acquired`,
-            { id: invocationEvent.id, data: { record: expectedRecordType } }
+            {
+                id: invocationEvent.id,
+                data: { record: { ...expectedRecordType } },
+            }
         );
     });
 
