@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config) {
   const options = {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: "",
@@ -20,7 +20,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress"],
+    reporters: ["progress", "junit"],
 
     // web server port
     port: 9876,
@@ -42,22 +42,27 @@ module.exports = function(config) {
     customLaunchers: {
       android: {
         base: "NS",
-        platform: "android"
+        platform: "android",
       },
       ios: {
         base: "NS",
-        platform: "ios"
+        platform: "ios",
       },
       ios_simulator: {
         base: "NS",
         platform: "ios",
-        arguments: ["--emulator"]
-      }
+        arguments: ["--emulator"],
+      },
     },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: false,
+
+    junitReporter: {
+      outputDir: "test-reports",
+      outputFile: "report.xml",
+    },
   };
 
   setWebpackPreprocessor(config, options);
@@ -72,7 +77,7 @@ function setWebpackPreprocessor(config, options) {
       options.preprocessors = {};
     }
 
-    options.files.forEach(file => {
+    options.files.forEach((file) => {
       if (!options.preprocessors[file]) {
         options.preprocessors[file] = [];
       }
@@ -92,10 +97,10 @@ function setWebpack(config, options) {
     delete options.webpack.output.libraryTarget;
     const invalidPluginsForUnitTesting = [
       "GenerateBundleStarterPlugin",
-      "GenerateNativeScriptEntryPointsPlugin"
+      "GenerateNativeScriptEntryPointsPlugin",
     ];
     options.webpack.plugins = options.webpack.plugins.filter(
-      p => !invalidPluginsForUnitTesting.includes(p.constructor.name)
+      (p) => !invalidPluginsForUnitTesting.includes(p.constructor.name)
     );
   }
 }
