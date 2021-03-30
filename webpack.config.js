@@ -40,9 +40,9 @@ module.exports = (env) => {
     ...[
       "tns-core-modules/ui/frame",
       "tns-core-modules/ui/frame/activity",
-      ...ANDROID_COMPONENTS.map(componentPath =>
+      ...ANDROID_COMPONENTS.map((componentPath) =>
         resolve(__dirname, `src/app/${componentPath}`)
-      )
+      ),
     ]
   );
 
@@ -355,7 +355,11 @@ module.exports = (env) => {
         {
           test: /\.scss$/,
           exclude: /[\/|\\]app\.scss$/,
-          use: ["raw-loader", "resolve-url-loader", "sass-loader"],
+          use: [
+            "raw-loader",
+            "resolve-url-loader",
+            { loader: "sass-loader", options: { includePaths: [appPath] } },
+          ],
         },
 
         {
