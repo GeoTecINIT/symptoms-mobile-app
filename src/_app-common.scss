@@ -1,7 +1,4 @@
-$accent: #1F525E;
-$complementary: #2DC38A;
-@import "~@nativescript/theme/index";
-
+@import "app-variables";
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
 
@@ -19,14 +16,6 @@ $complementary: #2DC38A;
 .far {
     font-family: "Font Awesome 5 Free", "fa-regular-400";
     font-weight: 400;
-}
-
-// Custom tabstrip item class
-.navigation__item {
-    &:active,
-    &:active Label {
-        @include colorize($contrasted-color: complementary background 20% 0%);
-    }
 }
 
 // Common page class
