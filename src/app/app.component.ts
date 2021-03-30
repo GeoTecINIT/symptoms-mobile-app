@@ -4,7 +4,7 @@ import { android as androidApp } from "tns-core-modules/application/application"
 import { externalEventHandler } from "./core/events/external-event-handler";
 
 @Component({
-    selector: "ns-app",
+    selector: "SymApp",
     templateUrl: "app.component.html",
 })
 export class AppComponent implements OnInit {
