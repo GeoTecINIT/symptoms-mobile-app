@@ -36,6 +36,15 @@ const routes: Routes = [
                     ),
                 outlet: "simulationTab",
             },
+            {
+                path: "settings",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./settings/settings.module").then(
+                        (m) => m.SettingsModule
+                    ),
+                outlet: "settingsModal",
+            },
         ],
     },
 ];
