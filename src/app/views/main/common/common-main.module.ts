@@ -4,9 +4,10 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { MainActionBarComponent } from "./main-action-bar/main-action-bar.component";
 
 import { SettingsModule } from "../modals/settings/settings.module";
+import { NotificationsModule } from "../modals/notifications/notifications.module";
 
 @NgModule({
-    imports: [NativeScriptCommonModule, SettingsModule],
+    imports: [NativeScriptCommonModule, SettingsModule, NotificationsModule],
     declarations: [MainActionBarComponent],
     exports: [MainActionBarComponent],
     schemas: [NO_ERRORS_SCHEMA],

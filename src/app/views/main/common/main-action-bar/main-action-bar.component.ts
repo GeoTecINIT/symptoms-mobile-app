@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 
 import { SettingsModalService } from "../../modals/settings/settings-modal.service";
+import { NotificationsModalService } from "../../modals/notifications/notifications-modal.service";
 
 @Component({
     selector: "SymMainActionBar",
@@ -10,10 +11,13 @@ import { SettingsModalService } from "../../modals/settings/settings-modal.servi
 export class MainActionBarComponent {
     @Input() title: string;
 
-    constructor(private settingsModalService: SettingsModalService) {}
+    constructor(
+        private settingsModalService: SettingsModalService,
+        private notificationsModalService: NotificationsModalService
+    ) {}
 
     onNotificationsTap() {
-        // Show notifications modal
+        this.notificationsModalService.show();
     }
 
     onSettingsTap() {
