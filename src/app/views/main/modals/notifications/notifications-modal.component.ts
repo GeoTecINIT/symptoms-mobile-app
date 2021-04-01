@@ -3,7 +3,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
-    selector: "Sym-notifications-modal",
+    selector: "SymNotificationsModal",
     templateUrl: "./notifications-modal.component.html",
     styleUrls: ["./notifications-modal.component.scss"],
 })
