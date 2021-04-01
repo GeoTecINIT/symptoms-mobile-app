@@ -8,8 +8,8 @@ import { CommonMainModule } from "../../common/common-main.module";
 import { ContentListComponent } from "./content-list.component";
 
 @NgModule({
-    declarations: [ContentListComponent],
     imports: [ContentRoutingModule, NativeScriptCommonModule, CommonMainModule],
+    declarations: [ContentListComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class ContentModule {}
