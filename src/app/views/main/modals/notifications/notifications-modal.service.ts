@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 import { NotificationsModule } from "./notifications.module";
 
-import { MainViewService } from "../../../main/main-view.service";
+import { MainViewService } from "../../main-view.service";
 
 import { NotificationsModalComponent } from "./notifications-modal.component";
 
