@@ -5,9 +5,11 @@ import { MainRoutingModule } from "./main-routing.module";
 
 import { MainComponent } from "./main.component";
 
+import { CommonMainModule } from "./common/common-main.module";
+
 @NgModule({
     declarations: [MainComponent],
-    imports: [NativeScriptCommonModule, MainRoutingModule],
+    imports: [NativeScriptCommonModule, MainRoutingModule, CommonMainModule],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class MainModule {}
