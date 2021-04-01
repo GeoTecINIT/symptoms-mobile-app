@@ -1,5 +1,7 @@
-<ActionBar>
-    <Label text="Te damos la bienvenida a SyMptOMS"></Label>
-</ActionBar>
+<SymBasicActionBar title="Te damos la bienvenida a SyMptOMS"></SymBasicActionBar>
 
-<Button text="login works!" class="btn btn-primary" [nsRouterLink]="['/main']"></Button>
+<SymSlideNavigationButton
+        text="Login"
+        [route]="['../tutorial']"
+        clearHistory="true">
+</SymSlideNavigationButton>
