@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
-import { NSEmptyOutletComponent } from "nativescript-angular";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 const routes: Routes = [
@@ -12,7 +11,6 @@ const routes: Routes = [
 
     {
         path: "welcome",
-        component: NSEmptyOutletComponent,
         loadChildren: () =>
             import("./views/welcome/welcome.module").then(
                 (m) => m.WelcomeModule
@@ -20,7 +18,6 @@ const routes: Routes = [
     },
     {
         path: "main",
-        component: NSEmptyOutletComponent,
         loadChildren: () =>
             import("./views/main/main.module").then((m) => m.MainModule),
     },
