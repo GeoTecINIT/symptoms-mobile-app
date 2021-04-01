@@ -5,6 +5,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { MainComponent } from "~/app/views/main/main.component";
 
 const routes: Routes = [
+    { path: "", redirectTo: "default", pathMatch: "full" },
     {
         path: "default",
         component: MainComponent,
