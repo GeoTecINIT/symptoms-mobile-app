@@ -6,11 +6,17 @@ import { Component, OnInit } from "@angular/core";
     styleUrls: ["./progress-container.component.scss"],
 })
 export class ProgressContainerComponent implements OnInit {
+    idle = true;
+
     constructor() {
         // Initialize dependencies here
     }
 
     ngOnInit() {
         // Use initialized dependencies
+    }
+
+    switchExposureState() {
+        this.idle = !this.idle;
     }
 }
