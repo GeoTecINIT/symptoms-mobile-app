@@ -28,6 +28,12 @@
     &.mdi-48 { font-size: 48; }
 }
 
+// Common ActionBar style
+ActionBar Label {
+    font-size: 16;
+    font-weight: bold;
+}
+
 // Common page class
 .page__content {
     &-icon,
