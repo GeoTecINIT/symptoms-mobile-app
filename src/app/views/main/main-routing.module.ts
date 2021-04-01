@@ -55,6 +55,15 @@ const routes: Routes = [
                     ),
                 outlet: "notificationsModal",
             },
+            {
+                path: "content-view",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/content-view/content-view.module").then(
+                        (m) => m.ContentViewModule
+                    ),
+                outlet: "contentViewModal",
+            },
         ],
     },
 ];
