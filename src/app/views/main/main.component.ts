@@ -1,9 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewContainerRef } from "@angular/core";
 
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 
 import { Page } from "tns-core-modules/ui/page/page";
+
+import { MainViewService } from "./main-view.service";
 
 @Component({
     selector: "SymMain",
@@ -14,9 +16,12 @@ export class MainComponent implements OnInit {
     constructor(
         private routerExtension: RouterExtensions,
         private activeRoute: ActivatedRoute,
-        page: Page
+        page: Page,
+        mainViewService: MainViewService,
+        vcRef: ViewContainerRef
     ) {
         page.actionBarHidden = true;
+        mainViewService.setViewContainerRef(vcRef);
     }
 
     ngOnInit() {
