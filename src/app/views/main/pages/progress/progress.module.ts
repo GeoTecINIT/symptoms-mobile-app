@@ -6,13 +6,19 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { CommonMainModule } from "../../common/common-main.module";
 
 import { ProgressContainerComponent } from "./progress-container.component";
+import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
+import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
 
 @NgModule({
-    declarations: [ProgressContainerComponent],
     imports: [
         ProgressRoutingModule,
         NativeScriptCommonModule,
         CommonMainModule,
+    ],
+    declarations: [
+        ProgressContainerComponent,
+        IdleProgressComponent,
+        UnderExposureComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
