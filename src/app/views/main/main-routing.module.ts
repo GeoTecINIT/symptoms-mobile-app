@@ -46,6 +46,15 @@ const routes: Routes = [
                     ),
                 outlet: "settingsModal",
             },
+            {
+                path: "notifications",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/notifications/notifications.module").then(
+                        (m) => m.NotificationsModule
+                    ),
+                outlet: "notificationsModal",
+            },
         ],
     },
 ];
