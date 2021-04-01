@@ -13,7 +13,7 @@ const routes: Routes = [
                 path: "progress",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
-                    import("./progress/progress.module").then(
+                    import("./pages/progress/progress.module").then(
                         (m) => m.ProgressModule
                     ),
                 outlet: "progressTab",
@@ -22,7 +22,7 @@ const routes: Routes = [
                 path: "content",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
-                    import("./content/content.module").then(
+                    import("./pages/content/content.module").then(
                         (m) => m.ContentModule
                     ),
                 outlet: "contentTab",
@@ -31,7 +31,7 @@ const routes: Routes = [
                 path: "simulation",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
-                    import("./simulation/simulation.module").then(
+                    import("./pages/simulation/simulation.module").then(
                         (m) => m.SimulationModule
                     ),
                 outlet: "simulationTab",
@@ -40,7 +40,7 @@ const routes: Routes = [
                 path: "settings",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
-                    import("./settings/settings.module").then(
+                    import("./modals/settings/settings.module").then(
                         (m) => m.SettingsModule
                     ),
                 outlet: "settingsModal",
