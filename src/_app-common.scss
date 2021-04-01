@@ -18,6 +18,16 @@
     font-weight: 400;
 }
 
+.mdi-ro {
+    font-family: "Material Icons Round", "MaterialIconsRound-Regular";
+    font-style: normal;
+    font-weight: 400;
+    &.mdi-18 { font-size: 18; }
+    &.mdi-24 { font-size: 24; }
+    &.mdi-36 { font-size: 36; }
+    &.mdi-48 { font-size: 48; }
+}
+
 // Common page class
 .page__content {
     &-icon,
