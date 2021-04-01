@@ -5,6 +5,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { CloseActionBarComponent } from "./close-action-bar/close-action-bar.component";
 import { BackActionBarComponent } from "./back-action-bar/back-action-bar.component";
 import { SlideNavigationButtonComponent } from "./slide-navigation-button/slide-navigation-button.component";
+import { BasicActionBarComponent } from "./basic-action-bar/basic-action-bar.component";
 
 @NgModule({
     imports: [NativeScriptCommonModule, NativeScriptRouterModule],
@@ -12,12 +13,14 @@ import { SlideNavigationButtonComponent } from "./slide-navigation-button/slide-
         CloseActionBarComponent,
         BackActionBarComponent,
         SlideNavigationButtonComponent,
+        BasicActionBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
         CloseActionBarComponent,
         BackActionBarComponent,
         SlideNavigationButtonComponent,
+        BasicActionBarComponent,
     ],
 })
 export class CommonComponentsModule {}
