@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 
-import { SettingsModalService } from "../../settings/settings-modal.service";
+import { SettingsModalService } from "../../modals/settings/settings-modal.service";
 
 @Component({
     selector: "SymMainActionBar",
