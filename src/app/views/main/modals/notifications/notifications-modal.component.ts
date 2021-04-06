@@ -17,7 +17,7 @@ export class NotificationsModalComponent implements OnInit {
         this.routerExtension
             .navigate(
                 [{ outlets: { notificationsModal: ["notifications"] } }],
-                { relativeTo: this.activeRoute }
+                { relativeTo: this.activeRoute, animated: false }
             )
             .catch((e) =>
                 console.error("Could not navigate to notifications list:", e)
