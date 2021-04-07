@@ -17,7 +17,6 @@ export class ContentViewModalComponent implements OnInit {
         this.routerExtension
             .navigate([{ outlets: { contentViewModal: ["content-view"] } }], {
                 relativeTo: this.activeRoute,
-                animated: false,
             })
             .catch((e) =>
                 console.error("Could not navigate to content view:", e)
