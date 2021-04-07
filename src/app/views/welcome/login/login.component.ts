@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { InAppBrowserService } from "~/app/views/common/in-app-browser.service";
 
 @Component({
     selector: "SymLogin",
@@ -6,11 +7,15 @@ import { Component, OnInit } from "@angular/core";
     styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-    constructor() {
+    constructor(private inAppBrowserService: InAppBrowserService) {
         // Initialize dependencies here
     }
 
     ngOnInit() {
         // Use initialized dependencies
+    }
+
+    onOpenWebsiteTap() {
+        this.inAppBrowserService.openProjectWebSite();
     }
 }
