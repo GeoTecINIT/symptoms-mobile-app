@@ -1,7 +1,11 @@
 <SymBasicActionBar title="Primeros pasos"></SymBasicActionBar>
 
-<SymSlideNavigationButton
-        text="Continuar"
-        [route]="['../setup-confirmation']"
-        clearHistory="true">
-</SymSlideNavigationButton>
+<StackLayout verticalAlignment="center">
+    <SymSlideNavigationButton
+            text="Continuar"
+            [route]="['../setup-confirmation']"
+            clearHistory="true">
+    </SymSlideNavigationButton>
+    <Button text="Política de privacidad" class="btn btn-primary" (tap)="onOpenPrivacyPolicyTap()"></Button>
+</StackLayout>
+
