@@ -1,7 +1,11 @@
 <SymBasicActionBar title="Te damos la bienvenida a SyMptOMS"></SymBasicActionBar>
 
-<SymSlideNavigationButton
-        text="Login"
-        [route]="['../tutorial']"
-        clearHistory="true">
-</SymSlideNavigationButton>
+<StackLayout verticalAlignment="center">
+    <SymSlideNavigationButton
+            text="Login"
+            [route]="['../tutorial']"
+            clearHistory="true">
+    </SymSlideNavigationButton>
+    <Button text="¿En qué consiste esta aplicación?" class="btn btn-primary" (tap)="onOpenWebsiteTap()"></Button>
+</StackLayout>
+
