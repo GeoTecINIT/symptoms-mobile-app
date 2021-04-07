@@ -23,7 +23,7 @@ export class SettingsModalComponent implements OnInit {
                         },
                     },
                 ],
-                { relativeTo: this.activeRoute, animated: false }
+                { relativeTo: this.activeRoute }
             )
             .catch((e) =>
                 console.error("Error navigating to settings container: ", e)

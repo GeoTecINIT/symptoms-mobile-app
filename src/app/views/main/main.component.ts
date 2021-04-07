@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
                         },
                     },
                 ],
-                { relativeTo: this.activeRoute, animated: false }
+                { relativeTo: this.activeRoute }
             )
             .catch((e) => console.error("On MainComponent navigation:", e));
     }
