@@ -30,6 +30,7 @@
     "@nano-sql/adapter-sqlite-nativescript": "^2.0.3",
     "@nativescript/theme": "~2.2.0",
     "nativescript-angular": "~8.20.0",
+    "nativescript-inappbrowser": "^2.3.0",
     "nativescript-localize": "^4.2.0",
     "nativescript-permissions": "^1.3.8",
     "nativescript-plugin-firebase": "^10.5.0",
