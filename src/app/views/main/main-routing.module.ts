@@ -82,6 +82,15 @@ const routes: Routes = [
                     ),
                 outlet: "questionsModal",
             },
+            {
+                path: "feedback",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/feedback/feedback.module").then(
+                        (m) => m.FeedbackModule
+                    ),
+                outlet: "feedbackModal",
+            },
         ],
     },
 ];
