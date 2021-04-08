@@ -73,6 +73,15 @@ const routes: Routes = [
                     ),
                 outlet: "confirmModal",
             },
+            {
+                path: "questions",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/questions/questions.module").then(
+                        (m) => m.QuestionsModule
+                    ),
+                outlet: "questionsModal",
+            },
         ],
     },
 ];
