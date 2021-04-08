@@ -4,6 +4,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { SettingsModule } from "../modals/settings/settings.module";
 import { NotificationsModule } from "../modals/notifications/notifications.module";
 import { ContentViewModule } from "../modals/content-view/content-view.module";
+import { ConfirmModule } from "../modals/confirm/confirm.module";
 
 import { MainActionBarComponent } from "./main-action-bar/main-action-bar.component";
 
@@ -13,6 +14,7 @@ import { MainActionBarComponent } from "./main-action-bar/main-action-bar.compon
         SettingsModule,
         NotificationsModule,
         ContentViewModule,
+        ConfirmModule,
     ],
     declarations: [MainActionBarComponent],
     exports: [MainActionBarComponent],
