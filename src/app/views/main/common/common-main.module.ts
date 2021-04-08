@@ -5,6 +5,7 @@ import { SettingsModule } from "../modals/settings/settings.module";
 import { NotificationsModule } from "../modals/notifications/notifications.module";
 import { ContentViewModule } from "../modals/content-view/content-view.module";
 import { ConfirmModule } from "../modals/confirm/confirm.module";
+import { QuestionsModule } from "../modals/questions/questions.module";
 
 import { MainActionBarComponent } from "./main-action-bar/main-action-bar.component";
 
@@ -15,6 +16,7 @@ import { MainActionBarComponent } from "./main-action-bar/main-action-bar.compon
         NotificationsModule,
         ContentViewModule,
         ConfirmModule,
+        QuestionsModule,
     ],
     declarations: [MainActionBarComponent],
     exports: [MainActionBarComponent],
