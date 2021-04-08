@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ConfirmModalService } from "../../modals/confirm/confirm-modal.service";
 import { QuestionsModalService } from "../../modals/questions/questions-modal.service";
+import { FeedbackModalService } from "~/app/views/main/modals/feedback/feedback-modal.service";
 
 @Component({
     selector: "SymSimulationActions",
@@ -10,7 +11,8 @@ import { QuestionsModalService } from "../../modals/questions/questions-modal.se
 export class SimulationActionsComponent implements OnInit {
     constructor(
         private confirmModalService: ConfirmModalService,
-        private questionsModalsService: QuestionsModalService
+        private questionsModalService: QuestionsModalService,
+        private feedbackModalService: FeedbackModalService
     ) {
         // Initialize dependencies here
     }
@@ -26,6 +28,10 @@ export class SimulationActionsComponent implements OnInit {
     }
 
     onWantsToAnswerQuestions() {
-        this.questionsModalsService.deliverQuestions();
+        this.questionsModalService.deliverQuestions();
+    }
+
+    onWantsToDeliverFeedback() {
+        this.feedbackModalService.askFeedback();
     }
 }
