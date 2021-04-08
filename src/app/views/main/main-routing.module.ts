@@ -64,6 +64,15 @@ const routes: Routes = [
                     ),
                 outlet: "contentViewModal",
             },
+            {
+                path: "confirm",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/confirm/confirm.module").then(
+                        (m) => m.ConfirmModule
+                    ),
+                outlet: "confirmModal",
+            },
         ],
     },
 ];
