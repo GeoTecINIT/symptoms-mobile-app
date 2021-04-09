@@ -1,8 +1,4 @@
-$accent: #1aa49d;
-$complementary: #20a41a;
-@import "~@nativescript/theme/index";
-//@import "~@nativescript/theme/lime";
-
+@import "app-variables";
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
 
@@ -22,12 +18,20 @@ $complementary: #20a41a;
     font-weight: 400;
 }
 
-// Custom tabstrip item class
-.navigation__item {
-    &:active,
-    &:active Label {
-        @include colorize($contrasted-color: complementary background 20% 0%);
-    }
+.mdi-ro {
+    font-family: "Material Icons Round", "MaterialIconsRound-Regular";
+    font-style: normal;
+    font-weight: 400;
+    &.mdi-18 { font-size: 18; }
+    &.mdi-24 { font-size: 24; }
+    &.mdi-36 { font-size: 36; }
+    &.mdi-48 { font-size: 48; }
+}
+
+// Common ActionBar style
+ActionBar Label {
+    font-size: 16;
+    font-weight: bold;
 }
 
 // Common page class

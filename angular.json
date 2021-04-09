@@ -3,15 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "cli": {
+    "analytics": false,
     "defaultCollection": "@nativescript/schematics"
   },
   "projects": {
-    "tab-navigation": {
+    "symptoms-mobile-app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "ns"
+      "prefix": "Sym"
     }
   },
-  "defaultProject": "tab-navigation"
+  "defaultProject": "symptoms-mobile-app"
 }

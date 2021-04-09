@@ -1,0 +1,21 @@
+<ActionBar>
+    <ActionItem
+            text="Ajustes"
+            icon="font://&#xef41;"
+            class="mdi-ro"
+            android.position="popup"
+            ios.position="right"
+            (tap)="onSettingsTap()">
+    </ActionItem>
+
+    <Label text="{{ title }}"></Label>
+
+    <ActionItem
+            android.position="actionBar"
+            ios.position="left"
+            (tap)="onNotificationsTap()">
+        <StackLayout>
+            <Label text="&#xf18b;" class="mdi-ro mdi-24"></Label>
+        </StackLayout>
+    </ActionItem>
+</ActionBar>

@@ -7,7 +7,7 @@ import { taskDispatcher } from "nativescript-task-dispatcher";
 import { Logger, getLogger } from "../core/utils/logger";
 
 @Component({
-    selector: "Home",
+    selector: "SymHome",
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })
