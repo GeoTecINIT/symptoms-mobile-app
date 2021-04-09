@@ -1,0 +1,12 @@
+<SymMainActionBar title="Tu progreso"></SymMainActionBar>
+
+<StackLayout verticalAlignment="center">
+    <Button
+            text="{{ idle ? 'Cambiar a \'En exposición\'' : 'Cambiar a \'En reposo\''}}"
+            (tap)="switchExposureState()">
+    </Button>
+
+    <SymIdleProgress *ngIf="idle"></SymIdleProgress>
+    <SymUnderExposure *ngIf="!idle"></SymUnderExposure>
+</StackLayout>
+

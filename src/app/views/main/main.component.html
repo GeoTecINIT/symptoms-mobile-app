@@ -1,0 +1,28 @@
+<BottomNavigation>
+    <TabStrip>
+        <TabStripItem>
+            <Label text="Progreso"></Label>
+            <Image src="font://&#xf015;" class="fas t-36"></Image>
+        </TabStripItem>
+        <TabStripItem>
+            <Label text="Contenido"></Label>
+            <Image src="font://&#xf1ea;" class="far t-36"></Image>
+        </TabStripItem>
+        <TabStripItem>
+            <Label text="Simulación"></Label>
+            <Image src="font://&#xf002;" class="fas t-36"></Image>
+        </TabStripItem>
+    </TabStrip>
+
+    <TabContentItem>
+        <page-router-outlet name="progressTab"></page-router-outlet>
+    </TabContentItem>
+
+    <TabContentItem>
+        <page-router-outlet name="contentTab"></page-router-outlet>
+    </TabContentItem>
+
+    <TabContentItem>
+        <page-router-outlet name="simulationTab"></page-router-outlet>
+    </TabContentItem>
+</BottomNavigation>

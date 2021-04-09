@@ -30,6 +30,7 @@
     "@nano-sql/adapter-sqlite-nativescript": "^2.0.3",
     "@nativescript/theme": "~2.2.0",
     "nativescript-angular": "~8.20.0",
+    "nativescript-inappbrowser": "^2.3.0",
     "nativescript-localize": "^4.2.0",
     "nativescript-permissions": "^1.3.8",
     "nativescript-plugin-firebase": "^10.5.0",
@@ -37,10 +38,12 @@
     "nativescript-unit-test-runner": "^0.7.0",
     "reflect-metadata": "~0.1.12",
     "rxjs": "^6.4.0",
-    "tns-core-modules": "~6.5.0",
+    "tns-core-modules": "6.5.24",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
+    "@angular/cli": "~8.3.0",
+    "@nativescript/schematics": "~1.0.0",
     "@angular/compiler-cli": "~8.2.0",
     "@ngtools/webpack": "~8.2.0",
     "@types/jasmine": "3.4.6",
