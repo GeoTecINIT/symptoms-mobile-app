@@ -1,3 +1,4 @@
-<ActionBar title="{{ title }}">
-    <NavigationButton icon="font://&#xe5c4;" class="mdi-ro" (tap)="onBack()"></NavigationButton>
+<ActionBar>
+    <NavigationButton icon="res://round_arrow_back_white_24" class="mdi-ro" (tap)="onBack()"></NavigationButton>
+    <Label [text]="title"></Label>
 </ActionBar>
