@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { AuthService } from "~/app/views/auth.service";
+import { AppSettingsService } from "~/app/views/app-settings.service";
+import { Switch } from "tns-core-modules/ui/switch";
 
 @Component({
     selector: "SymSettingsContainer",
@@ -9,11 +10,21 @@ import { AuthService } from "~/app/views/auth.service";
     styleUrls: ["./settings-container.component.scss"],
 })
 export class SettingsContainerComponent {
+    dataSharingConsent: boolean;
+
+    get version(): string {
+        return this.appSettingsService.version;
+    }
+
     constructor(
         private params: ModalDialogParams,
         private dialogsService: DialogsService,
-        private authService: AuthService
-    ) {}
+        private appSettingsService: AppSettingsService
+    ) {
+        this.appSettingsService
+            .getDataSharingConsent()
+            .then((consents) => (this.dataSharingConsent = consents));
+    }
 
     onClose() {
         this.params.closeCallback();
@@ -29,13 +40,26 @@ export class SettingsContainerComponent {
             )
             .then((unlink) => {
                 if (unlink) {
-                    this.authService
-                        .logout()
+                    this.appSettingsService
+                        .unlink()
                         .then(() => this.onClose())
                         .catch((e) =>
-                            console.error("Could not logout. Reason: ", e)
+                            console.error("Could not unlink. Reason: ", e)
                         );
                 }
             });
+    }
+
+    onDataSharingCheckChange(args: any) {
+        const sw = args.object as Switch;
+        this.dataSharingConsent = sw.checked;
+        this.appSettingsService
+            .setDataSharingConsent(sw.checked)
+            .catch((e) =>
+                console.error(
+                    "Could not update data sharing consent. Reason:",
+                    e
+                )
+            );
     }
 }
