@@ -1,1 +1,11 @@
-/* Add mobile styles for the component here.  */
+@import "app-variables";
+
+.setting-container {
+  padding-left: $global-spacing;
+}
+
+.version {
+  font-size: 14;
+  margin-top: 12;
+  color: $input-color;
+}
