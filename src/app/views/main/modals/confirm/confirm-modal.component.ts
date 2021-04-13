@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
+
+import { NavigationService } from "~/app/views/navigation.service";
+
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -9,20 +11,14 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class ConfirmModalComponent implements OnInit {
     constructor(
-        private routerExtension: RouterExtensions,
+        private navigationService: NavigationService,
         private activeRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
-        this.routerExtension
-            .navigate([{ outlets: { confirmModal: ["confirm"] } }], {
-                relativeTo: this.activeRoute,
-            })
-            .catch((e) =>
-                console.error(
-                    "Could not navigate to confirm modal container:",
-                    e
-                )
-            );
+        this.navigationService.outletNavigation(
+            { confirmModal: ["confirm"] },
+            this.activeRoute
+        );
     }
 }

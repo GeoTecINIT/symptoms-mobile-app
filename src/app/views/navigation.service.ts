@@ -23,4 +23,32 @@ export class NavigationService {
                 console.error(`Could not navigate to ${route}. Reason: `, e)
             );
     }
+
+    forceNavigate(absoluteRoute: Array<any>) {
+        this.routerExtension
+            .navigate(absoluteRoute, {
+                animated: false,
+                clearHistory: true,
+            })
+            .catch((e) =>
+                console.error(
+                    `Could not navigate to ${absoluteRoute}. Reason:`,
+                    e
+                )
+            );
+    }
+
+    outletNavigation(
+        outlets: { [key: string]: Array<any> },
+        source: ActivatedRoute
+    ) {
+        this.routerExtension
+            .navigate([{ outlets }], { relativeTo: source })
+            .catch((e) =>
+                console.error(
+                    `Could not navigate ${outlets} outlets. Reason:`,
+                    e
+                )
+            );
+    }
 }
