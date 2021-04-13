@@ -25,4 +25,9 @@ export class AuthService {
 
         return true;
     }
+
+    async logout(): Promise<void> {
+        setBoolean(LOGGED_IN_KEY, false);
+        this.authSubject.next(false);
+    }
 }
