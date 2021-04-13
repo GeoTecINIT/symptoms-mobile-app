@@ -7,6 +7,7 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
 
 import { SettingsModalComponent } from "./settings-modal.component";
 import { SettingsContainerComponent } from "./settings-container/settings-container.component";
+import { SettingsSectionComponent } from "./settings-container/settings-section/settings-section.component";
 
 @NgModule({
     imports: [
@@ -14,7 +15,11 @@ import { SettingsContainerComponent } from "./settings-container/settings-contai
         NativeScriptCommonModule,
         CommonComponentsModule,
     ],
-    declarations: [SettingsModalComponent, SettingsContainerComponent],
+    declarations: [
+        SettingsModalComponent,
+        SettingsContainerComponent,
+        SettingsSectionComponent,
+    ],
     entryComponents: [SettingsModalComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
