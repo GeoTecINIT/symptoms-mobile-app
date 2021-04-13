@@ -1,8 +1,7 @@
 @import "app-variables";
 
-TabStripItem {
-  &:active,
-  &:active Label {
-    @include colorize($contrasted-color: complementary background 20% 0%);
-  }
+BottomNavigationBar {
+  active-color: #ffffff;
+  inactive-color: rgba(255, 255, 255, 0.74);
+  background: light(complementary);
 }
