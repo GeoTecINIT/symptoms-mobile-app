@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 
-import { AuthService } from "./auth.service";
+import { AuthService } from "~/app/views/auth.service";
 
 describe("AuthService", () => {
     beforeEach(() =>
