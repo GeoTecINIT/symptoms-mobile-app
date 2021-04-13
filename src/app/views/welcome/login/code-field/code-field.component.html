@@ -8,7 +8,10 @@
                    autocorrect="false"
                    textAlignment="center"
                    returnKeyType="go"
-                   (focus)="onFieldFocus()" (blur)="onFieldBlur()" (textChange)="onFieldTextChange($event)" (returnPress)="onFieldReturnPress()">
+                   (focus)="onFieldFocus()"
+                   (blur)="onFieldBlur()"
+                   (textChange)="onFieldTextChange($event)"
+                   (returnPress)="onFieldReturnPress()">
         </TextField>
         <Label col="2" [text]="secure ? '&#xe8f4;' : '&#xe8f5;'" class="mdi-ro mdi-24" verticalAlignment="center" (tap)="onToggleVisibility()"></Label>
     </GridLayout>
