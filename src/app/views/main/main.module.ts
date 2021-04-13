@@ -6,10 +6,16 @@ import { MainRoutingModule } from "./main-routing.module";
 import { MainComponent } from "./main.component";
 
 import { CommonMainModule } from "./common/common-main.module";
+import { NativeScriptMaterialBottomNavigationBarModule } from "nativescript-material-bottomnavigationbar/angular";
 
 @NgModule({
+    imports: [
+        NativeScriptCommonModule,
+        MainRoutingModule,
+        CommonMainModule,
+        NativeScriptMaterialBottomNavigationBarModule,
+    ],
     declarations: [MainComponent],
-    imports: [NativeScriptCommonModule, MainRoutingModule, CommonMainModule],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class MainModule {}

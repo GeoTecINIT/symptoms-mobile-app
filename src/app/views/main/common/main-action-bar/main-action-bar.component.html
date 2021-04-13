@@ -1,21 +1,19 @@
 <ActionBar>
     <ActionItem
             text="Ajustes"
-            icon="font://&#xef41;"
-            class="mdi-ro"
+            icon="res://round_app_settings_alt_white_24"
             android.position="popup"
-            ios.position="right"
+            ios.position="left"
             (tap)="onSettingsTap()">
     </ActionItem>
 
-    <Label text="{{ title }}"></Label>
+    <Label [text]="title"></Label>
 
     <ActionItem
+            text="Notificaciones"
+            icon="res://round_mark_chat_read_white_24"
             android.position="actionBar"
-            ios.position="left"
+            ios.position="right"
             (tap)="onNotificationsTap()">
-        <StackLayout>
-            <Label text="&#xf18b;" class="mdi-ro mdi-24"></Label>
-        </StackLayout>
     </ActionItem>
 </ActionBar>
