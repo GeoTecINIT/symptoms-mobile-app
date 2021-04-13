@@ -4,9 +4,11 @@ import {
     CanActivate,
     RouterStateSnapshot,
 } from "@angular/router";
+
+import { AuthService } from "./auth.service";
+import { NavigationService } from "./navigation.service";
+
 import { Observable } from "rxjs";
-import { AuthService } from "~/app/views/auth.service";
-import { RouterExtensions } from "nativescript-angular/router";
 import { take, tap } from "rxjs/operators";
 
 @Injectable({
@@ -15,7 +17,7 @@ import { take, tap } from "rxjs/operators";
 export class BootGuard implements CanActivate {
     constructor(
         private authService: AuthService,
-        private routerExtension: RouterExtensions
+        private navigationService: NavigationService
     ) {}
 
     canActivate(
@@ -32,6 +34,6 @@ export class BootGuard implements CanActivate {
         if (loggedIn) {
             return;
         }
-        this.routerExtension.navigate(["/welcome"], { animated: false });
+        this.navigationService.forceNavigate(["/welcome"]);
     }
 }
