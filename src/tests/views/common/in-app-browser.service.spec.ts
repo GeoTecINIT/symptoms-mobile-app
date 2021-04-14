@@ -1,3 +1,4 @@
+/*
 import { TestBed } from "@angular/core/testing";
 
 import { NativeScriptModule } from "@nativescript/angular";
@@ -16,4 +17,4 @@ describe("InAppBrowserService", () => {
         const service: InAppBrowserService = TestBed.get(InAppBrowserService);
         expect(service).toBeTruthy();
     });
-});
+});*/
