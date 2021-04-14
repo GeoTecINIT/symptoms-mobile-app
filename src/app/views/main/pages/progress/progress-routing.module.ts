@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "@nativescript/angular";
 
 import { ProgressContainerComponent } from "./progress-container.component";
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
