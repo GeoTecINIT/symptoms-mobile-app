@@ -2,7 +2,7 @@ import { Provider } from "../provider";
 import { PlatformType } from "../record-type";
 import { BatteryLevel } from "./battery-level";
 import { ProviderInterruption } from "../provider-interrupter";
-import { android as androidApp } from "tns-core-modules/application/application";
+import { Application, isAndroid } from "@nativescript/core";
 
 export class BatteryProvider implements Provider {
     get provides() {
@@ -10,7 +10,7 @@ export class BatteryProvider implements Provider {
     }
 
     constructor(private sdkVersion?: number) {
-        if (androidApp && !this.sdkVersion) {
+        if (isAndroid && !this.sdkVersion) {
             this.sdkVersion = android.os.Build.VERSION.SDK_INT;
         }
     }
@@ -31,11 +31,11 @@ export class BatteryProvider implements Provider {
     }
 
     private getBatteryPercentage(): number {
-        if (!androidApp) {
+        if (!isAndroid) {
             return -1;
         }
         if (this.sdkVersion >= 21) {
-            const batteryManager: android.os.BatteryManager = androidApp.context.getSystemService(
+            const batteryManager: android.os.BatteryManager = Application.android.context.getSystemService(
                 android.content.Context.BATTERY_SERVICE
             );
 
@@ -46,7 +46,7 @@ export class BatteryProvider implements Provider {
         const intentFilter = new android.content.IntentFilter(
             android.content.Intent.ACTION_BATTERY_CHANGED
         );
-        const batteryStatus = androidApp.context.registerReceiver(
+        const batteryStatus = Application.android.context.registerReceiver(
             null,
             intentFilter
         );
