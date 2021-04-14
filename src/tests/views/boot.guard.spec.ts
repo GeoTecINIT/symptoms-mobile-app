@@ -1,5 +1,5 @@
 import { TestBed, inject } from "@angular/core/testing";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 
 import { BootGuard } from "~/app/views/boot.guard";
 import { NavigationService } from "~/app/views/navigation.service";

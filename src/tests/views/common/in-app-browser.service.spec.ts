@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 
 import { InAppBrowserService } from "~/app/views/common/in-app-browser.service";
