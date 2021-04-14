@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { FeedbackRoutingModule } from "./feedback-routing.module";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NativeScriptCommonModule } from "@nativescript/angular";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 
 import { FeedbackModalComponent } from "./feedback-modal.component";
