@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CommonComponentsModule } from "./common-components.module";
-import InAppBrowser from "nativescript-inappbrowser";
-import { openUrl } from "tns-core-modules/utils/utils";
+import { InAppBrowser } from "nativescript-inappbrowser";
+import { Utils } from "@nativescript/core";
 
 const actionBarBgColor = "#FAFAFA";
 const actionBarTextColor = "#212121";
@@ -70,6 +70,6 @@ export class InAppBrowserService {
     }
 
     private openInDefaultExternalBrowser(url: string) {
-        openUrl(url);
+        Utils.openUrl(url);
     }
 }
