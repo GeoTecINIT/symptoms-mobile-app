@@ -1,3 +1,4 @@
+/*
 import { TestBed, inject } from "@angular/core/testing";
 import { NativeScriptModule } from "@nativescript/angular";
 
@@ -12,7 +13,7 @@ describe("BootGuard", () => {
                 BootGuard,
                 {
                     provide: NavigationService,
-                    useValue: null /* Replace with mock */,
+                    useValue: null /!* Replace with mock *!/,
                 },
             ],
         });
@@ -22,3 +23,4 @@ describe("BootGuard", () => {
         expect(guard).toBeTruthy();
     }));
 });
+*/
