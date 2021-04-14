@@ -1,5 +1,5 @@
-import * as fb from "nativescript-plugin-firebase";
-import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
+import { ApplicationSettings } from "@nativescript/core";
+import { firebase, crashlytics, analytics } from "@nativescript/firebase";
 
 const DATA_COLLECTION_ENABLED = "firebase-manager/dataCollectionEnabled";
 
@@ -8,7 +8,7 @@ export class FirebaseManager {
     private initPromise: Promise<any>;
 
     get dataCollectionEnabled() {
-        return getBoolean(DATA_COLLECTION_ENABLED);
+        return ApplicationSettings.getBoolean(DATA_COLLECTION_ENABLED);
     }
 
     async init() {
@@ -16,7 +16,7 @@ export class FirebaseManager {
             return;
         }
         if (!this.initPromise) {
-            this.initPromise = fb.init({
+            this.initPromise = firebase.init({
                 crashlyticsCollectionEnabled: this.dataCollectionEnabled,
                 analyticsCollectionEnabled: this.dataCollectionEnabled,
             });
@@ -31,31 +31,31 @@ export class FirebaseManager {
         }
         await this.init();
 
-        return fb.crashlytics;
+        return crashlytics;
     }
 
     async enableUsageDataCollection() {
         await this.init();
         const yes = true;
 
-        setBoolean(DATA_COLLECTION_ENABLED, yes);
-        fb.crashlytics.setCrashlyticsCollectionEnabled(yes);
-        fb.analytics.setAnalyticsCollectionEnabled(yes);
+        ApplicationSettings.setBoolean(DATA_COLLECTION_ENABLED, yes);
+        crashlytics.setCrashlyticsCollectionEnabled(yes);
+        analytics.setAnalyticsCollectionEnabled(yes);
     }
 
     async disableUsageDataCollection() {
         await this.init();
         const no = false;
 
-        setBoolean(DATA_COLLECTION_ENABLED, no);
-        fb.crashlytics.setCrashlyticsCollectionEnabled(no);
-        fb.analytics.setAnalyticsCollectionEnabled(no);
+        ApplicationSettings.setBoolean(DATA_COLLECTION_ENABLED, no);
+        crashlytics.setCrashlyticsCollectionEnabled(no);
+        analytics.setAnalyticsCollectionEnabled(no);
     }
 
     async getInstance() {
         await this.init();
 
-        return fb;
+        return firebase;
     }
 }
 
