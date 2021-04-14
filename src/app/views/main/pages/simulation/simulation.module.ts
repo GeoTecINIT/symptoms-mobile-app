@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { SimulationRoutingModule } from "./simulation-routing.module";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonMainModule } from "../../common/common-main.module";
 
