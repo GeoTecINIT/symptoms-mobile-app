@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { Page } from "tns-core-modules/ui/page/page";
+import { Page } from "@nativescript/core";
 
 import { AuthService } from "../auth.service";
 import { NavigationService } from "../navigation.service";
@@ -11,7 +11,7 @@ import { MainViewService } from "./main-view.service";
 import {
     BottomNavigationBar,
     TabSelectedEventData,
-} from "nativescript-material-bottomnavigationbar";
+} from "@nativescript-community/ui-material-bottomnavigationbar";
 
 const navigationTabs = {
     Progress: 0,
