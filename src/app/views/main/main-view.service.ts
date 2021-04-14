@@ -1,8 +1,5 @@
 import { Injectable, ViewContainerRef, Type } from "@angular/core";
-import {
-    ModalDialogService,
-    ModalDialogOptions,
-} from "nativescript-angular/modal-dialog";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular";
 
 @Injectable({
     providedIn: "root",
