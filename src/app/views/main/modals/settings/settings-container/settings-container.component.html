@@ -1,3 +1,17 @@
 <SymCloseActionBar title="Ajustes" (close)="onClose()"></SymCloseActionBar>
 
-<Button text="Desvincular dispositivo" class="btn btn-primary" (tap)="onUnlinkTap()"></Button>
+<StackLayout>
+    <SymSettingsSection title="Cuenta">
+        <GridLayout columns="*, auto" rows="auto" class="setting-container">
+            <Label col="0" textWrap="true" text="Compartir mis datos debidamente anonimizados para su uso en futuros estudios científicos"></Label>
+            <Switch col="1" [checked]="dataSharingConsent" (checkedChange)="onDataSharingCheckChange($event)"></Switch>
+        </GridLayout>
+    </SymSettingsSection>
+    <SymSettingsSection title="Dispositivo">
+        <Button text="Desvincular" class="bg-danger" (tap)="onUnlinkTap()"></Button>
+    </SymSettingsSection>
+    <SymSettingsSection title="Información sobre la aplicación" [withSeparator]="false">
+        <Label horizontalAlignment="center" class="version" text="SyMptOMS Mobile App v{{version}}"></Label>
+    </SymSettingsSection>
+</StackLayout>
+
