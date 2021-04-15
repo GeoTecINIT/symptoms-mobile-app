@@ -39,6 +39,6 @@ export class ProviderTask extends Task {
         this.setCancelFunction(() => stopRecording());
         const record = await recordPromise;
 
-        return { eventName: this.outputEventNames[0], result: { record } };
+        return { eventName: this.outputEventNames[0], result: record };
     }
 }
