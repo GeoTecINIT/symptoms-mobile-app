@@ -1,4 +1,3 @@
-/*
 import { TestBed } from "@angular/core/testing";
 
 import { NativeScriptModule } from "@nativescript/angular";
@@ -27,4 +26,3 @@ describe("AppSettingsService", () => {
         expect(consents).toBeTruthy();
     });
 });
-*/
