@@ -1,11 +1,32 @@
 <SymBasicActionBar title="Te damos la bienvenida a SyMptOMS"></SymBasicActionBar>
 
-<StackLayout verticalAlignment="center">
-    <SymSlideNavigationButton
-            text="Login"
-            [route]="['../tutorial']"
-            clearHistory="true">
-    </SymSlideNavigationButton>
-    <Button text="¿En qué consiste esta aplicación?" class="btn btn-primary" (tap)="onOpenWebsiteTap()"></Button>
-</StackLayout>
+<GridLayout rows="*, auto" class="page">
+    <StackLayout row="0" verticalAlignment="center">
+        <Label
+                textWrap="true"
+                textAlignment="center"
+                marginBottom="20"
+                text="Para comenzar, por favor, introduce la clave de acceso que te haya proporcionado tu terapeuta y pulsa continuar">
+        </Label>
+        <SymCodeField
+                hint="Clave de acceso"
+                maxLength="7"
+                marginBottom="15"
+                [error]="authFailed ? 'Código incorrecto' : ''"
+                (textChange)="onCodeInputChange($event)"
+                (returnPress)="onContinueTap()">
+        </SymCodeField>
+        <SymPrimaryButton
+                text="Continuar"
+                size="lg"
+                horizontalAlignment="center"
+                (tap)="onContinueTap()"
+                [enabled]="canContinue">
+        </SymPrimaryButton>
+    </StackLayout>
+    <SymButtonLink row="1"
+            text="¿En qué consiste esta aplicación?"
+            (tap)="onOpenWebsiteTap()">
+    </SymButtonLink>
+</GridLayout>
 

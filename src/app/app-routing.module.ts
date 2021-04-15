@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
+import { BootGuard } from "./views/boot.guard";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 const routes: Routes = [
     {
         path: "",
-        redirectTo: "welcome",
+        redirectTo: "main",
         pathMatch: "full",
     },
 
@@ -18,6 +19,7 @@ const routes: Routes = [
     },
     {
         path: "main",
+        canActivate: [BootGuard],
         loadChildren: () =>
             import("./views/main/main.module").then((m) => m.MainModule),
     },

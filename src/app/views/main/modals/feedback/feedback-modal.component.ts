@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
+import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -9,17 +9,14 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class FeedbackModalComponent implements OnInit {
     constructor(
-        private routerExtension: RouterExtensions,
+        private navigationService: NavigationService,
         private activeRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
-        this.routerExtension
-            .navigate([{ outlets: { feedbackModal: ["feedback"] } }], {
-                relativeTo: this.activeRoute,
-            })
-            .catch((e) =>
-                console.error("Could not navigate to feedback container:", e)
-            );
+        this.navigationService.outletNavigation(
+            { feedbackModal: ["feedback"] },
+            this.activeRoute
+        );
     }
 }

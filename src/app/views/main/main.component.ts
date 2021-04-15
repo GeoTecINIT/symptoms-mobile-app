@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
-
-import { RouterExtensions } from "nativescript-angular/router";
+import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-
 import { Page } from "tns-core-modules/ui/page/page";
+
+import { AuthService } from "../auth.service";
+import { NavigationService } from "../navigation.service";
 
 import { MainViewService } from "./main-view.service";
 
@@ -23,12 +24,15 @@ const navigationTabs = {
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.scss"],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
+    private loggedInSub: Subscription;
+
     constructor(
-        private routerExtension: RouterExtensions,
+        private authService: AuthService,
+        private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         page: Page,
         mainViewService: MainViewService,
@@ -39,20 +43,14 @@ export class MainComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.routerExtension
-            .navigate(
-                [
-                    {
-                        outlets: {
-                            progressTab: ["progress"],
-                            contentTab: ["content"],
-                            simulationTab: ["simulation"],
-                        },
-                    },
-                ],
-                { relativeTo: this.activeRoute }
-            )
-            .catch((e) => console.error("On MainComponent navigation:", e));
+        this.loadTabOutlets();
+        this.controlAppLoginStatus();
+    }
+
+    ngOnDestroy() {
+        if (this.loggedInSub) {
+            this.loggedInSub.unsubscribe();
+        }
     }
 
     onNavigationBarLoaded(args: any) {
@@ -62,5 +60,24 @@ export class MainComponent implements OnInit {
 
     onTabSelected(args: TabSelectedEventData) {
         this.selectedTab = args.newIndex;
+    }
+
+    private loadTabOutlets() {
+        this.navigationService.outletNavigation(
+            {
+                progressTab: ["progress"],
+                contentTab: ["content"],
+                simulationTab: ["simulation"],
+            },
+            this.activeRoute
+        );
+    }
+
+    private controlAppLoginStatus() {
+        this.loggedInSub = this.authService.loggedIn$.subscribe((loggedIn) => {
+            if (!loggedIn) {
+                this.navigationService.forceNavigate(["/welcome"]);
+            }
+        });
     }
 }
