@@ -23,7 +23,7 @@ describe("Provider task", () => {
             `${expectedRecordType.type}Acquired`,
             {
                 id: invocationEvent.id,
-                data: { record: { ...expectedRecordType } },
+                data: { ...expectedRecordType },
             }
         );
     });
