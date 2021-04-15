@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
+
+import { NavigationService } from "~/app/views/navigation.service";
+
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -9,24 +11,14 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class SettingsModalComponent implements OnInit {
     constructor(
-        private routerExtension: RouterExtensions,
+        private navigationService: NavigationService,
         private activeRoute: ActivatedRoute
     ) {}
 
     ngOnInit() {
-        this.routerExtension
-            .navigate(
-                [
-                    {
-                        outlets: {
-                            settingsModal: ["settings"],
-                        },
-                    },
-                ],
-                { relativeTo: this.activeRoute }
-            )
-            .catch((e) =>
-                console.error("Error navigating to settings container: ", e)
-            );
+        this.navigationService.outletNavigation(
+            { settingsModal: ["settings"] },
+            this.activeRoute
+        );
     }
 }

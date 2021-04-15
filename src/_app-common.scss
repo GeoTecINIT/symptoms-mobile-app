@@ -34,19 +34,11 @@ ActionBar Label {
     font-weight: bold;
 }
 
-// Common page class
-.page__content {
-    &-icon,
-    &-placeholder {
-        color: const(grey);
-        font-size: 20;
-        vertical-align: center;
-        horizontal-align: center;
-    }
+Label {
+    font-size: 16;
+}
 
-    &-icon {
-        font-size: 72;
-        vertical-align: top;
-        margin-top: 20%;
-    }
+// Common page class
+.page {
+    padding: 18;
 }
