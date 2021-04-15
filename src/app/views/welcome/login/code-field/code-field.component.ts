@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { EventData, isAndroid, isIOS, TextField } from "@nativescript/core";
 
 @Component({
     selector: "SymCodeField",
@@ -14,8 +15,19 @@ export class CodeFieldComponent {
     @Output() textChange = new EventEmitter<string>();
     @Output() returnPress = new EventEmitter();
 
-    secure = true;
     focused = false;
+    secure = true;
+
+    private textField: TextField;
+    private typeface: any;
+
+    onFieldLoaded(args: EventData) {
+        this.textField = args.object as TextField;
+        if (isAndroid) {
+            this.typeface = this.textField.android.getTypeface();
+            this.updateVisibility();
+        }
+    }
 
     onFieldFocus() {
         this.focused = true;
@@ -35,5 +47,19 @@ export class CodeFieldComponent {
 
     onToggleVisibility() {
         this.secure = !this.secure;
+        if (isIOS) {
+            this.textField.secure = this.secure;
+        } else if (isAndroid && this.typeface) {
+            this.updateVisibility();
+        }
+    }
+
+    private updateVisibility() {
+        const androidTextField = this.textField.android;
+        androidTextField.setInputType(
+            this.secure ? 129 /* password */ : 16385 /* plain text */
+        );
+        androidTextField.setTypeface(this.typeface);
+        androidTextField.setSelection(androidTextField.length());
     }
 }
