@@ -1,0 +1,13 @@
+@import "app-variables";
+
+.title {
+  font-size: 14;
+  font-weight: bold;
+  color: $accent;
+  margin: $global-spacing $global-spacing 4 $global-spacing;
+}
+
+.separator {
+  border-bottom-width: 1;
+  border-color: const(grey);
+}
