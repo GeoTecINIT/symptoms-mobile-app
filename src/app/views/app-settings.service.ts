@@ -30,7 +30,7 @@ export class AppSettingsService {
 
     async unlink(): Promise<void> {
         await this.authService.logout();
-        remove(DATA_SHARING_CONSENT_KEY); // ONLY FOR TESTING! Do not remove server-side stored consent on unlink!
+        ApplicationSettings.remove(DATA_SHARING_CONSENT_KEY); // ONLY FOR TESTING! Do not remove server-side stored consent on unlink!
         // TODO: Clear patient data
     }
 }
