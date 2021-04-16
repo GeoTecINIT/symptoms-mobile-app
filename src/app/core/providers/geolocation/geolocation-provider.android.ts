@@ -1,6 +1,6 @@
 import { hasPermission, requestPermission } from "nativescript-permissions";
-import { localize } from "nativescript-localize";
-import { android as androidApp } from "tns-core-modules/application/application";
+import { localize } from "@nativescript/localize";
+import { Application } from "@nativescript/core";
 
 import { Geolocation } from "./geolocation";
 import {
@@ -29,10 +29,10 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
     constructor() {
         const location = com.google.android.gms.location;
         this.fusedLocationClient = location.LocationServices.getFusedLocationProviderClient(
-            androidApp.context
+            Application.android.context
         );
         this.settingsClient = location.LocationServices.getSettingsClient(
-            androidApp.context
+            Application.android.context
         );
         this.logger = getLogger("AndroidGeolocationProvider");
     }
@@ -52,7 +52,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
             return await this.checkLocationSettings();
         } catch (ex) {
             if (
-                androidApp.foregroundActivity === null ||
+                Application.android.foregroundActivity === null ||
                 typeof ex.getStatusCode !== "function" ||
                 ex.getStatusCode() !== RESOLUTION_REQUIRED
             ) {
@@ -61,7 +61,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
             }
 
             return ex.startResolutionForResult(
-                androidApp.foregroundActivity,
+                Application.android.foregroundActivity,
                 REQUEST_ENABLE_LOCATION
             );
         }
@@ -75,7 +75,7 @@ export class AndroidGeolocationProvider implements NativeGeolocationProvider {
         if (this.hasPermission()) {
             return;
         }
-        if (androidApp.foregroundActivity === null) {
+        if (Application.android.foregroundActivity === null) {
             throw geolocationAccessNotGrantedError;
         }
 

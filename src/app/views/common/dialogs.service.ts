@@ -5,7 +5,7 @@ import {
     AlertOptions,
     confirm,
     ConfirmOptions,
-} from "tns-core-modules/ui/dialogs";
+} from "@nativescript/core";
 
 @Injectable({
     providedIn: CommonComponentsModule,

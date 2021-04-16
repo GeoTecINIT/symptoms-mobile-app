@@ -1,4 +1,4 @@
-import { android as androidApp } from "tns-core-modules/application/application";
+import { isAndroid } from "@nativescript/core";
 
 import { Provider } from "../provider";
 import { getLogger, Logger } from "../../utils/logger";
@@ -112,7 +112,7 @@ export class GeolocationProvider implements Provider {
         if (this.nativeProvider) {
             return this.nativeProvider;
         }
-        if (androidApp) {
+        if (isAndroid) {
             this.nativeProvider = new AndroidGeolocationProvider();
         } else {
             throw new Error("Not implemented");

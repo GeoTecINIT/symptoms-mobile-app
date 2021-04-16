@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { NotificationsRoutingModule } from "./notifications-routing.module";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { NotificationsModalComponent } from "./notifications-modal.component";
 import { NotificationsListComponent } from "./notifications-list/notifications-list.component";

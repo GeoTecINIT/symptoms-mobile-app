@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { ConfirmRoutingModule } from "./confirm-routing.module";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 
