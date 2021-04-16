@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions } from "@nativescript/angular";
 
 @Component({
     selector: "SymBackActionBar",

@@ -1,7 +1,8 @@
 import { TestBed } from "@angular/core/testing";
 
+import { NativeScriptModule } from "@nativescript/angular";
+
 import { AppSettingsService } from "~/app/views/app-settings.service";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 
 describe("AppSettingsService", () => {
     let service: AppSettingsService;

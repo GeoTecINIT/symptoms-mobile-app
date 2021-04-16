@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 
 import { AuthService } from "~/app/views/auth.service";
 

@@ -2,7 +2,8 @@ import { AndroidGeolocationProvider } from "~/app/core/providers/geolocation/geo
 import { geolocationAccessNotGrantedError } from "~/app/core/providers/geolocation";
 
 describe("Android Geolocation Provider", () => {
-    if (typeof android === "undefined") {
+    // Disable location provider tests, on its way to final removal
+    if (true || typeof android === "undefined") {
         return;
     }
     const geolocationProvider = new AndroidGeolocationProvider();

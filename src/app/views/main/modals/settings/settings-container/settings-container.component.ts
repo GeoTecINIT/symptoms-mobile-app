@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { ModalDialogParams } from "nativescript-angular/modal-dialog";
+import { ModalDialogParams } from "@nativescript/angular";
+import { Switch } from "@nativescript/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
-import { Switch } from "tns-core-modules/ui/switch";
 
 @Component({
     selector: "SymSettingsContainer",

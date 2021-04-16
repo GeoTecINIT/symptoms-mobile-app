@@ -2,12 +2,12 @@
     <GridLayout columns="auto, *, auto" rows="auto" [class.focused]="focused" marginBottom="5">
         <Label col="0" text="&#xe0da;" class="mdi-ro mdi-24" verticalAlignment="center"></Label>
         <TextField col="1"
-                   [secure]="secure"
                    [hint]="hint"
                    [maxlength]="maxLength"
                    autocorrect="false"
                    textAlignment="center"
                    returnKeyType="go"
+                   (loaded)="onFieldLoaded($event)"
                    (focus)="onFieldFocus()"
                    (blur)="onFieldBlur()"
                    (textChange)="onFieldTextChange($event)"
