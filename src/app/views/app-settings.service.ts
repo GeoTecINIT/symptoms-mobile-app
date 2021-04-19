@@ -9,6 +9,8 @@ import {
 import { AuthService } from "./auth.service";
 
 const DATA_SHARING_CONSENT_KEY = "APP_SETTINGS_DATA_SHARING_CONSENT";
+const REPORT_USAGE_CONSENT_KEY = "APP_SETTINGS_REPORT_USAGE_CONSENT";
+const SETUP_COMPLETE_KEY = "APP_SETTINGS_SETUP_COMPLETE";
 
 @Injectable({
     providedIn: "root",
@@ -28,9 +30,25 @@ export class AppSettingsService {
         ApplicationSettings.setBoolean(DATA_SHARING_CONSENT_KEY, consents);
     }
 
+    async getReportUsageConsent(): Promise<boolean> {
+        return ApplicationSettings.getBoolean(REPORT_USAGE_CONSENT_KEY, false);
+    }
+
+    async setReportUsageConsent(consents: boolean): Promise<void> {
+        ApplicationSettings.setBoolean(REPORT_USAGE_CONSENT_KEY, consents);
+    }
+
+    isSetupComplete(): boolean {
+        return ApplicationSettings.getBoolean(SETUP_COMPLETE_KEY, false);
+    }
+
+    markSetupAsComplete() {
+        return ApplicationSettings.setBoolean(SETUP_COMPLETE_KEY, true);
+    }
+
     async unlink(): Promise<void> {
         await this.authService.logout();
-        ApplicationSettings.remove(DATA_SHARING_CONSENT_KEY); // ONLY FOR TESTING! Do not remove server-side stored consent on unlink!
+        ApplicationSettings.clear();
         // TODO: Clear patient data
     }
 }
