@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
-import { Switch } from "@nativescript/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 
@@ -10,8 +9,6 @@ import { AppSettingsService } from "~/app/views/app-settings.service";
     styleUrls: ["./settings-container.component.scss"],
 })
 export class SettingsContainerComponent {
-    dataSharingConsent: boolean;
-
     get version(): string {
         return this.appSettingsService.version;
     }
@@ -20,11 +17,7 @@ export class SettingsContainerComponent {
         private params: ModalDialogParams,
         private dialogsService: DialogsService,
         private appSettingsService: AppSettingsService
-    ) {
-        this.appSettingsService
-            .getDataSharingConsent()
-            .then((consents) => (this.dataSharingConsent = consents));
-    }
+    ) {}
 
     onClose() {
         this.params.closeCallback();
@@ -48,18 +41,5 @@ export class SettingsContainerComponent {
                         );
                 }
             });
-    }
-
-    onDataSharingCheckChange(args: any) {
-        const sw = args.object as Switch;
-        this.dataSharingConsent = sw.checked;
-        this.appSettingsService
-            .setDataSharingConsent(sw.checked)
-            .catch((e) =>
-                console.error(
-                    "Could not update data sharing consent. Reason:",
-                    e
-                )
-            );
     }
 }

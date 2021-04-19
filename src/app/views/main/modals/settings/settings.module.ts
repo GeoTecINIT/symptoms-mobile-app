@@ -4,6 +4,7 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
+import { AppSettingsOptionsModule } from "~/app/views/common/app-settings-options/app-settings-options.module";
 
 import { SettingsModalComponent } from "./settings-modal.component";
 import { SettingsContainerComponent } from "./settings-container/settings-container.component";
@@ -14,6 +15,7 @@ import { SettingsSectionComponent } from "./settings-container/settings-section/
         SettingsRoutingModule,
         NativeScriptCommonModule,
         CommonComponentsModule,
+        AppSettingsOptionsModule,
     ],
     declarations: [
         SettingsModalComponent,
