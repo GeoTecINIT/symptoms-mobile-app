@@ -1,1 +1,6 @@
-/* Add mobile styles for the component here.  */
+@import "src/app-variables";
+
+.header {
+  font-size: 34;
+  margin: 12 $global-spacing 12 $global-spacing;
+}
