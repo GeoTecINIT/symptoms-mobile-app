@@ -1,0 +1,22 @@
+<GridLayout columns="auto, *, auto">
+    <Label col="0"
+           class="circle"
+           [class.seen]="content.seen"
+           [class.unseen]="!content.seen">
+    </Label>
+    <Label col="0"
+           class="index"
+           [class.seen]="content.seen"
+           [class.unseen]="!content.seen"
+           horizontalAlignment="center"
+           [text]="formattedIndex">
+    </Label>
+    <Label col="1"
+           class="title"
+           [text]="content.title">
+    </Label>
+    <Label col="2"
+           class="text-primary mdi-ro mdi-24"
+           text="{{content.seen ? '&#xe86c;' : '&#xe836;'}}">
+    </Label>
+</GridLayout>
