@@ -1,3 +1,7 @@
 <SymMainActionBar title="Contenido"></SymMainActionBar>
 
-<Button text="Abrir módulo de introducción" class="btn btn-primary" (tap)="onOpenContent()"></Button>
+<ListView [items]="contents$ | async" (itemTap)="onListItemTap($event)">
+    <ng-template let-item="item">
+        <SymContentListItem [content]="item"></SymContentListItem>
+    </ng-template>
+</ListView>
