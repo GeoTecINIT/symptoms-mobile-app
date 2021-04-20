@@ -9,7 +9,7 @@ describe("AppSettingsService", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({ imports: [NativeScriptModule] });
-        service = TestBed.get(AppSettingsService);
+        service = TestBed.inject(AppSettingsService);
     });
 
     it("returns the app version code in x.x.x format", () => {
