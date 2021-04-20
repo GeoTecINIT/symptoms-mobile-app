@@ -16,16 +16,16 @@ export class ReportUsageOptionComponent {
 
     constructor(private appSettingsService: AppSettingsService) {
         this.appSettingsService
-            .getDataSharingConsent()
+            .getReportUsageConsent()
             .then((consents) => (this.reportUsageConsent = consents));
     }
 
     onReportUsageCheckChange(checked: boolean) {
         this.appSettingsService
-            .setDataSharingConsent(checked)
+            .setReportUsageConsent(checked)
             .catch((e) =>
                 console.error(
-                    "Could not update data sharing consent. Reason:",
+                    "Could not update report usage consent. Reason:",
                     e
                 )
             );
