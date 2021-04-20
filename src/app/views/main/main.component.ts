@@ -55,6 +55,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
     onNavigationBarLoaded(args: any) {
         const navigationBar: BottomNavigationBar = args.object;
+        navigationBar.selectTab(this.selectedTab);
         // Set here a badge if needed
     }
 
