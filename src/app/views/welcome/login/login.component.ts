@@ -29,6 +29,8 @@ export class LoginComponent {
     }
 
     onContinueTap() {
+        if (!this.canContinue) return;
+
         this.authService.login(this.code).then((success) => {
             if (success) {
                 this.navigationService.navigate(

@@ -1,0 +1,12 @@
+<GridLayout columns="*, auto" rows="auto" [marginBottom]="marginBottom">
+    <Label col="0"
+           textWrap="true"
+           [text]="text"
+           [class.font-weight-bold]="bold"
+           [class.font-italic]="italic">
+    </Label>
+    <Switch col="1"
+            [checked]="checked"
+            (checkedChange)="onCheckChange($event)">
+    </Switch>
+</GridLayout>
