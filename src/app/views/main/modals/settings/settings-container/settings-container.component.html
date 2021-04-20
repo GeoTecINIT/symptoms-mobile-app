@@ -2,10 +2,8 @@
 
 <StackLayout>
     <SymSettingsSection title="Cuenta">
-        <GridLayout columns="*, auto" rows="auto" class="setting-container">
-            <Label col="0" textWrap="true" text="Compartir mis datos debidamente anonimizados para su uso en futuros estudios científicos"></Label>
-            <Switch col="1" [checked]="dataSharingConsent" (checkedChange)="onDataSharingCheckChange($event)"></Switch>
-        </GridLayout>
+        <SymDataSharingOption></SymDataSharingOption>
+        <SymReportUsageOption></SymReportUsageOption>
     </SymSettingsSection>
     <SymSettingsSection title="Dispositivo">
         <Button text="Desvincular" class="bg-danger" (tap)="onUnlinkTap()"></Button>

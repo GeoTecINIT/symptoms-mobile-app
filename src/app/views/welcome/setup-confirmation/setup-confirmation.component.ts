@@ -1,16 +1,15 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { NavigationService } from "~/app/views/navigation.service";
 
 @Component({
     selector: "SymSetupConfirmation",
     templateUrl: "./setup-confirmation.component.html",
     styleUrls: ["./setup-confirmation.component.scss"],
 })
-export class SetupConfirmationComponent implements OnInit {
-    constructor() {
-        // Initialize dependencies here
-    }
+export class SetupConfirmationComponent {
+    constructor(private navigationService: NavigationService) {}
 
-    ngOnInit() {
-        // Use initialized dependencies
+    onLetsGoTap() {
+        this.navigationService.navigate(["/main"], null, true);
     }
 }
