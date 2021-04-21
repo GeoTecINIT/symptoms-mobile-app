@@ -1,0 +1,32 @@
+@import "src/app-variables";
+
+GridLayout {
+  height: 56;
+}
+
+.circle {
+  width: 40;
+  height: 40;
+  border-radius: 20;
+  &.seen {
+    background-color: $accent;
+  }
+  &.unseen {
+    background-color: const(grey);
+  }
+}
+
+.index {
+  &.seen {
+    color: const(white);
+  }
+  &.unseen {
+    color: $accent;
+  }
+}
+
+.title {
+  margin: 0 8 0 8;
+}
+
+
