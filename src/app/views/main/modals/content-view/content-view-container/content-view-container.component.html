@@ -1,3 +1,14 @@
-<SymCloseActionBar title="{{ 'Módulo de ' + id }}" (close)="onClose()"></SymCloseActionBar>
+<ng-container *ngIf="content$ | async as content; else loading">
+    <SymCloseActionBar [title]="content.title" (close)="onClose()"></SymCloseActionBar>
 
-<Button text="content-view-container works!" class="btn btn-primary"></Button>
+    <ScrollView (scroll)="onScroll($event)">
+        <StackLayout (layoutChanged)="onContentRendered($event)">
+            <Label textWrap="true" [text]="content.body"></Label>
+        </StackLayout>
+    </ScrollView>
+</ng-container>
+
+<ng-template #loading>
+    <SymCloseActionBar title="Cargando..." (close)="onClose()"></SymCloseActionBar>
+    <ActivityIndicator busy="true"></ActivityIndicator>
+</ng-template>
