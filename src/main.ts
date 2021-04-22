@@ -10,8 +10,12 @@ import { demoTaskGraph } from "./app/tasks/graph";
 import { getLogger } from "./app/core/utils/logger";
 import { taskDispatcher } from "nativescript-task-dispatcher";
 
+import { install } from "@nativescript-community/ui-chart";
+
 firebaseManager.init();
 
 taskDispatcher.init(appTasks, demoTaskGraph, { customLogger: getLogger });
+
+install();
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);
