@@ -1,7 +1,10 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { ProgressRoutingModule } from "./progress-routing.module";
-import { NativeScriptCommonModule } from "@nativescript/angular";
+import {
+    NativeScriptCommonModule,
+    registerElement,
+} from "@nativescript/angular";
 
 import { CommonMainModule } from "../../common/common-main.module";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
@@ -11,6 +14,12 @@ import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
 import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
 import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
+import { LineChartComponent } from "./common/line-chart/line-chart.component";
+
+registerElement(
+    "LineChart",
+    () => require("@nativescript-community/ui-chart").LineChart
+);
 
 @NgModule({
     imports: [
@@ -25,6 +34,7 @@ import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.co
         UnderExposureComponent,
         RecordsListComponent,
         AggregateListComponent,
+        LineChartComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
