@@ -15,6 +15,10 @@ import {
     LegendForm,
     LegendHorizontalAlignment,
 } from "@nativescript-community/ui-chart/components/Legend";
+import {
+    AxisValueFormatter,
+    AxisDateFormatter,
+} from "../formatters/axis-date-formatter";
 
 const CHART_BACKGROUND = "white";
 const X_ANIMATION_MILLIS = 500;
@@ -41,7 +45,9 @@ export class LineChartComponent {
     @Input() yAxisDataRange?: YAxisDataRange;
     @Input() cuttingLines: CuttingLines = [];
 
+    private internalData: Array<InternalChartData2D> = [];
     private chart: LineChart;
+    private xAxisFormatter?: AxisValueFormatter;
     private textFont = Font.default.withFontSize(TEXT_FONT_SIZE);
     private readonly colorScheme: Array<Color>;
 
@@ -60,6 +66,8 @@ export class LineChartComponent {
 
     onChartLoaded(event: EventData) {
         this.chart = event.object as LineChart;
+        this.configureAxisDataFormatter();
+        this.parseData();
 
         this.configureChart();
         this.configureYAxis();
@@ -71,6 +79,28 @@ export class LineChartComponent {
 
         const ld = new LineData(sets);
         this.chart.setData(ld);
+    }
+
+    private configureAxisDataFormatter() {
+        const data = this.data;
+        if (data.length === 0) {
+            return;
+        }
+        if (data[0].values.length === 0) {
+            return;
+        }
+        if (data[0].values[0].x instanceof Date) {
+            this.xAxisFormatter = new AxisDateFormatter(data);
+        }
+    }
+
+    private parseData() {
+        if (this.xAxisFormatter) {
+            this.internalData = this.xAxisFormatter.getProcessedData();
+
+            return;
+        }
+        this.internalData = this.data as Array<InternalChartData2D>;
     }
 
     private configureChart() {
@@ -103,10 +133,13 @@ export class LineChartComponent {
         xAxis.setAxisLineColor(AXIS_LINE_COLOR);
         xAxis.setFont(this.textFont);
         xAxis.setTextColor(AXIS_LABEL_TEXT_COLOR);
+        if (this.xAxisFormatter) {
+            xAxis.setValueFormatter(this.xAxisFormatter);
+        }
     }
 
     private configureLegend() {
-        if (this.data.length === 1) return;
+        if (this.internalData.length === 1) return;
 
         const legend = this.chart.getLegend();
         legend.setEnabled(true);
@@ -136,8 +169,8 @@ export class LineChartComponent {
     private generateDataSets(): Array<LineDataSet> {
         const sets = [];
 
-        for (let i = 0; i < this.data.length; i++) {
-            const dataset = this.data[i];
+        for (let i = 0; i < this.internalData.length; i++) {
+            const dataset = this.internalData[i];
             const set = this.generateDataSet(i, dataset);
             sets.push(set);
         }
@@ -161,6 +194,16 @@ export interface ChartData2D {
 }
 
 interface ChartEntry2D {
+    x: number | Date;
+    y: number;
+}
+
+export interface InternalChartData2D {
+    label: string;
+    values: Array<InternalChartEntry2D>;
+}
+
+export interface InternalChartEntry2D {
     x: number;
     y: number;
 }
