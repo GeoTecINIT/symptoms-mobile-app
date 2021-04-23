@@ -1,9 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-    ChartData2D,
-    CuttingLines,
-    YAxisDataRange,
-} from "./common/charts/line-chart/line-chart.component";
+import { ChartData2D, CuttingLines, YAxisDataRange } from "./common/charts";
 
 const TEST_DATA: Array<ChartData2D> = [
     {

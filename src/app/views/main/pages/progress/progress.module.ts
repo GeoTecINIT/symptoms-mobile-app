@@ -14,8 +14,7 @@ import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
 import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
 import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
-import { LineChartComponent } from "./common/charts/line-chart/line-chart.component";
-import { BarChartComponent } from "./common/charts/bar-chart/bar-chart.component";
+import { BarChartComponent, LineChartComponent } from "./common/charts";
 
 registerElement(
     "LineChart",
