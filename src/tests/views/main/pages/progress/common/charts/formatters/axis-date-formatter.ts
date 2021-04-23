@@ -2,7 +2,7 @@ import { AxisDateFormatter } from "~/app/views/main/pages/progress/common/charts
 import {
     ChartData2D,
     InternalChartData2D,
-} from "~/app/views/main/pages/progress/common/charts/line-chart/line-chart.component";
+} from "~/app/views/main/pages/progress/common/charts";
 
 describe("Axis date formatter", () => {
     const exampleData: Array<ChartData2D> = [

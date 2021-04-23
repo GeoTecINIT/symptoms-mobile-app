@@ -19,7 +19,7 @@ import {
     CuttingLines,
     InternalChartData2D,
     YAxisDataRange,
-} from "../line-chart/line-chart.component";
+} from "../common";
 import { BarDataSet } from "@nativescript-community/ui-chart/data/BarDataSet";
 import { BarData } from "@nativescript-community/ui-chart/data/BarData";
 

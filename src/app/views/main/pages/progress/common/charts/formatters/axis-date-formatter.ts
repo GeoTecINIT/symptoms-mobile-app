@@ -1,9 +1,6 @@
 import { IAxisValueFormatter } from "@nativescript-community/ui-chart/formatter/IAxisValueFormatter";
 import { AxisBase } from "@nativescript-community/ui-chart/components/AxisBase";
-import {
-    ChartData2D,
-    InternalChartData2D,
-} from "../line-chart/line-chart.component";
+import { ChartData2D, InternalChartData2D } from "../common";
 
 enum Resolution {
     Date,
