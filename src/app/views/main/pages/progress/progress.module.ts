@@ -15,10 +15,15 @@ import { UnderExposureComponent } from "./under-exposure/under-exposure.componen
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
 import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
 import { LineChartComponent } from "./common/charts/line-chart/line-chart.component";
+import { BarChartComponent } from "./common/charts/bar-chart/bar-chart.component";
 
 registerElement(
     "LineChart",
     () => require("@nativescript-community/ui-chart").LineChart
+);
+registerElement(
+    "BarChart",
+    () => require("@nativescript-community/ui-chart").BarChart
 );
 
 @NgModule({
@@ -35,6 +40,7 @@ registerElement(
         RecordsListComponent,
         AggregateListComponent,
         LineChartComponent,
+        BarChartComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
