@@ -1,15 +1,12 @@
-import { IAxisValueFormatter } from "@nativescript-community/ui-chart/formatter/IAxisValueFormatter";
 import { AxisBase } from "@nativescript-community/ui-chart/components/AxisBase";
+
+import { AxisValueFormatter } from "./common";
 import { ChartData2D, InternalChartData2D } from "../common";
 
 enum Resolution {
     Date,
     DateHour,
     Hour,
-}
-
-export interface AxisValueFormatter extends IAxisValueFormatter {
-    getProcessedData(): Array<InternalChartData2D>;
 }
 
 export class AxisDateFormatter implements AxisValueFormatter {
@@ -88,7 +85,7 @@ export class AxisDateFormatter implements AxisValueFormatter {
         dataSet: InternalChartData2D
     ): Map<string, number> {
         const dayTicks = new Map<string, number>();
-        const indexes = this.getIndexes(dataSet);
+        const indexes = dataSet.values.map((value) => value.x);
         for (const i of indexes) {
             const day = new Date(this.dates[i]);
             day.setHours(0, 0, 0, 0);
@@ -100,14 +97,6 @@ export class AxisDateFormatter implements AxisValueFormatter {
         }
 
         return dayTicks;
-    }
-
-    private getIndexes(dataSet: InternalChartData2D): Array<number> {
-        if (dataSet.values.length === 0) {
-            return [];
-        }
-
-        return dataSet.values.map((value) => value.x);
     }
 
     private processDataSet(dataSet: ChartData2D): InternalChartData2D {

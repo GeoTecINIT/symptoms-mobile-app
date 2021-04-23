@@ -20,10 +20,7 @@ import {
     InternalChartData2D,
     YAxisDataRange,
 } from "./common";
-import {
-    AxisDateFormatter,
-    AxisValueFormatter,
-} from "./formatters/axis-date-formatter";
+import { AxisDateFormatter, AxisValueFormatter } from "./formatters";
 
 const CHART_BACKGROUND = "white";
 const X_ANIMATION_MILLIS = 500;
