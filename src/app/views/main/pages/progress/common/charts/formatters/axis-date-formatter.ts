@@ -14,8 +14,8 @@ export interface AxisValueFormatter extends IAxisValueFormatter {
 
 export class AxisDateFormatter implements AxisValueFormatter {
     private readonly data: Array<InternalChartData2D>;
-    private readonly dates: Array<Date> = [];
     private readonly resolution: Resolution;
+    private dates: Array<Date>;
 
     constructor(data: Array<ChartData2D>) {
         this.data = this.processData(data);
@@ -39,6 +39,8 @@ export class AxisDateFormatter implements AxisValueFormatter {
     }
 
     private processData(data: Array<ChartData2D>): Array<InternalChartData2D> {
+        this.dates = flattenAndSortDates(data);
+
         return data.map((dataSet) => this.processDataSet(dataSet));
     }
 
@@ -113,14 +115,9 @@ export class AxisDateFormatter implements AxisValueFormatter {
             return dataSet as InternalChartData2D;
         }
 
-        if (!(dataSet.values[0].x instanceof Date)) {
-            throw new Error(
-                "Values must be Date objects to use a date formatter!"
-            );
-        }
         const values = dataSet.values.map((value) => {
             const { y } = value;
-            const x = this.mapDate(value.x as Date);
+            const x = this.dates.indexOf(value.x as Date);
 
             return { x, y };
         });
@@ -129,13 +126,6 @@ export class AxisDateFormatter implements AxisValueFormatter {
             label: dataSet.label,
             values,
         };
-    }
-
-    private mapDate(date: Date): number {
-        const idx = this.dates.length;
-        this.dates.push(date);
-
-        return idx;
     }
 }
 
@@ -164,4 +154,24 @@ function twoDigit(n: number): string {
     const z = n < 10 ? "0" : "";
 
     return `${z}${n}`;
+}
+
+function flattenAndSortDates(data: Array<ChartData2D>): Array<Date> {
+    if (data.length === 0) {
+        return;
+    }
+    const dates: Array<Date> = [];
+    for (const dataSet of data) {
+        for (const value of dataSet.values) {
+            if (!(value.x instanceof Date)) {
+                throw new Error(
+                    "Values must be Date objects to use a date formatter!"
+                );
+            }
+            dates.push(value.x);
+        }
+    }
+    dates.sort((d1, d2) => d1.getTime() - d2.getTime());
+
+    return dates;
 }
