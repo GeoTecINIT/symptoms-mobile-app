@@ -26,7 +26,7 @@ export class AxisDateFormatter implements AxisValueFormatter {
     }
 
     getAxisLabel(value: any, axis: AxisBase): string {
-        const date = this.dates[value];
+        const date = this.dates[Math.floor(value)];
         switch (this.resolution) {
             case Resolution.Date:
                 return formatAsDate(date);
