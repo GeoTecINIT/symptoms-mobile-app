@@ -18,6 +18,7 @@ import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.co
 import { BarChartComponent, LineChartComponent } from "./common/charts";
 import { BaseCardComponent } from "./common/cards/base-card/base-card.component";
 import { IconTextCardComponent } from "./common/cards/icon-text-card/icon-text-card.component";
+import { TitleContentCardComponent } from "./common/cards/title-content-card/title-content-card.component";
 
 registerElement(
     "LineChart",
@@ -46,6 +47,7 @@ registerElement(
         BarChartComponent,
         BaseCardComponent,
         IconTextCardComponent,
+        TitleContentCardComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
