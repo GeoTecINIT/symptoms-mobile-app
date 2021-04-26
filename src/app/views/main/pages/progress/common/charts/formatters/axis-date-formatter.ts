@@ -20,7 +20,7 @@ export class AxisDateFormatter implements AxisValueFormatter {
     }
 
     getAxisLabel(value: any, axis: AxisBase): string {
-        const date = this.dates[Math.floor(value)];
+        const date = this.getClosestDate(value);
         switch (this.resolution) {
             case Resolution.Date:
                 return formatAsDate(date);
@@ -115,6 +115,23 @@ export class AxisDateFormatter implements AxisValueFormatter {
             label: dataSet.label,
             values,
         };
+    }
+
+    private getClosestDate(value: number): Date {
+        let diff = Number.POSITIVE_INFINITY;
+        let closest = null;
+        for (let i = 0; i < this.dates.length; i++) {
+            const actualDiff = Math.abs(value - i);
+            if (actualDiff < diff) {
+                diff = actualDiff;
+                closest = this.dates[i];
+            }
+            if (actualDiff > diff) {
+                break;
+            }
+        }
+
+        return closest;
     }
 }
 
