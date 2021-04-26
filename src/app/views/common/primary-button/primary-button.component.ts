@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 export class PrimaryButtonComponent {
     @Input() text = "";
     @Input() flat = false;
+    @Input() margin = 12;
     @Input() horizontalAlignment: "left" | "right" | "center" | "stretch" =
         "stretch";
     @Input() size: "lg" | "md" | "sm" = "md";
