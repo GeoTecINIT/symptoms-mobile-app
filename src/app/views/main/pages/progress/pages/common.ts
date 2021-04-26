@@ -1,5 +1,5 @@
 import { ChartData2D, CuttingLines, YAxisDataRange } from "../common/charts";
-import { interval, Observable } from "rxjs";
+import { Observable, timer } from "rxjs";
 import { map } from "rxjs/internal/operators";
 
 export const SESSION_DATA: Array<ChartData2D> = [
@@ -59,7 +59,7 @@ export function fakeUpdates(
     source: Array<ChartData2D>,
     updateMs: number
 ): Observable<Array<ChartData2D>> {
-    return interval(updateMs).pipe(
+    return timer(0, updateMs).pipe(
         map((it) => {
             if (source.length === 0) return [];
             const cutAt = it % source[0].values.length;
@@ -71,7 +71,7 @@ export function fakeUpdates(
                     label: dataSet.label,
                     values: dataSet.values.slice(
                         0,
-                        cutAt <= length ? cutAt : length
+                        cutAt + 1 <= length ? cutAt + 1 : length
                     ),
                 };
             });
