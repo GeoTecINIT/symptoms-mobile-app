@@ -1,12 +1,22 @@
 <ScrollView>
     <StackLayout>
-        <SymProgressSection title="Última exposición" btnText="Ver todas" (btnTap)="onSeeRecordsTap()">
-            <SymIconTextCard iconCode="&#xe26b;" text="Parece que todavía no has realizado ninguna exposición. ¿Te animas a hacer una ahora?">
-            </SymIconTextCard>
+        <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasData" (btnTap)="onSeeRecordsTap()">
+            <SymTitleContentCard *ngIf="latestData; else noRecords" iconCode="&#xe55e;" title="En Calle Falsa, 123" subtitle="(23/04) Nivel de ansiedad">
+                <SymLineChart [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines" [data]="latestData"></SymLineChart>
+            </SymTitleContentCard>
+            <ng-template #noRecords>
+                <SymIconTextCard iconCode="&#xe26b;" text="Parece que todavía no has realizado ninguna exposición. ¿Te animas a hacer una ahora?">
+                </SymIconTextCard>
+            </ng-template>
         </SymProgressSection>
-        <SymProgressSection title="Evolución" btnText="Ver detalle" (btnTap)="onSeeAggregatesTap()">
-            <SymIconTextCard iconCode="&#xf092;" text="Conforme vayas realizando exposiciones te iremos mostrando tus avances aquí">
-            </SymIconTextCard>
+        <SymProgressSection title="Evolución" btnText="Ver detalle" [btnActive]="hasData" (btnTap)="onSeeAggregatesTap()">
+            <SymTitleContentCard *ngIf="summaryData; else noSummary" iconCode="&#xe26b;" title="En todos los lugares" subtitle="Nivel de ansiedad medio">
+                <SymBarChart [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines" [data]="summaryData"></SymBarChart>
+            </SymTitleContentCard>
+            <ng-template #noSummary>
+                <SymIconTextCard iconCode="&#xf092;" text="Conforme vayas realizando exposiciones te iremos mostrando tus avances aquí">
+                </SymIconTextCard>
+            </ng-template>
         </SymProgressSection>
     </StackLayout>
 </ScrollView>
