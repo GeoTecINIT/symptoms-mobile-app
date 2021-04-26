@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { EventData } from "@nativescript/core";
 
 import { BaseChart } from "../base-chart";
@@ -16,14 +16,23 @@ import { ChartData2D, CuttingLines, YAxisDataRange } from "../common";
     templateUrl: "./line-chart.component.html",
     styleUrls: ["./line-chart.component.scss"],
 })
-export class LineChartComponent extends BaseChart<LineDataSet, LineData> {
-    @Input() data: Array<ChartData2D> = [];
+export class LineChartComponent
+    extends BaseChart<LineDataSet, LineData>
+    implements OnDestroy {
+    @Input()
+    set data(data: Array<ChartData2D>) {
+        this.dataStream$.next(data);
+    }
     @Input() yAxisDataRange?: YAxisDataRange;
     @Input() cuttingLines: CuttingLines = [];
 
     onChartLoaded(event: EventData) {
         const chart = event.object as LineChart;
-        this.init(chart, this.data, this.cuttingLines, this.yAxisDataRange);
+        this.load(chart);
+    }
+
+    ngOnDestroy() {
+        this.unload();
     }
 
     protected generateChartData(): LineData {
