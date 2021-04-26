@@ -1,0 +1,21 @@
+@import "src/app-variables";
+
+.circle {
+  height: 100;
+  width: 100;
+  background-color: const(grey);
+  border-radius: 50;
+}
+
+.icon {
+  horizontal-align: center;
+  vertical-align: center;
+  font-size: 56;
+  color: $accent;
+}
+
+.text {
+  text-align: center;
+  color: $input-color;
+  margin: 24 24 0 24;
+}
