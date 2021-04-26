@@ -16,6 +16,8 @@ import { UnderExposureComponent } from "./under-exposure/under-exposure.componen
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
 import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
 import { BarChartComponent, LineChartComponent } from "./common/charts";
+import { BaseCardComponent } from "./common/cards/base-card/base-card.component";
+import { IconTextCardComponent } from "./common/cards/icon-text-card/icon-text-card.component";
 
 registerElement(
     "LineChart",
@@ -42,6 +44,8 @@ registerElement(
         AggregateListComponent,
         LineChartComponent,
         BarChartComponent,
+        BaseCardComponent,
+        IconTextCardComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
