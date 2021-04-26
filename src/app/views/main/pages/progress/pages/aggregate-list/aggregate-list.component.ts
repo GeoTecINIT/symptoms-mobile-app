@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { AGGREGATE_DATA, CUTTING_LINES, Y_AXIS_DATA_RANGE } from "../common";
+import {
+    AGGREGATE_DATA,
+    CUTTING_LINES,
+    fakeUpdates,
+    Y_AXIS_DATA_RANGE,
+} from "../common";
 
 @Component({
     selector: "SymAggregateList",
@@ -7,7 +12,7 @@ import { AGGREGATE_DATA, CUTTING_LINES, Y_AXIS_DATA_RANGE } from "../common";
     styleUrls: ["./aggregate-list.component.scss"],
 })
 export class AggregateListComponent implements OnInit {
-    data = AGGREGATE_DATA;
+    data = fakeUpdates(AGGREGATE_DATA, 2000);
     yAxisDataRange = Y_AXIS_DATA_RANGE;
     cuttingLines = CUTTING_LINES;
 
