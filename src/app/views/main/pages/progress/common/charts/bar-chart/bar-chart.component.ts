@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { EventData } from "@nativescript/core";
 
 import { BaseChart } from "../base-chart";
@@ -14,15 +14,23 @@ import { ChartData2D, CuttingLines, YAxisDataRange } from "../common";
     templateUrl: "./bar-chart.component.html",
     styleUrls: ["./bar-chart.component.scss"],
 })
-export class BarChartComponent extends BaseChart<BarDataSet, BarData> {
-    @Input() data: Array<ChartData2D> = [];
+export class BarChartComponent
+    extends BaseChart<BarDataSet, BarData>
+    implements OnDestroy {
+    @Input()
+    set data(data: Array<ChartData2D>) {
+        this.dataStream$.next(data);
+    }
     @Input() cuttingLines: CuttingLines = [];
     @Input() yAxisDataRange?: YAxisDataRange;
 
     onChartLoaded(event: EventData) {
         const chart = event.object as BarChart;
+        this.load(chart);
+    }
 
-        this.init(chart, this.data, this.cuttingLines, this.yAxisDataRange);
+    ngOnDestroy() {
+        this.unload();
     }
 
     protected generateChartData(): BarData {

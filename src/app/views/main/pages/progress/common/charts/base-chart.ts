@@ -13,6 +13,7 @@ import {
 } from "@nativescript-community/ui-chart/components/LimitLine";
 
 import { Color, Font } from "@nativescript/core";
+import { ReplaySubject, Subscription } from "rxjs";
 
 import {
     ChartData2D,
@@ -41,11 +42,17 @@ export abstract class BaseChart<
     S extends IBarLineScatterCandleBubbleDataSet<Entry>,
     D extends BarLineScatterCandleBubbleData<Entry, S>
 > {
-    protected readonly colorScheme: Array<Color>;
+    cuttingLines: CuttingLines;
+    yAxisDataRange?: YAxisDataRange;
+
     protected chart: BarLineChartBase<Entry, S, D>;
+    protected dataStream$ = new ReplaySubject<Array<ChartData2D>>(1);
+    protected readonly colorScheme: Array<Color>;
     protected internalData: Array<InternalChartData2D> = [];
+
     private xAxisFormatter?: AxisValueFormatter;
     private textFont = Font.default.withFontSize(TEXT_FONT_SIZE);
+    private streamSubscription: Subscription;
 
     constructor() {
         this.colorScheme = COLOR_SCHEME.map((color) => {
@@ -60,21 +67,30 @@ export abstract class BaseChart<
         });
     }
 
-    init(
-        chart: BarLineChartBase<Entry, S, D>,
-        data: Array<ChartData2D>,
-        cuttingLines: CuttingLines,
-        yAxisDataRange?: YAxisDataRange
-    ) {
+    load(chart: BarLineChartBase<Entry, S, D>) {
         this.chart = chart;
+        this.streamSubscription = this.dataStream$.subscribe((data) => {
+            if (data.length === 0 || data[0].values.length === 0) return;
+            this.plot(data);
+        });
+    }
+
+    unload() {
+        if (this.streamSubscription) {
+            this.streamSubscription.unsubscribe();
+        }
+    }
+
+    private plot(data: Array<ChartData2D>) {
+        this.chart.clear();
         this.configureAxisDataFormatter(data);
         this.parseData(data);
 
         this.configureChart();
-        this.configureYAxis(yAxisDataRange);
+        this.configureYAxis();
         this.configureXAxis();
         this.configureLegend();
-        this.addCuttingLines(cuttingLines);
+        this.addCuttingLines();
 
         const chartData = this.generateChartData();
         this.chart.setData(chartData);
@@ -111,12 +127,13 @@ export abstract class BaseChart<
         this.chart.getAxisRight().setEnabled(false);
     }
 
-    private configureYAxis(range?: YAxisDataRange) {
+    private configureYAxis() {
         const yAxis = this.chart.getAxisLeft();
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(false);
         yAxis.setFont(this.textFont);
         yAxis.setTextColor(AXIS_LABEL_TEXT_COLOR);
+        const range = this.yAxisDataRange;
         if (range) {
             yAxis.setAxisMinValue(range.min - 1);
             yAxis.setAxisMaxValue(range.max + 1);
@@ -147,13 +164,14 @@ export abstract class BaseChart<
         legend.setWordWrapEnabled(true);
     }
 
-    private addCuttingLines(cuttingLines: CuttingLines) {
-        if (cuttingLines.length === 0) return;
+    private addCuttingLines() {
+        if (this.cuttingLines.length === 0) return;
 
         const yAxis = this.chart.getAxisLeft();
         yAxis.setDrawLimitLinesBehindData(false);
 
-        for (const line of cuttingLines) {
+        yAxis.removeAllLimitLines();
+        for (const line of this.cuttingLines) {
             const limitLine = new LimitLine(line.value, line.label);
             limitLine.setLabelPosition(LimitLabelPosition.LEFT_TOP);
             limitLine.setLineColor(CUTTING_LINE_COLOR);
