@@ -1,11 +1,12 @@
 <SymMainActionBar title="Tu progreso"></SymMainActionBar>
 
-<StackLayout verticalAlignment="center">
-    <Button
+<!-- Flatten once button is no longer needed! -->
+<GridLayout rows="auto, *">
+    <Button row = 0
             text="{{ idle ? 'Cambiar a \'En exposición\'' : 'Cambiar a \'En reposo\''}}"
             (tap)="switchExposureState()">
     </Button>
 
-    <SymIdleProgress *ngIf="idle"></SymIdleProgress>
-    <SymUnderExposure *ngIf="!idle"></SymUnderExposure>
-</StackLayout>
+    <SymIdleProgress row="1" *ngIf="idle"></SymIdleProgress>
+    <SymUnderExposure row="1" *ngIf="!idle"></SymUnderExposure>
+</GridLayout>
