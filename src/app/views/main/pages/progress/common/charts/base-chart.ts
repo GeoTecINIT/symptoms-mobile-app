@@ -36,7 +36,7 @@ const CUTTING_LINE_COLOR = "#2DC38A";
 const TEXT_FONT_SIZE = 12;
 
 const COLOR_SCHEME = ["#3f2dc3", "#c3009f", "#fe006c", "#ff613a", "#ffa600"];
-const LINE_COLOR_ALPHA = 0.7;
+const LINE_COLOR_ALPHA = 0.5;
 
 export abstract class BaseChart<
     S extends IBarLineScatterCandleBubbleDataSet<Entry>,
