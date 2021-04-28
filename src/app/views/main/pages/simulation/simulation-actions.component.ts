@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { ConfirmModalService } from "../../modals/confirm/confirm-modal.service";
+import { ConfirmModalService } from "../../modals/confirm";
 import { QuestionsModalService } from "../../modals/questions/questions-modal.service";
-import { FeedbackModalService } from "~/app/views/main/modals/feedback/feedback-modal.service";
+import { FeedbackModalService } from "../../modals/feedback/feedback-modal.service";
 
 @Component({
     selector: "SymSimulationActions",
@@ -23,7 +23,19 @@ export class SimulationActionsComponent implements OnInit {
 
     onRelevantPlaceArrival() {
         this.confirmModalService
-            .show()
+            .show({
+                title: "Estás en un lugar importante",
+                body: {
+                    iconCode: "\ue55f",
+                    text: "Has llegado a: Lugar 1",
+                },
+                question: "¿Te animas a hacer una exposición ahora?",
+                buttons: {
+                    confirm: "¡Claro!",
+                    cancel: "En otro momento",
+                },
+            })
+            .then((result) => console.log("Result:", result))
             .catch((e) => console.error("Could not show confirm modal:", e));
     }
 
