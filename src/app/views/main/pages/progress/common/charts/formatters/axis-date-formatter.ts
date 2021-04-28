@@ -117,21 +117,21 @@ export class AxisDateFormatter implements AxisValueFormatter {
         };
     }
 
-    private getClosestDate(value: number): Date {
-        let diff = Number.POSITIVE_INFINITY;
-        let closest = null;
-        for (let i = 0; i < this.dates.length; i++) {
-            const actualDiff = Math.abs(value - i);
-            if (actualDiff < diff) {
-                diff = actualDiff;
-                closest = this.dates[i];
+    private getClosestDate(inexactIndex: number): Date {
+        let indexDiff = Number.POSITIVE_INFINITY;
+        let closestDate = null;
+        for (let index = 0; index < this.dates.length; index++) {
+            const currentDiff = Math.abs(inexactIndex - index);
+            if (currentDiff < indexDiff) {
+                indexDiff = currentDiff;
+                closestDate = this.dates[index];
             }
-            if (actualDiff > diff) {
+            if (currentDiff > indexDiff) {
                 break;
             }
         }
 
-        return closest;
+        return closestDate;
     }
 }
 
