@@ -1,0 +1,38 @@
+@import "src/app-variables";
+
+.body {
+  padding: $global-spacing;
+}
+
+.emoji {
+  font-size: 72;
+  text-align: center;
+}
+
+.circle {
+  height: 100;
+  width: 100;
+  border-radius: 50;
+  background-color: const(grey);
+  horizontal-align: center;
+}
+
+.icon {
+  color: $accent;
+  horizontal-align: center;
+  vertical-align: center;
+  font-size: 56;
+}
+
+.body-text {
+  text-align: center;
+  font-weight: 500;
+  margin: $global-spacing 24 0 24;
+}
+
+.card {
+  border-radius: 4;
+  android-elevation: 2;
+  margin: 4;
+  padding: 16;
+}
