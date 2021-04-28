@@ -17,7 +17,7 @@ describe("Production logger", () => {
     });
 
     it("throws info logs through crashlytics if available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 
@@ -33,7 +33,7 @@ describe("Production logger", () => {
     });
 
     it("prints info logs through auxiliary logger when crashlytics is not available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 
@@ -49,7 +49,7 @@ describe("Production logger", () => {
     });
 
     it("throws warning logs through crashlytics if available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 
@@ -65,7 +65,7 @@ describe("Production logger", () => {
     });
 
     it("prints warning logs through auxiliary logger when crashlytics is not available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 
@@ -81,7 +81,7 @@ describe("Production logger", () => {
     });
 
     it("sends errors as crashlogs through crashlytics if available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 
@@ -97,7 +97,7 @@ describe("Production logger", () => {
     });
 
     it("prints error logs through auxiliary logger when crashlytics is not available", async () => {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             spyOn(firebaseManager, "crashlytics").and.callFake(() => {
                 resolve();
 

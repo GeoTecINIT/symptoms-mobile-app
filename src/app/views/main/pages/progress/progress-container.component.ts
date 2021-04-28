@@ -7,6 +7,7 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ProgressContainerComponent implements OnInit {
     idle = true;
+    hasData = false;
 
     constructor() {
         // Initialize dependencies here
@@ -18,5 +19,9 @@ export class ProgressContainerComponent implements OnInit {
 
     switchExposureState() {
         this.idle = !this.idle;
+    }
+
+    switchDataAvailabilityState() {
+        this.hasData = !this.hasData;
     }
 }
