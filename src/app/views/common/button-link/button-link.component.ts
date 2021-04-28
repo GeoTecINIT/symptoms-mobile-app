@@ -7,6 +7,9 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 export class ButtonLinkComponent {
     @Input() text = "";
+    @Input() margin = 10;
+    @Input() horizontalAlignment: "left" | "right" | "center" | "stretch" =
+        "stretch";
     @Output() tap = new EventEmitter();
 
     onTap() {
