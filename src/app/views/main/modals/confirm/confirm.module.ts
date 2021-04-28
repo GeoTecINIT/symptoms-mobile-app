@@ -7,12 +7,14 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
 
 import { ConfirmModalComponent } from "./confirm-modal.component";
 import { ConfirmContainerComponent } from "./confirm-container/confirm-container.component";
+import { CommonModalsModule } from "../common/common-modals.module";
 
 @NgModule({
     imports: [
         ConfirmRoutingModule,
         NativeScriptCommonModule,
         CommonComponentsModule,
+        CommonModalsModule,
     ],
     declarations: [ConfirmModalComponent, ConfirmContainerComponent],
     entryComponents: [ConfirmModalComponent],
