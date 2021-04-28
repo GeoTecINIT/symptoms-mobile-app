@@ -1,0 +1,13 @@
+<SymBaseCard>
+    <GridLayout columns="auto, *" rows="auto, auto, *">
+        <Label row="0" col="0" rowSpan="2" class="circle"></Label>
+        <Label row="0" col="0" rowSpan="2" class="mdi-ro mdi-24 icon" [text]="iconCode"></Label>
+
+        <Label row="0" col="1" class="title" [text]="title"></Label>
+        <Label row="1" col="1" class="subtitle" [text]="subtitle"></Label>
+
+        <StackLayout row="2" col="0" colSpan="2" class="content">
+            <ng-content></ng-content>
+        </StackLayout>
+    </GridLayout>
+</SymBaseCard>

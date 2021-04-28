@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
+    "@nativescript-community/ui-chart": "^1.1.33",
     "@nativescript-community/ui-material-bottomnavigationbar": "^5.2.20",
     "@nativescript/angular": "~11.2.0",
     "@nativescript/core": "~7.3.0",
@@ -37,11 +38,10 @@
     "@angular/cli": "~11.2.0",
     "@angular/compiler-cli": "~11.2.0",
     "@nativescript/android": "7.0.1",
-    "@nativescript/schematics": "~11.0.0",
+    "@nativescript/schematics": "~11.2.0",
     "@nativescript/types": "~7.3.0",
     "@nativescript/webpack": "4.1.0",
     "@ngtools/webpack": "11.2.0",
-    "@schematics/angular": "11.0.0",
     "@types/jasmine": "3.6.9",
     "codelyzer": "~6.0.0",
     "fs-extra": "^9.1.0",
@@ -52,7 +52,7 @@
     "karma-webpack": "3.0.5",
     "sass": "^1.32.8",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.0"
+    "typescript": "~4.1.0"
   },
   "gitHead": "a6fec076a20f898feabb4466a2c411158c18a100",
   "readme": "Symptoms mobile application"

@@ -1,0 +1,29 @@
+@import "src/app-variables";
+
+.circle {
+  background-color: const(grey);
+  height: 40;
+  width: 40;
+  border-radius: 20;
+  margin: 16;
+}
+
+.icon {
+  horizontal-align: center;
+  vertical-align: center;
+  color: $accent;
+}
+
+.title {
+  font-size: 18;
+  font-weight: bold;
+  vertical-align: bottom;
+}
+
+.subtitle {
+  color: $input-color;
+}
+
+.content {
+  padding: 0 8 8 8;
+}

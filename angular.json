@@ -11,7 +11,12 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "Sym"
+      "prefix": "Sym",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "defaultProject": "symptoms-mobile-app"
