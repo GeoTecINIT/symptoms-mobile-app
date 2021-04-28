@@ -3,6 +3,7 @@ import { ConfirmModule } from "./confirm.module";
 
 import { MainViewService } from "../../main-view.service";
 import { ConfirmModalComponent } from "~/app/views/main/modals/confirm/confirm-modal.component";
+import { ConfirmModalOptions } from "./options";
 
 @Injectable({
     providedIn: ConfirmModule,
@@ -10,10 +11,10 @@ import { ConfirmModalComponent } from "~/app/views/main/modals/confirm/confirm-m
 export class ConfirmModalService {
     constructor(private mainViewService: MainViewService) {}
 
-    show(): Promise<void> {
-        // TODO: Later on return something meaningful
+    show(options: ConfirmModalOptions): Promise<boolean> {
         return this.mainViewService.showFullScreenAnimatedModal(
-            ConfirmModalComponent
+            ConfirmModalComponent,
+            options
         );
     }
 }
