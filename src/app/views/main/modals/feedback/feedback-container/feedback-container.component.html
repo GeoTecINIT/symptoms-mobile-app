@@ -1,3 +1,9 @@
 <SymCloseActionBar title="¿Qué tal lo estamos haciendo?" (close)="onClose()"></SymCloseActionBar>
 
-<Button text="feedback-container works!" class="btn btn-primary"></Button>
+<SymModalBody emoji="👋" bodyText="No te preocupes, lo importante es ser constante. ¡Hasta pronto!">
+    <Label text="¿Podrías indicar el motivo de tu salida?"></Label>
+    <SymFeedbackButtonOption text="Mi nivel de ansiedad no baja" (optionTap)="onAnswer($event)"></SymFeedbackButtonOption>
+    <SymFeedbackButtonOption text="No consigo manejar la situación" (optionTap)="onAnswer($event)"></SymFeedbackButtonOption>
+    <SymFeedbackButtonOption text="No dispongo de más tiempo" (optionTap)="onAnswer($event)"></SymFeedbackButtonOption>
+    <SymFeedbackTextOption hint="Otro" helpText="Tu terapeuta podrá leer este mensaje" (answerProvided)="onAnswer($event)"></SymFeedbackTextOption>
+</SymModalBody>
