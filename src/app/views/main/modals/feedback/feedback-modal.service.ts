@@ -11,11 +11,9 @@ import { FeedbackModalComponent } from "./feedback-modal.component";
 export class FeedbackModalService {
     constructor(private mainViewService: MainViewService) {}
 
-    askFeedback() {
-        this.mainViewService
-            .showFullScreenAnimatedModal(FeedbackModalComponent)
-            .catch((e) =>
-                console.error("Could not open feedback modal service:", e)
-            );
+    askFeedback(): Promise<string> {
+        return this.mainViewService.showFullScreenAnimatedModal(
+            FeedbackModalComponent
+        );
     }
 }
