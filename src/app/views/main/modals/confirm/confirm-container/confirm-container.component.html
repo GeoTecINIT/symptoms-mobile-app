@@ -1,3 +1,24 @@
-<SymBasicActionBar title="Estas en un lugar importante"></SymBasicActionBar>
+<SymBasicActionBar [title]="title"></SymBasicActionBar>
 
-<Button text="¡Claro!" class="btn btn-primary" (tap)="onClose()"></Button>
+<SymModalBody
+        [iconCode]="iconCode"
+        [emoji]="emoji"
+        [bodyText]="bodyText">
+    <Label
+            textWrap="true"
+            marginBottom="18"
+            [text]="question">
+    </Label>
+    <SymPrimaryButton
+            size="lg"
+            horizontalAlignment="center"
+            [text]="confirmText"
+            (tap)="onConfirmTap()">
+    </SymPrimaryButton>
+    <SymButtonLink
+            margin="0"
+            horizontalAlignment="center"
+            [text]="cancelText"
+            (tap)="onCancelTap()">
+    </SymButtonLink>
+</SymModalBody>
