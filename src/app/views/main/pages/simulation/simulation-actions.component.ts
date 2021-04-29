@@ -44,6 +44,8 @@ export class SimulationActionsComponent implements OnInit {
     }
 
     onWantsToDeliverFeedback() {
-        this.feedbackModalService.askFeedback();
+        this.feedbackModalService
+            .askFeedback()
+            .then((result) => console.log("Feedback:", result));
     }
 }
