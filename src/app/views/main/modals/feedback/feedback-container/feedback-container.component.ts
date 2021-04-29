@@ -10,6 +10,10 @@ export class FeedbackContainerComponent {
     constructor(private params: ModalDialogParams) {}
 
     onClose() {
-        this.params.closeCallback();
+        this.params.closeCallback(undefined);
+    }
+
+    onAnswer(answer: string) {
+        this.params.closeCallback(answer);
     }
 }
