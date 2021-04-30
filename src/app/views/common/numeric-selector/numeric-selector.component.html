@@ -1,0 +1,7 @@
+<ListPicker
+    *ngIf="values"
+    height="{{height}}"
+    width="{{width}}"
+    [items]="values"
+    (selectedIndexChange)="onSelectedIndexChange($event)">
+</ListPicker>
