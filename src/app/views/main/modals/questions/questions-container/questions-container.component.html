@@ -1,3 +1,5 @@
 <SymBasicActionBar title="¿Cómo te encuentras?"></SymBasicActionBar>
 
-<Button text="Bien" class="btn btn-primary" (tap)="onClose()"></Button>
+<SymModalBody iconCode="&#xe94c;" bodyText="Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras">
+    <SymQuestionStep [question]="ongoingQuestion" [index]="questionStep" [amount]="questionsAmount"></SymQuestionStep>
+</SymModalBody>
