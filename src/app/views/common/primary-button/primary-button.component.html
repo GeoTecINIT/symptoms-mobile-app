@@ -1,9 +1,10 @@
-<Button
-        [text]="text"
-        [class.flat]="flat"
-        class="bg-primary -rounded-lg {{size}}"
-        [horizontalAlignment]="horizontalAlignment"
-        [isEnabled]="enabled"
-        [margin]="margin">
-</Button>
-
+<SymBaseButton
+    variant="primary"
+    [text]="text"
+    [flat]="flat"
+    [size]="size"
+    [horizontalAlignment]="horizontalAlignment"
+    [enabled]="enabled"
+    [margin]="margin"
+    (tap)="onTap()">
+</SymBaseButton>

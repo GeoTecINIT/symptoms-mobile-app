@@ -1,4 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+    ButtonHAlignment,
+    ButtonSize,
+} from "../base-button/base-button.component";
 
 @Component({
     selector: "SymPrimaryButton",
@@ -6,12 +10,11 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     styleUrls: ["./primary-button.component.scss"],
 })
 export class PrimaryButtonComponent {
-    @Input() text = "";
-    @Input() flat = false;
+    @Input() text: string;
+    @Input() flat: boolean;
     @Input() margin = 12;
-    @Input() horizontalAlignment: "left" | "right" | "center" | "stretch" =
-        "stretch";
-    @Input() size: "lg" | "md" | "sm" = "md";
+    @Input() horizontalAlignment: ButtonHAlignment = "stretch";
+    @Input() size: ButtonSize = "md";
     @Input() enabled = true;
 
     @Output() tap = new EventEmitter();
