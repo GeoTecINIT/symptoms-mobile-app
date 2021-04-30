@@ -8,8 +8,14 @@ import { CloseActionBarComponent } from "./close-action-bar/close-action-bar.com
 import { BackActionBarComponent } from "./back-action-bar/back-action-bar.component";
 import { SlideNavigationButtonComponent } from "./slide-navigation-button/slide-navigation-button.component";
 import { BasicActionBarComponent } from "./basic-action-bar/basic-action-bar.component";
+
 import { ButtonLinkComponent } from "./button-link/button-link.component";
+import { BaseButtonComponent } from "./base-button/base-button.component";
 import { PrimaryButtonComponent } from "./primary-button/primary-button.component";
+import { SecondaryButtonComponent } from "./secondary-button/secondary-button.component";
+import { ConfirmButtonComponent } from "./confirm-button/confirm-button.component";
+
+import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.component";
 
 @NgModule({
     imports: [NativeScriptCommonModule, NativeScriptRouterModule],
@@ -19,7 +25,11 @@ import { PrimaryButtonComponent } from "./primary-button/primary-button.componen
         SlideNavigationButtonComponent,
         BasicActionBarComponent,
         ButtonLinkComponent,
+        BaseButtonComponent,
         PrimaryButtonComponent,
+        SecondaryButtonComponent,
+        ConfirmButtonComponent,
+        NumericSelectorComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -29,6 +39,9 @@ import { PrimaryButtonComponent } from "./primary-button/primary-button.componen
         BasicActionBarComponent,
         ButtonLinkComponent,
         PrimaryButtonComponent,
+        SecondaryButtonComponent,
+        ConfirmButtonComponent,
+        NumericSelectorComponent,
     ],
 })
 export class CommonComponentsModule {}
