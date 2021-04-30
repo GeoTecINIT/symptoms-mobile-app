@@ -14,7 +14,7 @@ export class FeedbackTextOptionComponent {
     focus = false;
 
     onConfirmTap() {
-        if (this.answer.trim() === "") return;
+        if (this.answer === undefined || this.answer.trim() === "") return;
         this.answerProvided.emit(this.answer);
     }
 
