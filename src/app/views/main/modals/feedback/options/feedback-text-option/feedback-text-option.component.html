@@ -21,6 +21,7 @@
             (tap)="onConfirmTap()">
     </Label>
     <Label
+        *ngIf="helpText"
         row="1"
         colSpan="2"
         class="help-text"
