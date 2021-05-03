@@ -11,10 +11,12 @@ export class NumericSelectorComponent implements OnInit {
 
     @Input() height = "100%";
     @Input() width = "100%";
+    @Input() selectedValue: number;
 
     @Output() valueChange = new EventEmitter<number>();
 
     values: Array<number>;
+    selectedIndex: number;
 
     ngOnInit(): void {
         if (this.from === undefined || this.to === undefined) {
@@ -29,12 +31,25 @@ export class NumericSelectorComponent implements OnInit {
             throw new Error("'from' value must be lower than 'to' value");
         }
         this.values = arrayRange(this.from, this.to);
+        this.updateSelectedIndex();
     }
 
     onSelectedIndexChange(evt: any) {
         const valueIndex = evt.value as number;
         const value = this.values[valueIndex];
         this.valueChange.emit(value);
+    }
+
+    private updateSelectedIndex() {
+        if (this.selectedValue !== undefined) {
+            const index = this.values.indexOf(this.selectedValue);
+            if (index !== -1) {
+                this.selectedIndex = index;
+
+                return;
+            }
+        }
+        this.selectedIndex = 0;
     }
 }
 
