@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 export type ButtonHAlignment = "left" | "right" | "center" | "stretch";
 export type ButtonSize = "lg" | "md" | "sm";
@@ -18,8 +18,6 @@ export class BaseButtonComponent {
     @Input() size: ButtonSize = "md";
     @Input() enabled = true;
 
-    @Output() tap = new EventEmitter();
-
     get primary(): boolean {
         return this.variant === "primary";
     }
@@ -30,9 +28,5 @@ export class BaseButtonComponent {
 
     get confirm(): boolean {
         return this.variant === "confirm";
-    }
-
-    onTap() {
-        this.tap.emit();
     }
 }
