@@ -1,71 +1,21 @@
-<Label textWrap="true" textAlignment="center" [text]="question.title"></Label>
+<StackLayout @fade>
+    <Label textWrap="true" textAlignment="center" [text]="question.title"></Label>
 
-<ng-container [ngSwitch]="question.type">
-    <SymNumericSelector
-            *ngSwitchCase="'range'"
-            [from]="question.from"
-            [to]="question.to"
-            height="120"
-            width="100"
-            (valueChange)="onValueSelected($event)">
-    </SymNumericSelector>
-</ng-container>
+    <ng-container [ngSwitch]="question.type">
+        <SymNumericSelector
+                *ngSwitchCase="'range'"
+                [from]="question.from"
+                [to]="question.to"
+                [selectedValue]="savedAnswer"
+                height="120"
+                width="100"
+                (valueChange)="onValueSelected($event)">
+        </SymNumericSelector>
+    </ng-container>
 
-<ng-container [ngSwitch]="stepType">
-    <SymConfirmButton
-            *ngSwitchCase="'standalone'"
-            [margin]="btnMargin"
-            [size]="btnSize"
-            horizontalAlignment="center"
-            text="Enviar"
-            [enabled]="gotAnswer"
-            (tap)="onContinueTap()">
-    </SymConfirmButton>
-    <SymPrimaryButton
-            *ngSwitchCase="'first'"
-            [margin]="btnMargin"
-            [size]="btnSize"
-            horizontalAlignment="center"
-            text="Siguiente"
-            [enabled]="gotAnswer"
-            (tap)="onContinueTap()">
-    </SymPrimaryButton>
-    <GridLayout
-            *ngSwitchCase="'middle'"
-            rows="auto"
-            columns="*, *">
-        <SymSecondaryButton
-                col="0"
-                [margin]="btnMargin"
-                [size]="btnSize"
-                horizontalAlignment="center"
-                text="Anterior"
-                (tap)="onBackTap()">
-        </SymSecondaryButton>
-        <SymPrimaryButton
-                col="1"
-                [margin]="btnMargin"
-                [size]="btnSize"
-                horizontalAlignment="center"
-                text="Siguiente"
-                [enabled]="gotAnswer"
-                (tap)="onContinueTap()">
-        </SymPrimaryButton>
-    </GridLayout>
-    <GridLayout
-            *ngSwitchCase="'last'"
-            rows="auto"
-            columns="*, *">
-        <SymSecondaryButton
-                col="0"
-                [margin]="btnMargin"
-                [size]="btnSize"
-                horizontalAlignment="center"
-                text="Anterior"
-                (tap)="onBackTap()">
-        </SymSecondaryButton>
+    <ng-container [ngSwitch]="stepType">
         <SymConfirmButton
-                col="1"
+                *ngSwitchCase="'standalone'"
                 [margin]="btnMargin"
                 [size]="btnSize"
                 horizontalAlignment="center"
@@ -73,6 +23,59 @@
                 [enabled]="gotAnswer"
                 (tap)="onContinueTap()">
         </SymConfirmButton>
-    </GridLayout>
-</ng-container>
+        <SymPrimaryButton
+                *ngSwitchCase="'first'"
+                [margin]="btnMargin"
+                [size]="btnSize"
+                horizontalAlignment="center"
+                text="Siguiente"
+                [enabled]="gotAnswer"
+                (tap)="onContinueTap()">
+        </SymPrimaryButton>
+        <GridLayout
+                *ngSwitchCase="'middle'"
+                rows="auto"
+                columns="*, *">
+            <SymSecondaryButton
+                    col="0"
+                    [margin]="btnMargin"
+                    [size]="btnSize"
+                    horizontalAlignment="center"
+                    text="Anterior"
+                    (tap)="onBackTap()">
+            </SymSecondaryButton>
+            <SymPrimaryButton
+                    col="1"
+                    [margin]="btnMargin"
+                    [size]="btnSize"
+                    horizontalAlignment="center"
+                    text="Siguiente"
+                    [enabled]="gotAnswer"
+                    (tap)="onContinueTap()">
+            </SymPrimaryButton>
+        </GridLayout>
+        <GridLayout
+                *ngSwitchCase="'last'"
+                rows="auto"
+                columns="*, *">
+            <SymSecondaryButton
+                    col="0"
+                    [margin]="btnMargin"
+                    [size]="btnSize"
+                    horizontalAlignment="center"
+                    text="Anterior"
+                    (tap)="onBackTap()">
+            </SymSecondaryButton>
+            <SymConfirmButton
+                    col="1"
+                    [margin]="btnMargin"
+                    [size]="btnSize"
+                    horizontalAlignment="center"
+                    text="Enviar"
+                    [enabled]="gotAnswer"
+                    (tap)="onContinueTap()">
+            </SymConfirmButton>
+        </GridLayout>
+    </ng-container>
+</StackLayout>
 
