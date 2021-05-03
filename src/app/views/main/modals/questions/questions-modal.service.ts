@@ -3,6 +3,7 @@ import { QuestionsModule } from "./questions.module";
 import { MainViewService } from "~/app/views/main/main-view.service";
 
 import { QuestionsModalComponent } from "./questions-modal.component";
+import { QuestionAnswer } from "./answers";
 
 @Injectable({
     providedIn: QuestionsModule,
@@ -10,9 +11,9 @@ import { QuestionsModalComponent } from "./questions-modal.component";
 export class QuestionsModalService {
     constructor(private mainViewService: MainViewService) {}
 
-    deliverQuestions() {
-        this.mainViewService
-            .showFullScreenAnimatedModal(QuestionsModalComponent)
-            .catch((e) => console.error("Could not open questions modal:", e));
+    deliverQuestions(): Promise<Array<QuestionAnswer>> {
+        return this.mainViewService.showFullScreenAnimatedModal(
+            QuestionsModalComponent
+        );
     }
 }
