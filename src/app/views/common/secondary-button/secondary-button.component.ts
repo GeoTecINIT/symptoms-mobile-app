@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import {
     ButtonHAlignment,
     ButtonSize,
@@ -16,10 +16,4 @@ export class SecondaryButtonComponent {
     @Input() horizontalAlignment: ButtonHAlignment = "stretch";
     @Input() size: ButtonSize = "md";
     @Input() enabled = true;
-
-    @Output() tap = new EventEmitter();
-
-    onTap() {
-        this.tap.emit();
-    }
 }
