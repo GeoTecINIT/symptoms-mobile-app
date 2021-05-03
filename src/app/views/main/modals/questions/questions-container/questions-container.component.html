@@ -1,3 +1,20 @@
-<SymBasicActionBar title="¿Cómo te encuentras?"></SymBasicActionBar>
+<SymBasicActionBar [title]="options.title"></SymBasicActionBar>
 
-<Button text="Bien" class="btn btn-primary" (tap)="onClose()"></Button>
+<SymModalBody
+        [emoji]="options.body.emoji"
+        [iconCode]="options.body.iconCode"
+        [bodyText]="options.body.text"
+        [currentStep]="currentStep"
+        [stepAmount]="questionsAmount">
+    <ng-container *ngFor="let question of options.questions; index as i">
+        <SymQuestionStep
+                *ngIf="currentStep === i"
+                [question]="question"
+                [index]="i"
+                [amount]="questionsAmount"
+                [savedAnswer]="currentStepAnswer"
+                (answerProvided)="onAnswerProvided($event)"
+                (backTap)="onBackTap()">
+        </SymQuestionStep>
+    </ng-container>
+</SymModalBody>

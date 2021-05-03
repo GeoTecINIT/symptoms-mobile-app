@@ -1,11 +1,12 @@
-<GridLayout class="body" rows="*, auto">
+<GridLayout class="body" rows="*, auto, auto">
     <GridLayout row="0" verticalAlignment="center" horizontalAlignment="center" rows="auto, auto">
         <Label row="0" *ngIf="emoji" class="emoji" [text]="emoji"></Label>
         <Label row="0" *ngIf="iconCode" class="circle"></Label>
         <Label row="0" *ngIf="iconCode" class="mdi-ro icon" [text]="iconCode"></Label>
         <Label row="1" class="body-text" textWrap="true" [text]="bodyText"></Label>
     </GridLayout>
-    <StackLayout row="1" class="card">
+    <SymStepProgressBar row="1" *ngIf="stepAmount" [current]="currentStep" [total]="stepAmount"></SymStepProgressBar>
+    <StackLayout row="2" class="card">
         <ng-content></ng-content>
     </StackLayout>
 </GridLayout>
