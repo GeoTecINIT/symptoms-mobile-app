@@ -10,4 +10,10 @@ export interface ConfirmModalOptions {
         confirm: string;
         cancel: string;
     };
+    cancelConfirm?: {
+        question: string;
+        description?: string;
+        positiveText: string;
+        negativeText: string;
+    };
 }
