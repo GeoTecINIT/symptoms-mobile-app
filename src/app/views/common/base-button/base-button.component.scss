@@ -1,0 +1,34 @@
+@import "src/app-variables";
+
+Button {
+  padding: 0;
+}
+
+.bg-secondary {
+  color: $accent;
+  background-color: const(white);
+}
+
+.bg-confirm {
+  color: const(white);
+  background-color: $complementary;
+}
+
+.flat {
+  android-elevation: 0;
+}
+
+.sm {
+  font-size: 14;
+  padding: 0 12;
+}
+
+.md {
+  font-size: 16;
+  padding: 0 16;
+}
+
+.lg {
+  font-size: 18;
+  padding: 0 30;
+}

@@ -1,24 +1,24 @@
-<SymBasicActionBar [title]="title"></SymBasicActionBar>
+<SymBasicActionBar [title]="options.title"></SymBasicActionBar>
 
 <SymModalBody
-        [iconCode]="iconCode"
-        [emoji]="emoji"
-        [bodyText]="bodyText">
+        [emoji]="options.body.emoji"
+        [iconCode]="options.body.iconCode"
+        [bodyText]="options.body.text">
     <Label
             textWrap="true"
             marginBottom="18"
-            [text]="question">
+            [text]="options.question">
     </Label>
     <SymPrimaryButton
             size="lg"
             horizontalAlignment="center"
-            [text]="confirmText"
+            [text]="options.buttons.confirm"
             (tap)="onConfirmTap()">
     </SymPrimaryButton>
     <SymButtonLink
             margin="0"
             horizontalAlignment="center"
-            [text]="cancelText"
+            [text]="options.buttons.cancel"
             (tap)="onCancelTap()">
     </SymButtonLink>
 </SymModalBody>

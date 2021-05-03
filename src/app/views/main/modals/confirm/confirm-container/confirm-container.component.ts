@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
+
 import { ModalDialogParams } from "@nativescript/angular";
+
+import { DialogsService } from "~/app/views/common/dialogs.service";
+
 import { ConfirmModalOptions } from "../options";
 
 @Component({
@@ -8,25 +12,17 @@ import { ConfirmModalOptions } from "../options";
     styleUrls: ["./confirm-container.component.scss"],
 })
 export class ConfirmContainerComponent {
-    title = "";
-    iconCode: string;
-    emoji: string;
-    bodyText = "";
-    question = "";
-    confirmText = "";
-    cancelText = "";
+    options: ConfirmModalOptions;
 
-    constructor(private params: ModalDialogParams) {
-        const options = params.context as ConfirmModalOptions;
-        this.title = options.title;
+    get hasCancelConfirm(): boolean {
+        return this.options.cancelConfirm !== undefined;
+    }
 
-        this.iconCode = options.body.iconCode;
-        this.emoji = options.body.emoji;
-        this.bodyText = options.body.text;
-
-        this.question = options.question;
-        this.confirmText = options.buttons.confirm;
-        this.cancelText = options.buttons.cancel;
+    constructor(
+        private params: ModalDialogParams,
+        private dialogsService: DialogsService
+    ) {
+        this.options = params.context as ConfirmModalOptions;
     }
 
     onConfirmTap() {
@@ -34,6 +30,27 @@ export class ConfirmContainerComponent {
     }
 
     onCancelTap() {
-        this.params.closeCallback(false);
+        if (!this.hasCancelConfirm) {
+            this.params.closeCallback(false);
+
+            return;
+        }
+
+        const {
+            question,
+            positiveText,
+            negativeText,
+            description,
+        } = this.options.cancelConfirm;
+        this.dialogsService
+            .askConfirmationWithPositiveAction(
+                question,
+                positiveText,
+                negativeText,
+                description
+            )
+            .then((confirms) => {
+                if (confirms) this.params.closeCallback(false);
+            });
     }
 }

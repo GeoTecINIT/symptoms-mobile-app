@@ -5,11 +5,11 @@ import {
 } from "../base-button/base-button.component";
 
 @Component({
-    selector: "SymPrimaryButton",
-    templateUrl: "./primary-button.component.html",
-    styleUrls: ["./primary-button.component.scss"],
+    selector: "SymSecondaryButton",
+    templateUrl: "./secondary-button.component.html",
+    styleUrls: ["./secondary-button.component.scss"],
 })
-export class PrimaryButtonComponent {
+export class SecondaryButtonComponent {
     @Input() text: string;
     @Input() flat: boolean;
     @Input() margin = 12;

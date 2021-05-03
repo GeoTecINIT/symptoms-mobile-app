@@ -1,0 +1,8 @@
+<GridLayout [columns]="columns" rows="auto">
+    <Label
+        *ngFor="let segment of segments; index as i"
+        [col]="i"
+        class="segment"
+        [class.active]="i <= current">
+    </Label>
+</GridLayout>

@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "lint": "tslint \"src/**/*.ts\"",
-    "android": "npm i && tns run android --watch",
+    "android": "npm i && tns run android --watch --no-hmr",
     "ios": "npm i && tns run ios --watch",
     "test.android": "npm i && tns test android --watch",
     "test.ios": "npm i && tns test ios --watch"

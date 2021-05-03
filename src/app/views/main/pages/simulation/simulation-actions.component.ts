@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ConfirmModalService } from "../../modals/confirm";
-import { QuestionsModalService } from "../../modals/questions/questions-modal.service";
+import { QuestionsModalService } from "../../modals/questions";
 import { FeedbackModalService } from "../../modals/feedback";
 
 @Component({
@@ -34,13 +34,53 @@ export class SimulationActionsComponent implements OnInit {
                     confirm: "¡Claro!",
                     cancel: "En otro momento",
                 },
+                cancelConfirm: {
+                    question: "¿Te vas?",
+                    description:
+                        "No deberías abandonar una exposición salvo por causa mayor. Recuerda el papel negativo de la evitación. Es normal que tengas picos de ansiedad. Si te quedas, acabarás controlándolos.",
+                    positiveText: "Me quedo",
+                    negativeText: "Salir",
+                },
             })
             .then((result) => console.log("Result:", result))
             .catch((e) => console.error("Could not show confirm modal:", e));
     }
 
     onWantsToAnswerQuestions() {
-        this.questionsModalService.deliverQuestions();
+        this.questionsModalService
+            .deliverQuestions({
+                title: "¿Cómo te encuentras?",
+                body: {
+                    iconCode: "\ue94c",
+                    text:
+                        "Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras",
+                },
+                questions: [
+                    {
+                        title:
+                            "De 0 a 10, ¿cómo puntuarías tu nivel de ansiedad actual?",
+                        type: "range",
+                        from: 0,
+                        to: 10,
+                    },
+                    {
+                        title:
+                            "De 0 a 10, ¿cómo puntuarías las ganas que tienes de salir de aquí?",
+                        type: "range",
+                        from: 0,
+                        to: 10,
+                    },
+                    {
+                        title:
+                            "De 0 a 10, ¿cómo puntuarías tu grado de creencia en pensamientos?",
+                        type: "range",
+                        from: 0,
+                        to: 10,
+                    },
+                ],
+            })
+            .then((answers) => console.log("Got answers:", answers))
+            .catch((e) => console.error("Could not deliver questions:", e));
     }
 
     onWantsToLeave() {

@@ -4,7 +4,7 @@
         [emoji]="options.feedbackScreen.body.emoji"
         [iconCode]="options.feedbackScreen.body.iconCode"
         [bodyText]="options.feedbackScreen.body.text">
-    <Label [text]="options.feedbackScreen.question"></Label>
+    <Label textWrap="true" textAlignment="center" [text]="options.feedbackScreen.question"></Label>
     <ng-container *ngFor="let option of options.feedbackScreen.options" [ngSwitch]="option.type">
         <SymFeedbackButtonOption *ngSwitchCase="'predefined'" [text]="option.answer" (optionTap)="onAnswer($event)"></SymFeedbackButtonOption>
         <SymFeedbackTextOption *ngSwitchCase="'free-text'" [hint]="option.hint" [helpText]="option.helpText" (answerProvided)="onAnswer($event)"></SymFeedbackTextOption>
