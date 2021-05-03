@@ -34,6 +34,13 @@ export class SimulationActionsComponent implements OnInit {
                     confirm: "¡Claro!",
                     cancel: "En otro momento",
                 },
+                cancelConfirm: {
+                    question: "¿Te vas?",
+                    description:
+                        "No deberías abandonar una exposición salvo por causa mayor. Recuerda el papel negativo de la evitación. Es normal que tengas picos de ansiedad. Si te quedas, acabarás controlándolos.",
+                    positiveText: "Me quedo",
+                    negativeText: "Salir",
+                },
             })
             .then((result) => console.log("Result:", result))
             .catch((e) => console.error("Could not show confirm modal:", e));
