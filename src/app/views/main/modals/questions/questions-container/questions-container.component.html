@@ -1,6 +1,10 @@
 <SymBasicActionBar title="¿Cómo te encuentras?"></SymBasicActionBar>
 
-<SymModalBody iconCode="&#xe94c;" bodyText="Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras">
+<SymModalBody
+        iconCode="&#xe94c;"
+        bodyText="Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras"
+        [currentStep]="currentStep"
+        [stepAmount]="questionsAmount">
     <ng-container *ngFor="let question of questions; index as i">
         <SymQuestionStep
                 *ngIf="currentStep === i"
