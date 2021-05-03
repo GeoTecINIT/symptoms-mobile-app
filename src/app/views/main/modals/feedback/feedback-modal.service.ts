@@ -4,6 +4,7 @@ import { FeedbackModule } from "./feedback.module";
 import { MainViewService } from "../../main-view.service";
 
 import { FeedbackModalComponent } from "./feedback-modal.component";
+import { FeedbackModalOptions } from "./options";
 
 @Injectable({
     providedIn: FeedbackModule,
@@ -11,11 +12,10 @@ import { FeedbackModalComponent } from "./feedback-modal.component";
 export class FeedbackModalService {
     constructor(private mainViewService: MainViewService) {}
 
-    askFeedback() {
-        this.mainViewService
-            .showFullScreenAnimatedModal(FeedbackModalComponent)
-            .catch((e) =>
-                console.error("Could not open feedback modal service:", e)
-            );
+    askFeedback(options: FeedbackModalOptions): Promise<string> {
+        return this.mainViewService.showFullScreenAnimatedModal(
+            FeedbackModalComponent,
+            options
+        );
     }
 }

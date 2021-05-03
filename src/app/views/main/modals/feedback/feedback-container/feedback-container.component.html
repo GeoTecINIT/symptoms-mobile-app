@@ -1,3 +1,25 @@
-<SymCloseActionBar title="¿Qué tal lo estamos haciendo?" (close)="onClose()"></SymCloseActionBar>
+<SymCloseActionBar [title]="options.title" (close)="onClose()"></SymCloseActionBar>
 
-<Button text="feedback-container works!" class="btn btn-primary"></Button>
+<SymModalBody
+        [emoji]="options.feedbackScreen.body.emoji"
+        [iconCode]="options.feedbackScreen.body.iconCode"
+        [bodyText]="options.feedbackScreen.body.text">
+    <Label [text]="options.feedbackScreen.question"></Label>
+    <ng-container *ngFor="let option of options.feedbackScreen.options" [ngSwitch]="option.type">
+        <SymFeedbackButtonOption *ngSwitchCase="'predefined'" [text]="option.answer" (optionTap)="onAnswer($event)"></SymFeedbackButtonOption>
+        <SymFeedbackTextOption *ngSwitchCase="'free-text'" [hint]="option.hint" [helpText]="option.helpText" (answerProvided)="onAnswer($event)"></SymFeedbackTextOption>
+    </ng-container>
+</SymModalBody>
+
+<StackLayout @slideUp *ngIf="showConfirmScreen" verticalAlignment="center">
+    <GridLayout rows="auto, auto, auto, auto">
+        <label row="0" *ngIf="options.confirmScreen.body.emoji" class="emoji" text="😎"></label>
+        <ng-container *ngIf="options.confirmScreen.body.iconCode">
+            <Label row="0" class="circle"></Label>
+            <Label row="0" class="mdi-ro icon" [text]="options.confirmScreen.body.iconCode"></Label>
+        </ng-container>
+        <Label row="1" class="header" [text]="options.confirmScreen.body.header"></Label>
+        <Label row="2" *ngIf="options.confirmScreen.body.message" class="message" textWrap="true" [text]="options.confirmScreen.body.message"></Label>
+        <SymPrimaryButton row="3" horizontalAlignment="center" [text]="options.confirmScreen.confirm" (tap)="onClose()"></SymPrimaryButton>
+    </GridLayout>
+</StackLayout>
