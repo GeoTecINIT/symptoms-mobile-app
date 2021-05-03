@@ -1,5 +1,15 @@
 <SymBasicActionBar title="¿Cómo te encuentras?"></SymBasicActionBar>
 
 <SymModalBody iconCode="&#xe94c;" bodyText="Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras">
-    <SymQuestionStep [question]="ongoingQuestion" [index]="questionStep" [amount]="questionsAmount"></SymQuestionStep>
+    <ng-container *ngFor="let question of questions; index as i">
+        <SymQuestionStep
+                *ngIf="currentStep === i"
+                [question]="question"
+                [index]="i"
+                [amount]="questionsAmount"
+                [savedAnswer]="currentStepAnswer"
+                (answerProvided)="onAnswerProvided($event)"
+                (backTap)="onBackTap()">
+        </SymQuestionStep>
+    </ng-container>
 </SymModalBody>
