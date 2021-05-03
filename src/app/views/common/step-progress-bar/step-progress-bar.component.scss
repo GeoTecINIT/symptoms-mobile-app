@@ -1,0 +1,15 @@
+@import "src/app-variables";
+
+GridLayout {
+  margin: 4;
+}
+
+.segment {
+  height: 3;
+  background-color: const(grey);
+  margin: 0 4 0 4;
+}
+
+.active {
+  background-color: $complementary;
+}

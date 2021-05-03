@@ -16,6 +16,7 @@ import { SecondaryButtonComponent } from "./secondary-button/secondary-button.co
 import { ConfirmButtonComponent } from "./confirm-button/confirm-button.component";
 
 import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.component";
+import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.component";
 
 @NgModule({
     imports: [NativeScriptCommonModule, NativeScriptRouterModule],
@@ -30,6 +31,7 @@ import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.co
         SecondaryButtonComponent,
         ConfirmButtonComponent,
         NumericSelectorComponent,
+        StepProgressBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -42,6 +44,7 @@ import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.co
         SecondaryButtonComponent,
         ConfirmButtonComponent,
         NumericSelectorComponent,
+        StepProgressBarComponent,
     ],
 })
 export class CommonComponentsModule {}
