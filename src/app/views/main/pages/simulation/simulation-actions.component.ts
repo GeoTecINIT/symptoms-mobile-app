@@ -40,7 +40,10 @@ export class SimulationActionsComponent implements OnInit {
     }
 
     onWantsToAnswerQuestions() {
-        this.questionsModalService.deliverQuestions();
+        this.questionsModalService
+            .deliverQuestions()
+            .then((answers) => console.log("Got answers:", answers))
+            .catch((e) => console.error("Could not deliver questions:", e));
     }
 
     onWantsToLeave() {
