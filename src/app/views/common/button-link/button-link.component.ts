@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
     selector: "SymButtonLink",
@@ -10,9 +10,4 @@ export class ButtonLinkComponent {
     @Input() margin = 10;
     @Input() horizontalAlignment: "left" | "right" | "center" | "stretch" =
         "stretch";
-    @Output() tap = new EventEmitter();
-
-    onTap() {
-        this.tap.emit();
-    }
 }
