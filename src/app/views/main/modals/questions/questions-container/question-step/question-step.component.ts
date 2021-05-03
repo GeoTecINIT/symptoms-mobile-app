@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { animate, style, transition, trigger } from "@angular/animations";
+
 import { QuestionType } from "../../options";
+import { QuestionStepResult } from "../../answers";
 
 type QuestionStepType = "standalone" | "first" | "middle" | "last";
 
@@ -7,14 +10,27 @@ type QuestionStepType = "standalone" | "first" | "middle" | "last";
     selector: "SymQuestionStep",
     templateUrl: "./question-step.component.html",
     styleUrls: ["./question-step.component.scss"],
+    animations: [
+        trigger("fade", [
+            transition(":enter", [
+                style({ opacity: 0 }),
+                animate("0.5s", style({ opacity: 1 })),
+            ]),
+            transition(":leave", [
+                style({ opacity: 1 }),
+                animate("0.5s", style({ opacity: 0 })),
+            ]),
+        ]),
+    ],
 })
 export class QuestionStepComponent {
     @Input() question: QuestionType;
     @Input() index: number;
     @Input() amount: number;
+    @Input() savedAnswer: any;
 
     @Output() backTap = new EventEmitter();
-    @Output() answerProvided = new EventEmitter<any>();
+    @Output() answerProvided = new EventEmitter<QuestionStepResult>();
 
     answer: any;
 
@@ -44,7 +60,10 @@ export class QuestionStepComponent {
     }
 
     onContinueTap() {
-        this.answerProvided.emit(this.answer);
+        this.answerProvided.emit({
+            step: this.index,
+            answer: this.answer,
+        });
     }
 
     onBackTap() {
