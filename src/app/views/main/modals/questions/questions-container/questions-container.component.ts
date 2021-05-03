@@ -1,10 +1,7 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
-import { QuestionType } from "~/app/views/main/modals/questions/options";
-import {
-    QuestionAnswer,
-    QuestionStepResult,
-} from "~/app/views/main/modals/questions/answers";
+import { QuestionsModalOptions } from "../options";
+import { QuestionAnswer, QuestionStepResult } from "../answers";
 
 @Component({
     selector: "SymQuestionsContainer",
@@ -12,29 +9,7 @@ import {
     styleUrls: ["./questions-container.component.scss"],
 })
 export class QuestionsContainerComponent {
-    questions: Array<QuestionType> = [
-        {
-            title: "De 0 a 10, ¿cómo puntuarías tu nivel de ansiedad actual?",
-            type: "range",
-            from: 0,
-            to: 10,
-        },
-        {
-            title:
-                "De 0 a 10, ¿cómo puntuarías las ganas que tienes de salir de aquí?",
-            type: "range",
-            from: 0,
-            to: 10,
-        },
-        {
-            title:
-                "De 0 a 10, ¿cómo puntuarías tu grado de creencia en pensamientos?",
-            type: "range",
-            from: 0,
-            to: 10,
-        },
-    ];
-
+    options: QuestionsModalOptions;
     currentStep = 0;
     answers: Array<QuestionAnswer> = [];
 
@@ -48,14 +23,16 @@ export class QuestionsContainerComponent {
     }
 
     get questionsAmount(): number {
-        return this.questions.length;
+        return this.options.questions.length;
     }
 
     get isLastQuestion(): boolean {
         return this.questionsAmount - this.currentStep === 1;
     }
 
-    constructor(private params: ModalDialogParams) {}
+    constructor(private params: ModalDialogParams) {
+        this.options = params.context as QuestionsModalOptions;
+    }
 
     onAnswerProvided(result: QuestionStepResult) {
         this.updateAnswer(result);
@@ -74,7 +51,7 @@ export class QuestionsContainerComponent {
 
     private updateAnswer(result: QuestionStepResult) {
         this.answers[result.step] = {
-            title: this.questions[result.step].title,
+            title: this.options.questions[result.step].title,
             answer: result.answer,
         };
     }
