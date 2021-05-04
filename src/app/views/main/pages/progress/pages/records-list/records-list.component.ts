@@ -1,10 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-    CUTTING_LINES,
-    fakeUpdates,
-    SESSION_DATA,
-    Y_AXIS_DATA_RANGE,
-} from "../common";
+import { FAKE_RECORDS_LIST } from "./data";
 
 @Component({
     selector: "SymRecordsList",
@@ -12,9 +7,7 @@ import {
     styleUrls: ["./records-list.component.scss"],
 })
 export class RecordsListComponent implements OnInit {
-    data = fakeUpdates(SESSION_DATA, 2000);
-    yAxisDataRange = Y_AXIS_DATA_RANGE;
-    cuttingLines = CUTTING_LINES;
+    data = FAKE_RECORDS_LIST;
 
     constructor() {
         // Initialize dependencies here
