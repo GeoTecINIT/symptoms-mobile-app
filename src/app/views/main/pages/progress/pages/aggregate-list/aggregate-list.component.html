@@ -1,3 +1,15 @@
 <SymBackActionBar title="Tu evolución detallada"></SymBackActionBar>
 
-<SymBarChart *ngIf="data | async as data" [data]="data" [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines"></SymBarChart>
+<ListView [items]="data" separatorColor="White">
+    <ng-template let-item="item">
+        <SymTitleContentCard
+                [iconCode]="item.iconCode"
+                [title]="item.title"
+                [subtitle]="item.subtitle">
+            <SymLineChart
+                    [yAxisDataRange]="item.chart.yAxisDataRange"
+                    [cuttingLines]="item.chart.cuttingLines"
+                    [data]="item.chart.data"></SymLineChart>
+        </SymTitleContentCard>
+    </ng-template>
+</ListView>
