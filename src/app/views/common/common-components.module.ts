@@ -17,6 +17,7 @@ import { ConfirmButtonComponent } from "./confirm-button/confirm-button.componen
 
 import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.component";
 import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.component";
+import { DangerButtonComponent } from "./danger-button/danger-button.component";
 
 @NgModule({
     imports: [NativeScriptCommonModule, NativeScriptRouterModule],
@@ -32,6 +33,7 @@ import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.
         ConfirmButtonComponent,
         NumericSelectorComponent,
         StepProgressBarComponent,
+        DangerButtonComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -45,6 +47,7 @@ import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.
         ConfirmButtonComponent,
         NumericSelectorComponent,
         StepProgressBarComponent,
+        DangerButtonComponent,
     ],
 })
 export class CommonComponentsModule {}
