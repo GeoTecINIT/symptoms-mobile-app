@@ -31,12 +31,21 @@ const AXIS_LABEL_TEXT_COLOR = "#828282";
 const AXIS_LINE_COLOR = "#E0E0E0";
 
 const CUTTING_LINE_TEXT_COLOR = "#1F525E";
-const CUTTING_LINE_COLOR = "#2DC38A";
+const CUTTING_LINE_COLOR = "#82919b";
+const CUTTING_LINE_WIDTH = 1;
 
 const TEXT_FONT_SIZE = 12;
 
-const COLOR_SCHEME = ["#3f2dc3", "#c3009f", "#fe006c", "#ff613a", "#ffa600"];
-const LINE_COLOR_ALPHA = 0.5;
+const COLOR_SCHEME = [
+    "#2DC38A",
+    "#00AB93",
+    "#009292",
+    "#007987",
+    "#1F6073",
+    "#2F4858",
+];
+
+const DATASET_COLOR_ALPHA = 0.7;
 
 export abstract class BaseChart<
     S extends IBarLineScatterCandleBubbleDataSet<Entry>,
@@ -59,7 +68,7 @@ export abstract class BaseChart<
             const nsColor = new Color(color);
 
             return new Color(
-                Math.round(LINE_COLOR_ALPHA * 255),
+                Math.round(DATASET_COLOR_ALPHA * 255),
                 nsColor.r,
                 nsColor.g,
                 nsColor.b
@@ -177,6 +186,7 @@ export abstract class BaseChart<
             limitLine.setLineColor(CUTTING_LINE_COLOR);
             limitLine.setFont(this.textFont);
             limitLine.setTextColor(CUTTING_LINE_TEXT_COLOR);
+            limitLine.setLineWidth(CUTTING_LINE_WIDTH);
             yAxis.addLimitLine(limitLine);
         }
     }
