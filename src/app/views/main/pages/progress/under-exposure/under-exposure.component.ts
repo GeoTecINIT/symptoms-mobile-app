@@ -7,12 +7,18 @@ import { DialogsService } from "~/app/views/common/dialogs.service";
     styleUrls: ["./under-exposure.component.scss"],
 })
 export class UnderExposureComponent implements OnInit {
+    inDanger = false;
+
     constructor(private dialogsService: DialogsService) {
         // Initialize dependencies here
     }
 
     ngOnInit() {
         // Use initialized dependencies
+    }
+
+    onSwitchStatus() {
+        this.inDanger = !this.inDanger;
     }
 
     onProgressGoneTap() {
@@ -37,6 +43,9 @@ export class UnderExposureComponent implements OnInit {
             .then((feelsBetter) => {
                 // TODO: Manage this
                 console.log("Feels better:", feelsBetter);
+                if (feelsBetter) {
+                    this.inDanger = false;
+                }
             });
     }
 
