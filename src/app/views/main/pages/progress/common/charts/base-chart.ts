@@ -31,18 +31,18 @@ const AXIS_LABEL_TEXT_COLOR = "#828282";
 const AXIS_LINE_COLOR = "#E0E0E0";
 
 const CUTTING_LINE_TEXT_COLOR = "#1F525E";
-const CUTTING_LINE_COLOR = "#82919b";
+const CUTTING_LINE_COLOR = "#62868e";
 const CUTTING_LINE_WIDTH = 1;
 
 const TEXT_FONT_SIZE = 12;
 
 const COLOR_SCHEME = [
     "#2DC38A",
-    "#00AB93",
-    "#009292",
-    "#007987",
-    "#1F6073",
-    "#2F4858",
+    "#F9CB5E",
+    "#669C81",
+    "#B1AF50",
+    "#79979E",
+    "#AEBEB2",
 ];
 
 const DATASET_COLOR_ALPHA = 0.7;
