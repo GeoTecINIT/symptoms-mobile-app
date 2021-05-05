@@ -3,6 +3,7 @@ import { ConfirmModalService } from "../../modals/confirm";
 import { QuestionsModalService } from "../../modals/questions";
 import { FeedbackModalService } from "../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { confirmWantsToLeave } from "~/app/core/dialogs/confirm";
 
 @Component({
     selector: "SymSimulationActions",
@@ -10,6 +11,8 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
     styleUrls: ["./simulation-actions.component.scss"],
 })
 export class SimulationActionsComponent implements OnInit {
+    btnMargin = 4;
+
     private logger: Logger;
 
     constructor(
@@ -37,13 +40,7 @@ export class SimulationActionsComponent implements OnInit {
                     confirm: "¡Claro!",
                     cancel: "En otro momento",
                 },
-                cancelConfirm: {
-                    question: "¿Te vas?",
-                    description:
-                        "No deberías abandonar una exposición salvo por causa mayor. Recuerda el papel negativo de la evitación. Es normal que tengas picos de ansiedad. Si te quedas, acabarás controlándolos.",
-                    positiveText: "Me quedo",
-                    negativeText: "Salir",
-                },
+                cancelConfirmOptions: confirmWantsToLeave,
             })
             .then((result) => this.logger.debug(`Result: ${result}`))
             .catch((e) =>
