@@ -15,6 +15,7 @@ import {
 import { preparePlugin } from "~/app/core/utils/emai-framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { Logger, getLogger } from "~/app/core/utils/logger";
+import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 
 const navigationTabs = {
     Progress: 0,
@@ -106,10 +107,6 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     private informAboutPermissionsNeed(): Promise<void> {
-        return this.dialogsService.showInfo(
-            "La aplicación no puede funcionar sin estos permisos",
-            "De acuerdo",
-            "Los permisos que te hemos solicitado son necesarios para que la aplicación funcione, sin ellos no podrás utilizar esta aplicación durante el tratamiento. Si tienes dudas, revisa nuestra política de privacidad o consulta a tu terapeuta."
-        );
+        return this.dialogsService.showInfo(infoOnPermissionsNeed);
     }
 }
