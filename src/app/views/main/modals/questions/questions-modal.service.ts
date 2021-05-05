@@ -3,7 +3,7 @@ import { QuestionsModule } from "./questions.module";
 import { MainViewService } from "~/app/views/main/main-view.service";
 
 import { QuestionsModalComponent } from "./questions-modal.component";
-import { QuestionsModalOptions } from "./options";
+import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer } from "./answers";
 
 @Injectable({

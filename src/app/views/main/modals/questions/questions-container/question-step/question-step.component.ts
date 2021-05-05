@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { animate, style, transition, trigger } from "@angular/animations";
 
-import { QuestionType } from "../../options";
+import { QuestionType } from "~/app/core/modals/questions";
 import { QuestionStepResult } from "../../answers";
 
 type QuestionStepType = "standalone" | "first" | "middle" | "last";
