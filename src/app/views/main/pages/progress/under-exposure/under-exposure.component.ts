@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
+import { FeedbackModalService } from "../../../modals/feedback";
+import { ProgressViewService } from "../progress-view.service";
 
 @Component({
     selector: "SymUnderExposure",
@@ -9,7 +11,11 @@ import { DialogsService } from "~/app/views/common/dialogs.service";
 export class UnderExposureComponent implements OnInit {
     inDanger = false;
 
-    constructor(private dialogsService: DialogsService) {
+    constructor(
+        private dialogsService: DialogsService,
+        private feedbackModalService: FeedbackModalService,
+        private progressViewService: ProgressViewService
+    ) {
         // Initialize dependencies here
     }
 
@@ -60,6 +66,48 @@ export class UnderExposureComponent implements OnInit {
             .then((wantsToLeave) => {
                 // TODO: Manage this
                 console.log("Wants to leave:", wantsToLeave);
+                if (wantsToLeave) {
+                    this.feedbackModalService
+                        .askFeedback({
+                            title: "En otro momento entonces",
+                            feedbackScreen: {
+                                body: {
+                                    emoji: "👋",
+                                    text:
+                                        "No te preocupes, lo importante es ser constante. ¡Hasta pronto!",
+                                },
+                                question:
+                                    "¿Podrías indicar el motivo de tu salida?",
+                                options: [
+                                    {
+                                        type: "predefined",
+                                        answer: "Mi nivel de ansiedad no baja",
+                                    },
+                                    {
+                                        type: "predefined",
+                                        answer:
+                                            "No consigo manejar la situación",
+                                    },
+                                    {
+                                        type: "predefined",
+                                        answer: "No dispongo de más tiempo",
+                                    },
+                                    {
+                                        type: "free-text",
+                                        hint: "Otro",
+                                        helpText:
+                                            "Tu terapeuta podrá leer este mensaje",
+                                    },
+                                ],
+                            },
+                        })
+                        .then((feedback) => {
+                            console.log("Feedback:", feedback);
+                            if (feedback) {
+                                this.progressViewService.setAsIdle();
+                            }
+                        });
+                }
             });
     }
 }
