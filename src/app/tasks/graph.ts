@@ -9,7 +9,12 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
-        // TODO: Add tasks
+        on(
+            "startEvent",
+            run("acquirePhoneGeolocation")
+                .every(5, "minutes")
+                .cancelOn("stopEvent")
+        );
     }
 }
 
