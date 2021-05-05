@@ -1,6 +1,25 @@
-<StackLayout>
-    <Button text="¿Dónde ha ido mi progreso?" class="btn btn-primary" (tap)="onProgressGoneTap()"></Button>
-    <Button text="¿Por qué no debería irme?" class="btn btn-primary" (tap)="onWantsToLeaveTap()"></Button>
-    <Button text="¿Te sientes mejor?" class="btn btn-primary" (tap)="onAskForMoodTap()"></Button>
-    <Button text="Finalizar exposición" class="btn btn-primary" (tap)="onEndExposureTap()"></Button>
-</StackLayout>
+<GridLayout class="page" rows="auto, *, auto">
+    <Button
+            row="0"
+            margin="0"
+            class="btn btn-primary"
+            [text]="inDanger ? 'Cambiar a \'Fuera de riesgo\'' : 'Cambiar a \'En riesgo\''"
+            (tap)="onSwitchStatus()">
+    </Button>
+    <GridLayout row="1" rows="auto, auto" verticalAlignment="center">
+        <Label row="0" class="circle"></Label>
+        <Label row="0" class="mdi-ro icon" text="&#xe55e;"></Label>
+        <Label row="1" class="body-text" textWrap="true" text="Estás realizando una exposición en: Lugar 1"></Label>
+    </GridLayout>
+    <StackLayout row="2">
+        <ng-container *ngIf="inDanger; else outOfDanger">
+            <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas, pero no te vayas"></Label>
+            <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskForMoodTap()"></SymConfirmButton>
+            <SymButtonLink margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
+        </ng-container>
+        <ng-template #outOfDanger>
+            <SymDangerButton horizontalAlignment="center" text="Finalizar exposición" (tap)="onEndExposureTap()"></SymDangerButton>
+            <SymButtonLink margin="0" text="¿Dónde ha ido mi información de progreso?" (tap)="onProgressGoneTap()"></SymButtonLink>
+        </ng-template>
+    </StackLayout>
+</GridLayout>

@@ -2,6 +2,17 @@ import { ChartData2D, CuttingLines, YAxisDataRange } from "../common/charts";
 import { Observable, timer } from "rxjs";
 import { map } from "rxjs/internal/operators";
 
+export interface ChartDescription {
+    iconCode: string;
+    title: string;
+    subtitle: string;
+    chart: {
+        yAxisDataRange: YAxisDataRange;
+        cuttingLines: CuttingLines;
+        data: Array<ChartData2D>;
+    };
+}
+
 export const SESSION_DATA: Array<ChartData2D> = [
     {
         label: "Nivel de ansiedad",
@@ -27,19 +38,23 @@ export const AGGREGATE_DATA: Array<ChartData2D> = [
         label: "Lugar 1",
         values: [
             { x: new Date(2021, 3, 20), y: 8 },
-            { x: new Date(2021, 3, 25), y: 7 },
             { x: new Date(2021, 3, 26), y: 5 },
-            { x: new Date(2021, 3, 29), y: 3 },
-            { x: new Date(2021, 3, 30), y: 3 },
+            { x: new Date(2021, 3, 30), y: 4 },
         ],
     },
     {
         label: "Lugar 2",
         values: [
-            { x: new Date(2021, 3, 22), y: 8 },
-            { x: new Date(2021, 3, 23), y: 7 },
-            { x: new Date(2021, 3, 27), y: 7 },
-            { x: new Date(2021, 3, 28), y: 5 },
+            { x: new Date(2021, 3, 22), y: 7 },
+            { x: new Date(2021, 3, 23), y: 5 },
+        ],
+    },
+
+    {
+        label: "Lugar 3",
+        values: [
+            { x: new Date(2021, 3, 27), y: 8 },
+            { x: new Date(2021, 3, 28), y: 7 },
         ],
     },
 ];
