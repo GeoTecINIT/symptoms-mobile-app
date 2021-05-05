@@ -6,7 +6,7 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { preparePlugin } from "~/app/core/utils/emai-framework";
 
 @Component({
     selector: "SymTutorial",
@@ -49,17 +49,5 @@ export class TutorialComponent implements OnInit {
                 );
             }
         });
-    }
-}
-
-async function preparePlugin(): Promise<boolean> {
-    const isReady = await emaiFramework.isReady();
-    if (isReady) return true;
-    try {
-        await emaiFramework.prepare();
-
-        return true;
-    } catch (e) {
-        return false;
     }
 }
