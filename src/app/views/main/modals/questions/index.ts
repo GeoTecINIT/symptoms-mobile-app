@@ -1,3 +1,3 @@
 export { QuestionsModalService } from "./questions-modal.service";
-export { QuestionsModalOptions } from "./options";
+export { QuestionsModalOptions } from "~/app/core/modals/questions";
 export { QuestionAnswer } from "./answers";
