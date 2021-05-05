@@ -15,7 +15,7 @@ export class ConfirmContainerComponent {
     options: ConfirmModalOptions;
 
     get hasCancelConfirm(): boolean {
-        return this.options.cancelConfirm !== undefined;
+        return this.options.cancelConfirmOptions !== undefined;
     }
 
     constructor(
@@ -36,18 +36,9 @@ export class ConfirmContainerComponent {
             return;
         }
 
-        const {
-            question,
-            positiveText,
-            negativeText,
-            description,
-        } = this.options.cancelConfirm;
         this.dialogsService
             .askConfirmationWithPositiveAction(
-                question,
-                positiveText,
-                negativeText,
-                description
+                this.options.cancelConfirmOptions
             )
             .then((confirms) => {
                 if (confirms) this.params.closeCallback(false);
