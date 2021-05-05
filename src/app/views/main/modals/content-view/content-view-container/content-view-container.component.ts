@@ -5,6 +5,7 @@ import {
     TreatmentContentService,
 } from "~/app/views/treatment-content.service";
 import { EventData, ScrollView, StackLayout } from "@nativescript/core";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 const CONTENT_END_OFFSET = 10;
 
@@ -19,11 +20,13 @@ export class ContentViewContainerComponent {
     private readonly contentId: string;
     private contentHeight: number;
     private seen: boolean;
+    private logger: Logger;
 
     constructor(
         private params: ModalDialogParams,
         private treatmentContentService: TreatmentContentService
     ) {
+        this.logger = getLogger("ContentViewContainerComponent");
         this.contentId = params.context.id;
         this.content$ = this.treatmentContentService.getById(this.contentId);
         this.content$.then((content) => (this.seen = content.seen));
@@ -48,7 +51,9 @@ export class ContentViewContainerComponent {
             this.treatmentContentService
                 .markAsSeen(this.contentId)
                 .catch((e) =>
-                    console.error("Could not mark content as seen. Reason:", e)
+                    this.logger.error(
+                        `Could not mark content as seen. Reason: ${e}`
+                    )
                 );
         }
     }

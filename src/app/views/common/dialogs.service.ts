@@ -6,11 +6,18 @@ import {
     confirm,
     ConfirmOptions,
 } from "@nativescript/core";
+import { Logger, getLogger } from "~/app/core/utils/logger";
 
 @Injectable({
     providedIn: CommonComponentsModule,
 })
 export class DialogsService {
+    private logger: Logger;
+
+    constructor() {
+        this.logger = getLogger("DialogsService");
+    }
+
     showInfo(
         title: string,
         confirmText: string,
@@ -24,7 +31,7 @@ export class DialogsService {
         };
 
         return alert(options).catch((e) =>
-            console.error("Could not show info dialog. Reason:", e)
+            this.logger.error(`Could not show info dialog. Reason: ${e}`)
         );
     }
 

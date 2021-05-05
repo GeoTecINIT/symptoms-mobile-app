@@ -6,15 +6,25 @@ import { MainViewService } from "../../main-view.service";
 
 import { ContentViewModalComponent } from "./content-view-modal.component";
 
+import { getLogger, Logger } from "~/app/core/utils/logger";
+
 @Injectable({
     providedIn: ContentViewModule,
 })
 export class ContentViewModalService {
-    constructor(private mainViewService: MainViewService) {}
+    private logger: Logger;
+
+    constructor(private mainViewService: MainViewService) {
+        this.logger = getLogger("ContentViewModalService");
+    }
 
     showContent(id: string) {
         this.mainViewService
             .showFullScreenAnimatedModal(ContentViewModalComponent, { id })
-            .catch((e) => console.log("Could not show content view modal:", e));
+            .catch((e) =>
+                this.logger.error(
+                    `Could not show content view modal. Reason: ${e}`
+                )
+            );
     }
 }
