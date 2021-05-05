@@ -3,7 +3,7 @@ import { ConfirmModalService } from "../../modals/confirm";
 import { QuestionsModalService } from "../../modals/questions";
 import { FeedbackModalService } from "../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { confirmWantsToLeave } from "~/app/core/dialogs/confirm";
+import { confirmWantsToStartAnExposure } from "~/app/core/modals/confirm";
 
 @Component({
     selector: "SymSimulationActions",
@@ -29,19 +29,7 @@ export class SimulationActionsComponent implements OnInit {
 
     onRelevantPlaceArrival() {
         this.confirmModalService
-            .show({
-                title: "Estás en un lugar importante",
-                body: {
-                    iconCode: "\ue55f",
-                    text: "Has llegado a: Lugar 1",
-                },
-                question: "¿Te animas a hacer una exposición ahora?",
-                buttons: {
-                    confirm: "¡Claro!",
-                    cancel: "En otro momento",
-                },
-                cancelConfirmOptions: confirmWantsToLeave,
-            })
+            .show(confirmWantsToStartAnExposure)
             .then((result) => this.logger.debug(`Result: ${result}`))
             .catch((e) =>
                 this.logger.error(`Could not show confirm modal: ${e}`)
