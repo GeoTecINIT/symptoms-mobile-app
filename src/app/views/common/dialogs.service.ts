@@ -11,14 +11,19 @@ import {
     providedIn: CommonComponentsModule,
 })
 export class DialogsService {
-    showInfo(title: string, confirmText: string, body: string = "") {
+    showInfo(
+        title: string,
+        confirmText: string,
+        body: string = ""
+    ): Promise<void> {
         const options: AlertOptions = {
             title,
             okButtonText: confirmText,
             message: body,
             cancelable: true,
         };
-        alert(options).catch((e) =>
+
+        return alert(options).catch((e) =>
             console.error("Could not show info dialog. Reason:", e)
         );
     }
