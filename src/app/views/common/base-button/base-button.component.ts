@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 
 export type ButtonHAlignment = "left" | "right" | "center" | "stretch";
 export type ButtonSize = "lg" | "md" | "sm";
-export type ButtonVariant = "primary" | "secondary" | "confirm";
+export type ButtonVariant = "primary" | "secondary" | "confirm" | "danger";
 
 @Component({
     selector: "SymBaseButton",
@@ -28,5 +28,9 @@ export class BaseButtonComponent {
 
     get confirm(): boolean {
         return this.variant === "confirm";
+    }
+
+    get danger(): boolean {
+        return this.variant === "danger";
     }
 }

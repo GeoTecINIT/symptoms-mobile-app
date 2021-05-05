@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { ProgressViewService } from "./progress-view.service";
 
 @Component({
     selector: "SymProgressContainer",
@@ -6,10 +7,12 @@ import { Component, OnInit } from "@angular/core";
     styleUrls: ["./progress-container.component.scss"],
 })
 export class ProgressContainerComponent implements OnInit {
-    idle = true;
+    get idle(): boolean {
+        return this.progressViewService.idle;
+    }
     hasData = false;
 
-    constructor() {
+    constructor(private progressViewService: ProgressViewService) {
         // Initialize dependencies here
     }
 
@@ -18,7 +21,7 @@ export class ProgressContainerComponent implements OnInit {
     }
 
     switchExposureState() {
-        this.idle = !this.idle;
+        this.progressViewService.switchIdleState();
     }
 
     switchDataAvailabilityState() {
