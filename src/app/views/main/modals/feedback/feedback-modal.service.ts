@@ -4,7 +4,7 @@ import { FeedbackModule } from "./feedback.module";
 import { MainViewService } from "../../main-view.service";
 
 import { FeedbackModalComponent } from "./feedback-modal.component";
-import { FeedbackModalOptions } from "./options";
+import { FeedbackModalOptions } from "~/app/core/modals/feedback";
 
 @Injectable({
     providedIn: FeedbackModule,

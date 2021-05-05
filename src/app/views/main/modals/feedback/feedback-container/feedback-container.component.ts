@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { FeedbackModalOptions } from "~/app/views/main/modals/feedback/options";
+import { FeedbackModalOptions } from "~/app/core/modals/feedback";
 
 @Component({
     selector: "SymFeedbackContainer",
