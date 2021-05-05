@@ -71,10 +71,15 @@ export class AxisDateFormatter implements AxisValueFormatter {
         dataSet: InternalChartData2D
     ): Resolution {
         const dayTicks = this.calculateDayTicks(dataSet);
-        if (dayTicks.size === 1) {
-            return Resolution.Hour;
+        const dayTicksValues = [...dayTicks.values()];
+        if (dayTicksValues.length === 1) {
+            if (dayTicksValues[0] > 1) {
+                return Resolution.Hour;
+            } else {
+                return Resolution.Date;
+            }
         }
-        if ([...dayTicks.values()].some((value) => value > 1)) {
+        if (dayTicksValues.some((value) => value > 1)) {
             return Resolution.DateHour;
         }
 
