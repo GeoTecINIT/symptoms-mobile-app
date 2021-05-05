@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ConfirmModalService } from "../../modals/confirm";
 import { QuestionsModalService } from "../../modals/questions";
 import { FeedbackModalService } from "../../modals/feedback";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({
     selector: "SymSimulationActions",
@@ -9,12 +10,14 @@ import { FeedbackModalService } from "../../modals/feedback";
     styleUrls: ["./simulation-actions.component.scss"],
 })
 export class SimulationActionsComponent implements OnInit {
+    private logger: Logger;
+
     constructor(
         private confirmModalService: ConfirmModalService,
         private questionsModalService: QuestionsModalService,
         private feedbackModalService: FeedbackModalService
     ) {
-        // Initialize dependencies here
+        this.logger = getLogger("SimulationActionsComponent");
     }
 
     ngOnInit() {
@@ -42,8 +45,10 @@ export class SimulationActionsComponent implements OnInit {
                     negativeText: "Salir",
                 },
             })
-            .then((result) => console.log("Result:", result))
-            .catch((e) => console.error("Could not show confirm modal:", e));
+            .then((result) => this.logger.debug(`Result: ${result}`))
+            .catch((e) =>
+                this.logger.error(`Could not show confirm modal: ${e}`)
+            );
     }
 
     onWantsToAnswerQuestions() {
@@ -79,8 +84,12 @@ export class SimulationActionsComponent implements OnInit {
                     },
                 ],
             })
-            .then((answers) => console.log("Got answers:", answers))
-            .catch((e) => console.error("Could not deliver questions:", e));
+            .then((answers) =>
+                this.logger.debug(`Got answers: ${JSON.stringify(answers)}`)
+            )
+            .catch((e) =>
+                this.logger.error(`Could not deliver questions: ${e}`)
+            );
     }
 
     onWantsToLeave() {
@@ -115,7 +124,10 @@ export class SimulationActionsComponent implements OnInit {
                     ],
                 },
             })
-            .then((result) => console.log("Feedback:", result));
+            .then((result) => this.logger.debug(`Feedback: ${result}`))
+            .catch((e) =>
+                this.logger.error(`Could not deliver feedback: ${e}`)
+            );
     }
 
     onWantsToDeliverFeedback() {
@@ -154,6 +166,9 @@ export class SimulationActionsComponent implements OnInit {
                     confirm: "Volver a la app",
                 },
             })
-            .then((result) => console.log("Feedback:", result));
+            .then((result) => this.logger.debug(`Feedback: ${result}`))
+            .catch((e) =>
+                this.logger.error(`Could not deliver feedback: ${e}`)
+            );
     }
 }

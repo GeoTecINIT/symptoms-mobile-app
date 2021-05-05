@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 
 import { AppSettingsService } from "~/app/views/app-settings.service";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({
     selector: "SymReportUsageOption",
@@ -14,7 +15,11 @@ export class ReportUsageOptionComponent {
 
     reportUsageConsent: boolean;
 
+    private logger: Logger;
+
     constructor(private appSettingsService: AppSettingsService) {
+        this.logger = getLogger("ReportUsageOptionComponent");
+
         this.appSettingsService
             .getReportUsageConsent()
             .then((consents) => (this.reportUsageConsent = consents));
@@ -24,9 +29,8 @@ export class ReportUsageOptionComponent {
         this.appSettingsService
             .setReportUsageConsent(checked)
             .catch((e) =>
-                console.error(
-                    "Could not update report usage consent. Reason:",
-                    e
+                this.logger.error(
+                    `Could not update report usage consent. Reason: ${e}`
                 )
             );
     }

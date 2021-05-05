@@ -14,6 +14,7 @@ import {
 } from "@nativescript-community/ui-material-bottomnavigationbar";
 import { preparePlugin } from "~/app/core/utils/emai-framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
+import { Logger, getLogger } from "~/app/core/utils/logger";
 
 const navigationTabs = {
     Progress: 0,
@@ -31,6 +32,7 @@ export class MainComponent implements OnInit, OnDestroy {
     selectedTab = navigationTabs.Progress;
 
     private loggedInSub: Subscription;
+    private logger: Logger;
 
     constructor(
         private authService: AuthService,
@@ -41,6 +43,7 @@ export class MainComponent implements OnInit, OnDestroy {
         mainViewService: MainViewService,
         vcRef: ViewContainerRef
     ) {
+        this.logger = getLogger("MainComponent");
         page.actionBarHidden = true;
         mainViewService.setViewContainerRef(vcRef);
     }
@@ -96,9 +99,8 @@ export class MainComponent implements OnInit, OnDestroy {
                 }
             })
             .catch((e) => {
-                console.error(
-                    "Could not prepare EMA/I framework tasks. Reason:",
-                    e
+                this.logger.error(
+                    `Could not prepare EMA/I framework tasks. Reason: ${e}`
                 );
             });
     }
