@@ -6,7 +6,7 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
-import { taskDispatcher } from "nativescript-task-dispatcher";
+import { emaiFramework } from "@geotecinit/emai-framework";
 
 @Component({
     selector: "SymTutorial",
@@ -53,10 +53,10 @@ export class TutorialComponent implements OnInit {
 }
 
 async function preparePlugin(): Promise<boolean> {
-    const isReady = await taskDispatcher.isReady();
+    const isReady = await emaiFramework.isReady();
     if (isReady) return true;
     try {
-        await taskDispatcher.prepare();
+        await emaiFramework.prepare();
 
         return true;
     } catch (e) {
