@@ -5,6 +5,7 @@ import { FeedbackModalService } from "../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 import { confirmWantsToStartAnExposure } from "~/app/core/modals/confirm";
+import { askAnxietyQuestions } from "~/app/core/modals/questions";
 import {
     askForQuestionFrequencyFeedback,
     askWantsToLeaveFeedback,
@@ -43,37 +44,7 @@ export class SimulationActionsComponent implements OnInit {
 
     onWantsToAnswerQuestions() {
         this.questionsModalService
-            .deliverQuestions({
-                title: "¿Cómo te encuentras?",
-                body: {
-                    iconCode: "\ue94c",
-                    text:
-                        "Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras",
-                },
-                questions: [
-                    {
-                        title:
-                            "De 0 a 10, ¿cómo puntuarías tu nivel de ansiedad actual?",
-                        type: "range",
-                        from: 0,
-                        to: 10,
-                    },
-                    {
-                        title:
-                            "De 0 a 10, ¿cómo puntuarías las ganas que tienes de salir de aquí?",
-                        type: "range",
-                        from: 0,
-                        to: 10,
-                    },
-                    {
-                        title:
-                            "De 0 a 10, ¿cómo puntuarías tu grado de creencia en pensamientos?",
-                        type: "range",
-                        from: 0,
-                        to: 10,
-                    },
-                ],
-            })
+            .deliverQuestions(askAnxietyQuestions)
             .then((answers) =>
                 this.logger.debug(`Got answers: ${JSON.stringify(answers)}`)
             )
