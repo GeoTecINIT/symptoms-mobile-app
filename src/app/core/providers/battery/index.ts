@@ -1,12 +1,16 @@
-import { Provider } from "../provider";
-import { PlatformType } from "../record-type";
 import { BatteryLevel } from "./battery-level";
-import { ProviderInterruption } from "../provider-interrupter";
 import { Application, isAndroid } from "@nativescript/core";
+import {
+    PullProvider,
+    ProviderInterruption,
+} from "@geotecinit/emai-framework/data-sources";
+import { RecordType } from "@geotecinit/emai-framework/entities";
 
-export class BatteryProvider implements Provider {
+// TODO: This is a candidate to be moved to the EMAI framework
+export class BatteryProvider implements PullProvider {
     get provides() {
-        return PlatformType.BatteryLevel;
+        // FIXME: Could be great to be able to return a string here
+        return RecordType.Geolocation;
     }
 
     constructor(private sdkVersion?: number) {
