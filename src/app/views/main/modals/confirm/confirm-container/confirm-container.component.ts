@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
 
 import { ModalDialogParams } from "@nativescript/angular";
-
 import { DialogsService } from "~/app/views/common/dialogs.service";
-
-import { ConfirmModalOptions } from "../options";
+import { ConfirmModalOptions } from "~/app/core/modals/confirm";
 
 @Component({
     selector: "SymConfirmContainer",
