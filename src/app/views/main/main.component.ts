@@ -12,6 +12,8 @@ import {
     BottomNavigationBar,
     TabSelectedEventData,
 } from "@nativescript-community/ui-material-bottomnavigationbar";
+import { preparePlugin } from "~/app/core/utils/emai-framework";
+import { DialogsService } from "~/app/views/common/dialogs.service";
 
 const navigationTabs = {
     Progress: 0,
@@ -33,6 +35,7 @@ export class MainComponent implements OnInit, OnDestroy {
     constructor(
         private authService: AuthService,
         private navigationService: NavigationService,
+        private dialogsService: DialogsService,
         private activeRoute: ActivatedRoute,
         page: Page,
         mainViewService: MainViewService,
@@ -45,6 +48,7 @@ export class MainComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.loadTabOutlets();
         this.controlAppLoginStatus();
+        this.checkEMAIFrameworkStatus();
     }
 
     ngOnDestroy() {
@@ -80,5 +84,30 @@ export class MainComponent implements OnInit, OnDestroy {
                 this.navigationService.forceNavigate(["/welcome"]);
             }
         });
+    }
+
+    private checkEMAIFrameworkStatus() {
+        preparePlugin()
+            .then((ready) => {
+                if (!ready) {
+                    this.informAboutPermissionsNeed().then(() => {
+                        this.checkEMAIFrameworkStatus();
+                    });
+                }
+            })
+            .catch((e) => {
+                console.error(
+                    "Could not prepare EMA/I framework tasks. Reason:",
+                    e
+                );
+            });
+    }
+
+    private informAboutPermissionsNeed(): Promise<void> {
+        return this.dialogsService.showInfo(
+            "La aplicación no puede funcionar sin estos permisos",
+            "De acuerdo",
+            "Los permisos que te hemos solicitado son necesarios para que la aplicación funcione, sin ellos no podrás utilizar esta aplicación durante el tratamiento. Si tienes dudas, revisa nuestra política de privacidad o consulta a tu terapeuta."
+        );
     }
 }
