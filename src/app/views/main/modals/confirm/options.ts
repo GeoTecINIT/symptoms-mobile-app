@@ -1,3 +1,5 @@
+import { ConfirmDialogOptions } from "~/app/core/dialogs/confirm";
+
 export interface ConfirmModalOptions {
     title: string;
     body: {
@@ -10,10 +12,5 @@ export interface ConfirmModalOptions {
         confirm: string;
         cancel: string;
     };
-    cancelConfirm?: {
-        question: string;
-        description?: string;
-        positiveText: string;
-        negativeText: string;
-    };
+    cancelConfirmOptions?: ConfirmDialogOptions;
 }
