@@ -1,4 +1,4 @@
 export {
     Logger,
     AbstractLogger,
-} from "nativescript-task-dispatcher/utils/logger";
+} from "@geotecinit/emai-framework/utils/logger";
