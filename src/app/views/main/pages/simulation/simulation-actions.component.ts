@@ -1,15 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { ConfirmModalService } from "../../modals/confirm";
-import { QuestionsModalService } from "../../modals/questions";
-import { FeedbackModalService } from "../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-
-import { confirmWantsToStartAnExposure } from "~/app/core/modals/confirm";
-import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import {
-    askForQuestionFrequencyFeedback,
-    askWantsToLeaveFeedback,
-} from "~/app/core/modals/feedback";
+import { emaiFramework } from "@geotecinit/emai-framework";
 
 @Component({
     selector: "SymSimulationActions",
@@ -21,11 +12,7 @@ export class SimulationActionsComponent implements OnInit {
 
     private logger: Logger;
 
-    constructor(
-        private confirmModalService: ConfirmModalService,
-        private questionsModalService: QuestionsModalService,
-        private feedbackModalService: FeedbackModalService
-    ) {
+    constructor() {
         this.logger = getLogger("SimulationActionsComponent");
     }
 
@@ -33,41 +20,7 @@ export class SimulationActionsComponent implements OnInit {
         // Use initialized dependencies
     }
 
-    onRelevantPlaceArrival() {
-        this.confirmModalService
-            .show(confirmWantsToStartAnExposure)
-            .then((result) => this.logger.debug(`Result: ${result}`))
-            .catch((e) =>
-                this.logger.error(`Could not show confirm modal: ${e}`)
-            );
-    }
-
-    onWantsToAnswerQuestions() {
-        this.questionsModalService
-            .deliverQuestions(askAnxietyQuestions)
-            .then((answers) =>
-                this.logger.debug(`Got answers: ${JSON.stringify(answers)}`)
-            )
-            .catch((e) =>
-                this.logger.error(`Could not deliver questions: ${e}`)
-            );
-    }
-
-    onWantsToLeave() {
-        this.feedbackModalService
-            .askFeedback(askWantsToLeaveFeedback)
-            .then((result) => this.logger.debug(`Feedback: ${result}`))
-            .catch((e) =>
-                this.logger.error(`Could not deliver feedback: ${e}`)
-            );
-    }
-
-    onWantsToDeliverFeedback() {
-        this.feedbackModalService
-            .askFeedback(askForQuestionFrequencyFeedback)
-            .then((result) => this.logger.debug(`Feedback: ${result}`))
-            .catch((e) =>
-                this.logger.error(`Could not deliver feedback: ${e}`)
-            );
+    emitEMAIFrameworkEvent(eventName: string) {
+        emaiFramework.emitEvent(eventName);
     }
 }
