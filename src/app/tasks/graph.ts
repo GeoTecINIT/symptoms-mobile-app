@@ -2,7 +2,7 @@ import {
     TaskGraph,
     EventListenerGenerator,
     RunnableTaskDescriptor,
-} from "nativescript-task-dispatcher/tasks/graph";
+} from "@geotecinit/emai-framework/tasks/graph";
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
@@ -11,23 +11,10 @@ class DemoTaskGraph implements TaskGraph {
     ): Promise<void> {
         on(
             "startEvent",
-            run("logDummyTaskExecutionStart")
-                .every(1, "minutes")
+            run("acquirePhoneGeolocation")
+                .every(5, "minutes")
                 .cancelOn("stopEvent")
         );
-        on(
-            "startEvent",
-            run("logGPSTaskExecutionStart")
-                .every(1, "minutes")
-                .cancelOn("stopEvent")
-        );
-
-        on("dummyTaskExecutionStartLogged", run("acquireBatteryLevel"));
-
-        on("gpsTaskExecutionStartLogged", run("acquireGeolocation"));
-        on("geolocationAcquired", run("acquireBatteryLevel"));
-
-        on("batteryLevelAcquired", run("logTaskExecutionEnd"));
     }
 }
 

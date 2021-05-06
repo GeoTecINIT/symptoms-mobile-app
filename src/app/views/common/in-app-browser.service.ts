@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { CommonComponentsModule } from "./common-components.module";
 import { InAppBrowser } from "nativescript-inappbrowser";
 import { Utils } from "@nativescript/core";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 const actionBarBgColor = "#FAFAFA";
 const actionBarTextColor = "#212121";
@@ -13,9 +14,15 @@ const privacyPolicyRoute = "/privacy-policy";
     providedIn: CommonComponentsModule,
 })
 export class InAppBrowserService {
+    private logger: Logger;
+
+    constructor() {
+        this.logger = getLogger("InAppBrowserService");
+    }
+
     openProjectWebSite(path: string = "") {
         this.openUrl(`https://${domain}${path}`).catch((e) =>
-            console.error("Could not open URL in in-app browser:", e)
+            this.logger.error(`Could not open URL in in-app browser: ${e}`)
         );
     }
 
@@ -61,9 +68,8 @@ export class InAppBrowserService {
                 },
             });
         } catch (e) {
-            console.error(
-                "Could not open url, falling back to default mechanism. Error: ",
-                e
+            this.logger.error(
+                `Could not open url, falling back to default mechanism. Error: ${e}`
             );
             this.openInDefaultExternalBrowser(url);
         }

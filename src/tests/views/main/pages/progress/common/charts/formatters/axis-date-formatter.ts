@@ -113,4 +113,20 @@ describe("Axis date formatter", () => {
         const formattedValue = formatter.getAxisLabel(5, null);
         expect(formattedValue).toEqual("26/04 15:25");
     });
+
+    it("formats data set values with just one timestamp as dates", () => {
+        const data: Array<ChartData2D> = [
+            {
+                label: "First dataset",
+                values: [{ x: new Date(2021, 3, 23), y: 0 }],
+            },
+            {
+                label: "Second dataset",
+                values: [{ x: new Date(2021, 3, 25), y: 5 }],
+            },
+        ];
+        const formatter = new AxisDateFormatter(data);
+        const formattedValue = formatter.getAxisLabel(1, null);
+        expect(formattedValue).toEqual("25/04");
+    });
 });
