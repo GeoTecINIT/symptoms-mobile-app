@@ -1,12 +1,17 @@
 import { Injectable } from "@angular/core";
 import { RouterExtensions } from "@nativescript/angular";
 import { ActivatedRoute } from "@angular/router";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
     providedIn: "root",
 })
 export class NavigationService {
-    constructor(private routerExtension: RouterExtensions) {}
+    private logger: Logger;
+
+    constructor(private routerExtension: RouterExtensions) {
+        this.logger = getLogger("NavigationService");
+    }
 
     navigate(
         route: Array<any>,
@@ -20,7 +25,9 @@ export class NavigationService {
                 clearHistory,
             })
             .catch((e) =>
-                console.error(`Could not navigate to ${route}. Reason: `, e)
+                this.logger.error(
+                    `Could not navigate to ${route}. Reason: ${e}`
+                )
             );
     }
 
@@ -31,9 +38,8 @@ export class NavigationService {
                 clearHistory: true,
             })
             .catch((e) =>
-                console.error(
-                    `Could not navigate to ${absoluteRoute}. Reason:`,
-                    e
+                this.logger.error(
+                    `Could not navigate to ${absoluteRoute}. Reason: ${e}`
                 )
             );
     }
@@ -45,9 +51,8 @@ export class NavigationService {
         this.routerExtension
             .navigate([{ outlets }], { relativeTo: source })
             .catch((e) =>
-                console.error(
-                    `Could not navigate ${outlets} outlets. Reason:`,
-                    e
+                this.logger.error(
+                    `Could not navigate ${outlets} outlets. Reason: ${e}`
                 )
             );
     }

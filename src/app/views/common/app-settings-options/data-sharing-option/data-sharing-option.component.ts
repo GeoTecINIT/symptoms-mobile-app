@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 
 import { AppSettingsService } from "~/app/views/app-settings.service";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({
     selector: "SymDataSharingOption",
@@ -14,7 +15,10 @@ export class DataSharingOptionComponent {
 
     dataSharingConsent: boolean;
 
+    private logger: Logger;
+
     constructor(private appSettingsService: AppSettingsService) {
+        this.logger = getLogger("DataSharingOptionComponent");
         this.appSettingsService
             .getDataSharingConsent()
             .then((consents) => (this.dataSharingConsent = consents));
@@ -24,9 +28,8 @@ export class DataSharingOptionComponent {
         this.appSettingsService
             .setDataSharingConsent(checked)
             .catch((e) =>
-                console.error(
-                    "Could not update data sharing consent. Reason:",
-                    e
+                this.logger.error(
+                    `Could not update data sharing consent. Reason: ${e}`
                 )
             );
     }

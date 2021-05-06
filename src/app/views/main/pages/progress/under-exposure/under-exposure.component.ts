@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { ProgressViewService } from "../progress-view.service";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({
     selector: "SymUnderExposure",
@@ -11,12 +12,14 @@ import { ProgressViewService } from "../progress-view.service";
 export class UnderExposureComponent implements OnInit {
     inDanger = false;
 
+    private logger: Logger;
+
     constructor(
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
         private progressViewService: ProgressViewService
     ) {
-        // Initialize dependencies here
+        this.logger = getLogger("UnderExposureComponent");
     }
 
     ngOnInit() {
@@ -48,7 +51,7 @@ export class UnderExposureComponent implements OnInit {
             .askConfirmation("¿Te sientes mejor?", "Sí", "No")
             .then((feelsBetter) => {
                 // TODO: Manage this
-                console.log("Feels better:", feelsBetter);
+                this.logger.debug(`Feels better: ${feelsBetter}`);
                 if (feelsBetter) {
                     this.inDanger = false;
                 }
@@ -65,7 +68,7 @@ export class UnderExposureComponent implements OnInit {
             )
             .then((wantsToLeave) => {
                 // TODO: Manage this
-                console.log("Wants to leave:", wantsToLeave);
+                this.logger.debug(`Wants to leave: ${wantsToLeave}`);
                 if (wantsToLeave) {
                     this.feedbackModalService
                         .askFeedback({
@@ -102,7 +105,7 @@ export class UnderExposureComponent implements OnInit {
                             },
                         })
                         .then((feedback) => {
-                            console.log("Feedback:", feedback);
+                            this.logger.debug(`Feedback: ${feedback}`);
                             if (feedback) {
                                 this.progressViewService.setAsIdle();
                             }

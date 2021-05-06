@@ -1,7 +1,7 @@
 import { AbstractLogger, Logger } from "./common";
 import { FirebaseManager, firebaseManager } from "../firebase";
 import { DevLogger } from "./dev";
-import { isAndroid } from "tns-core-modules/platform";
+import { isAndroid } from "@nativescript/core";
 
 export class ProdLogger extends AbstractLogger {
     constructor(

@@ -1,5 +1,5 @@
 import { getConfig } from "../../config";
-import { Logger } from "nativescript-task-dispatcher/utils/logger";
+import { Logger } from "./common";
 import { DevLogger } from "./dev";
 import { ProdLogger } from "./prod";
 
