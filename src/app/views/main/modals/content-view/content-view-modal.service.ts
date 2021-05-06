@@ -18,8 +18,8 @@ export class ContentViewModalService {
         this.logger = getLogger("ContentViewModalService");
     }
 
-    showContent(id: string) {
-        this.mainViewService
+    showContent(id: string): Promise<void> {
+        return this.mainViewService
             .showFullScreenAnimatedModal(ContentViewModalComponent, { id })
             .catch((e) =>
                 this.logger.error(
