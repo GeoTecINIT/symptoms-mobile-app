@@ -1,9 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { Page } from "@nativescript/core";
+import { Application, Page } from "@nativescript/core";
 
+import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
+import { DialogsService } from "~/app/views/common/dialogs.service";
+import { ConfirmModalService } from "~/app/views/main/modals/confirm";
+import { QuestionsModalService } from "~/app/views/main/modals/questions";
+import { FeedbackModalService } from "~/app/views/main/modals/feedback";
+import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
+
 import { NavigationService } from "../navigation.service";
 
 import { MainViewService } from "./main-view.service";
@@ -12,10 +19,11 @@ import {
     BottomNavigationBar,
     TabSelectedEventData,
 } from "@nativescript-community/ui-material-bottomnavigationbar";
-import { preparePlugin } from "~/app/core/utils/emai-framework";
-import { DialogsService } from "~/app/views/common/dialogs.service";
-import { Logger, getLogger } from "~/app/core/utils/logger";
+
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
+import { preparePlugin } from "~/app/core/utils/emai-framework";
+import { appEvents } from "~/app/core/app-events";
+import { ContentViewModalService } from "~/app/views/main/modals/content-view/content-view-modal.service";
 
 const navigationTabs = {
     Progress: 0,
@@ -37,8 +45,13 @@ export class MainComponent implements OnInit, OnDestroy {
 
     constructor(
         private authService: AuthService,
-        private navigationService: NavigationService,
         private dialogsService: DialogsService,
+        private confirmModalService: ConfirmModalService,
+        private questionsModalService: QuestionsModalService,
+        private feedbackModalService: FeedbackModalService,
+        private contentViewModalService: ContentViewModalService,
+        private notificationsHandlerService: NotificationsHandlerService,
+        private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         page: Page,
         mainViewService: MainViewService,
@@ -53,6 +66,14 @@ export class MainComponent implements OnInit, OnDestroy {
         this.loadTabOutlets();
         this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
+        appEvents.once(Application.displayedEvent, () => {
+            this.notificationsHandlerService.init(
+                this.confirmModalService,
+                this.feedbackModalService,
+                this.questionsModalService,
+                this.contentViewModalService
+            );
+        });
     }
 
     ngOnDestroy() {
