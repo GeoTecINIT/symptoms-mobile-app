@@ -7,6 +7,7 @@ import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
 import { preparePlugin } from "~/app/core/utils/emai-framework";
+import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 
 @Component({
     selector: "SymTutorial",
@@ -42,11 +43,7 @@ export class TutorialComponent implements OnInit {
                     true
                 );
             } else {
-                this.dialogsService.showInfo(
-                    "La aplicación no puede funcionar sin estos permisos",
-                    "De acuerdo",
-                    "Los permisos que te hemos solicitado son necesarios para que la aplicación funcione, sin ellos no podrás utilizar esta aplicación durante el tratamiento. Si tienes dudas, revisa nuestra política de privacidad o consulta a tu terapeuta."
-                );
+                this.dialogsService.showInfo(infoOnPermissionsNeed);
             }
         });
     }

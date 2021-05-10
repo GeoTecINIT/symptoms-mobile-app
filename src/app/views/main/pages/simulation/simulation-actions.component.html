@@ -1,9 +1,27 @@
 <SymMainActionBar title="Simulación"></SymMainActionBar>
 
-<StackLayout verticalAlignment="center">
-    <Button text="Llegada a un lugar importante" class="btn btn-primary" (tap)="onRelevantPlaceArrival()"></Button>
-    <Button text="Por favor, responde a estas preguntas" class="btn btn-primary" (tap)="onWantsToAnswerQuestions()"></Button>
-    <Button text="¿Te vas?" class="btn btn-primary" (tap)="onWantsToLeave()"></Button>
-    <Button text="¿Qué tal lo estamos haciendo?" class="btn btn-primary" (tap)="onWantsToDeliverFeedback()"></Button>
-</StackLayout>
-
+<ScrollView>
+    <StackLayout class="page">
+        <StackLayout class="flat-card">
+            <Label class="card-header" textWrap="true" textAlignment="center" text="Sección especial para evaluar la interfaz"></Label>
+            <Label textWrap="true" text="Esta sección no aparecerá en la aplicación definitiva. Su finalidad es permitir evaluar los diferentes componentes de la exposición sin tener que llevarla a cabo."></Label>
+        </StackLayout>
+        <SymSimulationSection title="Eventos preexposición">
+            <SymPrimaryButton [margin]="btnMargin" text="Está 10 minutos cerca del área (sin entrar)" (tap)="emitEMAIFrameworkEvent('stayedForAWhileCloseToAreaOfInterest')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Entra en el área" (tap)="emitEMAIFrameworkEvent('movedInsideAreaOfInterest')"></SymPrimaryButton>
+        </SymSimulationSection>
+        <SymSimulationSection title="Eventos en exposición">
+            <SymPrimaryButton [margin]="btnMargin" text="Recibe preguntas" (tap)="emitEMAIFrameworkEvent('wantsToAnswerQuestions')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Escapa involuntariamente (sigue cerca)" (tap)="emitEMAIFrameworkEvent('movedOutsideAreaOfInterest')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Regresa de un escape" (tap)="emitEMAIFrameworkEvent('reenteredAreaOfInterest')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Abandona (se aleja)" (tap)="emitEMAIFrameworkEvent('movedAwayFromAreaOfInterest')"></SymPrimaryButton>
+        </SymSimulationSection>
+        <SymSimulationSection title="Eventos de finalización">
+            <SymPrimaryButton [margin]="btnMargin" text="Finaliza con ansiedad <5" (tap)="emitEMAIFrameworkEvent('exposureSuccessfullyFinished')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Finaliza con ansiedad >= 5 & dif. >= 3 USAs" (tap)="emitEMAIFrameworkEvent('exposureNeutrallyFinished')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Finaliza con ansiedad >= 5 & dif. < 3 USAs" (tap)="emitEMAIFrameworkEvent('exposureBadlyFinished')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Finaliza la extensión de tiempo y sigue mal" (tap)="emitEMAIFrameworkEvent('exposureTimeExtensionFinished')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Acaba y se le pide valorar la experiencia" (tap)="emitEMAIFrameworkEvent('shouldDeliverQuestionFrequencyFeedback')"></SymPrimaryButton>
+        </SymSimulationSection>
+    </StackLayout>
+</ScrollView>

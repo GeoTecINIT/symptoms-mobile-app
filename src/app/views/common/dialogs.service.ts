@@ -6,7 +6,11 @@ import {
     confirm,
     ConfirmOptions,
 } from "@nativescript/core";
+
 import { Logger, getLogger } from "~/app/core/utils/logger";
+
+import { InfoDialogOptions } from "~/app/core/dialogs/info";
+import { ConfirmDialogOptions } from "~/app/core/dialogs/confirm";
 
 @Injectable({
     providedIn: CommonComponentsModule,
@@ -18,11 +22,7 @@ export class DialogsService {
         this.logger = getLogger("DialogsService");
     }
 
-    showInfo(
-        title: string,
-        confirmText: string,
-        body: string = ""
-    ): Promise<void> {
+    showInfo({ title, body, confirmText }: InfoDialogOptions): Promise<void> {
         const options: AlertOptions = {
             title,
             okButtonText: confirmText,
@@ -35,51 +35,51 @@ export class DialogsService {
         );
     }
 
-    askConfirmation(
-        question: string,
-        confirmText: string,
-        negationText: string,
-        description: string = ""
-    ): Promise<boolean> {
+    askConfirmation({
+        question,
+        positiveText,
+        negativeText,
+        body,
+    }: ConfirmDialogOptions): Promise<boolean> {
         const options: ConfirmOptions = {
             title: question,
-            okButtonText: confirmText,
-            cancelButtonText: negationText,
-            message: description,
+            okButtonText: positiveText,
+            cancelButtonText: negativeText,
+            message: body,
             cancelable: false,
         };
 
         return confirm(options);
     }
 
-    askConfirmationWithPositiveAction(
-        question: string,
-        positiveText: string,
-        negativeText: string,
-        description: string = ""
-    ): Promise<boolean> {
+    askConfirmationWithPositiveAction({
+        question,
+        positiveText,
+        negativeText,
+        body,
+    }: ConfirmDialogOptions): Promise<boolean> {
         const options: ConfirmOptions = {
             title: question,
             okButtonText: positiveText,
             cancelButtonText: negativeText,
-            message: description,
+            message: body,
             cancelable: false,
         };
 
         return confirm(options).then((result) => !result);
     }
 
-    askConfirmationWithDestructiveAction(
-        question: string,
-        destructiveText: string,
-        cancelText: string,
-        description: string = ""
-    ): Promise<boolean> {
+    askConfirmationWithDestructiveAction({
+        question,
+        positiveText,
+        negativeText,
+        body,
+    }: ConfirmDialogOptions): Promise<boolean> {
         const options: ConfirmOptions = {
             title: question,
-            okButtonText: cancelText,
-            cancelButtonText: destructiveText,
-            message: description,
+            okButtonText: negativeText,
+            cancelButtonText: positiveText,
+            message: body,
             cancelable: false,
         };
 
