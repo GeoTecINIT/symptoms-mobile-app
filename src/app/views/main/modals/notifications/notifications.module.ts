@@ -7,6 +7,7 @@ import { NotificationsModalComponent } from "./notifications-modal.component";
 import { NotificationsListComponent } from "./notifications-list/notifications-list.component";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
+import { NotificationsListItemComponent } from "./notifications-list/notifications-list-item/notifications-list-item.component";
 
 @NgModule({
     imports: [
@@ -14,7 +15,11 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
         NativeScriptCommonModule,
         CommonComponentsModule,
     ],
-    declarations: [NotificationsModalComponent, NotificationsListComponent],
+    declarations: [
+        NotificationsModalComponent,
+        NotificationsListComponent,
+        NotificationsListItemComponent,
+    ],
     entryComponents: [NotificationsModalComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })

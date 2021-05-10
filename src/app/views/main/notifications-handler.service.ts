@@ -69,6 +69,8 @@ export class NotificationsHandlerService {
                 return this.handleQuestionsAction(notification);
             case TapActionType.OPEN_CONTENT:
                 return this.handleContentAction(notification);
+            default:
+                return this.markAsSeen(notification);
         }
     }
 
@@ -127,7 +129,9 @@ export class NotificationsHandlerService {
         try {
             const result = await this.confirmModalService.show(options);
             this.logger.debug(`Result: ${result}`);
-            await this.markAsSeen(notification);
+            if (result !== undefined) {
+                await this.markAsSeen(notification);
+            }
 
             return result;
         } catch (e) {
@@ -165,7 +169,9 @@ export class NotificationsHandlerService {
                 options
             );
             this.logger.debug(`Answers: ${JSON.stringify(answers)}`);
-            await this.markAsSeen(notification);
+            if (answers !== undefined) {
+                await this.markAsSeen(notification);
+            }
 
             return answers;
         } catch (e) {
