@@ -1,3 +1,19 @@
 <SymCloseActionBar title="Notificaciones" (close)="onClose()"></SymCloseActionBar>
 
-<Button text="notifications-list works!" class="btn btn-primary"></Button>
+<ng-container *ngIf="notifications$ | async as notifications">
+    <ng-container *ngIf="notifications.length > 0; else notificationsRead">
+        <ListView [items]="notifications" (itemTap)="onListItemTap($event)">
+            <ng-template let-item="item">
+                <SymNotificationsListItem [notification]="item"></SymNotificationsListItem>
+            </ng-template>
+        </ListView>
+    </ng-container>
+
+    <ng-template #notificationsRead>
+        <GridLayout verticalAlignment="center" rows="auto, auto">
+            <Label row="0" class="circle"></Label>
+            <Label row="0" class="mdi-ro icon" text="&#xf18b;"></Label>
+            <Label row="1" class="body" textWrap="true" textAlignment="center" text="No tienes notificaciones pendientes"></Label>
+        </GridLayout>
+    </ng-template>
+</ng-container>

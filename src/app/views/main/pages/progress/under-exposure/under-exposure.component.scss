@@ -22,6 +22,14 @@
 
 .body-text {
   text-align: center;
+  margin: 0 24 0 24;
+}
+
+.body-title {
   font-weight: 500;
-  margin: $global-spacing 24 0 24;
+  margin-top: $global-spacing;
+}
+
+.body-subtitle {
+  margin-top: 8;
 }

@@ -1,0 +1,19 @@
+@import "src/app-variables";
+
+GridLayout {
+  padding: 0 8 0 8;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 14;
+}
+
+.age {
+  font-size: 12;
+}
+
+.body {
+  margin-top: 8;
+  color: $input-color;
+}

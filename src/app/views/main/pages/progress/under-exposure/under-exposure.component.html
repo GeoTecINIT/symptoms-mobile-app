@@ -6,10 +6,11 @@
             [text]="inDanger ? 'Cambiar a \'Fuera de riesgo\'' : 'Cambiar a \'En riesgo\''"
             (tap)="onSwitchStatus()">
     </Button>
-    <GridLayout row="1" rows="auto, auto" verticalAlignment="center">
+    <GridLayout row="1" rows="auto, auto, auto" verticalAlignment="center">
         <Label row="0" class="circle"></Label>
         <Label row="0" class="mdi-ro icon" text="&#xe55e;"></Label>
-        <Label row="1" class="body-text" textWrap="true" text="Estás realizando una exposición en: Lugar 1"></Label>
+        <Label row="1" class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\nLugar 1'"></Label>
+        <Label row="2" class="body-text body-subtitle" textWrap="true" text="Relájate e intenta quedarte aquí hasta que se te indique lo contrario. La app te irá dando instrucciones"></Label>
     </GridLayout>
     <StackLayout row="2">
         <ng-container *ngIf="inDanger; else outOfDanger">
