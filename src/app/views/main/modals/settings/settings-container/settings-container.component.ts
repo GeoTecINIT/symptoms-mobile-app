@@ -3,6 +3,7 @@ import { ModalDialogParams } from "@nativescript/angular";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { confirmWantsToUnlink } from "~/app/core/dialogs/confirm";
 
 @Component({
     selector: "SymSettingsContainer",
@@ -30,12 +31,7 @@ export class SettingsContainerComponent {
 
     onUnlinkTap() {
         this.dialogsService
-            .askConfirmationWithDestructiveAction(
-                "¿Desvincular dispositivo?",
-                "Salir",
-                "Volver",
-                "Si desvinculas este dispositivo perderás todo el progreso almacenado localmente (p. ej. contenido psicoeducativo visto, etc.) y tendrás que volver a configurar la app en caso de reinstalación"
-            )
+            .askConfirmationWithDestructiveAction(confirmWantsToUnlink)
             .then((unlink) => {
                 if (unlink) {
                     this.appSettingsService

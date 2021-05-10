@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
 
 import { ModalDialogParams } from "@nativescript/angular";
-
 import { DialogsService } from "~/app/views/common/dialogs.service";
-
-import { ConfirmModalOptions } from "../options";
+import { ConfirmModalOptions } from "~/app/core/modals/confirm";
 
 @Component({
     selector: "SymConfirmContainer",
@@ -15,7 +13,7 @@ export class ConfirmContainerComponent {
     options: ConfirmModalOptions;
 
     get hasCancelConfirm(): boolean {
-        return this.options.cancelConfirm !== undefined;
+        return this.options.cancelConfirmOptions !== undefined;
     }
 
     constructor(
@@ -36,18 +34,9 @@ export class ConfirmContainerComponent {
             return;
         }
 
-        const {
-            question,
-            positiveText,
-            negativeText,
-            description,
-        } = this.options.cancelConfirm;
         this.dialogsService
             .askConfirmationWithPositiveAction(
-                question,
-                positiveText,
-                negativeText,
-                description
+                this.options.cancelConfirmOptions
             )
             .then((confirms) => {
                 if (confirms) this.params.closeCallback(false);

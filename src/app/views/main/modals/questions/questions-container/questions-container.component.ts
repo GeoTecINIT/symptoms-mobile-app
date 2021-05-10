@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
-import { QuestionsModalOptions } from "../options";
+import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer, QuestionStepResult } from "../answers";
 
 @Component({
