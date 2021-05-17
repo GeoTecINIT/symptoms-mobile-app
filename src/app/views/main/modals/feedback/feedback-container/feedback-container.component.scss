@@ -7,29 +7,7 @@ Label {
 StackLayout {
   background-color: const(white);
   height: 100%;
-}
-
-GridLayout {
   padding: $global-spacing;
-}
-
-.emoji {
-  font-size: 72;
-  text-align: center;
-}
-
-.circle {
-  height: 100;
-  width: 100;
-  border-radius: 50;
-  background-color: const(grey);
-}
-
-.icon {
-  color: $accent;
-  horizontal-align: center;
-  vertical-align: center;
-  font-size: 56;
 }
 
 .header {
