@@ -1,9 +1,9 @@
 import { ConfirmDialogOptions } from "./options";
 
-export const confirmFeelsBetter: ConfirmDialogOptions = {
-    question: "¿Te sientes mejor?",
-    positiveText: "Sí",
-    negativeText: "No",
+export const confirmToContinueExposure: ConfirmDialogOptions = {
+    question: "¿Deseas continuar con la exposición o terminar por hoy?",
+    positiveText: "Finalizar",
+    negativeText: "Continuar",
 };
 
 export const confirmWantsToLeave: ConfirmDialogOptions = {
