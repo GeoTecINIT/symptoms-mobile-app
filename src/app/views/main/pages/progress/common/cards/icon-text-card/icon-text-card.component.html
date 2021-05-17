@@ -1,7 +1,4 @@
 <SymBaseCard verticalAlignment="center">
-    <GridLayout rows="auto, auto">
-        <Label row="0" class="circle"></Label>
-        <Label row="0" class="mdi-ro icon" [text]="iconCode"></Label>
-        <Label row="1" class="text" textWrap="true" [text]="text"></Label>
-    </GridLayout>
+    <SymCircleIcon [iconCode]="iconCode"></SymCircleIcon>
+    <Label class="text" textWrap="true" [text]="text"></Label>
 </SymBaseCard>

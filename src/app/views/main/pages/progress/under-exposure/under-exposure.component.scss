@@ -1,20 +1,5 @@
 @import "src/app-variables";
 
-.circle {
-  height: 100;
-  width: 100;
-  border-radius: 50;
-  background-color: const(grey);
-  horizontal-align: center;
-}
-
-.icon {
-  color: $accent;
-  font-size: 56;
-  horizontal-align: center;
-  vertical-align: center;
-}
-
 .highlighted-text {
   text-align: center;
   font-weight: bold;

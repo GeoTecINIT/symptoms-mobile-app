@@ -10,10 +10,9 @@
     </ng-container>
 
     <ng-template #notificationsRead>
-        <GridLayout verticalAlignment="center" rows="auto, auto">
-            <Label row="0" class="circle"></Label>
-            <Label row="0" class="mdi-ro icon" text="&#xf18b;"></Label>
-            <Label row="1" class="body" textWrap="true" textAlignment="center" text="No tienes notificaciones pendientes"></Label>
-        </GridLayout>
+        <StackLayout verticalAlignment="center">
+            <SymCircleIcon iconCode="&#xf18b;"></SymCircleIcon>
+            <Label class="body" textWrap="true" textAlignment="center" text="No tienes notificaciones pendientes"></Label>
+        </StackLayout>
     </ng-template>
 </ng-container>

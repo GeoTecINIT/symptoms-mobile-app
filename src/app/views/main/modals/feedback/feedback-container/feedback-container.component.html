@@ -12,14 +12,9 @@
 </SymModalBody>
 
 <StackLayout @slideUp *ngIf="showConfirmScreen" verticalAlignment="center">
-    <GridLayout rows="auto, auto, auto, auto">
-        <label row="0" *ngIf="options.confirmScreen.body.emoji" class="emoji" text="😎"></label>
-        <ng-container *ngIf="options.confirmScreen.body.iconCode">
-            <Label row="0" class="circle"></Label>
-            <Label row="0" class="mdi-ro icon" [text]="options.confirmScreen.body.iconCode"></Label>
-        </ng-container>
-        <Label row="1" class="header" [text]="options.confirmScreen.body.header"></Label>
-        <Label row="2" *ngIf="options.confirmScreen.body.message" class="message" textWrap="true" [text]="options.confirmScreen.body.message"></Label>
-        <SymPrimaryButton row="3" horizontalAlignment="center" [text]="options.confirmScreen.confirm" (tap)="onClose()"></SymPrimaryButton>
-    </GridLayout>
+    <Label *ngIf="options.confirmScreen.body.emoji" class="emoji-icon" [text]="options.confirmScreen.body.emoji"></Label>
+    <SymCircleIcon *ngIf="options.confirmScreen.body.iconCode" [iconCode]="options.confirmScreen.body.iconCode"></SymCircleIcon>
+    <Label class="header" [text]="options.confirmScreen.body.header"></Label>
+    <Label *ngIf="options.confirmScreen.body.message" class="message" textWrap="true" [text]="options.confirmScreen.body.message"></Label>
+    <SymPrimaryButton horizontalAlignment="center" [text]="options.confirmScreen.confirm" (tap)="onClose()"></SymPrimaryButton>
 </StackLayout>
