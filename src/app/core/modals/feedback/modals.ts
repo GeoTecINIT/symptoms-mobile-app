@@ -6,17 +6,13 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
         body: {
             emoji: "👋",
             text:
-                "No te preocupes, lo importante es ser constante. ¡Hasta pronto!",
+                "Recuerda la importancia de exponerte de forma regular. Te esperamos pronto",
         },
-        question: "¿Podrías indicar el motivo de tu salida?",
+        question: "¿Podrías indicarme el motivo de tu salida?",
         options: [
             {
                 type: "predefined",
                 answer: "Mi nivel de ansiedad no baja",
-            },
-            {
-                type: "predefined",
-                answer: "No consigo manejar la situación",
             },
             {
                 type: "predefined",
