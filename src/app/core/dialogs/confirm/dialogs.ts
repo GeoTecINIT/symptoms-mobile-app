@@ -1,15 +1,15 @@
 import { ConfirmDialogOptions } from "./options";
 
-export const confirmFeelsBetter: ConfirmDialogOptions = {
-    question: "¿Te sientes mejor?",
-    positiveText: "Sí",
-    negativeText: "No",
+export const confirmToContinueExposure: ConfirmDialogOptions = {
+    question: "¿Deseas continuar con la exposición o terminar por hoy?",
+    positiveText: "Finalizar",
+    negativeText: "Continuar",
 };
 
 export const confirmWantsToLeave: ConfirmDialogOptions = {
     question: "¿Te vas?",
     body:
-        "No deberías abandonar una exposición salvo por causa mayor. Recuerda el papel negativo de la evitación. Es normal que tengas picos de ansiedad. Si te quedas, acabarás controlándolos.",
+        "Recuerda el papel negativo de la evitación. Es importante mantenerte en la situación hasta que consigas reducir tu nivel de ansiedad.",
     positiveText: "Me quedo",
     negativeText: "Salir",
 };

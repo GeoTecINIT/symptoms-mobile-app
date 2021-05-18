@@ -6,21 +6,19 @@
             [text]="inDanger ? 'Cambiar a \'Fuera de riesgo\'' : 'Cambiar a \'En riesgo\''"
             (tap)="onSwitchStatus()">
     </Button>
-    <GridLayout row="1" rows="auto, auto, auto" verticalAlignment="center">
-        <Label row="0" class="circle"></Label>
-        <Label row="0" class="mdi-ro icon" text="&#xe55e;"></Label>
-        <Label row="1" class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\nLugar 1'"></Label>
-        <Label row="2" class="body-text body-subtitle" textWrap="true" text="Relájate e intenta quedarte aquí hasta que se te indique lo contrario. La app te irá dando instrucciones"></Label>
-    </GridLayout>
+    <StackLayout row="1" verticalAlignment="center">
+        <SymCircleIcon iconCode="&#xe55e;"></SymCircleIcon>
+        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\nLugar 1'"></Label>
+        <Label class="body-text body-subtitle" textWrap="true" text="Intenta permanecer en este lugar. La app te acompañará durante todo el proceso"></Label>
+    </StackLayout>
     <StackLayout row="2">
         <ng-container *ngIf="inDanger; else outOfDanger">
-            <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas, pero no te vayas"></Label>
-            <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskForMoodTap()"></SymConfirmButton>
+            <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas"></Label>
+            <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskToContinue()"></SymConfirmButton>
             <SymButtonLink margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
         </ng-container>
         <ng-template #outOfDanger>
-            <SymDangerButton horizontalAlignment="center" text="Finalizar exposición" (tap)="onEndExposureTap()"></SymDangerButton>
-            <SymButtonLink margin="0" text="¿Dónde ha ido mi información de progreso?" (tap)="onProgressGoneTap()"></SymButtonLink>
+            <SymButtonLink margin="0" text="¿Necesitas irte?" (tap)="onEndExposureTap()"></SymButtonLink>
         </ng-template>
     </StackLayout>
 </GridLayout>
