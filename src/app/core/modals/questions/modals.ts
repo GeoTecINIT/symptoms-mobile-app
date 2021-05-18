@@ -4,12 +4,12 @@ export const askAnxietyQuestions: QuestionsModalOptions = {
     title: "¿Cómo te encuentras?",
     body: {
         iconCode: "\ue94c",
-        text:
-            "Por favor, responde con sinceridad. Al hacerlo me ayudas a saber mejor cómo te encuentras",
+        text: "Responde con sinceridad a las preguntas que te planteamos",
     },
     questions: [
         {
-            title: "De 0 a 10, ¿cómo puntuarías tu nivel de ansiedad actual?",
+            title:
+                "De 0 a 10, ¿cómo puntuarías tu nivel de ansiedad en este momento?",
             type: "range",
             from: 0,
             to: 10,
@@ -23,7 +23,7 @@ export const askAnxietyQuestions: QuestionsModalOptions = {
         },
         {
             title:
-                "De 0 a 10, ¿cómo puntuarías tu grado de creencia en pensamientos?",
+                "De 0 a 10, ¿cómo puntuarías el grado de creencia en los pensamientos que tienes acerca de esta situación?",
             type: "range",
             from: 0,
             to: 10,

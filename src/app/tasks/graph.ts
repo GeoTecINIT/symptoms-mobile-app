@@ -22,7 +22,7 @@ class DemoTaskGraph implements TaskGraph {
             "stayedForAWhileCloseToAreaOfInterest",
             run("sendNotification", {
                 title: "Has llegado a un lugar importante",
-                body: "La exposición es fundamental. Adelante, ¡ánimo!",
+                body: "Exponerte te ayudará a superar tu problema, adelante",
             })
         );
         on(
@@ -52,14 +52,14 @@ class DemoTaskGraph implements TaskGraph {
             "movedOutsideAreaOfInterest",
             run("sendNotification", {
                 title: "Parece que has salido del lugar de exposición",
-                body: "Quédate cerca para que la terapia sea más efectiva",
+                body: "Recuerda que debes quedarte cerca del área",
             })
         );
         on(
             "reenteredAreaOfInterest",
             run("sendNotification", {
-                title: "¡Genial! Has vuelto al lugar de exposición",
-                body: "Nos alegra mucho que hayas vuelto. ¡Tú puedes! 💪",
+                title: "Vemos que has vuelto al lugar de exposición",
+                body: "Nos alegra que hayas vuelto. Puedes hacerlo",
             })
         );
         on(
@@ -77,15 +77,15 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureSuccessfullyFinished",
             run("sendNotification", {
-                title: "¡Bien hecho! Has dominado la situación",
-                body: "Puedes irte y revisar tu progreso si lo deseas",
+                title: "Bien, has manejado la situación",
+                body: "Puedes terminar aquí o continuar un poco más",
             })
         );
         on(
             "exposureNeutrallyFinished",
             run("sendNotification", {
-                title: "Te has esforzado mucho, ¡sigue así!",
-                body: "Puedes reforzar el esfuerzo pulsando aquí",
+                title: "Has conseguido reducir tu ansiedad, es un gran logro",
+                body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
                     id: "c05",
@@ -95,8 +95,8 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureBadlyFinished",
             run("sendNotification", {
-                title: "Deberías quedarte un poco más. Respira hondo ☺",
-                body: "Pulsa aquí, quizás esto te ayude",
+                title: "Puedes prologar tu tiempo de exposición",
+                body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
                     id: "c03",
@@ -104,18 +104,29 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on(
-            "exposureTimeExtensionFinished",
+            "exposureTimeExtensionFinishedFine",
             run("sendNotification", {
-                title: "¿Te encuentras bien?",
-                body: "Puedes hablar con tu terapeuta pulsando aquí",
+                title: "Te has esforzado mucho, con la práctica mejorarás",
+                body: "Pulsa aquí, leer esto puede resultarte útil",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c02",
+                },
+            })
+        );
+        on(
+            "exposureTimeExtensionFinishedBadly",
+            run("sendNotification", {
+                title: "Puedes hablar con tu terapeuta pulsando aquí",
+                body: " ",
             })
         );
 
         on(
             "shouldDeliverQuestionFrequencyFeedback",
             run("sendNotification", {
-                title: "¿Cómo ha ido?",
-                body: "¿Te animas a valorar la experiencia?",
+                title: "¿Te animas a valorar la experiencia?",
+                body: " ",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",

@@ -3,12 +3,9 @@ import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { ProgressViewService } from "../progress-view.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { dangersOfEarlyLeave } from "~/app/core/dialogs/info";
 import {
-    dangersOfEarlyLeave,
-    infoOnProgressGone,
-} from "~/app/core/dialogs/info";
-import {
-    confirmFeelsBetter,
+    confirmToContinueExposure,
     confirmWantsToLeave,
 } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
@@ -39,42 +36,34 @@ export class UnderExposureComponent implements OnInit {
         this.inDanger = !this.inDanger;
     }
 
-    onProgressGoneTap() {
-        this.dialogsService.showInfo(infoOnProgressGone);
-    }
-
     onWantsToLeaveTap() {
         this.dialogsService.showInfo(dangersOfEarlyLeave);
     }
 
-    onAskForMoodTap() {
+    onAskToContinue() {
         this.dialogsService
-            .askConfirmation(confirmFeelsBetter)
-            .then((feelsBetter) => {
-                // TODO: Manage this
-                this.logger.debug(`Feels better: ${feelsBetter}`);
-                if (feelsBetter) {
-                    this.inDanger = false;
-                }
-            });
+            .askConfirmationWithDestructiveAction(confirmToContinueExposure)
+            .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
     }
 
     onEndExposureTap() {
         this.dialogsService
             .askConfirmationWithPositiveAction(confirmWantsToLeave)
-            .then((wantsToLeave) => {
-                // TODO: Manage this
-                this.logger.debug(`Wants to leave: ${wantsToLeave}`);
-                if (wantsToLeave) {
-                    this.feedbackModalService
-                        .askFeedback(askWantsToLeaveFeedback)
-                        .then((feedback) => {
-                            this.logger.debug(`Feedback: ${feedback}`);
-                            if (feedback) {
-                                this.progressViewService.setAsIdle();
-                            }
-                        });
-                }
-            });
+            .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
+    }
+
+    private handleWantsToLeave(wantsToLeave: boolean) {
+        // TODO: Manage this
+        this.logger.debug(`Wants to leave: ${wantsToLeave}`);
+        if (wantsToLeave) {
+            this.feedbackModalService
+                .askFeedback(askWantsToLeaveFeedback)
+                .then((feedback) => {
+                    this.logger.debug(`Feedback: ${feedback}`);
+                    if (feedback) {
+                        this.progressViewService.setAsIdle();
+                    }
+                });
+        }
     }
 }
