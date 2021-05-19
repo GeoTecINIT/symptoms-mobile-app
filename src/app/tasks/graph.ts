@@ -38,6 +38,18 @@ class DemoTaskGraph implements TaskGraph {
         );
 
         on(
+            "exposureStarted",
+            run("sendNotification", {
+                title: "Acabas de iniciar una exposición",
+                body: "Pulsa aquí si tienes dudas",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c04",
+                },
+            })
+        );
+
+        on(
             "wantsToAnswerQuestions",
             run("sendNotification", {
                 title: "¿Podrías decirnos cómo te encuentras?",
