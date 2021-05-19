@@ -11,12 +11,53 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
+        // START: Human activity recognition
+        on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
+        on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
+        // END: Human activity recognition
+
+        // START: Geolocation data gathering
+        // -> Low frequency: Single
         on(
             "startEvent",
-            run("acquirePhoneGeolocation")
-                .every(5, "minutes")
-                .cancelOn("stopEvent")
+            run("emitLowFrequencyGeolocationAcquisitionCanStartEvent")
         );
+        on(
+            "userStartedBeingStill",
+            run("emitLowFrequencyGeolocationAcquisitionCanStartEvent")
+        );
+        on(
+            "stopEvent",
+            run("emitLowFrequencyGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "userFinishedBeingStill",
+            run("emitLowFrequencyGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "lowFrequencyGeolocationAcquisitionCanStart",
+            run("acquirePhoneGeolocation")
+                .every(15, "minutes")
+                .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
+        );
+        // -> High frequency: Single
+        on(
+            "stopEvent",
+            run("emitHighFrequencyGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "userStartedBeingStill",
+            run("emitHighFrequencyGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "userFinishedBeingStill",
+            run("acquirePhoneGeolocation")
+                .every(1, "minutes")
+                .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
+        );
+        // -> All frequencies & modes
+        on("geolocationAcquired", run("writeRecords"));
+        // END: Geolocation data gathering
 
         on(
             "stayedForAWhileCloseToAreaOfInterest",
