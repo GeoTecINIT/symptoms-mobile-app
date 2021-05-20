@@ -6,10 +6,9 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
-import {
-    emitTreatmentStartEvent,
-    preparePlugin,
-} from "~/app/core/utils/emai-framework";
+import { preparePlugin } from "~/app/core/framework";
+import { emitTreatmentStartEvent } from "~/app/core/framework/events";
+
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 
 @Component({

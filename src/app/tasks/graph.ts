@@ -16,8 +16,8 @@ class DemoTaskGraph implements TaskGraph {
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
 
-        // START: Geolocation data gathering
-        // -> Low frequency: Single
+        // START: Low resolution geolocation data collection
+        // -> Low frequency
         on(
             "startEvent",
             run("emitLowFrequencyGeolocationAcquisitionCanStartEvent")
@@ -27,11 +27,11 @@ class DemoTaskGraph implements TaskGraph {
             run("emitLowFrequencyGeolocationAcquisitionCanStartEvent")
         );
         on(
-            "stopEvent",
+            "userFinishedBeingStill",
             run("emitLowFrequencyGeolocationAcquisitionCanStopEvent")
         );
         on(
-            "userFinishedBeingStill",
+            "stopEvent",
             run("emitLowFrequencyGeolocationAcquisitionCanStopEvent")
         );
         on(
@@ -40,13 +40,13 @@ class DemoTaskGraph implements TaskGraph {
                 .every(15, "minutes")
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
-        // -> High frequency: Single
+        // -> High frequency
         on(
-            "stopEvent",
+            "userStartedBeingStill",
             run("emitHighFrequencyGeolocationAcquisitionCanStopEvent")
         );
         on(
-            "userStartedBeingStill",
+            "stopEvent",
             run("emitHighFrequencyGeolocationAcquisitionCanStopEvent")
         );
         on(
@@ -57,7 +57,46 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> All frequencies & modes
         on("geolocationAcquired", run("writeRecords"));
-        // END: Geolocation data gathering
+        // END: Low resolution data collection
+
+        // START: Geofence detection
+        on(
+            "geolocationAcquired",
+            run("checkAreaOfInterestProximity", {
+                nearbyRange: 100,
+                offset: 15,
+            })
+        );
+        on("movedCloseToAreaOfInterest", run("writeRecords"));
+        on("movedInsideAreaOfInterest", run("writeRecords"));
+        on("movedOutsideAreaOfInterest", run("writeRecords"));
+        on("movedAwayFromAreaOfInterest", run("writeRecords"));
+        // END: Geofence detection
+
+        // START: High resolution geolocation data collection
+        on(
+            "movedCloseToAreaOfInterest",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStartEvent")
+        );
+        on(
+            "movedInsideAreaOfInterest",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStartEvent")
+        );
+        on(
+            "movedAwayFromAreaOfInterest",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "stopEvent",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
+        );
+        on(
+            "highFrequencyMultipleGeolocationAcquisitionCanStart",
+            run("acquireMultiplePhoneGeolocation", { maxInterval: 10000 })
+                .every(1, "minutes")
+                .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
+        );
+        // END: High resolution geolocation data collection
 
         on(
             "stayedForAWhileCloseToAreaOfInterest",
