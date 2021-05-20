@@ -7,9 +7,10 @@ import {
 } from "@nativescript/core";
 
 import { AuthService } from "./auth.service";
-import { emitTreatmentStopEvent } from "~/app/core/utils/emai-framework";
+import { emitTreatmentStopEvent } from "~/app/core/framework/events";
 import { recordsStore } from "@geotecinit/emai-framework/storage/records";
 import { tracesStore } from "@geotecinit/emai-framework/storage/traces";
+import { areasOfInterest } from "@geotecinit/emai-framework/entities/aois";
 
 const DATA_SHARING_CONSENT_KEY = "APP_SETTINGS_DATA_SHARING_CONSENT";
 const REPORT_USAGE_CONSENT_KEY = "APP_SETTINGS_REPORT_USAGE_CONSENT";
@@ -53,6 +54,7 @@ export class AppSettingsService {
         emitTreatmentStopEvent();
         await this.authService.logout();
         ApplicationSettings.clear();
+        await areasOfInterest.deleteAll();
         await recordsStore.clear();
         await tracesStore.clear();
     }
