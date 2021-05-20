@@ -11,6 +11,7 @@ import { emitTreatmentStopEvent } from "~/app/core/framework/events";
 import { recordsStore } from "@geotecinit/emai-framework/storage/records";
 import { tracesStore } from "@geotecinit/emai-framework/storage/traces";
 import { areasOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { exposures } from "~/app/core/persistence/exposures";
 
 const DATA_SHARING_CONSENT_KEY = "APP_SETTINGS_DATA_SHARING_CONSENT";
 const REPORT_USAGE_CONSENT_KEY = "APP_SETTINGS_REPORT_USAGE_CONSENT";
@@ -55,6 +56,7 @@ export class AppSettingsService {
         await this.authService.logout();
         ApplicationSettings.clear();
         await areasOfInterest.deleteAll();
+        await exposures.clear();
         await recordsStore.clear();
         await tracesStore.clear();
     }
