@@ -21,9 +21,10 @@ import {
 } from "@nativescript-community/ui-material-bottomnavigationbar";
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
-import { preparePlugin } from "~/app/core/utils/emai-framework";
+import { preparePlugin } from "~/app/core/framework";
 import { appEvents } from "~/app/core/app-events";
 import { ContentViewModalService } from "~/app/views/main/modals/content-view/content-view-modal.service";
+import { setupAreasOfInterest } from "~/app/core/framework/aois";
 
 const navigationTabs = {
     Progress: 0,
@@ -114,6 +115,11 @@ export class MainComponent implements OnInit, OnDestroy {
     private checkEMAIFrameworkStatus() {
         preparePlugin()
             .then((ready) => {
+                setupAreasOfInterest().catch((e) =>
+                    this.logger.error(
+                        `Could not setup areas of interest. Reason: ${e}`
+                    )
+                );
                 if (!ready) {
                     this.informAboutPermissionsNeed().then(() => {
                         this.checkEMAIFrameworkStatus();
