@@ -21,7 +21,7 @@ import {
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
 
 @Injectable({
     providedIn: "root",
@@ -87,7 +87,7 @@ export class NotificationsHandlerService {
         if (!wantsToStartExposure) {
             await this.showFeedbackModal(askWantsToLeaveFeedback, notification);
         } else {
-            emaiFramework.emitEvent("exposureStarted");
+            emitExposureStartConfirmedEvent();
         }
     }
 
