@@ -15,4 +15,6 @@ export const utilityTasks: Array<Task> = [
     new EventConverterTask(
         "highFrequencyMultipleGeolocationAcquisitionCanStop"
     ),
+    // -> Movement from AoI outer radius
+    new EventConverterTask("movedOutsideAreaOfInterestOuterRadius"),
 ];
