@@ -98,13 +98,27 @@ class DemoTaskGraph implements TaskGraph {
         );
         // END: High resolution geolocation data collection
 
+        // START: Pre-exposure events
+        // -> Stays nearby an area of interest for a while
         on(
-            "stayedForAWhileCloseToAreaOfInterest",
+            "movedInsideAreaOfInterest",
+            run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
+        );
+        on(
+            "movedAwayFromAreaOfInterest",
+            run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
+        );
+        on(
+            "movedCloseToAreaOfInterest",
             run("sendNotification", {
                 title: "Has llegado a un lugar importante",
                 body: "Exponerte te ayudará a superar tu problema, adelante",
             })
+                .in(10, "minutes")
+                .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
+        // END: Pre-exposure events
+
         on(
             "movedInsideAreaOfInterest",
             run("sendNotification", {
