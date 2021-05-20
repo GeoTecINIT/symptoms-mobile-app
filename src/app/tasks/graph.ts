@@ -117,7 +117,7 @@ class DemoTaskGraph implements TaskGraph {
                 .in(10, "minutes")
                 .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
-        // -> Ask exposure start confirmation
+        // -> Enters a exposure area
         on(
             "movedInsideAreaOfInterest",
             run("sendNotification", {
@@ -129,8 +129,8 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
+        // -> Confirms to start a exposure
         on("exposureStartConfirmed", run("startExposure"));
-        // -> Inform about exposure start
         on(
             "exposureStarted",
             run("sendNotification", {
