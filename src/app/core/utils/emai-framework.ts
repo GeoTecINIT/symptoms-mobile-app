@@ -11,3 +11,11 @@ export async function preparePlugin(): Promise<boolean> {
         return false;
     }
 }
+
+export function emitTreatmentStartEvent() {
+    emaiFramework.emitEvent("startEvent");
+}
+
+export function emitTreatmentStopEvent() {
+    emaiFramework.emitEvent("stopEvent");
+}

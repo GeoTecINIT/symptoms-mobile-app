@@ -6,7 +6,10 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
-import { preparePlugin } from "~/app/core/utils/emai-framework";
+import {
+    emitTreatmentStartEvent,
+    preparePlugin,
+} from "~/app/core/utils/emai-framework";
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 
 @Component({
@@ -36,6 +39,7 @@ export class TutorialComponent implements OnInit {
     onConfigureTap() {
         preparePlugin().then((done) => {
             if (done) {
+                emitTreatmentStartEvent();
                 this.appSettingsService.markSetupAsComplete();
                 this.navigationService.navigate(
                     ["../setup-confirmation"],
