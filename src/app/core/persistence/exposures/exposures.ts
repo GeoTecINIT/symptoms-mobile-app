@@ -64,7 +64,7 @@ class ExposuresStoreDB implements ExposuresStore {
 export const exposures = new ExposuresStoreDB();
 
 function docFrom(exposure: Exposure): any {
-    const { startTime, endTime, emotionValues } = exposure;
+    const { startTime, endTime, emotionValues, place } = exposure;
 
     return {
         startTime: startTime.getTime(),
@@ -75,11 +75,12 @@ function docFrom(exposure: Exposure): any {
                 value: value.value,
             })),
         ],
+        place,
     };
 }
 
 function exposureFrom(doc: any): Exposure {
-    const { id, startTime, endTime, emotionValues } = doc;
+    const { id, startTime, endTime, emotionValues, place } = doc;
 
     return {
         id,
@@ -91,5 +92,6 @@ function exposureFrom(doc: any): Exposure {
                 value: value.value,
             })),
         ],
+        place,
     };
 }
