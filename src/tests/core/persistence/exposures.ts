@@ -1,10 +1,20 @@
 import { Exposure, exposures } from "~/app/core/persistence/exposures";
+import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
 
 describe("Exposures store", () => {
+    const place: AreaOfInterest = {
+        id: "place1",
+        name: "Place 1",
+        longitude: 0,
+        latitude: 0,
+        radius: 30,
+    };
+
     const newExposure: Exposure = {
         startTime: new Date(2021, 4, 20, 18, 0),
         endTime: null,
         emotionValues: [],
+        place,
     };
 
     const finishedExposure: Exposure = {
@@ -23,6 +33,7 @@ describe("Exposures store", () => {
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 5 },
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 5 },
         ],
+        place,
     };
 
     beforeAll(async () => {
