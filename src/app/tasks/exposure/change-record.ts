@@ -7,7 +7,7 @@ export class ExposureChange extends Record {
         change: Change,
         timestamp: Date,
         public emotionValues: Array<EmotionValue>,
-        public aoi: AreaOfInterest
+        public place: AreaOfInterest
     ) {
         super("exposure-change", timestamp, change);
     }

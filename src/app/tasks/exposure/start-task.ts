@@ -31,7 +31,7 @@ export class StartExposureTask extends TraceableTask {
             startTime: new Date(),
             endTime: null,
             emotionValues: [],
-            place: invocationEvent.data.aoi as AreaOfInterest,
+            place: invocationEvent.data[0].aoi as AreaOfInterest,
         };
         await this.store.insert(exposure);
 

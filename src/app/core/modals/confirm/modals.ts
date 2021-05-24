@@ -5,7 +5,7 @@ export const confirmWantsToStartAnExposure: ConfirmModalOptions = {
     title: "Estás en un lugar importante",
     body: {
         iconCode: "\ue55f",
-        text: "Has llegado a: {{aoi.name}}",
+        text: "Has llegado a: {{0.aoi.name}}",
     },
     question: "¿Te animas a hacer una exposición ahora?",
     buttons: {
