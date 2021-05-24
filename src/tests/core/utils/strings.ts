@@ -2,7 +2,7 @@ import { embedModel } from "~/app/core/utils/strings";
 
 describe("Strings utils", () => {
     const templateString =
-        "[{{id}}] You have reached: {{aoi.name}} (type={{aoi.category}}). Distance: {{aoi.distance.value}} {{aoi.distance.units}}";
+        "[{{id}}] You have reached: {{aoi.name}} (type={{aoi.category}}). Distance: {{aoi.distance.value}} {{aoi.distance.units}}. Closest: {{close.0}}";
 
     it("embeds a model inside a template string", () => {
         const model = {
@@ -15,10 +15,11 @@ describe("Strings utils", () => {
                     units: "meters",
                 },
             },
+            close: [1, 2],
         };
         const output = embedModel(templateString, model);
         expect(output).toEqual(
-            "[0] You have reached: AoI1 (type=Park). Distance: 10 meters"
+            "[0] You have reached: AoI1 (type=Park). Distance: 10 meters. Closest: 1"
         );
     });
 
@@ -32,10 +33,11 @@ describe("Strings utils", () => {
                     units: "meters",
                 },
             },
+            close: [1, 2],
         };
         const output = embedModel(templateString, model);
         expect(output).toEqual(
-            "[{{id}}] You have reached: AoI1 (type=Park). Distance: 10 meters"
+            "[{{id}}] You have reached: AoI1 (type=Park). Distance: 10 meters. Closest: 1"
         );
     });
 
