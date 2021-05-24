@@ -226,7 +226,6 @@ class DemoTaskGraph implements TaskGraph {
             "exposureTimeExtensionFinishedBadly",
             run("sendNotification", {
                 title: "Puedes hablar con tu terapeuta pulsando aquí",
-                body: " ",
             })
         );
 
@@ -234,7 +233,6 @@ class DemoTaskGraph implements TaskGraph {
             "shouldDeliverQuestionFrequencyFeedback",
             run("sendNotification", {
                 title: "¿Te animas a valorar la experiencia?",
-                body: " ",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",
