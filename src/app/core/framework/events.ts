@@ -8,6 +8,6 @@ export function emitTreatmentStopEvent() {
     emaiFramework.emitEvent("stopEvent");
 }
 
-export function emitExposureStartConfirmedEvent() {
-    emaiFramework.emitEvent("exposureStartConfirmed");
+export function emitExposureStartConfirmedEvent(data: any) {
+    emaiFramework.emitEvent("exposureStartConfirmed", data);
 }
