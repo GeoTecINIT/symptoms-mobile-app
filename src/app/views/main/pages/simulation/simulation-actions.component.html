@@ -8,7 +8,7 @@
         </StackLayout>
         <SymSimulationSection title="Eventos preexposición">
             <SymPrimaryButton [margin]="btnMargin" text="Está 10 minutos cerca del área (sin entrar)" (tap)="emitEMAIFrameworkEvent('stayedForAWhileCloseToAreaOfInterest')"></SymPrimaryButton>
-            <SymPrimaryButton [margin]="btnMargin" text="Entra en el área" (tap)="emitEMAIFrameworkEvent('movedInsideAreaOfInterest')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Entra en el área" (tap)="emitEMAIFrameworkEvent('movedInsideAreaOfInterest', { aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}})"></SymPrimaryButton>
         </SymSimulationSection>
         <SymSimulationSection title="Eventos en exposición">
             <SymPrimaryButton [margin]="btnMargin" text="Recibe preguntas" (tap)="emitEMAIFrameworkEvent('wantsToAnswerQuestions')"></SymPrimaryButton>
