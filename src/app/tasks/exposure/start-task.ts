@@ -11,6 +11,7 @@ import {
 } from "~/app/core/persistence/exposures";
 import { ExposureChange } from "./change-record";
 import { Change } from "@geotecinit/emai-framework/entities";
+import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
 
 export class StartExposureTask extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {
@@ -30,6 +31,7 @@ export class StartExposureTask extends TraceableTask {
             startTime: new Date(),
             endTime: null,
             emotionValues: [],
+            place: invocationEvent.data.aoi as AreaOfInterest,
         };
         await this.store.insert(exposure);
 
@@ -37,7 +39,8 @@ export class StartExposureTask extends TraceableTask {
             result: new ExposureChange(
                 Change.START,
                 exposure.startTime,
-                exposure.emotionValues
+                exposure.emotionValues,
+                exposure.place
             ),
         };
     }
