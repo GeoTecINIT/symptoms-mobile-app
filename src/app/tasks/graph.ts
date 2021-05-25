@@ -98,13 +98,26 @@ class DemoTaskGraph implements TaskGraph {
         );
         // END: High resolution geolocation data collection
 
+        // START: Pre-exposure events
+        // -> Stays nearby an area of interest for a while
         on(
-            "stayedForAWhileCloseToAreaOfInterest",
+            "movedInsideAreaOfInterest",
+            run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
+        );
+        on(
+            "movedAwayFromAreaOfInterest",
+            run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
+        );
+        on(
+            "movedCloseToAreaOfInterest",
             run("sendNotification", {
                 title: "Has llegado a un lugar importante",
                 body: "Exponerte te ayudará a superar tu problema, adelante",
             })
+                .in(10, "minutes")
+                .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
+        // -> Enters a exposure area
         on(
             "movedInsideAreaOfInterest",
             run("sendNotification", {
@@ -116,7 +129,8 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
-
+        // -> Confirms to start a exposure
+        on("exposureStartConfirmed", run("startExposure"));
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -128,6 +142,8 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
+        on("exposureStarted", run("writeRecords"));
+        // END: Pre-exposure events
 
         on(
             "wantsToAnswerQuestions",
@@ -210,7 +226,6 @@ class DemoTaskGraph implements TaskGraph {
             "exposureTimeExtensionFinishedBadly",
             run("sendNotification", {
                 title: "Puedes hablar con tu terapeuta pulsando aquí",
-                body: " ",
             })
         );
 
@@ -218,7 +233,6 @@ class DemoTaskGraph implements TaskGraph {
             "shouldDeliverQuestionFrequencyFeedback",
             run("sendNotification", {
                 title: "¿Te animas a valorar la experiencia?",
-                body: " ",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",
