@@ -158,10 +158,19 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("exposureFinished")
+                .cancelOn("stopEvent")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         // END: Exposure events
+
+        // START: App usage events
+        // -> Notification tap
+        on("notificationTapped", run("handleNotificationTap"));
+        on("notificationTapHandled", run("writeRecords"));
+        // -> Notification discard
+        on("notificationCleared", run("handleNotificationDiscard"));
+        on("notificationDiscardHandled", run("writeRecords"));
+        // END: App usage events
 
         on(
             "movedOutsideAreaOfInterest",
