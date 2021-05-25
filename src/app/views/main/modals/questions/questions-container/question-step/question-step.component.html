@@ -6,7 +6,7 @@
                 *ngSwitchCase="'range'"
                 [from]="question.from"
                 [to]="question.to"
-                [selectedValue]="savedAnswer"
+                [selectedValue]="savedAnswer?.answer"
                 height="120"
                 width="100"
                 (valueChange)="onValueSelected($event)">
