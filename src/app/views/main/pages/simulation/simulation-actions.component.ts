@@ -20,7 +20,7 @@ export class SimulationActionsComponent implements OnInit {
         // Use initialized dependencies
     }
 
-    emitEMAIFrameworkEvent(eventName: string) {
-        emaiFramework.emitEvent(eventName);
+    emitEMAIFrameworkEvent(eventName: string, data?: any) {
+        emaiFramework.emitEvent(eventName, data);
     }
 }

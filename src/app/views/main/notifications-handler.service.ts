@@ -15,13 +15,16 @@ import {
     TapActionType,
 } from "@geotecinit/emai-framework/notifications";
 
-import { confirmWantsToStartAnExposure } from "~/app/core/modals/confirm";
+import {
+    ConfirmModalOptionsDataEmbedder,
+    confirmWantsToStartAnExposure,
+} from "~/app/core/modals/confirm";
 import {
     askForQuestionFrequencyFeedback,
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
 
 @Injectable({
     providedIn: "root",
@@ -80,14 +83,17 @@ export class NotificationsHandlerService {
         if (tapActionId !== "start-exposure") {
             throw new Error(`Unsupported confirm action: ${tapActionId}`);
         }
+        const { metadata } = notification.tapAction;
         const wantsToStartExposure = await this.showConfirmModal(
-            confirmWantsToStartAnExposure,
+            new ConfirmModalOptionsDataEmbedder(
+                confirmWantsToStartAnExposure
+            ).embed(metadata),
             notification
         );
         if (!wantsToStartExposure) {
             await this.showFeedbackModal(askWantsToLeaveFeedback, notification);
         } else {
-            emaiFramework.emitEvent("exposureStarted");
+            emitExposureStartConfirmedEvent(metadata);
         }
     }
 
