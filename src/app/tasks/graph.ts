@@ -161,6 +161,26 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("stopEvent")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
+        // -> Leaving exposure area
+        on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
+        on(
+            "exposureAreaLeft",
+            run("sendNotification", {
+                title: "Parece que has salido del lugar de exposición",
+                body: "Recuerda que debes quedarte cerca del área",
+            })
+        );
+        on("exposureAreaLeft", run("writeRecords"));
+        // -> Returning exposure area
+        on("movedInsideAreaOfInterest", run("checkExposureAreaReturn"));
+        on(
+            "returnedToExposureArea",
+            run("sendNotification", {
+                title: "Vemos que has vuelto al lugar de exposición",
+                body: "Nos alegra que hayas vuelto. Puedes hacerlo",
+            })
+        );
+        on("returnedToExposureArea", run("writeRecords"));
         // END: Exposure events
 
         // START: App usage events
@@ -172,20 +192,6 @@ class DemoTaskGraph implements TaskGraph {
         on("notificationDiscardHandled", run("writeRecords"));
         // END: App usage events
 
-        on(
-            "movedOutsideAreaOfInterest",
-            run("sendNotification", {
-                title: "Parece que has salido del lugar de exposición",
-                body: "Recuerda que debes quedarte cerca del área",
-            })
-        );
-        on(
-            "reenteredAreaOfInterest",
-            run("sendNotification", {
-                title: "Vemos que has vuelto al lugar de exposición",
-                body: "Nos alegra que hayas vuelto. Puedes hacerlo",
-            })
-        );
         on(
             "movedAwayFromAreaOfInterest",
             run("sendNotification", {
