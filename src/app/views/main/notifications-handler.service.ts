@@ -65,6 +65,18 @@ export class NotificationsHandlerService {
                     `Error in notifications callback. Reason: ${e}`
                 );
             });
+
+        notificationsManager
+            .onNotificationCleared((notification) => {
+                this.logger.info(
+                    `Notification with id ${notification.id} cleared`
+                );
+            })
+            .catch((e) => {
+                this.logger.error(
+                    `Could not setup notification discard callback. Reason: ${e}`
+                );
+            });
     }
 
     handle(notification: Notification): Promise<void> {
