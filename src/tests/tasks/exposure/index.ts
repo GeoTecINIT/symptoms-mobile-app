@@ -47,8 +47,8 @@ export function createFakeAoIProximityChange(
 export function createNewFakeExposure(place: AreaOfInterest): Exposure {
     return {
         startTime: new Date(),
-        endTime: null,
         place,
         emotionValues: [],
+        successful: false,
     };
 }
