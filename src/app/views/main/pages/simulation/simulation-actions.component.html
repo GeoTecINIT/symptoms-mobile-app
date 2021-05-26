@@ -14,7 +14,7 @@
             <SymPrimaryButton [margin]="btnMargin" text="Recibe preguntas" (tap)="emitEMAIFrameworkEvent('wantsToAnswerQuestions')"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Escapa involuntariamente (sigue cerca)" (tap)="emitEMAIFrameworkEvent('movedOutsideAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Regresa de un escape" (tap)="emitEMAIFrameworkEvent('movedInsideAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
-            <SymPrimaryButton [margin]="btnMargin" text="Abandona (se aleja)" (tap)="emitEMAIFrameworkEvent('movedAwayFromAreaOfInterest')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Abandona (se aleja)" (tap)="emitEMAIFrameworkEvent('movedAwayFromAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
         </SymSimulationSection>
         <SymSimulationSection title="Eventos de finalización">
             <SymPrimaryButton [margin]="btnMargin" text="Finaliza con ansiedad <5" (tap)="emitEMAIFrameworkEvent('exposureSuccessfullyFinished')"></SymPrimaryButton>
