@@ -149,7 +149,6 @@ export class NotificationsHandlerService {
     ): Promise<boolean | void> {
         try {
             const result = await this.confirmModalService.show(options);
-            this.logger.debug(`Result: ${result}`);
             if (result !== undefined) {
                 await this.markAsSeen(notification);
             }
