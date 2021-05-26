@@ -24,11 +24,7 @@ import {
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import {
-    emitExposureStartConfirmedEvent,
-    emitQuestionnaireAnswersAcquired,
-} from "~/app/core/framework/events";
-import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
+import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
 
 @Injectable({
     providedIn: "root",
@@ -139,17 +135,7 @@ export class NotificationsHandlerService {
             default:
                 throw new Error(`Unknown questionnaire: ${questionnaireId}`);
         }
-        const openTime = new Date();
-        const answers = await this.showQuestionsModal(options, notification);
-        if (answers) {
-            emitQuestionnaireAnswersAcquired(
-                processQuestionnaireAnswers(answers, {
-                    openTime,
-                    questionnaireId,
-                    notificationId: notification.id,
-                })
-            );
-        }
+        await this.showQuestionsModal(options, notification);
     }
 
     private async handleContentAction(notification: Notification) {
@@ -201,7 +187,9 @@ export class NotificationsHandlerService {
     ): Promise<Array<QuestionAnswer> | void> {
         try {
             const answers = await this.questionsModalService.deliverQuestions(
-                options
+                notification.tapAction.id,
+                options,
+                notification.id
             );
             if (answers !== undefined) {
                 await this.markAsSeen(notification);

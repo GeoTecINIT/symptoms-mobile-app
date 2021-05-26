@@ -5,6 +5,8 @@ import { MainViewService } from "~/app/views/main/main-view.service";
 import { QuestionsModalComponent } from "./questions-modal.component";
 import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer } from "./answers";
+import { emitQuestionnaireAnswersAcquired } from "~/app/core/framework/events";
+import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 @Injectable({
     providedIn: QuestionsModule,
@@ -13,11 +15,26 @@ export class QuestionsModalService {
     constructor(private mainViewService: MainViewService) {}
 
     deliverQuestions(
-        options: QuestionsModalOptions
+        questionnaireId: string,
+        options: QuestionsModalOptions,
+        notificationId?: number
     ): Promise<Array<QuestionAnswer>> {
-        return this.mainViewService.showFullScreenAnimatedModal(
-            QuestionsModalComponent,
-            options
-        );
+        const openTime = new Date();
+
+        return this.mainViewService
+            .showFullScreenAnimatedModal(QuestionsModalComponent, options)
+            .then((answers: Array<QuestionAnswer>) => {
+                if (answers) {
+                    emitQuestionnaireAnswersAcquired(
+                        processQuestionnaireAnswers(answers, {
+                            openTime,
+                            questionnaireId,
+                            notificationId,
+                        })
+                    );
+                }
+
+                return answers;
+            });
     }
 }
