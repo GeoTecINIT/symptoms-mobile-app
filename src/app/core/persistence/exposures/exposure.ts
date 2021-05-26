@@ -3,9 +3,10 @@ import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
 export interface Exposure {
     id?: string;
     startTime: Date;
-    endTime: Date;
-    emotionValues: Array<EmotionValue>;
+    endTime?: Date;
     place: AreaOfInterest;
+    emotionValues: Array<EmotionValue>;
+    successful: boolean;
 }
 
 export interface EmotionValue {
