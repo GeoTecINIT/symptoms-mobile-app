@@ -29,9 +29,9 @@ export class StartExposureTask extends TraceableTask {
 
         const exposure: Exposure = {
             startTime: new Date(),
-            endTime: null,
-            emotionValues: [],
             place: invocationEvent.data[0].aoi as AreaOfInterest,
+            emotionValues: [],
+            successful: false,
         };
         await this.store.insert(exposure);
 
@@ -39,8 +39,8 @@ export class StartExposureTask extends TraceableTask {
             result: new ExposureChange(
                 Change.START,
                 exposure.startTime,
-                exposure.emotionValues,
-                exposure.place
+                exposure.place,
+                exposure.emotionValues
             ),
         };
     }

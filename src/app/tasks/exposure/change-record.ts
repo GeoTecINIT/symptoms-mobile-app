@@ -6,8 +6,9 @@ export class ExposureChange extends Record {
     constructor(
         change: Change,
         timestamp: Date,
+        public place: AreaOfInterest,
         public emotionValues: Array<EmotionValue>,
-        public place: AreaOfInterest
+        public successful: boolean = false
     ) {
         super("exposure-change", timestamp, change);
     }
