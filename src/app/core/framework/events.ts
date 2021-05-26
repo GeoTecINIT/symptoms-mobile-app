@@ -23,3 +23,7 @@ export function emitQuestionnaireAnswersAcquired(
 export function emitPatientFeedbackAcquired(feedback: PatientFeedback) {
     emaiFramework.emitEvent("patientFeedbackAcquired", feedback);
 }
+
+export function emitExposureManuallyFinished() {
+    emaiFramework.emitEvent("exposureManuallyFinished");
+}
