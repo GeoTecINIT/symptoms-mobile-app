@@ -1,5 +1,10 @@
 import { Exposure, ExposuresStore } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import {
+    AoIProximityChange,
+    AreaOfInterest,
+    GeofencingProximity,
+} from "@geotecinit/emai-framework/entities/aois";
+import { Change } from "@geotecinit/emai-framework/entities";
 
 export function createExposuresStoreMock(): ExposuresStore {
     return {
@@ -29,6 +34,14 @@ export function createFakeAoI(name: string): AreaOfInterest {
         longitude: 0,
         radius: 0,
     };
+}
+
+export function createFakeAoIProximityChange(
+    aoi: AreaOfInterest,
+    proximity: GeofencingProximity = GeofencingProximity.INSIDE,
+    change: Change = Change.START
+): AoIProximityChange {
+    return new AoIProximityChange(aoi, proximity, change);
 }
 
 export function createNewFakeExposure(place: AreaOfInterest): Exposure {
