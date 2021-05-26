@@ -184,6 +184,10 @@ class DemoTaskGraph implements TaskGraph {
         on("returnedToExposureArea", run("writeRecords"));
         // END: Exposure events
 
+        // START: Patient feedback events
+        on("patientFeedbackAcquired", run("writeRecords"));
+        // END: Patient feedback events
+
         // START: App usage events
         // -> Notification tap
         on("notificationTapped", run("handleNotificationTap"));
