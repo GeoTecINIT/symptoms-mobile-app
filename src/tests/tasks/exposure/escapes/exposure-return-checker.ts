@@ -3,6 +3,7 @@ import { ExposureReturnChecker } from "~/app/tasks/exposure/escapes/exposure-ret
 import {
     createExposuresStoreMock,
     createFakeAoI,
+    createFakeAoIProximityChange,
     createNewFakeExposure,
 } from "~/tests/tasks/exposure";
 import {
@@ -16,8 +17,8 @@ describe("Exposure return checker task", () => {
     let storeMock: ExposuresStore;
     let task: ExposureReturnChecker;
 
-    const aoi1 = createFakeAoI("AoI1");
-    const aoi2 = createFakeAoI("AoI2");
+    const aoiChange1 = createFakeAoIProximityChange(createFakeAoI("AoI1"));
+    const aoiChange2 = createFakeAoIProximityChange(createFakeAoI("AoI2"));
 
     beforeEach(() => {
         storeMock = createExposuresStoreMock();
@@ -30,7 +31,7 @@ describe("Exposure return checker task", () => {
         );
 
         const invocationEvent = createEvent("triggerEvent", {
-            data: [aoi1, aoi2],
+            data: [aoiChange1, aoiChange2],
         });
 
         const done = listenToEventTrigger(
@@ -45,11 +46,11 @@ describe("Exposure return checker task", () => {
 
     it("does nothing when the triggering event does not belong to the exposure area", async () => {
         spyOn(storeMock, "getLastUnfinished").and.returnValue(
-            Promise.resolve(createNewFakeExposure(aoi1))
+            Promise.resolve(createNewFakeExposure(aoiChange1.aoi))
         );
 
         const invocationEvent = createEvent("triggerEvent", {
-            data: [aoi2],
+            data: [aoiChange2],
         });
 
         const done = listenToEventTrigger(
@@ -64,11 +65,11 @@ describe("Exposure return checker task", () => {
 
     it("produces an exposure return record when the current exposure area is present in the invocation event", async () => {
         spyOn(storeMock, "getLastUnfinished").and.returnValue(
-            Promise.resolve(createNewFakeExposure(aoi1))
+            Promise.resolve(createNewFakeExposure(aoiChange1.aoi))
         );
 
         const invocationEvent = createEvent("triggerEvent", {
-            data: [aoi1],
+            data: [aoiChange1],
         });
 
         const pendingResult = listenToEventTrigger(
@@ -82,7 +83,7 @@ describe("Exposure return checker task", () => {
         expect(result).toEqual(
             jasmine.objectContaining({
                 type: "exposure-area-left",
-                place: aoi1,
+                place: aoiChange1.aoi,
                 change: Change.END,
             })
         );
