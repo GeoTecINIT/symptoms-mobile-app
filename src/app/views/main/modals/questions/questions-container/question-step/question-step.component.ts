@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { animate, style, transition, trigger } from "@angular/animations";
 
 import { QuestionType } from "~/app/core/modals/questions";
-import { QuestionStepResult } from "../../answers";
+import { QuestionAnswer, QuestionStepResult } from "../../answers";
 
 type QuestionStepType = "standalone" | "first" | "middle" | "last";
 
@@ -27,12 +27,13 @@ export class QuestionStepComponent {
     @Input() question: QuestionType;
     @Input() index: number;
     @Input() amount: number;
-    @Input() savedAnswer: any;
+    @Input() savedAnswer: QuestionAnswer;
 
     @Output() backTap = new EventEmitter();
     @Output() answerProvided = new EventEmitter<QuestionStepResult>();
 
     answer: any;
+    answerTime: Date;
 
     btnMargin = 6;
     btnSize: any = "md";
@@ -57,12 +58,17 @@ export class QuestionStepComponent {
 
     onValueSelected(value: number) {
         this.answer = value;
+        this.answerTime =
+            this.savedAnswer && this.savedAnswer.answer === value
+                ? this.savedAnswer.answerTime
+                : new Date();
     }
 
     onContinueTap() {
         this.answerProvided.emit({
             step: this.index,
             answer: this.answer,
+            answerTime: this.answerTime,
         });
     }
 

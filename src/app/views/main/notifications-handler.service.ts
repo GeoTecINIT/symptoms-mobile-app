@@ -24,7 +24,11 @@ import {
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
+import {
+    emitExposureStartConfirmedEvent,
+    emitQuestionnaireAnswersAcquired,
+} from "~/app/core/framework/events";
+import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 @Injectable({
     providedIn: "root",
@@ -59,6 +63,18 @@ export class NotificationsHandlerService {
             .catch((e) => {
                 this.logger.error(
                     `Error in notifications callback. Reason: ${e}`
+                );
+            });
+
+        notificationsManager
+            .onNotificationCleared((notification) => {
+                this.logger.info(
+                    `Notification with id ${notification.id} cleared`
+                );
+            })
+            .catch((e) => {
+                this.logger.error(
+                    `Could not setup notification discard callback. Reason: ${e}`
                 );
             });
     }
@@ -114,16 +130,26 @@ export class NotificationsHandlerService {
     }
 
     private async handleQuestionsAction(notification: Notification) {
-        const tapActionId = notification.tapAction.id;
+        const questionnaireId = notification.tapAction.id;
         let options: QuestionsModalOptions;
-        switch (tapActionId) {
+        switch (questionnaireId) {
             case "anxiety-questions":
                 options = askAnxietyQuestions;
                 break;
             default:
-                throw new Error(`Unsupported questions action: ${tapActionId}`);
+                throw new Error(`Unknown questionnaire: ${questionnaireId}`);
         }
-        await this.showQuestionsModal(options, notification);
+        const openTime = new Date();
+        const answers = await this.showQuestionsModal(options, notification);
+        if (answers) {
+            emitQuestionnaireAnswersAcquired(
+                processQuestionnaireAnswers(answers, {
+                    openTime,
+                    questionnaireId,
+                    notificationId: notification.id,
+                })
+            );
+        }
     }
 
     private async handleContentAction(notification: Notification) {
@@ -177,7 +203,6 @@ export class NotificationsHandlerService {
             const answers = await this.questionsModalService.deliverQuestions(
                 options
             );
-            this.logger.debug(`Answers: ${JSON.stringify(answers)}`);
             if (answers !== undefined) {
                 await this.markAsSeen(notification);
             }

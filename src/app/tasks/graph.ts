@@ -145,8 +145,10 @@ class DemoTaskGraph implements TaskGraph {
         on("exposureStarted", run("writeRecords"));
         // END: Pre-exposure events
 
+        // START: Exposure events
+        // -> Deliver questions every 5 minutes as long as the exposure lasts
         on(
-            "wantsToAnswerQuestions",
+            "exposureStarted",
             run("sendNotification", {
                 title: "¿Podrías decirnos cómo te encuentras?",
                 body: "Toca la notificación para responder",
@@ -155,7 +157,21 @@ class DemoTaskGraph implements TaskGraph {
                     id: "anxiety-questions",
                 },
             })
+                .every(5, "minutes")
+                .cancelOn("stopEvent")
         );
+        on("questionnaireAnswersAcquired", run("writeRecords"));
+        // END: Exposure events
+
+        // START: App usage events
+        // -> Notification tap
+        on("notificationTapped", run("handleNotificationTap"));
+        on("notificationTapHandled", run("writeRecords"));
+        // -> Notification discard
+        on("notificationCleared", run("handleNotificationDiscard"));
+        on("notificationDiscardHandled", run("writeRecords"));
+        // END: App usage events
+
         on(
             "movedOutsideAreaOfInterest",
             run("sendNotification", {

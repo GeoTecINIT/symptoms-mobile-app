@@ -13,13 +13,8 @@ export class QuestionsContainerComponent {
     currentStep = 0;
     answers: Array<QuestionAnswer> = [];
 
-    get currentStepAnswer(): any {
-        const savedAnswer = this.answers[this.currentStep];
-        if (savedAnswer) {
-            return savedAnswer.answer;
-        }
-
-        return undefined;
+    get currentStepAnswer(): QuestionAnswer {
+        return this.answers[this.currentStep];
     }
 
     get questionsAmount(): number {
@@ -50,9 +45,11 @@ export class QuestionsContainerComponent {
     }
 
     private updateAnswer(result: QuestionStepResult) {
-        this.answers[result.step] = {
-            title: this.options.questions[result.step].title,
-            answer: result.answer,
+        const { step, answer, answerTime } = result;
+        this.answers[step] = {
+            title: this.options.questions[step].title,
+            answer,
+            answerTime,
         };
     }
 }
