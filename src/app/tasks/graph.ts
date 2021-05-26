@@ -159,7 +159,7 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("stopEvent")
+                .cancelOn("exposureFinished")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         // -> Leaving exposure area
@@ -182,6 +182,27 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on("returnedToExposureArea", run("writeRecords"));
+        // -> Abandoning exposure area
+        on("movedAwayFromAreaOfInterest", run("checkExposureDropout"));
+        on("exposureDroppedOut", run("finishExposure", { successful: false }));
+        on(
+            "exposureDroppedOut",
+            run("sendNotification", {
+                title: "Has abandonado el lugar de exposición",
+                body: "Por favor, pulsa aquí para indicar el motivo",
+                tapAction: {
+                    type: TapActionType.ASK_FEEDBACK,
+                    id: "exposure-left",
+                },
+            })
+        );
+        // -> Manually finishing exposure
+        on(
+            "exposureManuallyFinished",
+            run("finishExposure", { successful: false })
+        );
+        // -> Finalization event
+        on("exposureFinished", run("writeRecords"));
         // END: Exposure events
 
         // START: Patient feedback events
@@ -196,18 +217,6 @@ class DemoTaskGraph implements TaskGraph {
         on("notificationCleared", run("handleNotificationDiscard"));
         on("notificationDiscardHandled", run("writeRecords"));
         // END: App usage events
-
-        on(
-            "movedAwayFromAreaOfInterest",
-            run("sendNotification", {
-                title: "Has abandonado el lugar de exposición",
-                body: "Por favor, pulsa aquí para indicar el motivo",
-                tapAction: {
-                    type: TapActionType.ASK_FEEDBACK,
-                    id: "exposure-left",
-                },
-            })
-        );
 
         on(
             "exposureSuccessfullyFinished",
