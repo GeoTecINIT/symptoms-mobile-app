@@ -57,7 +57,7 @@ export class UnderExposureComponent implements OnInit {
         this.logger.debug(`Wants to leave: ${wantsToLeave}`);
         if (wantsToLeave) {
             this.feedbackModalService
-                .askFeedback(askWantsToLeaveFeedback)
+                .askFeedback("exposure-left", askWantsToLeaveFeedback)
                 .then((feedback) => {
                     this.logger.debug(`Feedback: ${feedback}`);
                     if (feedback) {
