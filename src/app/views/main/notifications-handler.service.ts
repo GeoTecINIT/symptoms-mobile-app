@@ -168,9 +168,10 @@ export class NotificationsHandlerService {
     ): Promise<string | void> {
         try {
             const feedback = await this.feedbackModalService.askFeedback(
-                options
+                notification.tapAction.id,
+                options,
+                notification.id
             );
-            this.logger.debug(`Feedback: ${feedback}`);
             await this.markAsSeen(notification);
 
             return feedback;
