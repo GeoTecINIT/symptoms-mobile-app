@@ -118,8 +118,9 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
         // -> Enters a exposure area
+        on("movedInsideAreaOfInterest", run("checkExposureAreaStatus"));
         on(
-            "movedInsideAreaOfInterest",
+            "enteredAreaWithNoOngoingExposure",
             run("sendNotification", {
                 title: "Estás en un lugar importante",
                 body: "Toca la notificación para iniciar una exposición",
@@ -172,7 +173,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         on("exposureAreaLeft", run("writeRecords"));
         // -> Returning exposure area
-        on("movedInsideAreaOfInterest", run("checkExposureAreaReturn"));
+        on("enteredAreaWithOngoingExposure", run("checkExposureAreaReturn"));
         on(
             "returnedToExposureArea",
             run("sendNotification", {
