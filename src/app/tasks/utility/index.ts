@@ -17,6 +17,6 @@ export const utilityTasks: Array<Task> = [
     ),
     // -> Movement from AoI outer radius
     new EventConverterTask("movedOutsideAreaOfInterestOuterRadius"),
-    // -> Questionnaire delivery canceled
-    new EventConverterTask("questionnaireDeliveryCancelled"),
+    // -> Exposure forced to finish
+    new EventConverterTask("exposureForcedToFinish"),
 ];
