@@ -148,6 +148,8 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Exposure events
         // -> Deliver questions every 5 minutes as long as the exposure lasts
+        on("exposureFinished", run("emitQuestionnaireDeliveryCancelledEvent"));
+        on("stopEvent", run("emitQuestionnaireDeliveryCancelledEvent"));
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -159,7 +161,7 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("exposureFinished")
+                .cancelOn("questionnaireDeliveryCancelled")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         // -> Leaving exposure area
