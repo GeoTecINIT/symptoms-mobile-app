@@ -14,7 +14,7 @@ describe("Process exposure answers task", () => {
     let storeMock: ExposuresStore;
     let task: ProcessExposureAnswers;
 
-    const ongoingExposure = {
+    const ongoingExposure: Exposure = {
         id: "exposure-1",
         startTime: new Date(Date.now() - 60 * 60 * 1000 /* 1h ago */),
         place: createFakeAoI("AoI1"),
