@@ -9,6 +9,7 @@ import {
     confirmWantsToLeave,
 } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
+import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 
 @Component({
     selector: "SymUnderExposure",
@@ -53,11 +54,10 @@ export class UnderExposureComponent implements OnInit {
     }
 
     private handleWantsToLeave(wantsToLeave: boolean) {
-        // TODO: Manage this
-        this.logger.debug(`Wants to leave: ${wantsToLeave}`);
         if (wantsToLeave) {
+            emitExposureManuallyFinished();
             this.feedbackModalService
-                .askFeedback(askWantsToLeaveFeedback)
+                .askFeedback("exposure-left", askWantsToLeaveFeedback)
                 .then((feedback) => {
                     this.logger.debug(`Feedback: ${feedback}`);
                     if (feedback) {

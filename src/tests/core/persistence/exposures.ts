@@ -12,14 +12,15 @@ describe("Exposures store", () => {
 
     const newExposure: Exposure = {
         startTime: new Date(2021, 4, 20, 18, 0),
-        endTime: null,
-        emotionValues: [],
         place,
+        emotionValues: [],
+        successful: false,
     };
 
     const finishedExposure: Exposure = {
         startTime: new Date(2021, 4, 20, 16, 0),
         endTime: new Date(2021, 4, 20, 17, 0),
+        place,
         emotionValues: [
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 2 },
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 2 },
@@ -33,7 +34,7 @@ describe("Exposures store", () => {
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 5 },
             { timestamp: new Date(2021, 4, 20, 16, 5), value: 5 },
         ],
-        place,
+        successful: true,
     };
 
     beforeAll(async () => {
@@ -69,6 +70,7 @@ describe("Exposures store", () => {
                     value: 5,
                 },
             ],
+            successful: true,
         };
         await exposures.update(updatedExposure);
         const lastExposure = await exposures.getLastUnfinished();

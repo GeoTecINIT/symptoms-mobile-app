@@ -118,8 +118,9 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
         // -> Enters a exposure area
+        on("movedInsideAreaOfInterest", run("checkExposureAreaStatus"));
         on(
-            "movedInsideAreaOfInterest",
+            "enteredAreaWithNoOngoingExposure",
             run("sendNotification", {
                 title: "Estás en un lugar importante",
                 body: "Toca la notificación para iniciar una exposición",
@@ -158,36 +159,34 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("stopEvent")
+                .cancelOn("exposureFinished")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
-        // END: Exposure events
-
-        // START: App usage events
-        // -> Notification tap
-        on("notificationTapped", run("handleNotificationTap"));
-        on("notificationTapHandled", run("writeRecords"));
-        // -> Notification discard
-        on("notificationCleared", run("handleNotificationDiscard"));
-        on("notificationDiscardHandled", run("writeRecords"));
-        // END: App usage events
-
+        // -> Leaving exposure area
+        on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
-            "movedOutsideAreaOfInterest",
+            "exposureAreaLeft",
             run("sendNotification", {
                 title: "Parece que has salido del lugar de exposición",
                 body: "Recuerda que debes quedarte cerca del área",
             })
         );
+        on("exposureAreaLeft", run("writeRecords"));
+        // -> Returning exposure area
+        on("enteredAreaWithOngoingExposure", run("checkExposureAreaReturn"));
         on(
-            "reenteredAreaOfInterest",
+            "returnedToExposureArea",
             run("sendNotification", {
                 title: "Vemos que has vuelto al lugar de exposición",
                 body: "Nos alegra que hayas vuelto. Puedes hacerlo",
             })
         );
+        on("returnedToExposureArea", run("writeRecords"));
+        // -> Abandoning exposure area
+        on("movedAwayFromAreaOfInterest", run("checkExposureDropout"));
+        on("exposureDroppedOut", run("finishExposure", { successful: false }));
         on(
-            "movedAwayFromAreaOfInterest",
+            "exposureDroppedOut",
             run("sendNotification", {
                 title: "Has abandonado el lugar de exposición",
                 body: "Por favor, pulsa aquí para indicar el motivo",
@@ -197,6 +196,27 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
+        // -> Manually finishing exposure
+        on(
+            "exposureManuallyFinished",
+            run("finishExposure", { successful: false })
+        );
+        // -> Finalization event
+        on("exposureFinished", run("writeRecords"));
+        // END: Exposure events
+
+        // START: Patient feedback events
+        on("patientFeedbackAcquired", run("writeRecords"));
+        // END: Patient feedback events
+
+        // START: App usage events
+        // -> Notification tap
+        on("notificationTapped", run("handleNotificationTap"));
+        on("notificationTapHandled", run("writeRecords"));
+        // -> Notification discard
+        on("notificationCleared", run("handleNotificationDiscard"));
+        on("notificationDiscardHandled", run("writeRecords"));
+        // END: App usage events
 
         on(
             "exposureSuccessfullyFinished",
