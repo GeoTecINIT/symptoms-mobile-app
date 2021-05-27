@@ -1,5 +1,6 @@
 import { Task } from "@geotecinit/emai-framework/tasks";
 import { StartExposureTask } from "./start-exposure";
+import { ProcessExposureAnswers } from "./process-answers";
 import { FinishExposureTask } from "./finish-exposure";
 import { ExposureStatusChecker } from "./escapes/exposure-status-checker";
 import { ExposureLeaveChecker } from "./escapes/exposure-leave-checker";
@@ -11,6 +12,7 @@ export { ExposureChange } from "./change-record";
 export const exposureTasks: Array<Task> = [
     // --> General tasks
     new StartExposureTask(),
+    new ProcessExposureAnswers(),
     new FinishExposureTask(),
     // --> Escapes
     new ExposureStatusChecker(),
