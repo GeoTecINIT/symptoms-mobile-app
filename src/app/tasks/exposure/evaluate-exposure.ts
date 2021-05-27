@@ -13,7 +13,11 @@ const RESULT_UNSUCCESSFUL = "exposureEvaluationResultedUnsuccessful";
 export class EvaluateExposureTask extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {
         super("evaluateExposure", {
-            outputEventNames: [RESULT_SUCCESS, RESULT_NEUTRAL],
+            outputEventNames: [
+                RESULT_SUCCESS,
+                RESULT_NEUTRAL,
+                RESULT_UNSUCCESSFUL,
+            ],
         });
     }
 
