@@ -1,5 +1,5 @@
 import { Exposure, ExposuresStore } from "~/app/core/persistence/exposures";
-import { EvaluateExposureTask } from "~/app/tasks/exposure/evaluate-exposure";
+import { EvaluateExposureExtensionTask } from "~/app/tasks/exposure/evaluate-exposure-ext";
 import {
     createExposuresStoreMock,
     createFakeAoI,
@@ -9,17 +9,13 @@ import {
     listenToEventTrigger,
 } from "@geotecinit/emai-framework/testing/events";
 
-const MILD_ANXIETY = 5;
-const GOOD_PEAK_DIFF = 3;
+const SEVERE_ANXIETY = 8;
 
 describe("Evaluate exposure task", () => {
     let storeMock: ExposuresStore;
-    let task: EvaluateExposureTask;
+    let task: EvaluateExposureExtensionTask;
 
-    const taskParams = {
-        emotionThreshold: MILD_ANXIETY,
-        peakToLastThreshold: GOOD_PEAK_DIFF,
-    };
+    const taskParams = { emotionThreshold: SEVERE_ANXIETY };
 
     const ongoingExposure: Exposure = {
         id: "exposure-1",
@@ -37,21 +33,24 @@ describe("Evaluate exposure task", () => {
         { value: 8, timestamp: new Date() },
         { value: 7, timestamp: new Date() },
         { value: 8, timestamp: new Date() },
-        { value: 7, timestamp: new Date() },
-        { value: 6, timestamp: new Date() },
-        { value: 5, timestamp: new Date() },
+        { value: 9, timestamp: new Date() },
+        { value: 8, timestamp: new Date() },
+        { value: 9, timestamp: new Date() },
+        { value: 8, timestamp: new Date() },
+        { value: 9, timestamp: new Date() },
+        { value: 8, timestamp: new Date() },
     ];
 
     beforeEach(() => {
         storeMock = createExposuresStoreMock();
-        task = new EvaluateExposureTask(storeMock);
+        task = new EvaluateExposureExtensionTask(storeMock);
     });
 
     it("evaluate the exposure as successful when last emotion value is under threshold", async () => {
         ongoingExposure.emotionValues = [
             ...testEmotionValues,
             {
-                value: 4,
+                value: 7,
                 timestamp: new Date(),
             },
         ];
@@ -62,31 +61,7 @@ describe("Evaluate exposure task", () => {
         const invocationEvent = createEvent("eventTrigger");
 
         const done = listenToEventTrigger(
-            "exposureEvaluationResultedSuccessful",
-            invocationEvent.id
-        );
-
-        task.run(taskParams, invocationEvent);
-
-        await done;
-    });
-
-    it("evaluate the exposure as neutral when last emotion value is above threshold but effort is good enough", async () => {
-        ongoingExposure.emotionValues = [
-            ...testEmotionValues,
-            {
-                value: 5,
-                timestamp: new Date(),
-            },
-        ];
-        spyOn(storeMock, "getLastUnfinished").and.returnValue(
-            Promise.resolve(ongoingExposure)
-        );
-
-        const invocationEvent = createEvent("eventTrigger");
-
-        const done = listenToEventTrigger(
-            "exposureEvaluationResultedNeutral",
+            "exposureExtensionEvaluationResultedSuccessful",
             invocationEvent.id
         );
 
@@ -99,7 +74,7 @@ describe("Evaluate exposure task", () => {
         ongoingExposure.emotionValues = [
             ...testEmotionValues,
             {
-                value: 6,
+                value: 8,
                 timestamp: new Date(),
             },
         ];
@@ -110,7 +85,7 @@ describe("Evaluate exposure task", () => {
         const invocationEvent = createEvent("eventTrigger");
 
         const done = listenToEventTrigger(
-            "exposureEvaluationResultedUnsuccessful",
+            "exposureExtensionEvaluationResultedUnsuccessful",
             invocationEvent.id
         );
 
@@ -128,7 +103,7 @@ describe("Evaluate exposure task", () => {
         const invocationEvent = createEvent("eventTrigger");
 
         const done = listenToEventTrigger(
-            "exposureEvaluationResultedUnsuccessful",
+            "exposureExtensionEvaluationResultedUnsuccessful",
             invocationEvent.id
         );
 

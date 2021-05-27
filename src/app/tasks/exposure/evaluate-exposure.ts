@@ -5,8 +5,12 @@ import {
     TraceableTask,
 } from "@geotecinit/emai-framework/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
+import {
+    evaluateLastEmotionValue,
+    extractEmotionValuesFromOngoingExposure,
+} from "~/app/tasks/exposure/common";
 
-const RESULT_SUCCESS = "exposureEvaluationResultedSuccessful";
+const RESULT_SUCCESSFUL = "exposureEvaluationResultedSuccessful";
 const RESULT_NEUTRAL = "exposureEvaluationResultedNeutral";
 const RESULT_UNSUCCESSFUL = "exposureEvaluationResultedUnsuccessful";
 
@@ -14,7 +18,7 @@ export class EvaluateExposureTask extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {
         super("evaluateExposure", {
             outputEventNames: [
-                RESULT_SUCCESS,
+                RESULT_SUCCESSFUL,
                 RESULT_NEUTRAL,
                 RESULT_UNSUCCESSFUL,
             ],
@@ -37,26 +41,25 @@ export class EvaluateExposureTask extends TraceableTask {
             );
         }
 
-        const ongoingExposure = await this.store.getLastUnfinished();
-        if (!ongoingExposure) {
-            throw new Error("There is no exposure ongoing!");
-        }
-
-        const anxietyLevels = ongoingExposure.emotionValues.map(
-            (emotionValue) => emotionValue.value
+        const emotionValues = await extractEmotionValuesFromOngoingExposure(
+            this.store
         );
-        if (anxietyLevels.length === 0) {
-            return { eventName: RESULT_UNSUCCESSFUL };
+        const evaluationResult = evaluateLastEmotionValue(
+            emotionValues,
+            emotionThreshold
+        );
+        switch (evaluationResult) {
+            case "not-enough":
+                return { eventName: RESULT_UNSUCCESSFUL };
+            case "below":
+                return { eventName: RESULT_SUCCESSFUL };
         }
 
-        const lastValue = anxietyLevels[anxietyLevels.length - 1];
-        if (lastValue < emotionThreshold) {
-            return { eventName: RESULT_SUCCESS };
-        }
-
-        const peakValue = anxietyLevels.reduce((prev, curr) =>
+        const peakValue = emotionValues.reduce((prev, curr) =>
             curr > prev ? curr : prev
         );
+        const lastValue = emotionValues[emotionValues.length - 1];
+
         const peakToLastDiff = peakValue - lastValue;
         if (peakToLastDiff >= peakToLastThreshold) {
             return { eventName: RESULT_NEUTRAL };
