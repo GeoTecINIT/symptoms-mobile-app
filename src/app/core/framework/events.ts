@@ -1,5 +1,6 @@
 import { emaiFramework } from "@geotecinit/emai-framework";
 import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
+import { PatientFeedback } from "~/app/core/modals/feedback";
 
 export function emitTreatmentStartEvent() {
     emaiFramework.emitEvent("startEvent");
@@ -17,4 +18,12 @@ export function emitQuestionnaireAnswersAcquired(
     answers: QuestionnaireAnswers
 ) {
     emaiFramework.emitEvent("questionnaireAnswersAcquired", answers);
+}
+
+export function emitPatientFeedbackAcquired(feedback: PatientFeedback) {
+    emaiFramework.emitEvent("patientFeedbackAcquired", feedback);
+}
+
+export function emitExposureManuallyFinished() {
+    emaiFramework.emitEvent("exposureManuallyFinished");
 }
