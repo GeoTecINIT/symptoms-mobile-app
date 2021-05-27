@@ -255,6 +255,44 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
+        on(
+            "exposureEvaluationResultedUnsuccessful",
+            run("evaluateExposureExtension", {
+                emotionThreshold: 8,
+            })
+                .in(15, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        // -> Exposure extension evaluation results successful
+        on(
+            "exposureExtensionEvaluationResultedSuccessful",
+            run("sendNotification", {
+                title: "Te has esforzado mucho, con la práctica mejorarás",
+                body: "Pulsa aquí, leer esto puede resultarte útil",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c02",
+                },
+            })
+        );
+        on(
+            "exposureExtensionEvaluationResultedSuccessful",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure extension evaluation results unsuccessful
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
+            run("sendNotification", {
+                title: "Puedes hablar con tu terapeuta pulsando aquí",
+            })
+        );
+        // TODO: Confirm that what is next is what has to be done
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
+            run("finishExposure", { successful: true })
+                .in(15, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
         // -> Finalization event
         on("exposureFinished", run("writeRecords"));
         // END: Exposure events
@@ -271,24 +309,6 @@ class DemoTaskGraph implements TaskGraph {
         on("notificationCleared", run("handleNotificationDiscard"));
         on("notificationDiscardHandled", run("writeRecords"));
         // END: App usage events
-
-        on(
-            "exposureTimeExtensionFinishedFine",
-            run("sendNotification", {
-                title: "Te has esforzado mucho, con la práctica mejorarás",
-                body: "Pulsa aquí, leer esto puede resultarte útil",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "c02",
-                },
-            })
-        );
-        on(
-            "exposureTimeExtensionFinishedBadly",
-            run("sendNotification", {
-                title: "Puedes hablar con tu terapeuta pulsando aquí",
-            })
-        );
 
         on(
             "shouldDeliverQuestionFrequencyFeedback",
