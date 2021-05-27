@@ -1,4 +1,4 @@
-import { ExposuresStore } from "~/app/core/persistence/exposures";
+import { Exposure, ExposuresStore } from "~/app/core/persistence/exposures";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { FinishExposureTask } from "~/app/tasks/exposure/finish-exposure";
 import {
@@ -15,7 +15,7 @@ describe("Finish exposure task", () => {
     let storeMock: ExposuresStore;
     let task: FinishExposureTask;
 
-    const ongoingExposure = {
+    const ongoingExposure: Exposure = {
         id: "exposure-1",
         startTime: new Date(Date.now() - 60 * 60 * 1000 /* 1h ago */),
         place: createFakeAoI("AoI1"),
