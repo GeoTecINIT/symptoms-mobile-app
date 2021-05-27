@@ -164,6 +164,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("questionnaireDeliveryCancelled")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
+        on("questionnaireAnswersAcquired", run("processExposureAnswers"));
         // -> Leaving exposure area
         on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
