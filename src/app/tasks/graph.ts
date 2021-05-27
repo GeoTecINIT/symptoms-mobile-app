@@ -147,9 +147,10 @@ class DemoTaskGraph implements TaskGraph {
         // END: Pre-exposure events
 
         // START: Exposure events
+        // -> Possible exposure finalization causes
+        on("exposureFinished", run("emitExposureForcedToFinishEvent"));
+        on("stopEvent", run("emitExposureForcedToFinishEvent"));
         // -> Deliver questions every 5 minutes as long as the exposure lasts
-        on("exposureFinished", run("emitQuestionnaireDeliveryCancelledEvent"));
-        on("stopEvent", run("emitQuestionnaireDeliveryCancelledEvent"));
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -161,7 +162,7 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("questionnaireDeliveryCancelled")
+                .cancelOn("exposureForcedToFinish")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         on("questionnaireAnswersAcquired", run("processExposureAnswers"));
@@ -204,6 +205,56 @@ class DemoTaskGraph implements TaskGraph {
             "exposureManuallyFinished",
             run("finishExposure", { successful: false })
         );
+        // -> Standard time limit reached
+        on(
+            "exposureStarted",
+            run("evaluateExposure", {
+                emotionThreshold: 5,
+                peakToLastThreshold: 3,
+            })
+                .in(61, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        // -> Exposure evaluation results successful
+        on(
+            "exposureEvaluationResultedSuccessful",
+            run("sendNotification", {
+                title: "Bien, has manejado la situación",
+                body: "Puedes terminar aquí o continuar un poco más",
+            })
+        );
+        on(
+            "exposureEvaluationResultedSuccessful",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure evaluation results neutral
+        on(
+            "exposureEvaluationResultedNeutral",
+            run("sendNotification", {
+                title: "Has conseguido reducir tu ansiedad, es un gran logro",
+                body: "Pulsa aquí, leer esto puede resultarte útil",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c05",
+                },
+            })
+        );
+        on(
+            "exposureEvaluationResultedNeutral",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure evaluation results unsuccessful
+        on(
+            "exposureEvaluationResultedUnsuccessful",
+            run("sendNotification", {
+                title: "Puedes prologar tu tiempo de exposición",
+                body: "Pulsa aquí, leer esto puede resultarte de ayuda",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c03",
+                },
+            })
+        );
         // -> Finalization event
         on("exposureFinished", run("writeRecords"));
         // END: Exposure events
@@ -221,35 +272,6 @@ class DemoTaskGraph implements TaskGraph {
         on("notificationDiscardHandled", run("writeRecords"));
         // END: App usage events
 
-        on(
-            "exposureSuccessfullyFinished",
-            run("sendNotification", {
-                title: "Bien, has manejado la situación",
-                body: "Puedes terminar aquí o continuar un poco más",
-            })
-        );
-        on(
-            "exposureNeutrallyFinished",
-            run("sendNotification", {
-                title: "Has conseguido reducir tu ansiedad, es un gran logro",
-                body: "Pulsa aquí, leer esto puede resultarte útil",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "c05",
-                },
-            })
-        );
-        on(
-            "exposureBadlyFinished",
-            run("sendNotification", {
-                title: "Puedes prologar tu tiempo de exposición",
-                body: "Pulsa aquí, leer esto puede resultarte de ayuda",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "c03",
-                },
-            })
-        );
         on(
             "exposureTimeExtensionFinishedFine",
             run("sendNotification", {
