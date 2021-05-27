@@ -297,8 +297,31 @@ class DemoTaskGraph implements TaskGraph {
         on("exposureFinished", run("writeRecords"));
         // END: Exposure events
 
+        // START: Post-exposure events
+        on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on(
+            "exposureNotDroppedOut",
+            run("limitedFeedbackDelivery", {
+                feedbackId: "question-frequency",
+                maxCount: 3,
+            })
+        );
+
+        on(
+            "canDeliverFeedback",
+            run("sendNotification", {
+                title: "¿Te animas a valorar la experiencia?",
+                tapAction: {
+                    type: TapActionType.ASK_FEEDBACK,
+                    id: "question-frequency",
+                },
+            }).in(5, "minutes")
+        );
+        // END: Post-exposure events
+
         // START: Patient feedback events
         on("patientFeedbackAcquired", run("writeRecords"));
+        on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
         // END: Patient feedback events
 
         // START: App usage events
@@ -309,17 +332,6 @@ class DemoTaskGraph implements TaskGraph {
         on("notificationCleared", run("handleNotificationDiscard"));
         on("notificationDiscardHandled", run("writeRecords"));
         // END: App usage events
-
-        on(
-            "shouldDeliverQuestionFrequencyFeedback",
-            run("sendNotification", {
-                title: "¿Te animas a valorar la experiencia?",
-                tapAction: {
-                    type: TapActionType.ASK_FEEDBACK,
-                    id: "question-frequency",
-                },
-            })
-        );
     }
 }
 
