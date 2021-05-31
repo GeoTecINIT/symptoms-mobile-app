@@ -91,6 +91,10 @@ class DemoTaskGraph implements TaskGraph {
             run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
         );
         on(
+            "exposureFinished",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
+        );
+        on(
             "highFrequencyMultipleGeolocationAcquisitionCanStart",
             run("acquireMultiplePhoneGeolocation", { maxInterval: 10000 })
                 .every(1, "minutes")
@@ -147,6 +151,9 @@ class DemoTaskGraph implements TaskGraph {
         // END: Pre-exposure events
 
         // START: Exposure events
+        // -> Possible exposure finalization causes
+        on("exposureFinished", run("emitExposureForcedToFinishEvent"));
+        on("stopEvent", run("emitExposureForcedToFinishEvent"));
         // -> Deliver questions every 5 minutes as long as the exposure lasts
         on(
             "exposureStarted",
@@ -159,9 +166,10 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
                 .every(5, "minutes")
-                .cancelOn("exposureFinished")
+                .cancelOn("exposureForcedToFinish")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
+        on("questionnaireAnswersAcquired", run("processExposureAnswers"));
         // -> Leaving exposure area
         on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
@@ -201,30 +209,31 @@ class DemoTaskGraph implements TaskGraph {
             "exposureManuallyFinished",
             run("finishExposure", { successful: false })
         );
-        // -> Finalization event
-        on("exposureFinished", run("writeRecords"));
-        // END: Exposure events
-
-        // START: Patient feedback events
-        on("patientFeedbackAcquired", run("writeRecords"));
-        // END: Patient feedback events
-
-        // START: App usage events
-        // -> Notification tap
-        on("notificationTapped", run("writeRecords"));
-        // -> Notification discard
-        on("notificationCleared", run("writeRecords"));
-        // END: App usage events
-
+        // -> Standard time limit reached
         on(
-            "exposureSuccessfullyFinished",
+            "exposureStarted",
+            run("evaluateExposure", {
+                emotionThreshold: 5,
+                peakToLastThreshold: 3,
+            })
+                .in(61, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        // -> Exposure evaluation results successful
+        on(
+            "exposureEvaluationResultedSuccessful",
             run("sendNotification", {
                 title: "Bien, has manejado la situación",
                 body: "Puedes terminar aquí o continuar un poco más",
             })
         );
         on(
-            "exposureNeutrallyFinished",
+            "exposureEvaluationResultedSuccessful",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure evaluation results neutral
+        on(
+            "exposureEvaluationResultedNeutral",
             run("sendNotification", {
                 title: "Has conseguido reducir tu ansiedad, es un gran logro",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
@@ -235,9 +244,14 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on(
-            "exposureBadlyFinished",
+            "exposureEvaluationResultedNeutral",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure evaluation results unsuccessful
+        on(
+            "exposureEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Puedes prologar tu tiempo de exposición",
+                title: "Puedes prolongar tu tiempo de exposición",
                 body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -246,7 +260,16 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on(
-            "exposureTimeExtensionFinishedFine",
+            "exposureEvaluationResultedUnsuccessful",
+            run("evaluateExposureExtension", {
+                emotionThreshold: 8,
+            })
+                .in(15, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        // -> Exposure extension evaluation results successful
+        on(
+            "exposureExtensionEvaluationResultedSuccessful",
             run("sendNotification", {
                 title: "Te has esforzado mucho, con la práctica mejorarás",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
@@ -257,22 +280,60 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on(
-            "exposureTimeExtensionFinishedBadly",
+            "exposureExtensionEvaluationResultedSuccessful",
+            run("finishExposure", { successful: true })
+        );
+        // -> Exposure extension evaluation results unsuccessful
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
                 title: "Puedes hablar con tu terapeuta pulsando aquí",
             })
         );
+        // TODO: Confirm that what is next is what has to be done
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
+            run("finishExposure", { successful: true })
+                .in(15, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        // -> Finalization event
+        on("exposureFinished", run("writeRecords"));
+        // END: Exposure events
+
+        // START: Post-exposure events
+        on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on(
+            "exposureWasNotDroppedOut",
+            run("limitedFeedbackDelivery", {
+                feedbackId: "question-frequency",
+                maxCount: 3,
+            })
+        );
 
         on(
-            "shouldDeliverQuestionFrequencyFeedback",
+            "canDeliverFeedback",
             run("sendNotification", {
                 title: "¿Te animas a valorar la experiencia?",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",
                 },
-            })
+            }).in(5, "minutes")
         );
+        // END: Post-exposure events
+
+        // START: Patient feedback events
+        on("patientFeedbackAcquired", run("writeRecords"));
+        on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
+        // END: Patient feedback events
+
+        // START: App usage events
+        // -> Notification tap
+        on("notificationTapped", run("writeRecords"));
+        // -> Notification discard
+        on("notificationCleared", run("writeRecords"));
+        // END: App usage events
     }
 }
 
