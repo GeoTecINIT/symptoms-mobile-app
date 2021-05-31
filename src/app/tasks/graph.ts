@@ -247,7 +247,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Puedes prologar tu tiempo de exposición",
+                title: "Puedes prolongar tu tiempo de exposición",
                 body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -326,11 +326,9 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: App usage events
         // -> Notification tap
-        on("notificationTapped", run("handleNotificationTap"));
-        on("notificationTapHandled", run("writeRecords"));
+        on("notificationTapped", run("writeRecords"));
         // -> Notification discard
-        on("notificationCleared", run("handleNotificationDiscard"));
-        on("notificationDiscardHandled", run("writeRecords"));
+        on("notificationCleared", run("writeRecords"));
         // END: App usage events
     }
 }
