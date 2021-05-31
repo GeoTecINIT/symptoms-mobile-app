@@ -91,6 +91,10 @@ class DemoTaskGraph implements TaskGraph {
             run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
         );
         on(
+            "exposureFinished",
+            run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
+        );
+        on(
             "highFrequencyMultipleGeolocationAcquisitionCanStart",
             run("acquireMultiplePhoneGeolocation", { maxInterval: 10000 })
                 .every(1, "minutes")
@@ -300,7 +304,7 @@ class DemoTaskGraph implements TaskGraph {
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(
-            "exposureNotDroppedOut",
+            "exposureWasNotDroppedOut",
             run("limitedFeedbackDelivery", {
                 feedbackId: "question-frequency",
                 maxCount: 3,
