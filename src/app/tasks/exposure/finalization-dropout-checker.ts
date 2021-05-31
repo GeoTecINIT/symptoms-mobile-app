@@ -6,8 +6,8 @@ import {
 } from "@geotecinit/emai-framework/tasks";
 import { ExposureChange } from "~/app/tasks/exposure";
 
-const EXPOSURE_DROPPED_OUT = "exposureDroppedOut";
-const EXPOSURE_NOT_DROPPED_OUT = "exposureNotDroppedOut";
+const EXPOSURE_DROPPED_OUT = "exposureWasDroppedOut";
+const EXPOSURE_NOT_DROPPED_OUT = "exposureWasNotDroppedOut";
 
 export class ExposureFinalizationDropoutChecker extends TraceableTask {
     constructor() {
