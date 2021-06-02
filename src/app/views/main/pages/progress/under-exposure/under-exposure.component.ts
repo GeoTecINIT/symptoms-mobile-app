@@ -9,6 +9,10 @@ import {
 } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
+import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { map } from "rxjs/internal/operators";
 
 @Component({
     selector: "SymUnderExposure",
@@ -16,23 +20,29 @@ import { emitExposureManuallyFinished } from "~/app/core/framework/events";
     styleUrls: ["./under-exposure.component.scss"],
 })
 export class UnderExposureComponent implements OnInit {
-    inDanger = false;
+    exposurePlaceName$: Observable<string>;
+    inDanger$: Observable<boolean>;
 
     private logger: Logger;
 
     constructor(
+        private underExposureService: UnderExposureService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService
     ) {
         this.logger = getLogger("UnderExposureComponent");
+
+        this.exposurePlaceName$ = this.underExposureService.ongoingExposure$.pipe(
+            tap((exposure) => console.log(exposure)),
+            map((exposure) => (exposure ? exposure.place.name : ""))
+        );
+        this.inDanger$ = this.underExposureService.inDanger$.pipe(
+            tap((inDanger) => console.log(inDanger))
+        );
     }
 
     ngOnInit() {
         // Use initialized dependencies
-    }
-
-    onSwitchStatus() {
-        this.inDanger = !this.inDanger;
     }
 
     onWantsToLeaveTap() {

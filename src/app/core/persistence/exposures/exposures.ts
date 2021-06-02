@@ -12,6 +12,10 @@ export interface ExposuresStore {
 const DOC_TYPE = "exposure";
 
 class ExposuresStoreDB implements ExposuresStore {
+    get changes() {
+        return this.store.changes;
+    }
+
     private readonly store: EMAIStore<Exposure>;
 
     constructor() {
