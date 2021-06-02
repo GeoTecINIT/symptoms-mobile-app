@@ -2,6 +2,11 @@ import { AxisBase } from "@nativescript-community/ui-chart/components/AxisBase";
 
 import { AxisValueFormatter } from "./common";
 import { ChartData2D, InternalChartData2D } from "../common";
+import {
+    formatAsDate,
+    formatAsDateHour,
+    formatAsHour,
+} from "~/app/core/utils/time";
 
 enum Resolution {
     Date,
@@ -138,33 +143,6 @@ export class AxisDateFormatter implements AxisValueFormatter {
 
         return closestDate;
     }
-}
-
-function formatAsDate(date: Date): string {
-    const day = twoDigit(date.getDate());
-    const month = twoDigit(date.getMonth() + 1);
-
-    return `${day}/${month}`;
-}
-
-function formatAsHour(date: Date): string {
-    const hour = twoDigit(date.getHours());
-    const minute = twoDigit(date.getMinutes());
-
-    return `${hour}:${minute}`;
-}
-
-function formatAsDateHour(date: Date): string {
-    const formattedDate = formatAsDate(date);
-    const formattedHour = formatAsHour(date);
-
-    return `${formattedDate} ${formattedHour}`;
-}
-
-function twoDigit(n: number): string {
-    const z = n < 10 ? "0" : "";
-
-    return `${z}${n}`;
 }
 
 function flattenAndSortDates(data: Array<ChartData2D>): Array<Date> {
