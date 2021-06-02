@@ -1,8 +1,14 @@
 import { Component, Input } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
+import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
+
+import { Record } from "@geotecinit/emai-framework/entities";
+import { RecordType } from "~/app/core/record-type";
+import { Change } from "@geotecinit/emai-framework/internal/providers";
+
 import {
-    SESSION_DATA,
     Y_AXIS_DATA_RANGE,
     CUTTING_LINES,
     AGGREGATE_DATA,
@@ -19,10 +25,8 @@ export class IdleProgressComponent {
     set hasData(hasData: boolean) {
         this._hasData = hasData;
         if (hasData) {
-            this.latestData = SESSION_DATA;
             this.summaryData = AGGREGATE_DATA;
         } else {
-            this.latestData = undefined;
             this.summaryData = undefined;
         }
     }
@@ -30,7 +34,7 @@ export class IdleProgressComponent {
         return this._hasData;
     }
 
-    latestData: Array<ChartData2D>;
+    latestData$: Observable<Record>;
     summaryData: Array<ChartData2D>;
     yAxisDataRange = Y_AXIS_DATA_RANGE;
     cuttingLines = CUTTING_LINES;
@@ -39,8 +43,17 @@ export class IdleProgressComponent {
 
     constructor(
         private navigationService: NavigationService,
+        private patientDataService: PatientDataService,
         private activeRoute: ActivatedRoute
-    ) {}
+    ) {
+        this.latestData$ = this.patientDataService.getLastByRecordType(
+            RecordType.ExposureChange,
+            [
+                { property: "change", comparison: "=", value: Change.END },
+                { property: "successful", comparison: "=", value: true },
+            ]
+        );
+    }
 
     onSeeRecordsTap() {
         this.navigate("../records-list");

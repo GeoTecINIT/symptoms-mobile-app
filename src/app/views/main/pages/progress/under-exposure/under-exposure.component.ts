@@ -11,7 +11,6 @@ import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
 import { map } from "rxjs/internal/operators";
 
 @Component({
@@ -33,12 +32,9 @@ export class UnderExposureComponent implements OnInit {
         this.logger = getLogger("UnderExposureComponent");
 
         this.exposurePlaceName$ = this.underExposureService.ongoingExposure$.pipe(
-            tap((exposure) => console.log(exposure)),
             map((exposure) => (exposure ? exposure.place.name : ""))
         );
-        this.inDanger$ = this.underExposureService.inDanger$.pipe(
-            tap((inDanger) => console.log(inDanger))
-        );
+        this.inDanger$ = this.underExposureService.inDanger$;
     }
 
     ngOnInit() {
