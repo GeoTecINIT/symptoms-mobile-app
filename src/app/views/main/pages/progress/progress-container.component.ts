@@ -1,5 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { ProgressViewService } from "./progress-view.service";
+import { Observable } from "rxjs";
+import { map, share } from "rxjs/operators";
+
+import { PatientDataService } from "~/app/views/patient-data.service";
+import { ExposureChange } from "~/app/tasks/exposure";
+import { RecordType } from "~/app/core/record-type";
+import { Change } from "@geotecinit/emai-framework/entities";
 
 @Component({
     selector: "SymProgressContainer",
@@ -7,21 +13,24 @@ import { ProgressViewService } from "./progress-view.service";
     styleUrls: ["./progress-container.component.scss"],
 })
 export class ProgressContainerComponent implements OnInit {
-    get idle(): boolean {
-        return this.progressViewService.idle;
-    }
     hasData = false;
 
-    constructor(private progressViewService: ProgressViewService) {
-        // Initialize dependencies here
+    idle$: Observable<boolean>;
+
+    constructor(private patientDataService: PatientDataService) {
+        this.idle$ = this.patientDataService
+            .getLastByRecordType<ExposureChange>(RecordType.ExposureChange)
+            .pipe(
+                map(
+                    (exposureChange) =>
+                        !exposureChange || exposureChange.change === Change.END
+                ),
+                share()
+            );
     }
 
     ngOnInit() {
         // Use initialized dependencies
-    }
-
-    switchExposureState() {
-        this.progressViewService.switchIdleState();
     }
 
     switchDataAvailabilityState() {
