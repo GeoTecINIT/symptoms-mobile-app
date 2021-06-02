@@ -22,6 +22,7 @@
             <SymPrimaryButton [margin]="btnMargin" text="Finaliza con ansiedad >= 5 & dif. < 3 USAs" (tap)="emitEMAIFrameworkEvent('exposureBadlyFinished')"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Finaliza la extensión, con ansiedad <8" (tap)="emitEMAIFrameworkEvent('exposureTimeExtensionFinishedFine')"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Finaliza la extensión, con ansiedad >=8" (tap)="emitEMAIFrameworkEvent('exposureTimeExtensionFinishedBadly')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Transcurre 1h y 30min y finaliza" (tap)="emitEMAIFrameworkEvent('exposureRunOutOfTime')"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Acaba y se le pide valorar la experiencia" (tap)="emitEMAIFrameworkEvent('shouldDeliverQuestionFrequencyFeedback')"></SymPrimaryButton>
         </SymSimulationSection>
     </StackLayout>
