@@ -1,9 +1,7 @@
 <ScrollView>
     <StackLayout>
         <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasData" (btnTap)="onSeeRecordsTap()">
-            <SymTitleContentCard *ngIf="latestData; else noRecords" iconCode="&#xe55e;" title="En Lugar 1" subtitle="(30/04) Nivel de ansiedad">
-                <SymLineChart [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines" [data]="latestData"></SymLineChart>
-            </SymTitleContentCard>
+            <SymChartCard *ngIf="latestData$ | async as latestData; else noRecords" chartType="line" [record]="latestData"></SymChartCard>
             <ng-template #noRecords>
                 <SymIconTextCard iconCode="&#xe26b;" text="Aquí podrás ver los registros de tu última exposición en cuanto realices una">
                 </SymIconTextCard>
