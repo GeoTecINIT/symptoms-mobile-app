@@ -1,16 +1,12 @@
 <SymMainActionBar title="Tu progreso"></SymMainActionBar>
 
 <!-- Flatten once button is no longer needed! -->
-<GridLayout rows="auto, *" columns="2*, 2*">
-    <Button row="0" col="0"
-            text="{{ idle ? 'Cambiar a \'En exposición\'' : 'Cambiar a \'En reposo\''}}"
-            (tap)="switchExposureState()">
-    </Button>
-    <Button row="0" col="1"
+<GridLayout rows="auto, *">
+    <Button row="0"
             text="{{ hasData ? 'Borrar datos' : 'Generar datos'}}"
             (tap)="switchDataAvailabilityState()">
     </Button>
 
-    <SymIdleProgress row="1" colSpan="2" *ngIf="idle" [hasData]="hasData"></SymIdleProgress>
-    <SymUnderExposure row="1" colSpan="2" *ngIf="!idle"></SymUnderExposure>
+    <SymIdleProgress row="1" *ngIf="idle$ | async" [hasData]="hasData"></SymIdleProgress>
+    <SymUnderExposure row="1" *ngIf="!(idle$ | async)"></SymUnderExposure>
 </GridLayout>
