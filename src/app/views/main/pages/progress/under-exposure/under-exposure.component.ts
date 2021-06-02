@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
-import { ProgressViewService } from "../progress-view.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { dangersOfEarlyLeave } from "~/app/core/dialogs/info";
 import {
@@ -23,8 +22,7 @@ export class UnderExposureComponent implements OnInit {
 
     constructor(
         private dialogsService: DialogsService,
-        private feedbackModalService: FeedbackModalService,
-        private progressViewService: ProgressViewService
+        private feedbackModalService: FeedbackModalService
     ) {
         this.logger = getLogger("UnderExposureComponent");
     }
@@ -54,16 +52,12 @@ export class UnderExposureComponent implements OnInit {
     }
 
     private handleWantsToLeave(wantsToLeave: boolean) {
-        if (wantsToLeave) {
-            emitExposureManuallyFinished();
-            this.feedbackModalService
-                .askFeedback("exposure-left", askWantsToLeaveFeedback)
-                .then((feedback) => {
-                    this.logger.debug(`Feedback: ${feedback}`);
-                    if (feedback) {
-                        this.progressViewService.setAsIdle();
-                    }
-                });
-        }
+        if (!wantsToLeave) return;
+        emitExposureManuallyFinished();
+        this.feedbackModalService
+            .askFeedback("exposure-left", askWantsToLeaveFeedback)
+            .catch((e) =>
+                this.logger.error(`Could not deliver feedback: Reason ${e}`)
+            );
     }
 }
