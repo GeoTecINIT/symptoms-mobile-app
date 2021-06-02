@@ -8,10 +8,10 @@ import { patientData, QueryCondition } from "~/app/core/framework/patient-data";
     providedIn: "root",
 })
 export class PatientDataService {
-    getLastByRecordType<T extends Record>(
+    observeLastByRecordType<T extends Record>(
         recordType: string,
         conditions: Array<QueryCondition> = []
     ): Observable<T> {
-        return patientData.getLastByRecordType<T>(recordType, conditions);
+        return patientData.observeLastByRecordType<T>(recordType, conditions);
     }
 }

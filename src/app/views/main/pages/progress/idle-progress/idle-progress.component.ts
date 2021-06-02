@@ -46,7 +46,7 @@ export class IdleProgressComponent {
         private patientDataService: PatientDataService,
         private activeRoute: ActivatedRoute
     ) {
-        this.latestData$ = this.patientDataService.getLastByRecordType(
+        this.latestData$ = this.patientDataService.observeLastByRecordType(
             RecordType.ExposureChange,
             [
                 { property: "change", comparison: "=", value: Change.END },

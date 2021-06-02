@@ -19,7 +19,7 @@ export class ProgressContainerComponent implements OnInit {
 
     constructor(private patientDataService: PatientDataService) {
         this.idle$ = this.patientDataService
-            .getLastByRecordType<ExposureChange>(RecordType.ExposureChange)
+            .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
             .pipe(
                 map(
                     (exposureChange) =>
