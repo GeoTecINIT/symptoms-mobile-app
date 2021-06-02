@@ -133,6 +133,13 @@ class DemoTaskGraph implements TaskGraph {
                 body: " ",
             })
         );
+        on(
+            "exposureRunOutOfTime",
+            run("sendNotification", {
+                title: "Sabemos que no es fácil, pero te has esforzado mucho",
+                body: "Podemos finalizar la exposición por hoy",
+            })
+        );
 
         on(
             "shouldDeliverQuestionFrequencyFeedback",
