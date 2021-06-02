@@ -7,10 +7,10 @@ import {
 import { map } from "rxjs/operators";
 
 export interface PatientData {
-    getLastByRecordType<T extends Record>(
+    observeLastByRecordType<T extends Record>(
         recordType: string,
         conditions?: Array<QueryCondition>
-    );
+    ): Observable<T>;
 }
 
 export interface QueryCondition {
@@ -25,7 +25,7 @@ const INT_MAX_VALUE = Math.pow(2, 31) - 1;
 class PatientDataStore implements PatientData {
     constructor(private store: RecordsStore = recordsStore) {}
 
-    getLastByRecordType<T extends Record>(
+    observeLastByRecordType<T extends Record>(
         recordType: string,
         conditions: Array<QueryCondition> = []
     ): Observable<T> {
@@ -62,7 +62,6 @@ function meetsConditions(
                 if (propertyValue !== condition.value) {
                     return false;
                 } else {
-                    console.log("Meets condition!", condition);
                     continue;
                 }
             default:
