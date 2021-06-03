@@ -7,4 +7,6 @@ export const RecordType = {
     BatteryLevel: "battery-level",
     ExposureChange: "exposure-change",
     ExposureAreaLeft: "exposure-area-left",
+    ExposureAggregate: "exposure-aggregate",
+    ExposurePlaceAggregate: "exposure-place-aggregate",
 };
