@@ -311,6 +311,10 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on("exposureWasNotDroppedOut", run("calculateExposureAggregate"));
+        on("exposureAggregateCalculated", run("writeRecords"));
+        on("exposureWasNotDroppedOut", run("calculateExposurePlaceAggregate"));
+        on("exposurePlaceAggregateCalculated", run("writeRecords"));
         on(
             "exposureWasNotDroppedOut",
             run("limitedFeedbackDelivery", {
@@ -318,7 +322,6 @@ class DemoTaskGraph implements TaskGraph {
                 maxCount: 3,
             })
         );
-
         on(
             "canDeliverFeedback",
             run("sendNotification", {
