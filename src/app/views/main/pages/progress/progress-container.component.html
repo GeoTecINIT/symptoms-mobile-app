@@ -3,10 +3,10 @@
 <!-- Flatten once button is no longer needed! -->
 <GridLayout rows="auto, *">
     <Button row="0"
-            text="{{ hasData ? 'Borrar datos' : 'Generar datos'}}"
+            text="Generar datos"
             (tap)="switchDataAvailabilityState()">
     </Button>
 
-    <SymIdleProgress row="1" *ngIf="idle$ | async" [hasData]="hasData"></SymIdleProgress>
+    <SymIdleProgress row="1" *ngIf="idle$ | async"></SymIdleProgress>
     <SymUnderExposure row="1" *ngIf="!(idle$ | async)"></SymUnderExposure>
 </GridLayout>
