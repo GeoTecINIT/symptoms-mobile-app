@@ -6,6 +6,8 @@ import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { RecordType } from "~/app/core/record-type";
 import { Change } from "@geotecinit/emai-framework/entities";
+import { emaiFramework } from "@geotecinit/emai-framework";
+import { createFakeDataGenerator, DataGenerator } from "./data";
 
 @Component({
     selector: "SymProgressContainer",
@@ -13,9 +15,8 @@ import { Change } from "@geotecinit/emai-framework/entities";
     styleUrls: ["./progress-container.component.scss"],
 })
 export class ProgressContainerComponent implements OnInit {
-    hasData = false;
-
     idle$: Observable<boolean>;
+    private readonly generateData: DataGenerator;
 
     constructor(private patientDataService: PatientDataService) {
         this.idle$ = this.patientDataService
@@ -27,6 +28,7 @@ export class ProgressContainerComponent implements OnInit {
                 ),
                 share()
             );
+        this.generateData = createFakeDataGenerator();
     }
 
     ngOnInit() {
@@ -34,6 +36,9 @@ export class ProgressContainerComponent implements OnInit {
     }
 
     switchDataAvailabilityState() {
-        this.hasData = !this.hasData;
+        const exposureChange = this.generateData();
+        if (exposureChange) {
+            emaiFramework.emitEvent("exposureFinished", exposureChange);
+        }
     }
 }
