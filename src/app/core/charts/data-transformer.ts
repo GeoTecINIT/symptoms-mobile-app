@@ -4,7 +4,6 @@ import { RecordType } from "~/app/core/record-type";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { formatAsDate } from "~/app/core/utils/time";
 import {
-    ChartEntry2D,
     CuttingLines,
     YAxisDataRange,
 } from "~/app/views/main/pages/progress/common/charts";
@@ -73,22 +72,6 @@ function transformExposureChange(
 function transformExposureAggregate(
     exposureAggregate: ExposureAggregate
 ): ChartDescription {
-    const placesEntries = new Map<string, Array<ChartEntry2D>>();
-    for (const aggregateData of exposureAggregate.data) {
-        const placeName = aggregateData.place.name;
-
-        const entry: ChartEntry2D = {
-            x: aggregateData.timestamp,
-            y: aggregateData.value,
-        };
-
-        const entries = placesEntries.has(placeName)
-            ? [...placesEntries.get(placeName), entry]
-            : [entry];
-
-        placesEntries.set(placeName, entries);
-    }
-
     return {
         iconCode: "\ue26b",
         title: "En todos los lugares",
@@ -96,9 +79,12 @@ function transformExposureAggregate(
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
-            data: [...placesEntries.keys()].map((placeName) => ({
-                label: placeName,
-                values: placesEntries.get(placeName),
+            data: exposureAggregate.data.map((placeAggregate) => ({
+                label: placeAggregate.placeName,
+                values: placeAggregate.emotionValues.map((emotionValue) => ({
+                    x: emotionValue.timestamp,
+                    y: emotionValue.value,
+                })),
             })),
         },
     };

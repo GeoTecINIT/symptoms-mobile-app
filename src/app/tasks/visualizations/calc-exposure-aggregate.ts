@@ -30,10 +30,14 @@ export class CalculateExposureAggregate extends TraceableTask {
         const { timestamp, emotionValues } = exposureChange;
         const { id, name } = exposureChange.place;
 
-        const newEntry: ExposureAggregatePoint = {
+        const newEmotionValue = {
             timestamp,
-            place: { id, name },
             value: calculateEmotionValuesAvg(emotionValues),
+        };
+        const newEntry: ExposureAggregatePoint = {
+            placeId: id,
+            placeName: name,
+            emotionValues: [newEmotionValue],
         };
 
         const prevAggregate = await this.store
@@ -43,11 +47,27 @@ export class CalculateExposureAggregate extends TraceableTask {
             .pipe(take(1))
             .toPromise();
 
-        const data = prevAggregate
-            ? [...prevAggregate.data, newEntry]
-            : [newEntry];
+        const samePlace = (placeAggregate) => placeAggregate.placeId === id;
 
-        const aggregate = new ExposureAggregate(data);
+        let aggregatePoints: Array<ExposureAggregatePoint>;
+        if (!prevAggregate) {
+            aggregatePoints = [newEntry];
+        } else if (!prevAggregate.data.find(samePlace)) {
+            aggregatePoints = [...prevAggregate.data, newEntry];
+        } else {
+            aggregatePoints = [...prevAggregate.data];
+            const placeIndex = aggregatePoints.findIndex(samePlace);
+            aggregatePoints[placeIndex] = {
+                ...aggregatePoints[placeIndex],
+                placeName: name,
+                emotionValues: [
+                    ...aggregatePoints[placeIndex].emotionValues,
+                    newEmotionValue,
+                ],
+            };
+        }
+
+        const aggregate = new ExposureAggregate(aggregatePoints);
 
         return { result: aggregate };
     }
