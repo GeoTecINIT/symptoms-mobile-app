@@ -109,7 +109,7 @@ class PatientDataStore implements PatientData {
                 }
 
                 return filteredRecords.sort(
-                    (r1, r2) => r1.timestamp.getTime() - r2.timestamp.getTime()
+                    (r1, r2) => r2.timestamp.getTime() - r1.timestamp.getTime()
                 );
             })
         );
