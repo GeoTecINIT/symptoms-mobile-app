@@ -1,11 +1,11 @@
 <GridLayout class="page" rows="*, auto">
     <StackLayout row="0" verticalAlignment="center">
         <SymCircleIcon iconCode="&#xe55e;"></SymCircleIcon>
-        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\n' + (exposurePlaceName$ | async)"></Label>
+        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\n' + ongoingExposure ? ongoingExposure.place.name : ''"></Label>
         <Label class="body-text body-subtitle" textWrap="true" text="Intenta permanecer en este lugar. La app te acompañará durante todo el proceso"></Label>
     </StackLayout>
     <StackLayout row="1">
-        <ng-container *ngIf="inDanger$ | async; else outOfDanger">
+        <ng-container *ngIf="inDanger; else outOfDanger">
             <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas"></Label>
             <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskToContinue()"></SymConfirmButton>
             <SymButtonLink margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>

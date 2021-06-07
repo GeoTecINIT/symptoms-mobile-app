@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-import { map, share } from "rxjs/operators";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
@@ -14,25 +14,39 @@ import { createFakeDataGenerator, DataGenerator } from "./data";
     templateUrl: "./progress-container.component.html",
     styleUrls: ["./progress-container.component.scss"],
 })
-export class ProgressContainerComponent implements OnInit {
-    idle$: Observable<boolean>;
+export class ProgressContainerComponent implements OnInit, OnDestroy {
+    idle: boolean;
+    underExposure: boolean;
+
+    private exposureChangeSubscription?: Subscription;
     private readonly generateData: DataGenerator;
 
-    constructor(private patientDataService: PatientDataService) {
-        this.idle$ = this.patientDataService
+    constructor(
+        private patientDataService: PatientDataService,
+        private ngZone: NgZone
+    ) {
+        this.generateData = createFakeDataGenerator();
+    }
+
+    ngOnInit() {
+        this.exposureChangeSubscription = this.patientDataService
             .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
             .pipe(
                 map(
                     (exposureChange) =>
                         !exposureChange || exposureChange.change === Change.END
-                ),
-                share()
-            );
-        this.generateData = createFakeDataGenerator();
+                )
+            )
+            .subscribe((idle) => {
+                this.ngZone.run(() => {
+                    this.idle = idle;
+                    this.underExposure = !idle;
+                });
+            });
     }
 
-    ngOnInit() {
-        // Use initialized dependencies
+    ngOnDestroy() {
+        this.exposureChangeSubscription?.unsubscribe();
     }
 
     switchDataAvailabilityState() {
