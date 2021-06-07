@@ -7,6 +7,6 @@
             (tap)="switchDataAvailabilityState()">
     </Button>
 
-    <SymIdleProgress row="1" *ngIf="idle$ | async"></SymIdleProgress>
-    <SymUnderExposure row="1" *ngIf="!(idle$ | async)"></SymUnderExposure>
+    <SymIdleProgress row="1" *ngIf="idle"></SymIdleProgress>
+    <SymUnderExposure row="1" *ngIf="underExposure"></SymUnderExposure>
 </GridLayout>

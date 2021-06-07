@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
@@ -10,35 +10,52 @@ import {
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/internal/operators";
+import { Exposure } from "~/app/core/persistence/exposures";
 
 @Component({
     selector: "SymUnderExposure",
     templateUrl: "./under-exposure.component.html",
     styleUrls: ["./under-exposure.component.scss"],
 })
-export class UnderExposureComponent implements OnInit {
-    exposurePlaceName$: Observable<string>;
-    inDanger$: Observable<boolean>;
+export class UnderExposureComponent implements OnInit, OnDestroy {
+    ongoingExposure: Exposure;
+    inDanger: boolean;
 
     private logger: Logger;
+    private exposureSubscription: Subscription;
+    private inDangerSubscription: Subscription;
 
     constructor(
         private underExposureService: UnderExposureService,
         private dialogsService: DialogsService,
-        private feedbackModalService: FeedbackModalService
+        private feedbackModalService: FeedbackModalService,
+        private ngZone: NgZone
     ) {
         this.logger = getLogger("UnderExposureComponent");
-
-        this.exposurePlaceName$ = this.underExposureService.ongoingExposure$.pipe(
-            map((exposure) => (exposure ? exposure.place.name : ""))
-        );
-        this.inDanger$ = this.underExposureService.inDanger$;
     }
 
     ngOnInit() {
-        // Use initialized dependencies
+        this.exposureSubscription = this.underExposureService.ongoingExposure$.subscribe(
+            (exposure) => {
+                this.ngZone.run(() => {
+                    this.ongoingExposure = exposure;
+                });
+            }
+        );
+        this.inDangerSubscription = this.underExposureService.inDanger$.subscribe(
+            (inDanger) => {
+                this.ngZone.run(() => {
+                    this.inDanger = inDanger;
+                });
+            }
+        );
+    }
+
+    ngOnDestroy() {
+        this.exposureSubscription?.unsubscribe();
+        this.inDangerSubscription?.unsubscribe();
     }
 
     onWantsToLeaveTap() {
