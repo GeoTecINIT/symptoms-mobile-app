@@ -11,9 +11,8 @@ export class ExposureAggregate extends Record {
     }
 }
 
-export interface ExposureAggregatePoint extends EmotionValue {
-    place: {
-        id: string;
-        name: string;
-    };
+export interface ExposureAggregatePoint {
+    placeId: string;
+    placeName: string;
+    emotionValues: Array<EmotionValue>;
 }
