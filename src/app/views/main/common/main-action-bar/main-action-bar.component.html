@@ -10,8 +10,9 @@
     <Label [text]="title"></Label>
 
     <ActionItem
-            text="Notificaciones"
-            icon="res://round_mark_chat_{{(unread$ | async) ? 'unread' : 'read'}}_white_24"
+            *ngIf="development"
+            text="Simulación"
+            icon="res://round_bolt_white_24"
             android.position="actionBar"
             ios.position="right"
             (tap)="onNotificationsTap()">
