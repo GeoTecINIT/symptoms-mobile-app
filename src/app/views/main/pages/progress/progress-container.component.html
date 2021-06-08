@@ -1,12 +1,4 @@
 <SymMainActionBar title="Tu progreso"></SymMainActionBar>
 
-<!-- Flatten once button is no longer needed! -->
-<GridLayout rows="auto, *">
-    <Button row="0"
-            text="Generar datos"
-            (tap)="switchDataAvailabilityState()">
-    </Button>
-
-    <SymIdleProgress row="1" *ngIf="idle"></SymIdleProgress>
-    <SymUnderExposure row="1" *ngIf="underExposure"></SymUnderExposure>
-</GridLayout>
+<SymIdleProgress *ngIf="idle"></SymIdleProgress>
+<SymUnderExposure *ngIf="underExposure"></SymUnderExposure>

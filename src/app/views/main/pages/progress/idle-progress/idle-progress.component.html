@@ -1,5 +1,6 @@
 <ScrollView>
     <StackLayout>
+        <Button *ngIf="development" marginTop="0" marginLeft="0" marginRight="0" text="Generar datos" (tap)="onGenerateDataTap()"></Button>
         <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasLatestData" (btnTap)="onSeeRecordsTap()">
             <SymChartCard *ngIf="hasLatestData; else noRecords" chartType="line" [record]="latestData"></SymChartCard>
             <ng-template #noRecords>
