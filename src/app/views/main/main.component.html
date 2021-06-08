@@ -6,8 +6,8 @@
         <StackLayout [visibility]="selectedTab === navigationTabs.Content ? 'visible' : 'collapsed'">
             <page-router-outlet name="contentTab"></page-router-outlet>
         </StackLayout>
-        <StackLayout [visibility]="selectedTab === navigationTabs.Simulation ? 'visible' : 'collapsed'">
-            <page-router-outlet name="simulationTab"></page-router-outlet>
+        <StackLayout [visibility]="selectedTab === navigationTabs.Notifications ? 'visible' : 'collapsed'">
+            <page-router-outlet name="notificationsTab"></page-router-outlet>
         </StackLayout>
     </GridLayout>
     <BottomNavigationBar
@@ -16,6 +16,6 @@
             (tabSelected)="onTabSelected($event)">
         <BottomNavigationTab title="Progreso" icon="res://round_double_arrow_black_24"></BottomNavigationTab>
         <BottomNavigationTab title="Contenido" icon="res://round_library_books_black_24"></BottomNavigationTab>
-        <BottomNavigationTab title="Simulación" icon="res://round_bolt_black_24"></BottomNavigationTab>
+        <BottomNavigationTab title="Notificaciones" icon="res://round_notifications_black_24"></BottomNavigationTab>
     </BottomNavigationBar>
 </GridLayout>

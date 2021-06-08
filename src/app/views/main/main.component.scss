@@ -4,4 +4,5 @@ BottomNavigationBar {
   active-color: #ffffff;
   inactive-color: rgba(255, 255, 255, 0.74);
   background: light(complementary);
+  badge-color: $accent;
 }
