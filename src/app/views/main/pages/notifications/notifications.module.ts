@@ -1,22 +1,21 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 
-import { SimulationRoutingModule } from "./simulation-routing.module";
+import { NotificationsRoutingModule } from "./notifications-routing.module";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { CommonMainModule } from "../../common/common-main.module";
-
-import { SimulationActionsComponent } from "./simulation-actions.component";
-import { SimulationSectionComponent } from "./simulation-section/simulation-section.component";
+import { NotificationsListComponent } from "./notifications-list.component";
+import { NotificationsListItemComponent } from "./notifications-list-item/notifications-list-item.component";
 
 @NgModule({
-    declarations: [SimulationActionsComponent, SimulationSectionComponent],
+    declarations: [NotificationsListComponent, NotificationsListItemComponent],
     imports: [
-        SimulationRoutingModule,
+        NotificationsRoutingModule,
         NativeScriptCommonModule,
         CommonComponentsModule,
         CommonMainModule,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
-export class SimulationModule {}
+export class NotificationsModule {}

@@ -1,28 +1,28 @@
 import { Injectable } from "@angular/core";
 
-import { NotificationsModule } from "./notifications.module";
+import { SimulationModule } from "./simulation.module";
 
 import { MainViewService } from "../../main-view.service";
 
-import { NotificationsModalComponent } from "./notifications-modal.component";
+import { SimulationModalComponent } from "./simulation-modal.component";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
-    providedIn: NotificationsModule,
+    providedIn: SimulationModule,
 })
-export class NotificationsModalService {
+export class SimulationModalService {
     private logger: Logger;
 
     constructor(private mainViewService: MainViewService) {
-        this.logger = getLogger("NotificationsModalService");
+        this.logger = getLogger("SimulationModalService");
     }
 
     show() {
         this.mainViewService
-            .showFullScreenAnimatedModal(NotificationsModalComponent)
+            .showFullScreenAnimatedModal(SimulationModalComponent)
             .catch((e) =>
                 this.logger.error(
-                    `Could not show notifications modal. Reason: ${e}`
+                    `Could not show simulation modal. Reason: ${e}`
                 )
             );
     }
