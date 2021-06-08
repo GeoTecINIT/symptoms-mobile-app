@@ -12,17 +12,6 @@ import {
     ExposurePlaceAggregate,
 } from "~/app/tasks/visualizations";
 
-export const ANXIETY_LEVEL_RANGE: YAxisDataRange = {
-    min: 0,
-    max: 10,
-};
-
-export const ANXIETY_THRESHOLDS: CuttingLines = [
-    { label: "Leve", value: 2 },
-    { label: "Moderada", value: 5 },
-    { label: "Alta", value: 8 },
-];
-
 export function transformIntoChartDescription(
     record: Record
 ): ChartDescription {
@@ -114,3 +103,14 @@ function transformExposurePlaceAggregate(
         },
     };
 }
+
+const ANXIETY_LEVEL_RANGE: YAxisDataRange = {
+    min: 0,
+    max: 10,
+};
+
+const ANXIETY_THRESHOLDS: CuttingLines = [
+    { label: "Leve", value: 2 },
+    { label: "Moderada", value: 5 },
+    { label: "Alta", value: 8 },
+];
