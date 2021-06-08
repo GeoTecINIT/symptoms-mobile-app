@@ -31,13 +31,13 @@ const routes: Routes = [
                 outlet: "contentTab",
             },
             {
-                path: "simulation",
+                path: "notifications",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
-                    import("./pages/simulation/simulation.module").then(
-                        (m) => m.SimulationModule
+                    import("./pages/notifications/notifications.module").then(
+                        (m) => m.NotificationsModule
                     ),
-                outlet: "simulationTab",
+                outlet: "notificationsTab",
             },
             {
                 path: "settings",
@@ -47,15 +47,6 @@ const routes: Routes = [
                         (m) => m.SettingsModule
                     ),
                 outlet: "settingsModal",
-            },
-            {
-                path: "notifications",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/notifications/notifications.module").then(
-                        (m) => m.NotificationsModule
-                    ),
-                outlet: "notificationsModal",
             },
             {
                 path: "content-view",
@@ -92,6 +83,15 @@ const routes: Routes = [
                         (m) => m.FeedbackModule
                     ),
                 outlet: "feedbackModal",
+            },
+            {
+                path: "simulation",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/simulation/simulation.module").then(
+                        (m) => m.SimulationModule
+                    ),
+                outlet: "simulationModal",
             },
         ],
     },

@@ -1,6 +1,6 @@
-<SymCloseActionBar title="Notificaciones" (close)="onClose()"></SymCloseActionBar>
+<SymMainActionBar title="Notificaciones"></SymMainActionBar>
 
-<ng-container *ngIf="notifications$ | async as notifications">
+<ng-container *ngIf="notifications">
     <ng-container *ngIf="notifications.length > 0; else notificationsRead">
         <ListView [items]="notifications" (itemTap)="onListItemTap($event)">
             <ng-template let-item="item">
