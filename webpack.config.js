@@ -414,6 +414,7 @@ module.exports = (env) => {
       new webpack.DefinePlugin({
         "global.TNS_WEBPACK": "true",
         "global.ENV_NAME": JSON.stringify(mode || "development"),
+        "global.ENV_THERAPIST_PHONE": JSON.stringify(env.therapistPhone || ""),
         "global.isAndroid": platform === "android",
         "global.isIOS": platform === "ios",
         process: "global.process",

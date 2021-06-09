@@ -62,15 +62,23 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
         this.dialogsService.showInfo(dangersOfEarlyLeave);
     }
 
-    onAskToContinue() {
+    onCallTherapistTap() {
+        this.underExposureService.callTherapist().then((success) => {
+            if (success) {
+                this.askIfWantsToContinue();
+            }
+        });
+    }
+
+    onWantsToEndExposureTap() {
         this.dialogsService
-            .askConfirmationWithDestructiveAction(confirmToContinueExposure)
+            .askConfirmationWithPositiveAction(confirmWantsToLeave)
             .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
     }
 
-    onEndExposureTap() {
+    private askIfWantsToContinue() {
         this.dialogsService
-            .askConfirmationWithPositiveAction(confirmWantsToLeave)
+            .askConfirmationWithDestructiveAction(confirmToContinueExposure)
             .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
     }
 
