@@ -6,5 +6,6 @@
 declare namespace NodeJS {
     interface Global {
         ENV_NAME: string;
+        ENV_THERAPIST_PHONE: string;
     }
 }
