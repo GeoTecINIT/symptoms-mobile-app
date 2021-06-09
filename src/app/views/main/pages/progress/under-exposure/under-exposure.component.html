@@ -1,17 +1,10 @@
-<GridLayout class="page" rows="auto, *, auto">
-    <Button
-            row="0"
-            margin="0"
-            class="btn btn-primary"
-            [text]="inDanger ? 'Cambiar a \'Fuera de riesgo\'' : 'Cambiar a \'En riesgo\''"
-            (tap)="onSwitchStatus()">
-    </Button>
-    <StackLayout row="1" verticalAlignment="center">
+<GridLayout class="page" rows="*, auto">
+    <StackLayout row="0" verticalAlignment="center">
         <SymCircleIcon iconCode="&#xe55e;"></SymCircleIcon>
-        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\nLugar 1'"></Label>
+        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\n' + ongoingExposure ? ongoingExposure.place.name : ''"></Label>
         <Label class="body-text body-subtitle" textWrap="true" text="Intenta permanecer en este lugar. La app te acompañará durante todo el proceso"></Label>
     </StackLayout>
-    <StackLayout row="2">
+    <StackLayout row="1">
         <ng-container *ngIf="inDanger; else outOfDanger">
             <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas"></Label>
             <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskToContinue()"></SymConfirmButton>

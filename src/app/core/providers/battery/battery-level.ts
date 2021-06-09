@@ -1,10 +1,11 @@
 import { Change, Record } from "@geotecinit/emai-framework/entities";
+import { RecordType } from "~/app/core/record-type";
 
 export class BatteryLevel extends Record {
     static fromPercentage(level: number) {
         return new BatteryLevel(level);
     }
     constructor(public value: number, public capturedAt = new Date()) {
-        super("battery-level", capturedAt, Change.NONE);
+        super(RecordType.BatteryLevel, capturedAt, Change.NONE);
     }
 }
