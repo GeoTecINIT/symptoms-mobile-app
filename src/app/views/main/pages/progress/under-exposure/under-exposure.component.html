@@ -7,11 +7,11 @@
     <StackLayout row="1">
         <ng-container *ngIf="inDanger; else outOfDanger">
             <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas"></Label>
-            <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onAskToContinue()"></SymConfirmButton>
+            <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onCallTherapistTap()"></SymConfirmButton>
             <SymButtonLink margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
         </ng-container>
         <ng-template #outOfDanger>
-            <SymButtonLink margin="0" text="¿Necesitas irte?" (tap)="onEndExposureTap()"></SymButtonLink>
+            <SymButtonLink margin="0" text="¿Necesitas irte?" (tap)="onWantsToEndExposureTap()"></SymButtonLink>
         </ng-template>
     </StackLayout>
 </GridLayout>
