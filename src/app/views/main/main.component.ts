@@ -10,6 +10,7 @@ import { ConfirmModalService } from "~/app/views/main/modals/confirm";
 import { QuestionsModalService } from "~/app/views/main/modals/questions";
 import { FeedbackModalService } from "~/app/views/main/modals/feedback";
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
+import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
 import { NavigationService } from "../navigation.service";
 
@@ -29,7 +30,7 @@ import { setupAreasOfInterest } from "~/app/core/framework/aois";
 const navigationTabs = {
     Progress: 0,
     Content: 1,
-    Simulation: 2,
+    Notifications: 2,
 };
 
 @Component({
@@ -41,7 +42,8 @@ export class MainComponent implements OnInit, OnDestroy {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
-    private loggedInSub: Subscription;
+    private loggedInSub?: Subscription;
+    private notificationsSub?: Subscription;
     private logger: Logger;
 
     constructor(
@@ -52,6 +54,7 @@ export class MainComponent implements OnInit, OnDestroy {
         private feedbackModalService: FeedbackModalService,
         private contentViewModalService: ContentViewModalService,
         private notificationsHandlerService: NotificationsHandlerService,
+        private notificationsReaderService: NotificationsReaderService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         page: Page,
@@ -78,15 +81,23 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.loggedInSub) {
-            this.loggedInSub.unsubscribe();
-        }
+        this.loggedInSub?.unsubscribe();
     }
 
     onNavigationBarLoaded(args: any) {
         const navigationBar: BottomNavigationBar = args.object;
         navigationBar.selectTab(this.selectedTab);
-        // Set here a badge if needed
+        this.notificationsSub = this.notificationsReaderService.unread$.subscribe(
+            (unread) => {
+                if (
+                    !unread ||
+                    this.selectedTab === navigationTabs.Notifications
+                ) {
+                    return;
+                }
+                navigationBar.showBadge(navigationTabs.Notifications);
+            }
+        );
     }
 
     onTabSelected(args: TabSelectedEventData) {
@@ -98,7 +109,7 @@ export class MainComponent implements OnInit, OnDestroy {
             {
                 progressTab: ["progress"],
                 contentTab: ["content"],
-                simulationTab: ["simulation"],
+                notificationsTab: ["notifications"],
             },
             this.activeRoute
         );

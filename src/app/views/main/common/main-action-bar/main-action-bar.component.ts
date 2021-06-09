@@ -1,9 +1,8 @@
 import { Component, Input } from "@angular/core";
 
 import { SettingsModalService } from "../../modals/settings/settings-modal.service";
-import { NotificationsModalService } from "../../modals/notifications/notifications-modal.service";
-import { NotificationsReaderService } from "../../notifications-reader.service";
-import { Observable } from "rxjs";
+import { SimulationModalService } from "../../modals/simulation/simulation-modal.service";
+import { getConfig } from "~/app/core/config";
 
 @Component({
     selector: "SymMainActionBar",
@@ -12,19 +11,17 @@ import { Observable } from "rxjs";
 })
 export class MainActionBarComponent {
     @Input() title: string;
-
-    get unread$(): Observable<boolean> {
-        return this.notificationsReaderService.unread$;
-    }
+    development: boolean;
 
     constructor(
         private settingsModalService: SettingsModalService,
-        private notificationsModalService: NotificationsModalService,
-        private notificationsReaderService: NotificationsReaderService
-    ) {}
+        private simulationModalService: SimulationModalService
+    ) {
+        this.development = !getConfig().production;
+    }
 
-    onNotificationsTap() {
-        this.notificationsModalService.show();
+    onSimulationTap() {
+        this.simulationModalService.show();
     }
 
     onSettingsTap() {

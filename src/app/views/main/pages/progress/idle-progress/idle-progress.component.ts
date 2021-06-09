@@ -7,6 +7,9 @@ import { Subscription } from "rxjs";
 import { Record } from "@geotecinit/emai-framework/entities";
 import { RecordType } from "~/app/core/record-type";
 import { Change } from "@geotecinit/emai-framework/internal/providers";
+import { emaiFramework } from "@geotecinit/emai-framework";
+import { createFakeDataGenerator, DataGenerator } from "./data";
+import { getConfig } from "~/app/core/config";
 
 @Component({
     selector: "SymIdleProgress",
@@ -14,6 +17,8 @@ import { Change } from "@geotecinit/emai-framework/internal/providers";
     styleUrls: ["./idle-progress.component.scss"],
 })
 export class IdleProgressComponent implements OnInit, OnDestroy {
+    development: boolean;
+
     latestData: Record;
     hasLatestData: boolean;
 
@@ -22,13 +27,19 @@ export class IdleProgressComponent implements OnInit, OnDestroy {
 
     private latestDataSubscription: Subscription;
     private summaryDataSubscription: Subscription;
+    private readonly generateData: DataGenerator;
 
     constructor(
         private patientDataService: PatientDataService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
-    ) {}
+    ) {
+        this.development = !getConfig().production;
+        if (this.development) {
+            this.generateData = createFakeDataGenerator();
+        }
+    }
 
     ngOnInit() {
         this.latestDataSubscription = this.patientDataService
@@ -55,6 +66,13 @@ export class IdleProgressComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.latestDataSubscription?.unsubscribe();
         this.summaryDataSubscription?.unsubscribe();
+    }
+
+    onGenerateDataTap() {
+        const exposureChange = this.generateData();
+        if (exposureChange) {
+            emaiFramework.emitEvent("exposureFinished", exposureChange);
+        }
     }
 
     onSeeRecordsTap() {

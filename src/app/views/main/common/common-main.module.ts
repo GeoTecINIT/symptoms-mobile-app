@@ -2,7 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { SettingsModule } from "../modals/settings/settings.module";
-import { NotificationsModule } from "../modals/notifications/notifications.module";
+import { SimulationModule } from "../modals/simulation/simulation.module";
 import { ContentViewModule } from "../modals/content-view/content-view.module";
 import { ConfirmModule } from "../modals/confirm/confirm.module";
 import { QuestionsModule } from "../modals/questions/questions.module";
@@ -14,7 +14,7 @@ import { MainActionBarComponent } from "./main-action-bar/main-action-bar.compon
     imports: [
         NativeScriptCommonModule,
         SettingsModule,
-        NotificationsModule,
+        SimulationModule,
         ContentViewModule,
         ConfirmModule,
         QuestionsModule,

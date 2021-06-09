@@ -39,12 +39,12 @@ export function createFakeDataGenerator(): DataGenerator {
     };
 }
 
-export const Y_AXIS_DATA_RANGE: YAxisDataRange = {
+const Y_AXIS_DATA_RANGE: YAxisDataRange = {
     min: 0,
     max: 10,
 };
 
-export const CUTTING_LINES: CuttingLines = [
+const CUTTING_LINES: CuttingLines = [
     { label: "Leve", value: 2 },
     { label: "Moderada", value: 5 },
     { label: "Alta", value: 8 },

@@ -6,10 +6,10 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "SymNotificationsModal",
-    templateUrl: "./notifications-modal.component.html",
-    styleUrls: ["./notifications-modal.component.scss"],
+    templateUrl: "./simulation-modal.component.html",
+    styleUrls: ["./simulation-modal.component.scss"],
 })
-export class NotificationsModalComponent implements OnInit {
+export class SimulationModalComponent implements OnInit {
     constructor(
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute
@@ -17,7 +17,7 @@ export class NotificationsModalComponent implements OnInit {
 
     ngOnInit() {
         this.navigationService.outletNavigation(
-            { notificationsModal: ["notifications"] },
+            { simulationModal: ["simulation"] },
             this.activeRoute
         );
     }
