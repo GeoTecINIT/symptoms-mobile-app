@@ -20,7 +20,7 @@ export class MainActionBarComponent {
         this.development = !getConfig().production;
     }
 
-    onNotificationsTap() {
+    onSimulationTap() {
         this.simulationModalService.show();
     }
 
