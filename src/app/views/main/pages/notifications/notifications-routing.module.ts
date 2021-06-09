@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { NotificationsListComponent } from "./notifications-list/notifications-list.component";
+import { NotificationsListComponent } from "./notifications-list.component";
 
 const routes: Routes = [{ path: "", component: NotificationsListComponent }];
 

@@ -21,3 +21,11 @@ export const confirmWantsToUnlink: ConfirmDialogOptions = {
     positiveText: "Salir",
     negativeText: "Volver",
 };
+
+export const confirmWantsToExport: ConfirmDialogOptions = {
+    question: "¿Exportar todos los datos recopilados por la app?",
+    body:
+        "El proceso puede llevar un tiempo en función del uso que hayas hecho de la app y del tiempo que lleves usándola",
+    positiveText: "Exportar",
+    negativeText: "Cancelar",
+};
