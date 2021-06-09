@@ -3,7 +3,10 @@ import { ModalDialogParams } from "@nativescript/angular";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { confirmWantsToUnlink } from "~/app/core/dialogs/confirm";
+import {
+    confirmWantsToExport,
+    confirmWantsToUnlink,
+} from "~/app/core/dialogs/confirm";
 
 @Component({
     selector: "SymSettingsContainer",
@@ -39,6 +42,27 @@ export class SettingsContainerComponent {
                         .then(() => this.onClose())
                         .catch((e) =>
                             this.logger.error(`Could not unlink. Reason: ${e}`)
+                        );
+                }
+            });
+    }
+
+    onExportTap() {
+        this.dialogsService
+            .askConfirmation(confirmWantsToExport)
+            .then((wantsToExport) => {
+                if (wantsToExport) {
+                    this.appSettingsService
+                        .exportData()
+                        .then((path) =>
+                            this.logger.debug(
+                                `Data exported and available at: ${path}`
+                            )
+                        )
+                        .catch((e) =>
+                            this.logger.error(
+                                `Could not export data. Reason: ${e}`
+                            )
                         );
                 }
             });
