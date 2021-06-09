@@ -290,10 +290,18 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Puedes hablar con tu terapeuta pulsando aquí",
             })
         );
-        // TODO: Confirm that what is next is what has to be done
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("finishExposure", { successful: true })
+                .in(15, "minutes")
+                .cancelOn("exposureForcedToFinish")
+        );
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
+            run("sendNotification", {
+                title: "Sabemos que no es fácil, pero te has esforzado mucho",
+                body: "Podemos finalizar la exposición por hoy",
+            })
                 .in(15, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
@@ -303,6 +311,10 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on("exposureWasNotDroppedOut", run("calculateExposureAggregate"));
+        on("exposureAggregateCalculated", run("writeRecords"));
+        on("exposureWasNotDroppedOut", run("calculateExposurePlaceAggregate"));
+        on("exposurePlaceAggregateCalculated", run("writeRecords"));
         on(
             "exposureWasNotDroppedOut",
             run("limitedFeedbackDelivery", {
@@ -310,7 +322,6 @@ class DemoTaskGraph implements TaskGraph {
                 maxCount: 3,
             })
         );
-
         on(
             "canDeliverFeedback",
             run("sendNotification", {

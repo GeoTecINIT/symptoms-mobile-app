@@ -1,4 +1,5 @@
 import { Record, Change } from "@geotecinit/emai-framework/entities";
+import { RecordType } from "~/app/core/record-type";
 
 export class PatientFeedback extends Record {
     constructor(
@@ -8,6 +9,6 @@ export class PatientFeedback extends Record {
         public notificationId?: number,
         obtainedAt: Date = new Date()
     ) {
-        super("patient-feedback", obtainedAt, Change.NONE);
+        super(RecordType.PatientFeedback, obtainedAt, Change.NONE);
     }
 }

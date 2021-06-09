@@ -1,7 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
-import { ProgressViewService } from "../progress-view.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { dangersOfEarlyLeave } from "~/app/core/dialogs/info";
 import {
@@ -10,31 +9,53 @@ import {
 } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
+import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
+import { Observable, Subscription } from "rxjs";
+import { map } from "rxjs/internal/operators";
+import { Exposure } from "~/app/core/persistence/exposures";
 
 @Component({
     selector: "SymUnderExposure",
     templateUrl: "./under-exposure.component.html",
     styleUrls: ["./under-exposure.component.scss"],
 })
-export class UnderExposureComponent implements OnInit {
-    inDanger = false;
+export class UnderExposureComponent implements OnInit, OnDestroy {
+    ongoingExposure: Exposure;
+    inDanger: boolean;
 
     private logger: Logger;
+    private exposureSubscription: Subscription;
+    private inDangerSubscription: Subscription;
 
     constructor(
+        private underExposureService: UnderExposureService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
-        private progressViewService: ProgressViewService
+        private ngZone: NgZone
     ) {
         this.logger = getLogger("UnderExposureComponent");
     }
 
     ngOnInit() {
-        // Use initialized dependencies
+        this.exposureSubscription = this.underExposureService.ongoingExposure$.subscribe(
+            (exposure) => {
+                this.ngZone.run(() => {
+                    this.ongoingExposure = exposure;
+                });
+            }
+        );
+        this.inDangerSubscription = this.underExposureService.inDanger$.subscribe(
+            (inDanger) => {
+                this.ngZone.run(() => {
+                    this.inDanger = inDanger;
+                });
+            }
+        );
     }
 
-    onSwitchStatus() {
-        this.inDanger = !this.inDanger;
+    ngOnDestroy() {
+        this.exposureSubscription?.unsubscribe();
+        this.inDangerSubscription?.unsubscribe();
     }
 
     onWantsToLeaveTap() {
@@ -54,16 +75,12 @@ export class UnderExposureComponent implements OnInit {
     }
 
     private handleWantsToLeave(wantsToLeave: boolean) {
-        if (wantsToLeave) {
-            emitExposureManuallyFinished();
-            this.feedbackModalService
-                .askFeedback("exposure-left", askWantsToLeaveFeedback)
-                .then((feedback) => {
-                    this.logger.debug(`Feedback: ${feedback}`);
-                    if (feedback) {
-                        this.progressViewService.setAsIdle();
-                    }
-                });
-        }
+        if (!wantsToLeave) return;
+        emitExposureManuallyFinished();
+        this.feedbackModalService
+            .askFeedback("exposure-left", askWantsToLeaveFeedback)
+            .catch((e) =>
+                this.logger.error(`Could not deliver feedback: Reason ${e}`)
+            );
     }
 }

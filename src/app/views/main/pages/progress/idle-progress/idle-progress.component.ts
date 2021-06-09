@@ -1,46 +1,61 @@
-import { Component, Input } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
+import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
-import {
-    SESSION_DATA,
-    Y_AXIS_DATA_RANGE,
-    CUTTING_LINES,
-    AGGREGATE_DATA,
-} from "../pages/common";
-import { ChartData2D } from "../common/charts";
+import { Subscription } from "rxjs";
+
+import { Record } from "@geotecinit/emai-framework/entities";
+import { RecordType } from "~/app/core/record-type";
+import { Change } from "@geotecinit/emai-framework/internal/providers";
 
 @Component({
     selector: "SymIdleProgress",
     templateUrl: "./idle-progress.component.html",
     styleUrls: ["./idle-progress.component.scss"],
 })
-export class IdleProgressComponent {
-    @Input()
-    set hasData(hasData: boolean) {
-        this._hasData = hasData;
-        if (hasData) {
-            this.latestData = SESSION_DATA;
-            this.summaryData = AGGREGATE_DATA;
-        } else {
-            this.latestData = undefined;
-            this.summaryData = undefined;
-        }
-    }
-    get hasData(): boolean {
-        return this._hasData;
-    }
+export class IdleProgressComponent implements OnInit, OnDestroy {
+    latestData: Record;
+    hasLatestData: boolean;
 
-    latestData: Array<ChartData2D>;
-    summaryData: Array<ChartData2D>;
-    yAxisDataRange = Y_AXIS_DATA_RANGE;
-    cuttingLines = CUTTING_LINES;
+    summaryData: Record;
+    hasSummaryData: boolean;
 
-    private _hasData = false;
+    private latestDataSubscription: Subscription;
+    private summaryDataSubscription: Subscription;
 
     constructor(
+        private patientDataService: PatientDataService,
         private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute
+        private activeRoute: ActivatedRoute,
+        private ngZone: NgZone
     ) {}
+
+    ngOnInit() {
+        this.latestDataSubscription = this.patientDataService
+            .observeLastByRecordType(RecordType.ExposureChange, [
+                { property: "change", comparison: "=", value: Change.END },
+                { property: "successful", comparison: "=", value: true },
+            ])
+            .subscribe((record) => {
+                this.ngZone.run(() => {
+                    this.latestData = record;
+                    this.hasLatestData = !!record;
+                });
+            });
+        this.summaryDataSubscription = this.patientDataService
+            .observeLastByRecordType(RecordType.ExposureAggregate)
+            .subscribe((summary) => {
+                this.ngZone.run(() => {
+                    this.summaryData = summary;
+                    this.hasSummaryData = !!summary;
+                });
+            });
+    }
+
+    ngOnDestroy() {
+        this.latestDataSubscription?.unsubscribe();
+        this.summaryDataSubscription?.unsubscribe();
+    }
 
     onSeeRecordsTap() {
         this.navigate("../records-list");

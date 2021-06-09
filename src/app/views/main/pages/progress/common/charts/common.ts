@@ -3,7 +3,7 @@ export interface ChartData2D {
     values: Array<ChartEntry2D>;
 }
 
-interface ChartEntry2D {
+export interface ChartEntry2D {
     x: number | Date;
     y: number;
 }

@@ -1,18 +1,14 @@
 <ScrollView>
     <StackLayout>
-        <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasData" (btnTap)="onSeeRecordsTap()">
-            <SymTitleContentCard *ngIf="latestData; else noRecords" iconCode="&#xe55e;" title="En Lugar 1" subtitle="(30/04) Nivel de ansiedad">
-                <SymLineChart [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines" [data]="latestData"></SymLineChart>
-            </SymTitleContentCard>
+        <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasLatestData" (btnTap)="onSeeRecordsTap()">
+            <SymChartCard *ngIf="hasLatestData; else noRecords" chartType="line" [record]="latestData"></SymChartCard>
             <ng-template #noRecords>
                 <SymIconTextCard iconCode="&#xe26b;" text="Aquí podrás ver los registros de tu última exposición en cuanto realices una">
                 </SymIconTextCard>
             </ng-template>
         </SymProgressSection>
-        <SymProgressSection title="Evolución" btnText="Ver detalle" [btnActive]="hasData" (btnTap)="onSeeAggregatesTap()">
-            <SymTitleContentCard *ngIf="summaryData; else noSummary" iconCode="&#xe26b;" title="En todos los lugares" subtitle="Nivel de ansiedad medio">
-                <SymBarChart [yAxisDataRange]="yAxisDataRange" [cuttingLines]="cuttingLines" [data]="summaryData"></SymBarChart>
-            </SymTitleContentCard>
+        <SymProgressSection title="Evolución" btnText="Ver detalle" [btnActive]="hasSummaryData" (btnTap)="onSeeAggregatesTap()">
+            <SymChartCard *ngIf="hasSummaryData; else noSummary" chartType="bar" [record]="summaryData"></SymChartCard>
             <ng-template #noSummary>
                 <SymIconTextCard iconCode="&#xf092;" text="Conforme vayas realizando exposiciones te iremos mostrando tus avances aquí">
                 </SymIconTextCard>
