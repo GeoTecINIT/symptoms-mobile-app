@@ -94,183 +94,183 @@ const contents: Array<RemoteTreatmentContent> = [
     {
         id: "c01",
         index: 1,
-        title: "Introducción",
-        body: `Defectus privatio perspicuum utrimque favis notandum.
+        title: "¿Qué es la ansiedad?",
+        body: `Las emociones forman parte del funcionamiento normal de los seres humanos, tanto las positivas como las negativas, no es posible entender la vida sin la función importantísima que cumplen las emociones, juegan un papel fundamental y no son perjudiciales. El foco no está en deshacerse de las emociones, sino en conocerlas, ser más consciente de los factores asociados a las mismas y poder regularlas mejor.
+Una función fundamental de las emociones es alertarnos, avisarnos de que algo importante ha ocurrido (tanto en el medio externo como en el medio interno) y motivarnos para actuar. Las emociones nos inducen a la acción en situaciones importantes y son energizantes. Otra función de las emociones es comunicarnos con los demás. Las expresiones faciales son una parte importante de las emociones.
+Para tener una idea mejor de qué ocurre cuando se desencadena la emoción, es importante saber que tiene tres componentes principales. A continuación, describiremos esos tres componentes y te haremos reflexionar sobre ellos:
 
-Defectibus effectus gustu tum. Occasionem verarum exhibentur heri caligantis alicujus explorant auditu. Emergere audiam assignare mallent quocunque ponamus manifestam donec ignorem author me religionis sentiat ullis. Finitus augeatur integritas habentem ejusmodi audio. Scire habeam securum nam utiles animos dormiam confirmet alia externis funditus veris actum vixque perfecta sui.
 
-Nullas attigerint detorqueat singulis habentur automata mutationum remotam regi. Videntur sacras describere suae solam dubium finitas errore debiliora apud perfectis remotis. Cumque propugnent persuadere judiciis quieti enatare cujuslibet quaerere ferre aestimare mediam. Esset impetu induci evidentes nudam tangantur discrimen corpori sae  ideo autem suum. Odoratu loquebar duratio.
+    1)  Componente cognitivo (Lo que pienso): Cuando sentimos emociones a menudo aparecen pensamientos.
 
-Corporea externis tactiles judicia. Artificis sentio judiciis essentiam imponere primum explorant. Crescit quoties considero obstet fallar percipior locus obstinate soleam desinerem manum aetheris parte longe praecipuus addo occurrere. Mutata imaginem fallebar certi tantaeque probabiles recte objectioni deleantur conemur. Caligantis deus iis noluisse plus imponere solus impetus mansurum rationes sensisse posuisse typis carnem tantaeque causas referam.
+    2)  Componente comportamental (lo que hago): Son las acciones, las conductas que la persona hace o tiene el impulso de hacer cuando siente una emoción.
 
-Sumamus creari imaginem nequeam singulari aut conversa indubitati aliquid aberrare inquiram iste. Ventus loquebar pendeant talium cadavere cerebella haberem deveniri visum assentiri opera supponant possem suscipere amen quod. Divelli intra sine ausi differre arrogo externis potuerunt puram motum. Solam possumne similibus culpa qualem visione videretur ipsos paulatim factae praesenti. Mo demus tractarem manifestam velim certas.
+    3)  Componente fisiológico (cómo me siento): Existen respuestas fisiológicas asociadas a las emociones, las palpitaciones y la sudoración pueden ser dos sensaciones características, aunque puede tener otras muchas manifestaciones.
 
-Sacras liberam purgantur primam ope fruebatur habemus tius solam du quantumvis agendis. Deo putare extensio quaerendum eo utrum sonos necessitas formalis creatis cogitandi inscitiae cogitantur quas hominem usitata incipit. Utrimque perspexi ultimam opinione idem deveniri tractandae oculis tantummodo motus unam istius pleraque quapropter divinae opinione. Appellatur admovetur putarem finguntur sim fides habuimus perspicue percepturi nolens collecta foret pleraque aliquo altera item. `,
+
+El miedo es una de las emociones básica que es tremendamente adaptativa y ha servido a los seres humanos a lo largo de todos nuestros años de historia.
+
+Experimentar cierto temor a determinadas situaciones que ocurren a tu alrededor puede ser una reacción no problemática, el problema está en que tu experiencia no termine ahí sino que ese conjunto de reacciones (pensamientos, conductas y sensaciones físicas) interaccionen entre ellas, impidan que veamos la situación a la que nos enfrentamos de forma objetiva a la experiencia tal y como está sucediendo y se centre más bien en el pasado o en los que podría ocurrir en el futuro, convirtiéndose así en realmente amenazante o catastrófica. Es ahí cuando estas reacciones se convierten en extremadamente desadaptativas y podemos hablar de una emoción más compleja como la ansiedad y que se caracteriza por un miedo intenso.`,
     },
     {
         id: "c02",
         index: 2,
-        title: "¿Qué es la ansiedad?",
-        body: `Aliquamdiu somnis visu tollitur vere corporeis advenire anno contentae habentur.
+        title: "El papel de las cogniciones",
+        body: `Ante cualquier situación o experiencia las personas podemos atender a una gran cantidad de aspectos distintos. La mente humana funciona como un filtro, focalizamos la atención sobre ciertos aspectos de una situación y les damos significado.
 
-Expectanti obstinate putabam nullamque tes examinare propositio velim talium favis longo. Ausit admi eversioni affectus suae supponatur insomnia contentae adsit nullo sensisse experiar ferias quaerantur terea quam. Pudeat solum comparem oculi realem parum disputari magnum mutuatur. Primas eodem aliisque hactenus proposui sufficeret materialis majorem ipsarum aliquanto priusquam scientiam sese meditabor spectant natura quascunque. Nolens constare artificium exsurgit insuper falsae advertebam longe immensi dissimilem mundo diversorum innumeras.
+Este proceso tiene una razón muy clara, aumentar la eficiencia y la velocidad de nuestras respuestas ante una situación determinada. Esto tiene sus ventajas y sus inconvenientes.
 
-Certius secunda aspexi mo magnum. Sex praemia rationale. Omniscium tractatur remaneat scripturas acquirere ostendam remotam vox materiam constanter quum alienis. Primae ipsam habuimus persuadet tractatur posuisse cohibendam qua ipso anno interire veritate mandat. Possidendi affirmarem liberius spero sentire.
+La mayor parte de las veces, este proceso se produce de forma tan rápida que no nos llegamos a dar cuenta de lo que estamos pensando. Estas interpretaciones son automáticas, se producen de forma no consciente. Ahora bien, estas interpretaciones no surgen de la nada, en gran medida, se deben a nuestras experiencias pasadas. Además, en ocasiones, utilizamos estas interpretaciones automáticas para imaginar lo que podría ocurrir en el futuro.
 
-Ea firmae veri scirem realitatis discrepant annos noctu audio evidentius aliisque. Mutuari reddere similes scriptum poterunt ponamus quarundam quidem audio producatur tangantur solo ullas. Aliquandiu substantia causas prudentiae caeteri dictis fuisse nos quis cujuslibet ii corrigatur scriptum atqui. Exhibet dubitem theologiae quaerendum integritas improviso geometria requirunt errores novam prosecutus incipere praevidere induci sed. `,
+Nuestras interpretaciones influyen en lo que esperamos que ocurra en una determinada situación. Cuando sentimos emociones también aparecen pensamientos. Por ejemplo, alguien que sienta ansiedad en espacios cerrados puede tener pensamientos negativos relacionados con “se va a acabar el aire y me voy a ahogar”. Pues bien, este proceso de interpretaciones tiene importantes consecuencias en cómo nos sentimos y dependiendo de cada una de las interpretaciones la persona experimentará una determinada emoción u otra, a su vez cómo nos sintamos influye en las futuras valoraciones que hagamos.`,
     },
     {
         id: "c03",
         index: 3,
-        title: "Métodos para lidiar con la ansiedad",
-        body: `Tactiles quarta consumerem pertineant contra.
+        title: "¿Qué es la evitación?",
+        body: `El elemento fundamental que contribuye al mantenimiento del miedo intenso en múltiples situaciones es la evitación, es decir, el no enfrentarse a las situaciones temidas.
 
-Argumenta reddere retinet potentiam quadratam solum fuisse testari firmae occurret maximam alias flexibile prius pergamque complexus fidam. Callidus confidam nunc afferuntur reducantur. Cujuslibet durationem horum agnosco incertas colore errore meliores attendenti corporibus sumptum assignetur agendum persuadeor extensum exponantur. Argumenta corpori volo potestis versa corporis cucurbitas omnesque praeditis undenam. Producatur aliquandiu deleantur attigi voluntate duas clarae hesterna occasione extensum ferant putabo originis.
+La evitación puede servir a corto plazo para eliminar la ansiedad (p.ej., una persona con claustrofobia puede empezar a sentir ansiedad al entrar en un ascensor y si decide evitar la situación y salir del ascensor, se producirá un descenso de la ansiedad), pero a largo plazo evitar tiene numerosas consecuencias negativas:
 
-Reliquiae existentia extendere sciamus judicio inveniri subjectum lucem profecto vigilem ferre fide profecta possint. Potentiali causam desinerem modo eram tactu opinantem. Dubitari deo suae infigatur. Praecipuis veritatem corporea frigoris distinguit dicamne deumque spectentur solent posse juncta crescit ideamque minor punctum. Nullum itaque tacitus.
 
-Profundum invenerunt me ferventi dum. Cogit existam aliarum vulgus videor totumque gloria intuebar heri patiatur reliquiae concursum. Frigus nova existentia tangatur quaero equidem nemine suffossis paucos objectivae simul assequi deleantur experior. Suo timet spectant afferri inde vigilantes concedam scriptae requiratur quidquid tractandae. Evidentes vos eorum extitisse invenit bonus callidum primas entis infinitae difficilia falso insidias.
+    -  El alivio de la ansiedad que se experimenta es momentáneo, de corta duración.
 
-Divinae elicitam delusisse rationem evidenter solis catholicae dubitandi existimavi liquida sit quocunque humanae cupiam certi advertisse praesertim. Non assignem habentem visa asseverent ingeniosi color ideas cohibendam famam desinere illarum. Memores sui ultimam dispari dubitabam causas divelli vita scientiam invenero tangatur omnesque ideis angelos luminis est vitari. Allatis imaginari tantas. Fuerit inanimes pertineant ceram certum apud propositio videmus quantitas perlegere certius vel commendare sae reddendum ultimum.
+    -  No nos acostumbramos a experimentar esa emoción y por tanto, cada vez que aparece nos sentimos mucho peor.
 
-Omnes enatare imaginabar nota satyriscos nutriri applicare. Regula detorqueat dividi sola pleraque quarta primo imaginatio venturum experimur. Praemia loquebar aliquo facultate naturali nocturna exerant calida ideamque. Scio tribuebam exempli quocunque tollentur ente. Figuras praesenti confusae fallebar co signa defectibus nihili per imaginarer etiam.
+    -  Hace que la próxima vez que nos enfrentemos a la situación experimentemos mayor temor y una ansiedad más intensa, es decir, refuerza negativamente el miedo por el alivio momentáneo de la ansiedad.
 
-Putandum agendis sentiens ipsis externo referebam aliquamdiu extitisse ostensum assentiri sensus falsam eorum fallar.`,
+    -  Poco a poco, se llega a desear evitar cada vez más cosas. De esta manera, la evitación se generalizará cada vez a más situaciones interfiriendo en distintas áreas de la vida de la persona y limitándole cada vez más.
+
+    -  Se van perdiendo las habilidades necesarias para enfrentarse a la situación temida o actuar adecuadamente, como ocurre cuando una persona ha estado mucho tiempo sin escribir a máquina y nos impide desarrollar un sentimiento de autoeficacia.
+
+    -  La evitación impide realizar actividades que se desean hacer (p.ej., en el caso de la claustrofobia evitar subir en ascensor nos obliga a tener que subir siempre por las escaleras… ¡aunque se trate del piso 14!)
+
+    -  Impide a la persona comprobar si lo que teme es cierto o no. Esto es, la persona no puede desconfirmar la creencia acerca de la peligrosidad de la situación temida.
+
+    -  La evitación hace que la persona pierda la confianza en sí misma, disminuyendo su autoestima al no considerarse capaz de afrontar con eficacia la situación temida y mermando tu autonomía.
+
+
+Todo lo anterior limita sustancialmente la vida.
+
+Este tipo de comportamientos o estrategias destinados a impedir que ocurran experiencias emocionales dolorosas o no deseadas por el malestar que generan, son por lo tanto estrategias muy desadaptativas. Es importante que comprendas que el hecho de realizar estas estrategias de evitación emocional lo que hacen es justo contribuir a que se mantenga el malestar que experimentas. A pesar de que puedas considerar que estas estrategias son útiles en algunas situaciones, ya que tienden a reducir o inhibir la experiencia de emociones intensas a corto plazo, no te ayudarán a superar el problema a largo plazo, al contrario, contribuirán a mantenerlo.
+
+Quizás, durante tu vida has aprendido que el hecho de realizar ciertas conductas reduce o elimina la intensidad de un estímulo que te produce malestar, ya sea un estímulo interno (una sesión física, por ejemplo, el temblor) como externo (estar en un lugar alto). Sin embargo, aunque la utilización de estas estrategias a corto plazo puede aliviar tu malestar o reducir la intensidad de la emoción, a largo plazo contribuyen al mantenimiento del malestar que querías modificar y, por tanto, aumentan la gravedad de tu problema.
+
+Es importante saber además que la evitación puede ser muy sutil y en ocasiones la persona pone en marcha conductas de seguridad (por ejemplo, tomar medicación para enfrentarse a esa situación) o utiliza señales de seguridad (ir siempre acompañado) y en ambos casos también estamos hablando de una evitación perjudicial para superar el problema.`,
     },
     {
         id: "c04",
         index: 4,
-        title: "¿Qué es la terapia de exposición?",
-        body: `Meditabor dormiam potuerunt.
+        title: "La importancia de exponerse",
+        body: `Por todo lo que hemos comentado en la sección anterior, es importante exponerse. Esta técnica consiste en mantenerse en las situaciones ansiógenas, experimentando ansiedad el tiempo necesario hasta que la ansiedad disminuya, produciéndose lo que se denomina habituación. Es decir, consiste en enfrentarse a una situación temida hasta familiarizarse con ella, comprobar que no es peligrosa y adquirir las habilidades necesarias para actuar de forma eficaz. No te pedimos que te enfrentes a una situación peligrosa, de verdad para ti, sino que te expongas a situaciones que se entienden como amenazantes, pero realmente no entrañan un peligro real para tu vida. Esta exposición se hará de forma gradual y se establecerán distintos objetivos de exposición en función de la ansiedad que la persona experimente y el grado de evitación que tengan en las distintas situaciones que tema. De este modo, se empezará la exposición con objetivos más fáciles, para ir consiguiendo todos los objetivos uno a uno y avanzando a los más difíciles.
 
-Prava pileos perfectum ideoque curandum incipit confidere venturum affectus diversi sentiens donec major principia longo probant. Partes totaque cessarem. Verumtamen author dei facit scio judicarent fecto quae. Singulae aperte inquiram indubitati initia remaneat respondere periculi magnum ero creari fallit digna videbuntur sequentium. Flexibile quae discrimen fictitium concipio neque simulque cogitandi cavendum quaeretur faciliorem ferri pappo.
+En las exposiciones es esencial que experimentes tus emociones de forma completa, es decir, sin tratar de evitarlas, aplicando nuevas formas de afrontamiento más adaptativas que las usadas hasta ahora ya que han hecho que se mantenga el problema. Es importante que sepas que el principal objetivo de las exposiciones a la emoción no es la reducción inmediata de la respuesta emocional, sino que aprendas algo nuevo como resultado de la experiencia. Es fundamental que durante todas las exposiciones intentes experimentar las emociones de forma completa, es decir, sin tratar de evitarlas, aplicando nuevas formas de afrontamiento más adaptativas. Este procedimiento te ayudará a incrementar la tolerancia a las emociones, esta es la meta de aprendizaje central de las exposiciones que queremos que realices. También es importante que se creen nuevas asociaciones, es decir, conforme te expongas, incorpores nuevas experiencias, comprobando cómo esas consecuencias más catastróficas que siempre has anticipado no ocurren realmente.
 
-Quietem offerendum nocturna passim certi testari cognoscere majestatis matura magis foco usurpabam. Elicitam pappo conemur abducerem capax essem scripto totos. Majus originis attigeram primo utcunque explicui quaslibet vestro. Factae superest tollitur imbecillia nusquam dedissem insuper pla exsurgit. Componat affirmo diversorum falsam quam tactiles naturas.
+Además, las exposiciones han de llevarse a cabo de forma sistemática, gradual y repetidamente.
 
-Quaedam nolo fuerit fuerit pileos diversas totumque quolibet percurrere veritatem. Revocari probandum isti atqui ipsam. Meum certus nequeam immorari durationis. Clara agendis volens somnis. Poni simplex forte voluptatem opinor nomine terea fruebatur adhuc loco inter causam habet in spectentur ipsi sim.
+Esta parte del tratamiento puede resultarte complicada al principio, ya que supone enfrentarte a aquello que te genera malestar, pero conforme vayas exponiéndote de forma repetida y sistemática, sin llevar a cabo ninguna estrategia de evitación, la tolerancia a las emociones que experimentes se incrementará permitiéndote afrontar situaciones cada vez más difíciles.
 
-Manus matura admodum odor tamque numeri iterum facillimam animalia percipi plerosque innotuit argumentis tot ope. Contrariae visae ritas certas admisi finitas dubitandum difficilia essem mutationum spatium ejusque meos profecto sensus attributa. Alienas fingo naturae rationum archimedes recte. Delusisse offerendum quarum ille quodcumque. Causam nullis quoque speranda consistat existeret considero.
+Es importante que prestes atención a los pensamientos, emociones y comportamientos que anteceden a la exposición, y también a los que experimentarás durante la realización de ésta, analizando si las consecuencias que esperabas en un inicio han llegado a ocurrir en relación a los pensamientos catastróficos que habías anticipado, o respecto a la intensidad de las emociones o sensaciones físicas que anticipabas.
 
-Angelum nonnisi percipiat loquebar exsolvi attinet referuntur longum contrarium sexta generales voluptatem re fuse supponam. Rationum capax nonnisi credendam athei imaginem gustum attigeram sentio mutuatur ecclesiae agnoscitur aliquid immortalem aliquoties sensuum attributa. Blandisque distinctum tentassem affectus timeo cumque. Imaginabar fuisse curiosius affectus ignota admodum tangatur respondeam ventus efficere denegante idea virorum integritas cum. Materiam extra quavis est positivum anima objectioni foret antehac haben differant aër fore fiat quoties ferias.
-
-Quam mandat alio immorari melius. Data chartam objectiva aliquoties actum naturales voces aliquanto admiserim visae tanquam conservet mens artificis loco inveniri. Credimus meditatas corrigatur imponere inde at. `,
+Recuerda, cuando te permites experimentar tus emociones de forma completa sin evitarlas, te estás dando la oportunidad de poner en marcha las estrategias adecuadas y eficaces para hacerles frente que, con la práctica, acaban convirtiéndose en estrategias automáticas.`,
     },
     {
         id: "c05",
         index: 5,
-        title: "La importancia de exponerse",
-        body: `Constare calorem motus angelos theologos meas.
+        title: "Curva de ansiedad y evitación",
+        body: `Es fundamental que conozcas curva de ansiedad que se producirá durante las exposiciones, es decir, cómo aumenta la ansiedad al exponerse a la situación temida (esto es normal y es señal de que el proceso va bien) y después va descendiendo si permanecemos en la situación el tiempo suficiente sin realizar conductas de evitación.
 
-Existenti co apud causis objective prae separatum originem existant solvendae illos tentassem imaginata. Illi ignota nia argumentis sumamus modi adipisci lus fatigor quaslibet cunctatus pileos probant illo similium ausit color. Pergamque commoveo spondeo hesterna concedam assentiri iterum productus dormio. Tale vocant externa haben propria manifestum. Erunt longum animus tritam aliquoties prudens haustam efficiat constet admodum operatione.
+Por otra parte, a medida que nos exponemos repetidamente a la misma situación, la ansiedad sube menos y tarda menos tiempo en bajar.
 
-Animos humanam absoluta strepitum explicui inquirere. Quaero liberius meditatio qui recordor putare caeteri denique firma callidum manifeste. Vacabo nihilum notandum locum quomodo collabitur quales erat extensarum vestra facultates vocant lus attigerint omnibus habeatur excogitent. Quo frigus aliquod agendum subducam timet conformes animos geometria cur multarum mundo theologiae dubitandum assumere efficiat praemia. Advenire neutrum tantumdem evidentius agnoscitur aliis unitas haberet certis ullius.
+La exposición, como alternativa a las conductas de evitación, nos permite enfrentarnos gradualmente a aquellas situaciones que tratan de evitarse o se experimentan con gran malestar.
 
-Quis putabam extensa firmae potuit multarum calorem habemus qualia quoniam vixque scribi tangi docetur physicae ignotas. Ullius cogitantur exponetur quidquid ostendam arcte actiones donec nocturna earumdem. Male credo obstinate hinc praestare longum incedere chartam ipsos. Maxima desumptas detrahere dubitarem meipsum possem aggrediar recte praeterea advertebam. Plures defectibus cumque alicubi catholicae accepit volent monendos supersit.
-
-Autho potest cognitio allatis magis vestibus quoque per ullius tempore. Imaginem infinite perfecti soliditas etsi data advenire suscipere hesterna pretium distincte nullo dubium pappo dormio alicujus extendo. `,
+La exposición repetida a estas situaciones produce un descenso del malestar ya que permite que se empiecen a vivir y experimentar y es ahí donde actúa el proceso de habituación. Se trata de un fenómeno natural mediante el cual, si permanecemos el tiempo suficiente en una situación que no es amenazante de forma objetiva, ésta deja de afectarnos. Se reduce entonces la fuerza con la que se percibe el estímulo y hace que se disminuya el malestar que experimenta la personas ante el estímulo que teme. `,
     },
     {
         id: "c06",
         index: 6,
-        title: "Contenido 6",
-        body: `Cogitans maxime rerumque ubi loquendi causam superare quis cumque possunt volens lus supponant alia.
+        title: "Efectos colaterales",
+        body: `Cuando se comienza la exposición, es habitual que aparezcan algunos efectos colaterales de la misma, como son:
 
-Confidam elicitam erunt generalia. Potuit sensus ejusmodi invenerunt me tam istiusmodi illarum detractis improviso dubito notandum fictitium idea incipit existant. Fallebar liberius consistere positivum materiam originis expectabam spectentur nunquid. Spectatum eminenter imperfecta. Probabiles cavebo impetus denique ei desiderant opportune meum essent videor advertatur finitus dubitem.
 
-Exponetur somniemus veritatem. Aliud to prudens cerae divinae loquebar imo latere. Usu spondeo visu. Postquam fallat facit extensio advenire sine causis requiratur serie nullam figurata igni facile ideas fit sentiat funditus. Objectiva poterunt solis bono augeri ille tale pictores istas hesterna praesertim videmus lor impetus externarum. `,
+    1)  Ansiedad, aunque no requiere tratamiento especial.
+
+    2)  A veces, pesadillas por las noches después de las sesiones de exposición que generalmente desaparecen a medida que avanza el tratamiento.
+
+    3)  Estado de ánimo bajo que generalmente desaparece a medida que avanza el tratamiento.
+
+    4)  Recaídas. Es importante identificar las causas y atajarlas.
+
+
+Ten en cuenta estas características del momento de exposición por el que puedes estar pasando, porque al contrario de lo que podría parecer, indica que todo está funcionando bien y estás afrontando estas situaciones adecuadamente, a pesar de que experimentes efectos colaterales que irán despareciendo con el tiempo. Habla con tu terapeuta si no es así.`,
     },
     {
         id: "c07",
         index: 7,
-        title: "Contenido 7",
-        body: `Efficitur corpori cui physicam effectibus timeo.
+        title: "Tácticas de manejo de la ansiedad",
+        body: `Puedes apoyarte en algunas tácticas de control de la ansiedad durante el periodo de tiempo en el que estarás haciendo exposición. Algunas de estas tácticas son:
 
-Nequit illos sui. Concipiam summum excogitent deinde utens extensio publice explicui sed apprehendo ausit audio posse credo ideis. Proposui inveniant ideam tanti partiales agnoscitur rerumque earumque brachia aliarum removendo deus docti ullius. Assentiar secunda attentius alios durent oculis conflantur quantumvis. Credidi assideo constat intellectu requiratur ipsis machinam.
+    1)  Respiración lenta.
 
-Atque difficilia maxima mirum etsi separatum actu. Consuetae excoluisse prudens suam tam lumine agebam humano confirmet totaque falsam requiratur producatur geometria discrepant. Potuit iis caeteras possumne necdum ingressus multi altera innumeras signa revolvo exponetur punctum imaginatio ubi regi. Alio quid scopo magnum exponuntur respondeam potestate respondere sentiat simus ulterius ille novam credidi. Strepitum gustu animalia excludat spatium transferre fuse aliter data solo paritura differant pendere vi saltem aliquamdiu gurgitem.
 
-Nondum ut assignem dum habentur fallacem communi habeo quomodo vere cogitatio pugnare item attendendo imaginem anno. Illos spem credimus praeditis gi veritate vestra tangatur perfectae regi fingo exsurgit amen caeteri. Admiserim lapide sequeretur dicetur videmur devinctam incrementi judicare sufficiunt solam cujuslibet replere veras ullos defectu majora obnoxius. `,
+    2)  Relajación muscular progresiva.
+
+
+    3)  Tácticas paradójicas: intentar que el temor aumente.
+
+
+    4)  Reglas para afrontar el miedo.`,
     },
     {
         id: "c08",
         index: 8,
-        title: "Contenido 8",
-        body: `Circulum apparet tamquam refutent ante permiscent voces potuerit praecipuis obscure cernitur dormire inspiciam integritas denegante oblivisci.
+        title: "Situaciones difíciles",
+        body: `El cambio es un proceso largo, con altibajos y lograr la consolidación definitiva del cambio requiere un esfuerzo por tu parte. Estos altibajos forman parte de la emoción de vivir y en cualquier momento se puede dar una situación que nos afecte especialmente y ante la que conviene saber cómo podríamos responder.
 
-Apertum procedere quavis excitari divelli posse. Digna brevi probatur fas repugnaret quascunque perfecti admodum decipi exigui. Neutrum manum omnia sufficit discrimen verbum infusum distinctum iterum extendo praecipuas conservat nomen. Objectivus judicia frigus distinguo talis viris talem accepit figuram maximam. Occurrere privatio ideae faciendam mentem consuetae fueram probabiles testari ipse ubi liberet.
+Con independencia de los progresos realizados, es probable que en algún momento vuelvas a tener experiencias emocionales intensas desagradables y que te produzcan malestar. Determinadas situaciones pueden favorecer además con mayor probabilidad la reaparición de tu problema. A estas situaciones las llamamos situaciones “de alto riesgo”.
 
-Quanta tempusque unde rationes nego dixi facturum propria. Cucurbitas omnem invenio sum eminenter ima causis praeterea utili vitro ab. Cupio odor vel angelum ingenio sex fuit ostendam tius mihi intra. Color detrahere dubitavit probandam quaestione intra sae his videmus dubitabam crediderim consumerem aucta formalis. Scilicet persuaderi etiam conari de bile confidere.
+Todo esto forma parte de lo esperable, ya sabes que las emociones fluctúan y que el proceso de cambio no es siempre lineal y constante. Es decir, vas a tener momentos mejores y momentos peores y respecto a los momentos peores, es importante saber manejarlas. La mejor manera de estar preparado para afrontar adecuadamente una situación de alto riesgo es seguir estos tres puntos:
 
-Incipere meam sensisse scientiis. `,
+
+    1)  Saber identificar las situaciones de alto riesgo o reconocerlas a tiempo.
+
+    2)  Saber qué habilidades tienes para hacerles frente y asegurarse de haberlas practicado.
+
+    3)  Que aprendas a pedir ayuda (si esta ayuda es necesaria, sin ningún temor). No esperes a sentirte mal.
+
+
+Una vez hayas reflexionado sobre estos aspectos trata de realizar un listado de esas situaciones y plantearte dos cuestiones 1º) ¿qué puedo hacer para afrontarlas?, y 2º) ¿con quién podría contar para apoyarme? De esta manera estarás más preparado/a para afrontarlas.`,
     },
     {
         id: "c09",
         index: 9,
-        title: "Contenido 9",
-        body: `Prava theologiae evidenter vis patiatur novo tanquam ut odoratu ageretur incidissem bono assignare quaecumque.
+        title: "Mantenimiento de los logros",
+        body: `Las principales estrategias de mantenimiento se pueden resumir en: 1) intenta practicar todo lo aprendido y 2) procura estar atento/a a posibles fluctuaciones en el estado de ánimo y a las posibles recaídas.
 
-Dimoveret affirmarem viderunt quomodo illo loquor potentiali reperero plura habentur externa humano. Respondere ullum potuerit qualis bile finguntur tempore curant vul perfectum cessarem memores libertate missae. Attendamus caligantis novas figmenta impetus vixque quidem desumptas numeranda procedere. Cunctatus impetus credo externarum sine noctu sit quandiu solus capax praestare advertatur idque ausint audio. Nonnisi falleret occurrere respondeam distinctum affectus credidi apertum supponam deesset.
+Es fundamental que practiques todo lo que has aprendido, ya que esta práctica es un elemento clave en el mantenimiento de los logros. Con este objetivo, te proponemos desarrollar un plan de puesta en práctica de aquello que has aprendido, de manera que en tus actividades del día a día esté muy presente todo lo aprendido en el programa de tratamiento que has realizado. Algunos ejercicios que te pueden ayudar a esto son:
 
-Nullum perlegere tam. Jactantur assidere interire faciendam magna. Evadit situs hactenus sese cognoscere advertebam desumptas referam tractarem utor persuadeam ea naturae. Istis audio quaero utrum. Sufficiat perfectae istae percipimus admovetur procuravi opinio habuerim ideis audio.
 
-Quadrati formas aspexi possem perfectis probatur fallar ideo hoc idearum. Tantumque videtur attigerint persuadere possum judicare fuit sonos. Certe parte an abducendam affirmabam induci vel. Sentio inanes aliquoties opinantem regendae suo immorari visu animalium sola ipsius deus innatis hactenus proprie differant. Agnoscitur habemus negat diverso conceptum perfacile deceptor.
+    -  Busca un momento cada día en el que practicar la exposición. Realiza evaluaciones periódicas de tu progreso. Puedes utilizar un calendario en el que puedes marcar las habilidades que te conviene practicar, como si fueras tu propio terapeuta y los días en los que vas a evaluar si has llevado a cabo cada práctica.
 
-Haben consuetudo ventus meam relabor quaedam regendae meos quadrati etiam fueram dubitare. Veritate objective effectus heri ac archimedes producatur revolvo. Prudentiae illa asseverent imagines conformes fore quales quaedamque. Sum eam posse ipsos dicam mo dubitari cerae cognitas nudi explorant nullamque reliquiae interdum divinae admiserim. Credamus voce perfecti fatigor naturales bono deus nihili tius ostenditur objicient vocant diversi conari continent. `,
-    },
-    {
-        id: "c10",
-        index: 10,
-        title: "Contenido 10",
-        body: `Sufficere alio utcunque corporeis coloribus actiones levitatem primo suas finitae falleret spectant omnibus.
+    -  Intenta poner en práctica todo esto el mismo día en que finalices el tratamiento.
 
-Ideamque usitate hesterna inusitatis externarum efficiat se his remanet cogit patiatur aspexi tanquam compages ineunte. Veniebant conflatum vitiis. Auditu scripto fateri manum fuerit reges erunt abducendam recurrunt potentiale quapropter prae tactu credimus locus profertur. Videbuntur firmas nullamque aperte extensa peccato ignorata. Scriptis maximum ineptire ineunte desiderant reducit delusisse erumpam ha pileos deteriorem utrum magnis.
+    -  Recuerda que estás tomando las riendas de tu propia mejoría. Eso implica que te responsabilices de practicar diariamente las técnicas aprendidas.
 
-Minor quaerere ero possem at aliam more diversitas mox desinere artificium vulgo dura manus patet. Clarius mox recte regi tollatur invenio ideo novi sola addi hauriantur rea retinet porro justam. Humanum perfectum rum tamen utili. Puram figmenta fingo studiose dulcedinem judiciis fidam tangitur prosecutus sonos falsum regula credo. Fallacem facit physicae apprehendo erit praesenti priusquam essentiae manet ipsos creatis intellectu.
+    -  Ya has avanzado y aprendido mucho, ¡¡¡enhorabuena!!! Seguro que puedes lograr tus objetivos. Sólo se trata de planificarlos bien y trabajar a fondo las habilidades que te conviene practicar para lograrlos.
 
-Oculis indidisse numeranda viris formalem caelum liberet possint spem. Cognitione opinionis comparem contineri figura manibus improviso docti omnes praecipuus archetypi formas mutationum. Mutatur minus mearum quieti efficere. Mea percipimus probatur poni actu ulterius disputari spero separatum reducantur unitas finitas sufficit. `,
-    },
-    {
-        id: "c11",
-        index: 11,
-        title: "Contenido 11",
-        body: `Evidentes demus facultatem errore insidias visu imagines scriptae turbatus advenire has inveniri videmus chartam discrepant.
 
-Quum vitiis prava maximam propter dei nequit industriam exerant quaecumque quovis iterum cupientem duo suscipere. Meliores futurus eminenter. Id lapide opus formis de existam posuisse habemus sive integram possint ei industria pendam neque. Inquirere formas timet interitum fallant cavendum actum lor propria laboriosa pertinet tria doctum. Hodie prius subjectum veritate.
+Finalmente, conviene que recuerdes una serie de consejos respecto a posibles formas para mantener tus progresos:
 
-Dubitavit igni sensum contentae repugnemus reges afferri imponere gnum antedictis partibus cum evidentes omnem partibus. Duce vestra voluntates. Soleam gnum distinctae existat corrigatur saporis tritam hac aut tollentur ideam pleraque negari verti tactu. Dat animam diversas integritas pileos major paucos majorem vigilantes esse. Levitatem apta curantes.
 
-Levitatem nuperrime tollentur indefinite tractarem si sint postquam privatio certis tractandae indefinite prudentiae studiose corrigatur causas concedam. Angelos illo agendis imagines articulo memores illi certi viderunt meipsum judicabam arrogo. Aeque publice entis qua cognoscam novam humano objectiva scioli. Affirmarem figmenta tangitur falsum tertia talia effecerit certum discrimen solo qualitates. Ulterius solis visa unam immensi pictores longe deprehendi cogitatio membris cunctaque aliam exigui.
+    -  Sortea la evitación. Recuerda, cuando llevas a cabo la evitación de una emoción estás recompensando tus emociones negativas y haciendo que éstas empeoren.
 
-Placidae voluptatem volui dico laboriosa anno similes. Monendos experiar cernitur rerumque affirmarem. Tacitus generales demus esset iste indidisse aliisque satyriscos pertineant ullum major unam spem assignem essentiam. Ipsum aetheris conceptum aetate recensenda humanae indidisse habeo durationem appellatur simulque deveniatur cogitandi perspicuae materiam constet imaginata. Contrariae cur auditu quibus confirmet dormiam pappo acceptis possim locis.
+    -  Continúa practicando las exposiciones a la emoción, trata de practicar la conciencia libre de interpretaciones y centrada en el presente de las experiencias emocionales.
 
-Cogit credo ecce innumeras persuaderi rerum fallacem infinitum ii repugnemus aspi credendas quaeretur plura tertia. Figuras adjuvetis ultimam scientiis pendere priusquam dubitans modos tenebras naturales humano adsunt. `,
-    },
-    {
-        id: "c12",
-        index: 12,
-        title: "Contenido 12",
-        body: `Meis imaginabor qualia contra permittere producatur partes physicae vapor quaslibet.
+    -  Recuerda, lo importante que es practicar, practicar y practicar. No olvides hacerlo, aunque veas que estás bien, es importante no dejar que se oxide todo lo que has aprendido.
 
-Admodum operatione corporeis vestes humanae primo antehac rogo possidendi. Putabo infirmari funditus equidem gustu nec majus omne necesse eo tum communibus latum. Primae evidentius judicio affectibus prius cohaereant perfecta judicarint. Animae cognitio exhibentur mutatur refutent gustum unaquaque importare seipso occurret. Automata credo totumque erant sum reipsa duce quaecumque locum adhuc aliquam.
+    -  No te preocupes si tienes días en los que parece que has vuelto atrás. Ese es precisamente el momento de aplicar todo lo que has aprendido y practicado.
 
-Aliquamdiu examinare facultate incrementi apud manifestam probabiles adjuvetis erumpam prudentiae. Lectores humano intellectu formalis earumque supponatur sensus tius supersunt gustu et enim duo. Habentem creatis agnoscerem tactu potentiam libertate deesset excaecant indidisse haberi attendendo notitia imaginem ecclesiae aberrare. Hic relabor quia interdum creatis partiales restat. Quiddam fallar probandum probandum.
+    -  Prevé las situaciones de alto riesgo. No las ignores, trata de identificarlas y busca la mejor manera de afrontarlas.
 
-Exhibet creando perspicuae imaginarer duce examinare forte originis putare perfecti utili solam loquendi facilius. Lumine frigida caeteris ullas varia flexibile vere ostensum. Disputari qualem venientia supersit liberius extensum membris verbis illos admittere enatare ferenda discrepant theologos quantum item missae. Non assidere facultatem crediderim difficilia aspi certe mutuatur innata prava memores conflatum facilius cupientem sapores. Quid ageretur caelum cupiam ordinis lapide matura finitae.
-
-Extat verarum terra. `,
-    },
-    {
-        id: "c13",
-        index: 13,
-        title: "Contenido con título máximo #####",
-        body: `Quantumvis figuram  efficiat primo nemine coloribus paulo rationem.
-
-Velit sum ulla adesse. Quandiu magna me prosecutus quos notionibus esse faciliorem poterunt quales intelligo perspicuae simplex ferenda operatione archetypi impellit. Anima desuescam lumine judicio qui deceret veras propria etc percepturi meliores. Mandat multum erumpam multae nitebatur difficilia culpa crediderim singulis nusquam inscitiae peccant aliquando corpus calorem cunctaque. Esse aliquo visione longe prudens sequeretur subjectum saltem naturali qualia vulgo contentae.
-
-Illo ejusque agnosco credo tandem foret ingressus at animam manus fallit deesse potentiali tanquam accidentia coloribus. Mentibus tollatur nullo mutuari. Mo rari nego favis habemus velit. Sint lus fuerit missae oculis notandum nonnihil. Praefatio haustam primas sensum data caetera nemo figurata ignorem ceram intelligat.
-
-Abducerem cognitas hesterna sub ipsarum synopsis nempe augeatur caeteri vocant scripta desinere quem. Inquirere calida quapropter formis apollonio quarta nihili colore vitro cap. Realem invenero delibarem magnis. Persuadeor deo vul figurata aliquoties nia talia mutata realitatem essent durat memoriae cogitandi clarae interitum. Clarius excogitent assideo ope simus finitae devenietur immortalem requiratur requirunt conflantur sit.
-
-Objecta igitur novum deinde objectioni tollentur contrariae temporis totos. Aliquo infinitam opinionum nonnihil ente assumam aucta sub obversari somno volui utcunque condemnat summopere extensio remotam admisi. Erroris potest ille proxime. Ullum sequuturum modos ista dumtaxat nullo putavi accepisse co gustu. Realem voce notaverim pleraque effecerit simul durationis corporis. `,
+    -  Sí lo necesitas, acude de nuevo a un especialista. Recuerda que una recaída no es un fracaso, aunque puede que lo veas así cuando te sientas mal. ¡Es un obstáculo que puedes superar!`,
     },
 ];
