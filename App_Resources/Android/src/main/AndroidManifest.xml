@@ -50,5 +50,15 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.tns.ErrorReportActivity"/>
+
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="__PACKAGE__.provider"
+			android:grantUriPermissions="true"
+			android:exported="false">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/filepaths" />
+		</provider>
 	</application>
 </manifest>
