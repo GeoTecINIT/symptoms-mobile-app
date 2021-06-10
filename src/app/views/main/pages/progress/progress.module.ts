@@ -9,6 +9,7 @@ import {
 import { CommonMainModule } from "../../common/common-main.module";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { FeedbackModule } from "../../modals/feedback/feedback.module";
+import { ContentViewModule } from "../../modals/content-view/content-view.module";
 
 import { ProgressContainerComponent } from "./progress-container.component";
 import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
@@ -38,6 +39,7 @@ registerElement(
         CommonMainModule,
         CommonComponentsModule,
         FeedbackModule,
+        ContentViewModule,
     ],
     declarations: [
         ProgressContainerComponent,

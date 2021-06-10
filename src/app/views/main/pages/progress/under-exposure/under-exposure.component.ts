@@ -1,8 +1,8 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { dangersOfEarlyLeave } from "~/app/core/dialogs/info";
 import {
     confirmToContinueExposure,
     confirmWantsToLeave,
@@ -10,8 +10,7 @@ import {
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
-import { Observable, Subscription } from "rxjs";
-import { map } from "rxjs/internal/operators";
+import { Subscription } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
 
 @Component({
@@ -29,6 +28,7 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
 
     constructor(
         private underExposureService: UnderExposureService,
+        private contentViewModalService: ContentViewModalService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
         private ngZone: NgZone
@@ -59,7 +59,7 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
     }
 
     onWantsToLeaveTap() {
-        this.dialogsService.showInfo(dangersOfEarlyLeave);
+        this.contentViewModalService.showContent("c03");
     }
 
     onCallTherapistTap() {

@@ -31,6 +31,10 @@ export class TutorialComponent implements OnInit {
         // Use initialized dependencies
     }
 
+    onOpenProjectWebsiteTap() {
+        this.inAppBrowserService.openProjectWebSite();
+    }
+
     onOpenPrivacyPolicyTap() {
         this.inAppBrowserService.openPrivacyPolicy();
     }
