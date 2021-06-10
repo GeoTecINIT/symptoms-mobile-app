@@ -53,7 +53,7 @@
 
 		<provider
 			android:name="androidx.core.content.FileProvider"
-			android:authorities="es.uji.geotec.symptomsapp.provider"
+			android:authorities="__PACKAGE__.provider"
 			android:grantUriPermissions="true"
 			android:exported="false">
 			<meta-data
