@@ -255,7 +255,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c03",
+                    id: "c07",
                 },
             })
         );
@@ -275,7 +275,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c02",
+                    id: "c08",
                 },
             })
         );
