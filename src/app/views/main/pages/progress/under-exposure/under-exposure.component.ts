@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { ProgressViewService } from "../progress-view.service";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { dangersOfEarlyLeave } from "~/app/core/dialogs/info";
 import {
     confirmToContinueExposure,
     confirmWantsToLeave,
@@ -21,6 +21,7 @@ export class UnderExposureComponent implements OnInit {
     private logger: Logger;
 
     constructor(
+        private contentViewModalService: ContentViewModalService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
         private progressViewService: ProgressViewService
@@ -37,7 +38,7 @@ export class UnderExposureComponent implements OnInit {
     }
 
     onWantsToLeaveTap() {
-        this.dialogsService.showInfo(dangersOfEarlyLeave);
+        this.contentViewModalService.showContent("c03");
     }
 
     onAskToContinue() {
