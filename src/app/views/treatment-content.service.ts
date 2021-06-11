@@ -209,16 +209,34 @@ Ten en cuenta estas características del momento de exposición por el que puede
         title: "Tácticas de manejo de la ansiedad",
         body: `Puedes apoyarte en algunas tácticas de control de la ansiedad durante el periodo de tiempo en el que estarás haciendo exposición. Algunas de estas tácticas son:
 
-    1)  Respiración lenta.
 
+    1)  Respiración lenta.
 
     2)  Relajación muscular progresiva.
 
-
     3)  Tácticas paradójicas: intentar que el temor aumente.
 
+    4)  Reglas para afrontar el miedo. Concretamente:
 
-    4)  Reglas para afrontar el miedo.`,
+        a)  Recuerda que las sensaciones no son más que una exageración de las reacciones corporales al estrés.
+
+        b)  No son, en absoluto, perjudiciales ni peligrosas. Solamente desagradables. No sucederá nada peor.
+
+        c)  Deja de aumentar el pánico con pensamientos atemorizadores sobre lo que está sucediendo.
+
+        d)  Observa lo que está sucediendo en tu cuerpo justamente ahora, no lo que temas que pueda pasar.
+
+        e)  Espera y deja tiempo al miedo para que pase. No luches en contra, no huyas de él. Simplemente acéptalo.
+
+        f)  Observa que cuando dejas de aumentarlo al añadir pensamientos atemorizadores, el miedo comienza a desaparecer por sí mismo.
+
+        g)  Recuerda que el objetivo de exponerse es aprender a afrontar el miedo (sin evitarlo). Por tanto, esta es una oportunidad de progresar.
+
+        h)  Piensa en el avance que has conseguido hasta ahora, a pesar de todas las dificultades. Piensa en lo satisfecho que estarás cuando lo consigas esta vez.
+
+        i)  Cuando comiences a sentirte mejor, mira a tu alrededor y empieza a planear qué vas a hacer después.
+
+        j)  Cuando estés dispuesto a continuar, comienza de forma tranquila, relajada. No hay necesidad de sobreesforzarse ni de tener prisa.`,
     },
     {
         id: "c08",
