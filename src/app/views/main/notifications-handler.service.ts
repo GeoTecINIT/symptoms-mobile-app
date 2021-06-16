@@ -36,6 +36,7 @@ export class NotificationsHandlerService {
     private contentViewModalService: ContentViewModalService;
 
     private logger: Logger;
+    private savedNotification: Notification;
 
     constructor() {
         this.logger = getLogger("NotificationsHandlerService");
@@ -53,26 +54,32 @@ export class NotificationsHandlerService {
         this.feedbackModalService = feedbackModalService;
         this.questionsModalService = questionsModalService;
         this.contentViewModalService = contentViewModalService;
+    }
 
-        notificationsManager
-            .onNotificationTap((notification) => this.handle(notification))
-            .catch((e) => {
+    resume() {
+        this.setNotificationTapCallback((notification) =>
+            this.handle(notification)
+        );
+        this.setNotificationClearCallback((notification) => {
+            this.logger.info(`Notification with id ${notification.id} cleared`);
+        });
+
+        if (this.savedNotification) {
+            this.logger.debug("There was a notification saved");
+            this.handle(this.savedNotification).catch((e) => {
                 this.logger.error(
-                    `Error in notifications callback. Reason: ${e}`
+                    `Could not handle notification tap: Reason ${e}`
                 );
             });
+            this.savedNotification = undefined;
+        }
+    }
 
-        notificationsManager
-            .onNotificationCleared((notification) => {
-                this.logger.info(
-                    `Notification with id ${notification.id} cleared`
-                );
-            })
-            .catch((e) => {
-                this.logger.error(
-                    `Could not setup notification discard callback. Reason: ${e}`
-                );
-            });
+    pause() {
+        this.setNotificationTapCallback((notification) => {
+            this.logger.debug("Saving notification for later");
+            this.savedNotification = notification;
+        });
     }
 
     handle(notification: Notification): Promise<void> {
@@ -88,6 +95,24 @@ export class NotificationsHandlerService {
             default:
                 return this.markAsSeen(notification);
         }
+    }
+
+    private setNotificationTapCallback(
+        cb: (notification: Notification) => void
+    ) {
+        notificationsManager.onNotificationTap(cb).catch((e) => {
+            this.logger.error(`Error in notifications callback. Reason: ${e}`);
+        });
+    }
+
+    private setNotificationClearCallback(
+        cb: (notification: Notification) => void
+    ) {
+        notificationsManager.onNotificationCleared(cb).catch((e) => {
+            this.logger.error(
+                `Could not setup notification discard callback. Reason: ${e}`
+            );
+        });
     }
 
     private async handleConfirmAction(notification: Notification) {
