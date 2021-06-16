@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Application, Page } from "@nativescript/core";
 
@@ -26,6 +26,7 @@ import { preparePlugin } from "~/app/core/framework";
 import { appEvents } from "~/app/core/app-events";
 import { ContentViewModalService } from "~/app/views/main/modals/content-view/content-view-modal.service";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
+import { takeUntil } from "rxjs/internal/operators";
 
 const navigationTabs = {
     Progress: 0,
@@ -42,8 +43,11 @@ export class MainComponent implements OnInit, OnDestroy {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
+    private navigationBar: BottomNavigationBar;
+    private navigationBarDestroyed$ = new Subject<void>();
+
     private loggedInSub?: Subscription;
-    private notificationsSub?: Subscription;
+
     private logger: Logger;
 
     constructor(
@@ -70,34 +74,37 @@ export class MainComponent implements OnInit, OnDestroy {
         this.loadTabOutlets();
         this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
-        appEvents.once(Application.displayedEvent, () => {
-            this.notificationsHandlerService.init(
-                this.confirmModalService,
-                this.feedbackModalService,
-                this.questionsModalService,
-                this.contentViewModalService
-            );
+
+        this.notificationsHandlerService.init(
+            this.confirmModalService,
+            this.feedbackModalService,
+            this.questionsModalService,
+            this.contentViewModalService
+        );
+        appEvents.on(Application.resumeEvent, "MainComponent", () => {
+            this.logger.debug("Notification handler initialized");
+            this.notificationsHandlerService.resume();
+        });
+        appEvents.on(Application.suspendEvent, "MainComponent", () => {
+            this.logger.debug("Notification handler paused");
+            this.notificationsHandlerService.pause();
         });
     }
 
     ngOnDestroy() {
         this.loggedInSub?.unsubscribe();
+        this.logger.debug("Destroyed");
     }
 
     onNavigationBarLoaded(args: any) {
-        const navigationBar: BottomNavigationBar = args.object;
-        navigationBar.selectTab(this.selectedTab);
-        this.notificationsSub = this.notificationsReaderService.unread$.subscribe(
-            (unread) => {
-                if (
-                    !unread ||
-                    this.selectedTab === navigationTabs.Notifications
-                ) {
-                    return;
-                }
-                navigationBar.showBadge(navigationTabs.Notifications);
-            }
-        );
+        this.logger.debug("NavigationBarLoaded");
+        this.navigationBar = args.object;
+        this.navigationBar.selectTab(this.selectedTab);
+        this.subscribeToPendingNotifications();
+    }
+
+    onNavigationBarUnloaded() {
+        this.navigationBarDestroyed$.next();
     }
 
     onTabSelected(args: TabSelectedEventData) {
@@ -141,6 +148,28 @@ export class MainComponent implements OnInit, OnDestroy {
                 this.logger.error(
                     `Could not prepare EMA/I framework tasks. Reason: ${e}`
                 );
+            });
+    }
+
+    private subscribeToPendingNotifications() {
+        this.notificationsReaderService.unread$
+            .pipe(takeUntil(this.navigationBarDestroyed$))
+            .subscribe((unread) => {
+                const navigationBar = this.navigationBar;
+                const nativeComponent =
+                    navigationBar.android || navigationBar.ios;
+                this.logger.debug(`NativeComponent: ${nativeComponent}`);
+
+                if (!nativeComponent) return;
+
+                if (
+                    !unread ||
+                    this.selectedTab === navigationTabs.Notifications
+                ) {
+                    navigationBar.removeBadge(navigationTabs.Notifications);
+                } else {
+                    navigationBar.showBadge(navigationTabs.Notifications);
+                }
             });
     }
 

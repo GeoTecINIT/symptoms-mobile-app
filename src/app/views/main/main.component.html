@@ -13,6 +13,7 @@
     <BottomNavigationBar
             row="1"
             (loaded)="onNavigationBarLoaded($event)"
+            (unloaded)="onNavigationBarUnloaded()"
             (tabSelected)="onTabSelected($event)">
         <BottomNavigationTab title="Progreso" icon="res://round_double_arrow_black_24"></BottomNavigationTab>
         <BottomNavigationTab title="Contenido" icon="res://round_library_books_black_24"></BottomNavigationTab>
