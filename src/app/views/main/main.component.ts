@@ -93,11 +93,9 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.loggedInSub?.unsubscribe();
-        this.logger.debug("Destroyed");
     }
 
     onNavigationBarLoaded(args: any) {
-        this.logger.debug("NavigationBarLoaded");
         this.navigationBar = args.object;
         this.navigationBar.selectTab(this.selectedTab);
         this.subscribeToPendingNotifications();
@@ -156,10 +154,9 @@ export class MainComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.navigationBarDestroyed$))
             .subscribe((unread) => {
                 const navigationBar = this.navigationBar;
+
                 const nativeComponent =
                     navigationBar.android || navigationBar.ios;
-                this.logger.debug(`NativeComponent: ${nativeComponent}`);
-
                 if (!nativeComponent) return;
 
                 if (

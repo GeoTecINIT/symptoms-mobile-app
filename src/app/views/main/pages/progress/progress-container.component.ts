@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
@@ -52,7 +52,6 @@ export class ProgressContainerComponent implements OnInit, OnDestroy {
         this.exposureChangeSubscription = this.patientDataService
             .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
             .pipe(
-                tap(() => console.log("Progress container change!")),
                 map(
                     (exposureChange) =>
                         !exposureChange || exposureChange.change === Change.END
@@ -64,7 +63,6 @@ export class ProgressContainerComponent implements OnInit, OnDestroy {
                     this.underExposure = !idle;
                 });
             });
-        this.logger.debug("Subscribed to exposure changes");
     }
 
     private unsubscribeFromExposureChanges() {
@@ -72,6 +70,5 @@ export class ProgressContainerComponent implements OnInit, OnDestroy {
 
         this.exposureChangeSubscription.unsubscribe();
         this.exposureChangeSubscription = undefined;
-        this.logger.debug("Unsubscribed from exposure changes");
     }
 }
