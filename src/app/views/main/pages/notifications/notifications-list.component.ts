@@ -1,6 +1,9 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 
+import { appEvents } from "~/app/core/app-events";
+import { Application } from "@nativescript/core";
+
 import {
     NotificationsReaderService,
     NotificationViewModel,
@@ -8,6 +11,8 @@ import {
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
+
+const APP_EVENTS_KEY = "NotificationsList";
 
 @Component({
     selector: "SymNotificationsList",
@@ -30,17 +35,18 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.notificationsSub = this.notificationsReaderService.notifications$.subscribe(
-            (notifications) => {
-                this.ngZone.run(() => {
-                    this.notifications = notifications;
-                });
-            }
-        );
+        this.subscribeToNotificationUpdates();
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.subscribeToNotificationUpdates();
+        });
+
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.unsubscribeFromNotificationUpdates();
+        });
     }
 
     ngOnDestroy() {
-        this.notificationsSub?.unsubscribe();
+        this.unsubscribeFromNotificationUpdates();
     }
 
     onListItemTap(args: any) {
@@ -53,5 +59,26 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
                     `Could not handle notification tap. Reason: ${e}`
                 );
             });
+    }
+
+    private subscribeToNotificationUpdates() {
+        if (this.notificationsSub) return;
+
+        this.notificationsSub = this.notificationsReaderService.notifications$.subscribe(
+            (notifications) => {
+                this.ngZone.run(() => {
+                    this.notifications = notifications;
+                });
+            }
+        );
+        this.logger.debug("Subscribed to notifications updates");
+    }
+
+    private unsubscribeFromNotificationUpdates() {
+        if (!this.notificationsSub) return;
+
+        this.notificationsSub.unsubscribe();
+        this.notificationsSub = undefined;
+        this.logger.debug("Unsubscribed from notifications updates");
     }
 }
