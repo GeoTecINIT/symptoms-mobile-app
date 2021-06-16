@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { SettingsModule } from "./settings.module";
 
 import { MainViewService } from "../../main-view.service";
 
@@ -7,7 +6,7 @@ import { SettingsModalComponent } from "./settings-modal.component";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
-    providedIn: SettingsModule,
+    providedIn: "root",
 })
 export class SettingsModalService {
     private logger: Logger;

@@ -30,30 +30,16 @@ import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
     providedIn: "root",
 })
 export class NotificationsHandlerService {
-    private confirmModalService: ConfirmModalService;
-    private feedbackModalService: FeedbackModalService;
-    private questionsModalService: QuestionsModalService;
-    private contentViewModalService: ContentViewModalService;
-
     private logger: Logger;
     private savedNotification: Notification;
 
-    constructor() {
-        this.logger = getLogger("NotificationsHandlerService");
-    }
-
-    // Fixme: make modal services global so cyclic dependencies become removed
-    // and then services can be injected via constructor instead.
-    init(
-        confirmModalService: ConfirmModalService,
-        feedbackModalService: FeedbackModalService,
-        questionsModalService: QuestionsModalService,
-        contentViewModalService: ContentViewModalService
+    constructor(
+        private confirmModalService: ConfirmModalService,
+        private feedbackModalService: FeedbackModalService,
+        private questionsModalService: QuestionsModalService,
+        private contentViewModalService: ContentViewModalService
     ) {
-        this.confirmModalService = confirmModalService;
-        this.feedbackModalService = feedbackModalService;
-        this.questionsModalService = questionsModalService;
-        this.contentViewModalService = contentViewModalService;
+        this.logger = getLogger("NotificationsHandlerService");
     }
 
     resume() {

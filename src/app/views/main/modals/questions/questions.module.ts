@@ -5,7 +5,6 @@ import { NativeScriptCommonModule } from "@nativescript/angular";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { CommonModalsModule } from "../common/common-modals.module";
 
-import { QuestionsModalComponent } from "./questions-modal.component";
 import { QuestionsContainerComponent } from "./questions-container/questions-container.component";
 import { QuestionStepComponent } from "./questions-container/question-step/question-step.component";
 
@@ -16,12 +15,7 @@ import { QuestionStepComponent } from "./questions-container/question-step/quest
         CommonComponentsModule,
         CommonModalsModule,
     ],
-    declarations: [
-        QuestionsModalComponent,
-        QuestionsContainerComponent,
-        QuestionStepComponent,
-    ],
-    entryComponents: [QuestionsModalComponent],
+    declarations: [QuestionsContainerComponent, QuestionStepComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class QuestionsModule {}

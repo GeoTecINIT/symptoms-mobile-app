@@ -5,7 +5,6 @@ import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 
-import { ConfirmModalComponent } from "./confirm-modal.component";
 import { ConfirmContainerComponent } from "./confirm-container/confirm-container.component";
 import { CommonModalsModule } from "../common/common-modals.module";
 
@@ -16,8 +15,7 @@ import { CommonModalsModule } from "../common/common-modals.module";
         CommonComponentsModule,
         CommonModalsModule,
     ],
-    declarations: [ConfirmModalComponent, ConfirmContainerComponent],
-    entryComponents: [ConfirmModalComponent],
+    declarations: [ConfirmContainerComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class ConfirmModule {}
