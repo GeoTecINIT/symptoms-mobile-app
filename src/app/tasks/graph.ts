@@ -216,7 +216,7 @@ class DemoTaskGraph implements TaskGraph {
                 emotionThreshold: 5,
                 peakToLastThreshold: 3,
             })
-                .in(61, "minutes")
+                .in(62, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure evaluation results successful
@@ -330,7 +330,9 @@ class DemoTaskGraph implements TaskGraph {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",
                 },
-            }).in(5, "minutes")
+            })
+                .in(5, "minutes")
+                .cancelOn("stopEvent")
         );
         // END: Post-exposure events
 
