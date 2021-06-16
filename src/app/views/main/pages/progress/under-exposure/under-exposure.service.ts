@@ -36,7 +36,6 @@ export class UnderExposureService {
             map((exposure) => isInDanger(exposure))
         );
         this.therapistPhone = `${global.ENV_THERAPIST_PHONE}`;
-        console.log("Therapist phone:", this.therapistPhone);
     }
 
     async callTherapist(): Promise<boolean> {
