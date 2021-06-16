@@ -71,7 +71,6 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
                 });
             }
         );
-        this.logger.debug("Subscribed to notifications updates");
     }
 
     private unsubscribeFromNotificationUpdates() {
@@ -79,6 +78,5 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
 
         this.notificationsSub.unsubscribe();
         this.notificationsSub = undefined;
-        this.logger.debug("Unsubscribed from notifications updates");
     }
 }
