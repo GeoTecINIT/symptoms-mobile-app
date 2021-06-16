@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
 
-import { ContentViewModule } from "./content-view.module";
-
 import { MainViewService } from "../../main-view.service";
 
 import { ContentViewModalComponent } from "./content-view-modal.component";
@@ -9,7 +7,7 @@ import { ContentViewModalComponent } from "./content-view-modal.component";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
-    providedIn: ContentViewModule,
+    providedIn: "root",
 })
 export class ContentViewModalService {
     private logger: Logger;

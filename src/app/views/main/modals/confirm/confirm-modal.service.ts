@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ConfirmModule } from "./confirm.module";
 
 import { MainViewService } from "../../main-view.service";
 import { ConfirmModalComponent } from "~/app/views/main/modals/confirm/confirm-modal.component";
 import { ConfirmModalOptions } from "~/app/core/modals/confirm";
 
 @Injectable({
-    providedIn: ConfirmModule,
+    providedIn: "root",
 })
 export class ConfirmModalService {
     constructor(private mainViewService: MainViewService) {}

@@ -6,9 +6,6 @@ import { Application, Page } from "@nativescript/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { ConfirmModalService } from "~/app/views/main/modals/confirm";
-import { QuestionsModalService } from "~/app/views/main/modals/questions";
-import { FeedbackModalService } from "~/app/views/main/modals/feedback";
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
 import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
@@ -24,7 +21,6 @@ import {
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin } from "~/app/core/framework";
 import { appEvents } from "~/app/core/app-events";
-import { ContentViewModalService } from "~/app/views/main/modals/content-view/content-view-modal.service";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
 import { takeUntil } from "rxjs/internal/operators";
 
@@ -53,10 +49,6 @@ export class MainComponent implements OnInit, OnDestroy {
     constructor(
         private authService: AuthService,
         private dialogsService: DialogsService,
-        private confirmModalService: ConfirmModalService,
-        private questionsModalService: QuestionsModalService,
-        private feedbackModalService: FeedbackModalService,
-        private contentViewModalService: ContentViewModalService,
         private notificationsHandlerService: NotificationsHandlerService,
         private notificationsReaderService: NotificationsReaderService,
         private navigationService: NavigationService,
@@ -75,12 +67,6 @@ export class MainComponent implements OnInit, OnDestroy {
         this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
 
-        this.notificationsHandlerService.init(
-            this.confirmModalService,
-            this.feedbackModalService,
-            this.questionsModalService,
-            this.contentViewModalService
-        );
         appEvents.on(Application.resumeEvent, "MainComponent", () => {
             this.logger.debug("Notification handler initialized");
             this.notificationsHandlerService.resume();

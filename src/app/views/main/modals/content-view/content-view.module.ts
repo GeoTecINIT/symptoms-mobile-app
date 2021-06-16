@@ -5,7 +5,6 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
 
 import { ContentViewRoutingModule } from "./content-view-routing.module";
 
-import { ContentViewModalComponent } from "./content-view-modal.component";
 import { ContentViewContainerComponent } from "./content-view-container/content-view-container.component";
 
 @NgModule({
@@ -14,8 +13,7 @@ import { ContentViewContainerComponent } from "./content-view-container/content-
         CommonComponentsModule,
         ContentViewRoutingModule,
     ],
-    declarations: [ContentViewModalComponent, ContentViewContainerComponent],
-    entryComponents: [ContentViewModalComponent],
+    declarations: [ContentViewContainerComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class ContentViewModule {}
