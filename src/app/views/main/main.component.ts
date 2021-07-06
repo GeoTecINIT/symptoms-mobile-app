@@ -1,5 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
-import { Subject, Subscription } from "rxjs";
+import {
+    Component,
+    HostListener,
+    OnInit,
+    ViewContainerRef,
+} from "@angular/core";
+import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Application, Page } from "@nativescript/core";
 
@@ -35,14 +40,14 @@ const navigationTabs = {
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.scss"],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
-    private loggedInSub?: Subscription;
+    private unloaded$ = new Subject();
 
     private logger: Logger;
 
@@ -64,7 +69,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadTabOutlets();
-        this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
 
         appEvents.on(Application.resumeEvent, "MainComponent", () => {
@@ -77,8 +81,14 @@ export class MainComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy() {
-        this.loggedInSub?.unsubscribe();
+    @HostListener("loaded")
+    onLoaded() {
+        this.controlAppLoginStatus();
+    }
+
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onNavigationBarLoaded(args: any) {
@@ -107,31 +117,12 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     private controlAppLoginStatus() {
-        this.loggedInSub = this.authService.loggedIn$.subscribe((loggedIn) => {
-            if (!loggedIn) {
-                this.navigationService.forceNavigate(["/welcome"]);
-            }
-        });
-    }
-
-    private checkEMAIFrameworkStatus() {
-        preparePlugin()
-            .then((ready) => {
-                setupAreasOfInterest().catch((e) =>
-                    this.logger.error(
-                        `Could not setup areas of interest. Reason: ${e}`
-                    )
-                );
-                if (!ready) {
-                    this.informAboutPermissionsNeed().then(() => {
-                        this.checkEMAIFrameworkStatus();
-                    });
+        this.authService.loggedIn$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((loggedIn) => {
+                if (!loggedIn) {
+                    this.navigationService.forceNavigate(["/welcome"]);
                 }
-            })
-            .catch((e) => {
-                this.logger.error(
-                    `Could not prepare EMA/I framework tasks. Reason: ${e}`
-                );
             });
     }
 
@@ -153,6 +144,27 @@ export class MainComponent implements OnInit, OnDestroy {
                 } else {
                     navigationBar.showBadge(navigationTabs.Notifications);
                 }
+            });
+    }
+
+    private checkEMAIFrameworkStatus() {
+        preparePlugin()
+            .then((ready) => {
+                setupAreasOfInterest().catch((e) =>
+                    this.logger.error(
+                        `Could not setup areas of interest. Reason: ${e}`
+                    )
+                );
+                if (!ready) {
+                    this.informAboutPermissionsNeed().then(() => {
+                        this.checkEMAIFrameworkStatus();
+                    });
+                }
+            })
+            .catch((e) => {
+                this.logger.error(
+                    `Could not prepare EMA/I framework tasks. Reason: ${e}`
+                );
             });
     }
 

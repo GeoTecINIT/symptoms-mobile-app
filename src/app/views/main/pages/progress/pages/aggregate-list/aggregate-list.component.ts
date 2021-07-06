@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, HostListener, NgZone } from "@angular/core";
+import { Subject } from "rxjs";
 import { Record } from "@geotecinit/emai-framework/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { RecordType } from "~/app/core/record-type";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymAggregateList",
@@ -10,12 +11,36 @@ import { RecordType } from "~/app/core/record-type";
     styleUrls: ["./aggregate-list.component.scss"],
 })
 export class AggregateListComponent {
-    records$: Observable<Array<Record>>;
+    aggregates: Array<Record>;
 
-    constructor(private patientDataService: PatientDataService) {
-        this.records$ = this.patientDataService.observeLatestGroupedRecordsByType(
-            RecordType.ExposurePlaceAggregate,
-            "placeId"
-        );
+    private unloaded$ = new Subject();
+
+    constructor(
+        private patientDataService: PatientDataService,
+        private ngZone: NgZone
+    ) {}
+
+    @HostListener("loaded")
+    onLoaded() {
+        this.subscribeToAggregateChanges();
+    }
+
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
+    }
+
+    private subscribeToAggregateChanges() {
+        this.patientDataService
+            .observeLatestGroupedRecordsByType(
+                RecordType.ExposurePlaceAggregate,
+                "placeId"
+            )
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((aggregates) => {
+                this.ngZone.run(() => {
+                    this.aggregates = aggregates;
+                });
+            });
     }
 }

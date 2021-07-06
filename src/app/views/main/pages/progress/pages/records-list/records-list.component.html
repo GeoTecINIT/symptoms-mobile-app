@@ -1,6 +1,6 @@
 <SymBackActionBar title="Tus exposiciones"></SymBackActionBar>
 
-<ListView [items]="records$ | async" separatorColor="White">
+<ListView [items]="records" separatorColor="White">
     <ng-template let-item="item">
         <SymChartCard chartType="line" [record]="item"></SymChartCard>
     </ng-template>

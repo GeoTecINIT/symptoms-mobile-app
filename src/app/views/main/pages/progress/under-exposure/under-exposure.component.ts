@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, NgZone } from "@angular/core";
 import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
@@ -10,21 +10,22 @@ import {
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymUnderExposure",
     templateUrl: "./under-exposure.component.html",
     styleUrls: ["./under-exposure.component.scss"],
 })
-export class UnderExposureComponent implements OnInit, OnDestroy {
+export class UnderExposureComponent {
     ongoingExposure: Exposure;
     inDanger: boolean;
 
+    private unloaded$ = new Subject();
+
     private logger: Logger;
-    private exposureSubscription: Subscription;
-    private inDangerSubscription: Subscription;
 
     constructor(
         private underExposureService: UnderExposureService,
@@ -36,26 +37,15 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
         this.logger = getLogger("UnderExposureComponent");
     }
 
-    ngOnInit() {
-        this.exposureSubscription = this.underExposureService.ongoingExposure$.subscribe(
-            (exposure) => {
-                this.ngZone.run(() => {
-                    this.ongoingExposure = exposure;
-                });
-            }
-        );
-        this.inDangerSubscription = this.underExposureService.inDanger$.subscribe(
-            (inDanger) => {
-                this.ngZone.run(() => {
-                    this.inDanger = inDanger;
-                });
-            }
-        );
+    @HostListener("loaded")
+    onLoaded() {
+        this.subscribeToOngoingExposureChanges();
+        this.subscribeToInDangerChanges();
     }
 
-    ngOnDestroy() {
-        this.exposureSubscription?.unsubscribe();
-        this.inDangerSubscription?.unsubscribe();
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onWantsToLeaveTap() {
@@ -74,6 +64,26 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
         this.dialogsService
             .askConfirmationWithPositiveAction(confirmWantsToLeave)
             .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
+    }
+
+    private subscribeToOngoingExposureChanges() {
+        this.underExposureService.ongoingExposure$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((exposure) => {
+                this.ngZone.run(() => {
+                    this.ongoingExposure = exposure;
+                });
+            });
+    }
+
+    private subscribeToInDangerChanges() {
+        this.underExposureService.inDanger$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((inDanger) => {
+                this.ngZone.run(() => {
+                    this.inDanger = inDanger;
+                });
+            });
     }
 
     private askIfWantsToContinue() {
