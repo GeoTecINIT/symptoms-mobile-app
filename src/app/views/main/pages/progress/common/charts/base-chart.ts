@@ -13,7 +13,7 @@ import {
 } from "@nativescript-community/ui-chart/components/LimitLine";
 
 import { Color, Font } from "@nativescript/core";
-import { ReplaySubject, Subscription } from "rxjs";
+import { ReplaySubject, Subject } from "rxjs";
 
 import {
     ChartData2D,
@@ -22,6 +22,7 @@ import {
     YAxisDataRange,
 } from "./common";
 import { AxisDateFormatter, AxisValueFormatter } from "./formatters";
+import { takeUntil } from "rxjs/operators";
 
 const CHART_BACKGROUND = "white";
 const X_ANIMATION_MILLIS = 500;
@@ -61,7 +62,7 @@ export abstract class BaseChart<
 
     private xAxisFormatter?: AxisValueFormatter;
     private textFont = Font.default.withFontSize(TEXT_FONT_SIZE);
-    private streamSubscription: Subscription;
+    private unloaded$ = new Subject();
 
     constructor() {
         this.colorScheme = COLOR_SCHEME.map((color) => {
@@ -78,16 +79,14 @@ export abstract class BaseChart<
 
     load(chart: BarLineChartBase<Entry, S, D>) {
         this.chart = chart;
-        this.streamSubscription = this.dataStream$.subscribe((data) => {
+        this.dataStream$.pipe(takeUntil(this.unloaded$)).subscribe((data) => {
             if (data.length === 0 || data[0].values.length === 0) return;
             this.plot(data);
         });
     }
 
     unload() {
-        if (this.streamSubscription) {
-            this.streamSubscription.unsubscribe();
-        }
+        this.unloaded$.next();
     }
 
     private plot(data: Array<ChartData2D>) {
