@@ -4,7 +4,7 @@ import {
     RecordsStore,
     recordsStore,
 } from "@geotecinit/emai-framework/storage/records";
-import { map } from "rxjs/operators";
+import { distinctUntilChanged, map } from "rxjs/operators";
 
 export interface PatientData {
     observeLastByRecordType<T extends Record>(
@@ -50,7 +50,8 @@ class PatientDataStore implements PatientData {
                 }
 
                 return null;
-            })
+            }),
+            distinctUntilChanged(areEqual)
         );
     }
 
@@ -71,7 +72,8 @@ class PatientDataStore implements PatientData {
                 }
 
                 return filteredRecords;
-            })
+            }),
+            distinctUntilChanged(areEqual)
         );
     }
 
@@ -111,7 +113,8 @@ class PatientDataStore implements PatientData {
                 return filteredRecords.sort(
                     (r1, r2) => r2.timestamp.getTime() - r1.timestamp.getTime()
                 );
-            })
+            }),
+            distinctUntilChanged(areEqual)
         );
     }
 }
@@ -142,4 +145,9 @@ function meetsConditions(
     }
 
     return true;
+}
+
+function areEqual(obj1: any, obj2: any) {
+    // Naive equality comparison, will fail if object properties are reordered
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
