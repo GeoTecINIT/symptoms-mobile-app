@@ -1,5 +1,5 @@
-import { Component, HostListener, NgZone } from "@angular/core";
-import { Subject } from "rxjs";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 
 import {
     NotificationsReaderService,
@@ -8,17 +8,20 @@ import {
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { takeUntil } from "rxjs/operators";
+import { appEvents } from "~/app/core/app-events";
+import { Application } from "@nativescript/core";
+
+const APP_EVENTS_KEY = "NotificationsListComponent";
 
 @Component({
     selector: "SymNotificationsList",
     templateUrl: "./notifications-list.component.html",
     styleUrls: ["./notifications-list.component.scss"],
 })
-export class NotificationsListComponent {
+export class NotificationsListComponent implements OnInit, OnDestroy {
     notifications: Array<NotificationViewModel>;
 
-    private unloaded$ = new Subject();
+    private notificationUpdatesSub: Subscription;
 
     private logger: Logger;
 
@@ -30,14 +33,18 @@ export class NotificationsListComponent {
         this.logger = getLogger("NotificationsListComponent");
     }
 
-    @HostListener("loaded")
-    onLoaded() {
+    ngOnInit() {
         this.subscribeToNotificationUpdates();
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.subscribeToNotificationUpdates();
+        });
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.unsubscribeFromNotificationUpdates();
+        });
     }
 
-    @HostListener("unloaded")
-    onUnloaded() {
-        this.unloaded$.next();
+    ngOnDestroy() {
+        this.unsubscribeFromNotificationUpdates();
     }
 
     onListItemTap(args: any) {
@@ -53,12 +60,20 @@ export class NotificationsListComponent {
     }
 
     private subscribeToNotificationUpdates() {
-        this.notificationsReaderService.notifications$
-            .pipe(takeUntil(this.unloaded$))
-            .subscribe((notifications) => {
+        if (this.notificationUpdatesSub) return;
+
+        this.notificationUpdatesSub = this.notificationsReaderService.notifications$.subscribe(
+            (notifications) => {
                 this.ngZone.run(() => {
                     this.notifications = notifications;
                 });
-            });
+            }
+        );
+    }
+
+    private unsubscribeFromNotificationUpdates() {
+        if (!this.notificationUpdatesSub) return;
+        this.notificationUpdatesSub.unsubscribe();
+        this.notificationUpdatesSub = undefined;
     }
 }

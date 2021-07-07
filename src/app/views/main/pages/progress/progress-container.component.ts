@@ -1,23 +1,26 @@
-import { Component, HostListener, NgZone } from "@angular/core";
-import { Subject } from "rxjs";
-import { map, takeUntil } from "rxjs/operators";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { RecordType } from "~/app/core/record-type";
 import { Change } from "@geotecinit/emai-framework/entities";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { appEvents } from "~/app/core/app-events";
+import { Application } from "@nativescript/core";
+
+const APP_EVENTS_KEY = "SymProgressContainer";
 
 @Component({
     selector: "SymProgressContainer",
     templateUrl: "./progress-container.component.html",
     styleUrls: ["./progress-container.component.scss"],
 })
-export class ProgressContainerComponent {
+export class ProgressContainerComponent implements OnInit, OnDestroy {
     idle: boolean;
-    underExposure: boolean;
 
-    private unloaded$ = new Subject();
+    private exposureChangesSub: Subscription;
 
     private logger: Logger;
 
@@ -28,21 +31,26 @@ export class ProgressContainerComponent {
         this.logger = getLogger("ProgressContainer");
     }
 
-    @HostListener("loaded")
-    onLoaded() {
+    ngOnInit() {
         this.subscribeToExposureChanges();
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.subscribeToExposureChanges();
+        });
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.unsubscribeFromExposureChanges();
+        });
     }
 
-    @HostListener("unloaded")
-    onUnloaded() {
-        this.unloaded$.next();
+    ngOnDestroy() {
+        this.unsubscribeFromExposureChanges();
     }
 
     private subscribeToExposureChanges() {
-        this.patientDataService
+        if (this.exposureChangesSub) return;
+
+        this.exposureChangesSub = this.patientDataService
             .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
             .pipe(
-                takeUntil(this.unloaded$),
                 map(
                     (exposureChange) =>
                         !exposureChange || exposureChange.change === Change.END
@@ -51,8 +59,13 @@ export class ProgressContainerComponent {
             .subscribe((idle) => {
                 this.ngZone.run(() => {
                     this.idle = idle;
-                    this.underExposure = !idle;
                 });
             });
+    }
+
+    private unsubscribeFromExposureChanges() {
+        if (!this.exposureChangesSub) return;
+        this.exposureChangesSub.unsubscribe();
+        this.exposureChangesSub = undefined;
     }
 }
