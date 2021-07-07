@@ -1,4 +1,6 @@
 <SymMainActionBar title="Tu progreso"></SymMainActionBar>
 
-<SymIdleProgress *ngIf="idle"></SymIdleProgress>
-<SymUnderExposure *ngIf="underExposure"></SymUnderExposure>
+<SymIdleProgress *ngIf="idle; else underExposure"></SymIdleProgress>
+<ng-template #underExposure>
+    <SymUnderExposure></SymUnderExposure>
+</ng-template>
