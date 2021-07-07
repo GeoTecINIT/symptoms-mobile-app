@@ -1,22 +1,25 @@
-import { Component, HostListener, NgZone } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 
 import {
     TreatmentContent,
     TreatmentContentService,
 } from "~/app/views/treatment-content.service";
 import { ContentViewModalService } from "../../modals/content-view";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { appEvents } from "~/app/core/app-events";
+import { Application } from "@nativescript/core";
+
+const APP_EVENTS_KEY = "ContentListComponent";
 
 @Component({
     selector: "SymContentList",
     templateUrl: "./content-list.component.html",
     styleUrls: ["./content-list.component.scss"],
 })
-export class ContentListComponent {
+export class ContentListComponent implements OnInit, OnDestroy {
     contents: Array<TreatmentContent>;
 
-    private unloaded$ = new Subject();
+    private contentChangesSub: Subscription;
 
     constructor(
         private treatmentContentService: TreatmentContentService,
@@ -24,14 +27,18 @@ export class ContentListComponent {
         private ngZone: NgZone
     ) {}
 
-    @HostListener("loaded")
-    onLoaded() {
+    ngOnInit() {
         this.subscribeToContentChanges();
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.subscribeToContentChanges();
+        });
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.unsubscribeFromContentChanges();
+        });
     }
 
-    @HostListener("unloaded")
-    onUnloaded() {
-        this.unloaded$.next();
+    ngOnDestroy() {
+        this.unsubscribeFromContentChanges();
     }
 
     onListItemTap(args: any) {
@@ -40,13 +47,21 @@ export class ContentListComponent {
     }
 
     private subscribeToContentChanges() {
-        this.treatmentContentService.contents$
-            .pipe(takeUntil(this.unloaded$))
-            .subscribe((contents) => {
+        if (this.contentChangesSub) return;
+
+        this.contentChangesSub = this.treatmentContentService.contents$.subscribe(
+            (contents) => {
                 this.ngZone.run(() => {
                     this.contents = contents;
                 });
-            });
+            }
+        );
+    }
+
+    private unsubscribeFromContentChanges() {
+        if (!this.contentChangesSub) return;
+        this.contentChangesSub.unsubscribe();
+        this.contentChangesSub = undefined;
     }
 
     private onOpenContent(id: string) {
