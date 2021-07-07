@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, NgZone } from "@angular/core";
 import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
@@ -10,24 +10,20 @@ import {
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
-import { appEvents } from "~/app/core/app-events";
-import { Application } from "@nativescript/core";
-
-const APP_EVENTS_KEY = "UnderExposureComponent";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymUnderExposure",
     templateUrl: "./under-exposure.component.html",
     styleUrls: ["./under-exposure.component.scss"],
 })
-export class UnderExposureComponent implements OnInit, OnDestroy {
+export class UnderExposureComponent {
     ongoingExposure: Exposure;
     inDanger: boolean;
 
-    private ongoingExposureSub: Subscription;
-    private inDangerSub: Subscription;
+    private unloaded$ = new Subject();
 
     private logger: Logger;
 
@@ -41,18 +37,15 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
         this.logger = getLogger("UnderExposureComponent");
     }
 
-    ngOnInit() {
-        this.subscribeAll();
-        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
-            this.subscribeAll();
-        });
-        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
-            this.unsubscribeAll();
-        });
+    @HostListener("loaded")
+    onLoaded() {
+        this.subscribeToOngoingExposureChanges();
+        this.subscribeToInDangerChanges();
     }
 
-    ngOnDestroy() {
-        this.unsubscribeAll();
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onWantsToLeaveTap() {
@@ -73,50 +66,24 @@ export class UnderExposureComponent implements OnInit, OnDestroy {
             .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
     }
 
-    private subscribeAll() {
-        this.subscribeToOngoingExposureChanges();
-        this.subscribeToInDangerChanges();
-    }
-
-    private unsubscribeAll() {
-        this.unsubscribeFromOngoingExposureChanges();
-        this.unsubscribeFromInDangerChanges();
-    }
-
     private subscribeToOngoingExposureChanges() {
-        if (this.ongoingExposureSub) return;
-
-        this.ongoingExposureSub = this.underExposureService.ongoingExposure$.subscribe(
-            (exposure) => {
+        this.underExposureService.ongoingExposure$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((exposure) => {
                 this.ngZone.run(() => {
                     this.ongoingExposure = exposure;
                 });
-            }
-        );
-    }
-
-    private unsubscribeFromOngoingExposureChanges() {
-        if (!this.ongoingExposureSub) return;
-        this.ongoingExposureSub.unsubscribe();
-        this.ongoingExposureSub = undefined;
+            });
     }
 
     private subscribeToInDangerChanges() {
-        if (this.inDangerSub) return;
-
-        this.inDangerSub = this.underExposureService.inDanger$.subscribe(
-            (inDanger) => {
+        this.underExposureService.inDanger$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((inDanger) => {
                 this.ngZone.run(() => {
                     this.inDanger = inDanger;
                 });
-            }
-        );
-    }
-
-    private unsubscribeFromInDangerChanges() {
-        if (!this.inDangerSub) return;
-        this.inDangerSub.unsubscribe();
-        this.inDangerSub = undefined;
+            });
     }
 
     private askIfWantsToContinue() {
