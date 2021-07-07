@@ -1,5 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
-import { Subject, Subscription } from "rxjs";
+import {
+    Component,
+    HostListener,
+    OnInit,
+    ViewContainerRef,
+} from "@angular/core";
+import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Application, Page } from "@nativescript/core";
 
@@ -22,7 +27,7 @@ import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin } from "~/app/core/framework";
 import { appEvents } from "~/app/core/app-events";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
-import { takeUntil } from "rxjs/internal/operators";
+import { takeUntil } from "rxjs/operators";
 
 const APP_EVENTS_KEY = "MainComponent";
 
@@ -37,14 +42,14 @@ const navigationTabs = {
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.scss"],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
-    private loggedInSub: Subscription;
+    private unloaded$ = new Subject();
 
     private logger: Logger;
 
@@ -66,23 +71,26 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadTabOutlets();
-        this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
 
         appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
             this.logger.debug("Notification handler initialized");
-            this.controlAppLoginStatus();
             this.notificationsHandlerService.resume();
         });
         appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
             this.logger.debug("Notification handler paused");
-            this.cancelLoggedInStatusControl();
             this.notificationsHandlerService.pause();
         });
     }
 
-    ngOnDestroy() {
-        this.cancelLoggedInStatusControl();
+    @HostListener("loaded")
+    onLoaded() {
+        this.controlAppLoginStatus();
+    }
+
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onNavigationBarLoaded(args: any) {
@@ -111,19 +119,13 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     private controlAppLoginStatus() {
-        if (this.loggedInSub) return;
-
-        this.loggedInSub = this.authService.loggedIn$.subscribe((loggedIn) => {
-            if (!loggedIn) {
-                this.navigationService.forceNavigate(["/welcome"]);
-            }
-        });
-    }
-
-    private cancelLoggedInStatusControl() {
-        if (!this.loggedInSub) return;
-        this.loggedInSub.unsubscribe();
-        this.loggedInSub = undefined;
+        this.authService.loggedIn$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((loggedIn) => {
+                if (!loggedIn) {
+                    this.navigationService.forceNavigate(["/welcome"]);
+                }
+            });
     }
 
     private subscribeToPendingNotifications() {

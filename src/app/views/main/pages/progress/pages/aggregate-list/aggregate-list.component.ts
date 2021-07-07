@@ -1,60 +1,46 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Component, HostListener, NgZone } from "@angular/core";
+import { Subject } from "rxjs";
 import { Record } from "@geotecinit/emai-framework/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { RecordType } from "~/app/core/record-type";
-import { appEvents } from "~/app/core/app-events";
-import { Application } from "@nativescript/core";
-
-const APP_EVENTS_KEY = "AggregateListComponent";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymAggregateList",
     templateUrl: "./aggregate-list.component.html",
     styleUrls: ["./aggregate-list.component.scss"],
 })
-export class AggregateListComponent implements OnInit, OnDestroy {
+export class AggregateListComponent {
     aggregates: Array<Record>;
 
-    private aggregatesSub: Subscription;
+    private unloaded$ = new Subject();
 
     constructor(
         private patientDataService: PatientDataService,
         private ngZone: NgZone
     ) {}
 
-    ngOnInit() {
+    @HostListener("loaded")
+    onLoaded() {
         this.subscribeToAggregateChanges();
-        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
-            this.subscribeToAggregateChanges();
-        });
-        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
-            this.unsubscribeFromAggregateChanges();
-        });
     }
 
-    ngOnDestroy() {
-        this.unsubscribeFromAggregateChanges();
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     private subscribeToAggregateChanges() {
-        if (this.aggregatesSub) return;
-
-        this.aggregatesSub = this.patientDataService
+        this.patientDataService
             .observeLatestGroupedRecordsByType(
                 RecordType.ExposurePlaceAggregate,
                 "placeId"
             )
+            .pipe(takeUntil(this.unloaded$))
             .subscribe((aggregates) => {
                 this.ngZone.run(() => {
                     this.aggregates = aggregates;
                 });
             });
-    }
-
-    private unsubscribeFromAggregateChanges() {
-        if (!this.aggregatesSub) return;
-        this.aggregatesSub.unsubscribe();
-        this.aggregatesSub = undefined;
     }
 }
