@@ -21,6 +21,14 @@ firebaseManager
     .catch((e) =>
         console.error("Could not initialize Firebase manager. Reason:", e)
     );
+firebaseManager
+    .enableUsageDataCollection()
+    .catch((e) =>
+        console.error(
+            "Could not enable firebase usage data collection. Reason:",
+            e
+        )
+    );
 
 emaiFramework
     .init(appTasks, demoTaskGraph, { customLogger: getLogger })
