@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 
-import { FeedbackModule } from "./feedback.module";
 import { MainViewService } from "../../main-view.service";
 
 import { FeedbackModalComponent } from "./feedback-modal.component";
@@ -11,7 +10,7 @@ import {
 import { emitPatientFeedbackAcquired } from "~/app/core/framework/events";
 
 @Injectable({
-    providedIn: FeedbackModule,
+    providedIn: "root",
 })
 export class FeedbackModalService {
     constructor(private mainViewService: MainViewService) {}

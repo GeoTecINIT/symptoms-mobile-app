@@ -1,18 +1,19 @@
 <GridLayout rows="*, auto">
     <GridLayout row="0">
         <StackLayout [visibility]="selectedTab === navigationTabs.Progress ? 'visible' : 'collapsed'">
-            <page-router-outlet name="progressTab"></page-router-outlet>
+            <router-outlet name="progressTab"></router-outlet>
         </StackLayout>
         <StackLayout [visibility]="selectedTab === navigationTabs.Content ? 'visible' : 'collapsed'">
-            <page-router-outlet name="contentTab"></page-router-outlet>
+            <router-outlet name="contentTab"></router-outlet>
         </StackLayout>
         <StackLayout [visibility]="selectedTab === navigationTabs.Notifications ? 'visible' : 'collapsed'">
-            <page-router-outlet name="notificationsTab"></page-router-outlet>
+            <router-outlet name="notificationsTab"></router-outlet>
         </StackLayout>
     </GridLayout>
     <BottomNavigationBar
             row="1"
             (loaded)="onNavigationBarLoaded($event)"
+            (unloaded)="onNavigationBarUnloaded()"
             (tabSelected)="onTabSelected($event)">
         <BottomNavigationTab title="Progreso" icon="res://round_double_arrow_black_24"></BottomNavigationTab>
         <BottomNavigationTab title="Contenido" icon="res://round_library_books_black_24"></BottomNavigationTab>

@@ -1,14 +1,12 @@
 import { Injectable } from "@angular/core";
 
-import { SimulationModule } from "./simulation.module";
-
 import { MainViewService } from "../../main-view.service";
 
 import { SimulationModalComponent } from "./simulation-modal.component";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
-    providedIn: SimulationModule,
+    providedIn: "root",
 })
 export class SimulationModalService {
     private logger: Logger;
