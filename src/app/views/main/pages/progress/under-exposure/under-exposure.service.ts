@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Observable, of, merge } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 import { Exposure, exposures } from "~/app/core/persistence/exposures";
-import { share, switchMap } from "rxjs/operators";
 import { map } from "rxjs/internal/operators";
-import { requestCallPermission, dial } from "nativescript-phone";
+import { dial, requestCallPermission } from "nativescript-phone";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 const DANGER_THRESHOLD = 8;
@@ -13,30 +12,27 @@ const DANGER_THRESHOLD = 8;
 })
 export class UnderExposureService {
     get ongoingExposure$(): Observable<Exposure> {
-        return this._ongoingExposure$;
+        return this.lastUnfinishedExposure$.asObservable();
     }
 
     get inDanger$(): Observable<boolean> {
-        return this._inDanger$;
+        return this.lastUnfinishedExposure$
+            .asObservable()
+            .pipe(map((exposure) => isInDanger(exposure)));
     }
 
     private readonly therapistPhone: string;
 
-    private readonly _ongoingExposure$: Observable<Exposure>;
-    private readonly _inDanger$: Observable<boolean>;
+    private readonly lastUnfinishedExposure$ = new ReplaySubject<Exposure>(
+        /* keep */ 1
+    );
+
     private logger: Logger;
 
     constructor() {
         this.logger = getLogger("UnderExposureService");
-        this._ongoingExposure$ = merge(of([]), exposures.changes).pipe(
-            switchMap(() => exposures.getLastUnfinished()),
-            share()
-        );
-        this._inDanger$ = this._ongoingExposure$.pipe(
-            map((exposure) => isInDanger(exposure))
-        );
+        this.subscribeToLastUnfinishedExposureChanges();
         this.therapistPhone = `${global.ENV_THERAPIST_PHONE}`;
-        console.log("Therapist phone:", this.therapistPhone);
     }
 
     async callTherapist(): Promise<boolean> {
@@ -52,6 +48,19 @@ export class UnderExposureService {
 
             return this.dial(phoneNumber, true);
         }
+    }
+
+    private subscribeToLastUnfinishedExposureChanges() {
+        this.takeAndBroadcastLastUnfinishedExposure();
+        exposures.changes.subscribe(() => {
+            this.takeAndBroadcastLastUnfinishedExposure();
+        });
+    }
+
+    private takeAndBroadcastLastUnfinishedExposure() {
+        exposures
+            .getLastUnfinished()
+            .then((exposure) => this.lastUnfinishedExposure$.next(exposure));
     }
 
     private dial(phone: string, askPermission: boolean): boolean {

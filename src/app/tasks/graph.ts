@@ -94,12 +94,24 @@ class DemoTaskGraph implements TaskGraph {
             "exposureFinished",
             run("emitHighFrequencyMultipleGeolocationAcquisitionCanStopEvent")
         );
+        // TODO: Temporal fix, remove
         on(
+            // nearbyAoIGeolocationAcquisitionCanStart
+            "highFrequencyMultipleGeolocationAcquisitionCanStart",
+            run("acquirePhoneGeolocation", {
+                id: "nearby-aoi-constant-geolocation",
+            })
+                .every(1, "minutes")
+                // nearbyAoIGeolocationAcquisitionCanStop
+                .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
+        );
+        // FIXME: Make this work with notification taps
+        /*on(
             "highFrequencyMultipleGeolocationAcquisitionCanStart",
             run("acquireMultiplePhoneGeolocation", { maxInterval: 10000 })
                 .every(1, "minutes")
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
-        );
+        );*/
         // END: High resolution geolocation data collection
 
         // START: Pre-exposure events
@@ -216,7 +228,7 @@ class DemoTaskGraph implements TaskGraph {
                 emotionThreshold: 5,
                 peakToLastThreshold: 3,
             })
-                .in(61, "minutes")
+                .in(62, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure evaluation results successful
@@ -330,7 +342,9 @@ class DemoTaskGraph implements TaskGraph {
                     type: TapActionType.ASK_FEEDBACK,
                     id: "question-frequency",
                 },
-            }).in(5, "minutes")
+            })
+                .in(5, "minutes")
+                .cancelOn("stopEvent")
         );
         // END: Post-exposure events
 

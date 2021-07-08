@@ -8,6 +8,10 @@ import {
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { appEvents } from "~/app/core/app-events";
+import { Application } from "@nativescript/core";
+
+const APP_EVENTS_KEY = "NotificationsListComponent";
 
 @Component({
     selector: "SymNotificationsList",
@@ -17,7 +21,7 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
 export class NotificationsListComponent implements OnInit, OnDestroy {
     notifications: Array<NotificationViewModel>;
 
-    private notificationsSub?: Subscription;
+    private notificationUpdatesSub: Subscription;
 
     private logger: Logger;
 
@@ -30,17 +34,17 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.notificationsSub = this.notificationsReaderService.notifications$.subscribe(
-            (notifications) => {
-                this.ngZone.run(() => {
-                    this.notifications = notifications;
-                });
-            }
-        );
+        this.subscribeToNotificationUpdates();
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.subscribeToNotificationUpdates();
+        });
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.unsubscribeFromNotificationUpdates();
+        });
     }
 
     ngOnDestroy() {
-        this.notificationsSub?.unsubscribe();
+        this.unsubscribeFromNotificationUpdates();
     }
 
     onListItemTap(args: any) {
@@ -53,5 +57,23 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
                     `Could not handle notification tap. Reason: ${e}`
                 );
             });
+    }
+
+    private subscribeToNotificationUpdates() {
+        if (this.notificationUpdatesSub) return;
+
+        this.notificationUpdatesSub = this.notificationsReaderService.notifications$.subscribe(
+            (notifications) => {
+                this.ngZone.run(() => {
+                    this.notifications = notifications;
+                });
+            }
+        );
+    }
+
+    private unsubscribeFromNotificationUpdates() {
+        if (!this.notificationUpdatesSub) return;
+        this.notificationUpdatesSub.unsubscribe();
+        this.notificationUpdatesSub = undefined;
     }
 }

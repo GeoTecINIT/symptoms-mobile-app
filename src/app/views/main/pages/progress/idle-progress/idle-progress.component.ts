@@ -1,8 +1,8 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, NgZone } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
 
 import { Record } from "@geotecinit/emai-framework/entities";
 import { RecordType } from "~/app/core/record-type";
@@ -10,13 +10,14 @@ import { Change } from "@geotecinit/emai-framework/internal/providers";
 import { emaiFramework } from "@geotecinit/emai-framework";
 import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymIdleProgress",
     templateUrl: "./idle-progress.component.html",
     styleUrls: ["./idle-progress.component.scss"],
 })
-export class IdleProgressComponent implements OnInit, OnDestroy {
+export class IdleProgressComponent {
     development: boolean;
 
     latestData: Record;
@@ -25,8 +26,8 @@ export class IdleProgressComponent implements OnInit, OnDestroy {
     summaryData: Record;
     hasSummaryData: boolean;
 
-    private latestDataSubscription: Subscription;
-    private summaryDataSubscription: Subscription;
+    private unloaded$ = new Subject();
+
     private readonly generateData: DataGenerator;
 
     constructor(
@@ -41,31 +42,15 @@ export class IdleProgressComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnInit() {
-        this.latestDataSubscription = this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureChange, [
-                { property: "change", comparison: "=", value: Change.END },
-                { property: "successful", comparison: "=", value: true },
-            ])
-            .subscribe((record) => {
-                this.ngZone.run(() => {
-                    this.latestData = record;
-                    this.hasLatestData = !!record;
-                });
-            });
-        this.summaryDataSubscription = this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureAggregate)
-            .subscribe((summary) => {
-                this.ngZone.run(() => {
-                    this.summaryData = summary;
-                    this.hasSummaryData = !!summary;
-                });
-            });
+    @HostListener("loaded")
+    onLoaded() {
+        this.subscribeToLatestData();
+        this.subscribeToSummaryData();
     }
 
-    ngOnDestroy() {
-        this.latestDataSubscription?.unsubscribe();
-        this.summaryDataSubscription?.unsubscribe();
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onGenerateDataTap() {
@@ -81,6 +66,33 @@ export class IdleProgressComponent implements OnInit, OnDestroy {
 
     onSeeAggregatesTap() {
         this.navigate("../aggregate-list");
+    }
+
+    private subscribeToLatestData() {
+        this.patientDataService
+            .observeLastByRecordType(RecordType.ExposureChange, [
+                { property: "change", comparison: "=", value: Change.END },
+                { property: "successful", comparison: "=", value: true },
+            ])
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((record) => {
+                this.ngZone.run(() => {
+                    this.latestData = record;
+                    this.hasLatestData = !!record;
+                });
+            });
+    }
+
+    private subscribeToSummaryData() {
+        this.patientDataService
+            .observeLastByRecordType(RecordType.ExposureAggregate)
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((summary) => {
+                this.ngZone.run(() => {
+                    this.summaryData = summary;
+                    this.hasSummaryData = !!summary;
+                });
+            });
     }
 
     private navigate(route: string) {

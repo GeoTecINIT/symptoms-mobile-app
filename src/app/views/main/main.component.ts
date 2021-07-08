@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
-import { Subscription } from "rxjs";
+import {
+    Component,
+    HostListener,
+    OnInit,
+    ViewContainerRef,
+} from "@angular/core";
+import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Application, Page } from "@nativescript/core";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { ConfirmModalService } from "~/app/views/main/modals/confirm";
-import { QuestionsModalService } from "~/app/views/main/modals/questions";
-import { FeedbackModalService } from "~/app/views/main/modals/feedback";
 import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
 import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
@@ -24,8 +26,10 @@ import {
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin } from "~/app/core/framework";
 import { appEvents } from "~/app/core/app-events";
-import { ContentViewModalService } from "~/app/views/main/modals/content-view/content-view-modal.service";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
+import { takeUntil } from "rxjs/operators";
+
+const APP_EVENTS_KEY = "MainComponent";
 
 const navigationTabs = {
     Progress: 0,
@@ -38,21 +42,20 @@ const navigationTabs = {
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.scss"],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit {
     navigationTabs = navigationTabs;
     selectedTab = navigationTabs.Progress;
 
-    private loggedInSub?: Subscription;
-    private notificationsSub?: Subscription;
+    private navigationBar: BottomNavigationBar;
+    private navigationBarDestroyed$ = new Subject<void>();
+
+    private unloaded$ = new Subject();
+
     private logger: Logger;
 
     constructor(
         private authService: AuthService,
         private dialogsService: DialogsService,
-        private confirmModalService: ConfirmModalService,
-        private questionsModalService: QuestionsModalService,
-        private feedbackModalService: FeedbackModalService,
-        private contentViewModalService: ContentViewModalService,
         private notificationsHandlerService: NotificationsHandlerService,
         private notificationsReaderService: NotificationsReaderService,
         private navigationService: NavigationService,
@@ -68,36 +71,36 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadTabOutlets();
-        this.controlAppLoginStatus();
         this.checkEMAIFrameworkStatus();
-        appEvents.once(Application.displayedEvent, () => {
-            this.notificationsHandlerService.init(
-                this.confirmModalService,
-                this.feedbackModalService,
-                this.questionsModalService,
-                this.contentViewModalService
-            );
+
+        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
+            this.logger.debug("Notification handler initialized");
+            this.notificationsHandlerService.resume();
+        });
+        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
+            this.logger.debug("Notification handler paused");
+            this.notificationsHandlerService.pause();
         });
     }
 
-    ngOnDestroy() {
-        this.loggedInSub?.unsubscribe();
+    @HostListener("loaded")
+    onLoaded() {
+        this.controlAppLoginStatus();
+    }
+
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onNavigationBarLoaded(args: any) {
-        const navigationBar: BottomNavigationBar = args.object;
-        navigationBar.selectTab(this.selectedTab);
-        this.notificationsSub = this.notificationsReaderService.unread$.subscribe(
-            (unread) => {
-                if (
-                    !unread ||
-                    this.selectedTab === navigationTabs.Notifications
-                ) {
-                    return;
-                }
-                navigationBar.showBadge(navigationTabs.Notifications);
-            }
-        );
+        this.navigationBar = args.object;
+        this.navigationBar.selectTab(this.selectedTab);
+        this.subscribeToPendingNotifications();
+    }
+
+    onNavigationBarUnloaded() {
+        this.navigationBarDestroyed$.next();
     }
 
     onTabSelected(args: TabSelectedEventData) {
@@ -116,11 +119,34 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     private controlAppLoginStatus() {
-        this.loggedInSub = this.authService.loggedIn$.subscribe((loggedIn) => {
-            if (!loggedIn) {
-                this.navigationService.forceNavigate(["/welcome"]);
-            }
-        });
+        this.authService.loggedIn$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((loggedIn) => {
+                if (!loggedIn) {
+                    this.navigationService.forceNavigate(["/welcome"]);
+                }
+            });
+    }
+
+    private subscribeToPendingNotifications() {
+        this.notificationsReaderService.unread$
+            .pipe(takeUntil(this.navigationBarDestroyed$))
+            .subscribe((unread) => {
+                const navigationBar = this.navigationBar;
+
+                const nativeComponent =
+                    navigationBar.android || navigationBar.ios;
+                if (!nativeComponent) return;
+
+                if (
+                    !unread ||
+                    this.selectedTab === navigationTabs.Notifications
+                ) {
+                    navigationBar.removeBadge(navigationTabs.Notifications);
+                } else {
+                    navigationBar.showBadge(navigationTabs.Notifications);
+                }
+            });
     }
 
     private checkEMAIFrameworkStatus() {

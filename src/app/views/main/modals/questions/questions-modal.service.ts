@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { QuestionsModule } from "./questions.module";
 import { MainViewService } from "~/app/views/main/main-view.service";
 
 import { QuestionsModalComponent } from "./questions-modal.component";
@@ -9,7 +8,7 @@ import { emitQuestionnaireAnswersAcquired } from "~/app/core/framework/events";
 import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 @Injectable({
-    providedIn: QuestionsModule,
+    providedIn: "root",
 })
 export class QuestionsModalService {
     constructor(private mainViewService: MainViewService) {}
