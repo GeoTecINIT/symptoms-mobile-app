@@ -1,4 +1,4 @@
-import { firebaseAuthManager } from "~/app/core/auth/firebase-auth-manager.ts";
+import { firebaseAuthManager } from "~/app/core/auth/firebase-auth-manager";
 
 describe("Auth manager", () => {
     if (1 === 1) {
