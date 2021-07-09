@@ -14,11 +14,14 @@ class ServerApiAdapter {
 
     private readonly devicesAdapter: DevicesApiAdapter;
 
-    constructor(hostname: string, options: GRPCServiceOptions) {
-        this.devicesAdapter = new DevicesApiAdapter(hostname, options);
+    constructor(url: string, options: GRPCServiceOptions) {
+        this.devicesAdapter = new DevicesApiAdapter(url, options);
     }
 }
 
-export const serverApi = new ServerApiAdapter(getConfig().serverHostname, {
-    unaryInterceptors: [new GRPCAuthInterceptor()],
-});
+export const serverApi = new ServerApiAdapter(
+    `https://${getConfig().serverHostname}`,
+    {
+        unaryInterceptors: [new GRPCAuthInterceptor()],
+    }
+);

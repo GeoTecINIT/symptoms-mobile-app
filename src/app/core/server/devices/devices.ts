@@ -11,8 +11,8 @@ export type LinkAppResponse = LAResponse.AsObject;
 export class DevicesApiAdapter {
     private readonly client: DevicesPromiseClient;
 
-    constructor(hostname: string, options: GRPCServiceOptions) {
-        this.client = new DevicesPromiseClient(hostname, null, options);
+    constructor(url: string, options: GRPCServiceOptions) {
+        this.client = new DevicesPromiseClient(url, null, options);
     }
 
     async linkApp(req: LinkAppRequest): Promise<LinkAppResponse> {

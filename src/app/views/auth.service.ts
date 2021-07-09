@@ -42,7 +42,7 @@ export class AuthService {
 
             return true;
         } catch (e) {
-            this.logger.warn(`Login error: ${e}`);
+            this.logger.warn(`Login error: ${JSON.stringify(e)}`);
 
             return false;
         }
