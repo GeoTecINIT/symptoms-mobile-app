@@ -1,10 +1,11 @@
-import { Folder, isAndroid, knownFolders, path } from "@nativescript/core";
+import { Folder, knownFolders, path } from "@nativescript/core";
 import {
     createRecordsExporter,
     createTracesExporter,
 } from "@geotecinit/emai-framework/storage/exporters";
 import { ShareFile } from "@nativescript-community/ui-share-file";
 import { Zip } from "@nativescript/zip";
+import { getDeviceInfo } from "~/app/core/utils/app-info";
 
 const EXPORTS_FOLDER = "exports";
 
@@ -44,25 +45,7 @@ export async function exportData(exportWindowTitle: string): Promise<string> {
 
 function exportDeviceInfo(folder: Folder, fileName: string): Promise<void> {
     const file = folder.getFile(`${fileName}.json`);
-    const deviceData = getDeviceData();
+    const deviceData = getDeviceInfo();
 
     return file.writeText(JSON.stringify(deviceData));
-}
-
-function getDeviceData(): DeviceData {
-    if (isAndroid) {
-        return {
-            manufacturer: `${android.os.Build.MANUFACTURER}`,
-            model: `${android.os.Build.MODEL}`,
-            osVersion: `${android.os.Build.VERSION.RELEASE}`,
-        };
-    }
-
-    return null;
-}
-
-interface DeviceData {
-    manufacturer: string;
-    model: string;
-    osVersion: string;
 }
