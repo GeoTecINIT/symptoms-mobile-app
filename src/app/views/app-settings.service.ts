@@ -1,15 +1,12 @@
 import { Injectable } from "@angular/core";
 
-import {
-    Application,
-    ApplicationSettings,
-    isAndroid,
-} from "@nativescript/core";
+import { ApplicationSettings } from "@nativescript/core";
 
 import { AuthService } from "./auth.service";
 import { emitTreatmentStopEvent } from "~/app/core/framework/events";
 import { clearEMAIDB } from "@geotecinit/emai-framework/storage";
 import { exportData } from "~/app/core/framework/data-exporter";
+import { getVersionName } from "~/app/core/utils/app-info";
 
 const DATA_SHARING_CONSENT_KEY = "APP_SETTINGS_DATA_SHARING_CONSENT";
 const REPORT_USAGE_CONSENT_KEY = "APP_SETTINGS_REPORT_USAGE_CONSENT";
@@ -20,7 +17,7 @@ const SETUP_COMPLETE_KEY = "APP_SETTINGS_SETUP_COMPLETE";
 })
 export class AppSettingsService {
     get version(): string {
-        return getApplicationVersionName();
+        return getVersionName();
     }
 
     constructor(private authService: AuthService) {}
@@ -58,23 +55,5 @@ export class AppSettingsService {
 
     exportData(): Promise<string> {
         return exportData("Abrir archivo comprimido con:");
-    }
-}
-
-function getApplicationVersionName(): string {
-    if (isAndroid) {
-        const PackageManager = android.content.pm.PackageManager;
-        const pkg = Application.android.context
-            .getPackageManager()
-            .getPackageInfo(
-                Application.android.context.getPackageName(),
-                PackageManager.GET_META_DATA
-            );
-
-        return pkg.versionName;
-    } else {
-        return NSBundle.mainBundle.objectForInfoDictionaryKey(
-            "CFBundleVersion"
-        );
     }
 }
