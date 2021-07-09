@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
-import { ApplicationSettings } from "@nativescript/core";
-
-const LOGGED_IN_KEY = "AUTH_LOGGED_IN";
+import { ServerApiService } from "~/app/core/server";
+import { AccountService } from "~/app/core/account";
+import { getDeviceInfo, getPackageName } from "~/app/core/utils/app-info";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
     providedIn: "root",
@@ -14,20 +15,41 @@ export class AuthService {
 
     private authSubject = new ReplaySubject<boolean>(1);
 
-    constructor() {
-        const loggedIn = ApplicationSettings.getBoolean(LOGGED_IN_KEY, false);
-        this.authSubject.next(loggedIn);
+    private readonly logger: Logger;
+
+    constructor(
+        private serverApiService: ServerApiService,
+        private accountService: AccountService
+    ) {
+        this.authSubject.next(this.accountService.deviceProfile.linked);
+        this.logger = getLogger("AuthService");
     }
 
-    async login(authCode: string): Promise<boolean> {
-        ApplicationSettings.setBoolean(LOGGED_IN_KEY, true);
-        this.authSubject.next(true);
+    async login(accessCode: string): Promise<boolean> {
+        const appId = getPackageName();
+        const { os, osVersion, manufacturer, model } = getDeviceInfo();
+        try {
+            const resp = await this.serverApiService.devices.linkApp({
+                accessCode,
+                appId,
+                os,
+                osVersion,
+                manufacturer,
+                model,
+            });
+            this.accountService.deviceProfile.load(resp);
+            this.authSubject.next(true);
 
-        return true;
+            return true;
+        } catch (e) {
+            this.logger.warn(`Login error: ${e}`);
+
+            return false;
+        }
     }
 
     async logout(): Promise<void> {
-        ApplicationSettings.setBoolean(LOGGED_IN_KEY, false);
+        this.accountService.deviceProfile.clear();
         this.authSubject.next(false);
     }
 }
