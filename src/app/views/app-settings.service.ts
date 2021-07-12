@@ -26,6 +26,10 @@ export class AppSettingsService {
         private authService: AuthService
     ) {}
 
+    reloadPatientInfo(): Promise<void> {
+        return this.accountService.patientProfile.reloadInfo();
+    }
+
     async getDataSharingConsent(): Promise<boolean> {
         return this.accountService.patientProfile.consentsToShareData;
     }
