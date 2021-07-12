@@ -24,10 +24,7 @@ class FirebaseAuthManager implements AuthManager {
             return;
         }
         if (!this.initPromise) {
-            const firebase = await firebaseManager.getInstance();
-            this.initPromise = firebase.login({
-                type: firebase.LoginType.ANONYMOUS,
-            });
+            this.initPromise = this.loginAnonymously();
         }
         const user = await this.initPromise;
         const sessionData = sessionDataFromUser(user);
@@ -53,6 +50,14 @@ class FirebaseAuthManager implements AuthManager {
         this.logger.info(`Token: ${token}`);
 
         return token;
+    }
+
+    private async loginAnonymously() {
+        const firebase = await this.firebaseManager.getInstance();
+
+        return firebase.login({
+            type: firebase.LoginType.ANONYMOUS,
+        });
     }
 
     private async getCurrentUser(): Promise<User> {
