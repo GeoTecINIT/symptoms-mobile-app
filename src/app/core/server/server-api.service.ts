@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { serverApi, ServerApiClient } from "./server-api";
 import { DevicesApiAdapter } from "./devices";
 import { PatientsApiAdapter } from "./patients";
+import { TherapistsApiAdapter } from "./therapists";
 
 @Injectable({
     providedIn: "root",
@@ -13,5 +14,9 @@ export class ServerApiService implements ServerApiClient {
 
     get patients(): PatientsApiAdapter {
         return serverApi.patients;
+    }
+
+    get therapists(): TherapistsApiAdapter {
+        return serverApi.therapists;
     }
 }
