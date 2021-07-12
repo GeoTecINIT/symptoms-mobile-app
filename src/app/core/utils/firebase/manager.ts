@@ -10,7 +10,7 @@ export class FirebaseManager {
     private initPromise: Promise<any>;
 
     get dataCollectionEnabled() {
-        return ApplicationSettings.getBoolean(DATA_COLLECTION_ENABLED);
+        return ApplicationSettings.getBoolean(DATA_COLLECTION_ENABLED, false);
     }
 
     async init() {
