@@ -10,6 +10,7 @@ import { preparePlugin } from "~/app/core/framework";
 import { emitTreatmentStartEvent } from "~/app/core/framework/events";
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({
     selector: "SymTutorial",
@@ -17,6 +18,8 @@ import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
     styleUrls: ["./tutorial.component.scss"],
 })
 export class TutorialComponent implements OnInit {
+    private logger: Logger;
+
     constructor(
         private inAppBrowserService: InAppBrowserService,
         private navigationService: NavigationService,
@@ -24,11 +27,15 @@ export class TutorialComponent implements OnInit {
         private dialogsService: DialogsService,
         private activeRoute: ActivatedRoute
     ) {
-        // Initialize dependencies here
+        this.logger = getLogger("TutorialComponent");
     }
 
     ngOnInit() {
-        // Use initialized dependencies
+        this.appSettingsService.reloadPatientInfo().catch((e) => {
+            this.logger.error(
+                `Could not load patient information. Reason: ${e}`
+            );
+        });
     }
 
     onOpenProjectWebsiteTap() {
