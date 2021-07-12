@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { serverApi, ServerApiClient } from "~/app/core/server/server-api";
-import { DevicesApiAdapter } from "~/app/core/server/devices";
+import { serverApi, ServerApiClient } from "./server-api";
+import { DevicesApiAdapter } from "./devices";
+import { PatientsApiAdapter } from "./patients";
 
 @Injectable({
     providedIn: "root",
@@ -8,5 +9,9 @@ import { DevicesApiAdapter } from "~/app/core/server/devices";
 export class ServerApiService implements ServerApiClient {
     get devices(): DevicesApiAdapter {
         return serverApi.devices;
+    }
+
+    get patients(): PatientsApiAdapter {
+        return serverApi.patients;
     }
 }
