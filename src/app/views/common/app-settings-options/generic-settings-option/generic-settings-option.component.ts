@@ -20,6 +20,8 @@ export class GenericSettingsOptionComponent {
 
         const sw = args.object as Switch;
         const checked = sw.checked;
+        if (this.checked === checked) return;
+
         this.checked = checked;
         this.checkedChange.emit(checked);
     }
