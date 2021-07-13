@@ -46,6 +46,7 @@
     "@nativescript/types": "~7.3.0",
     "@nativescript/webpack": "4.1.0",
     "@ngtools/webpack": "11.2.0",
+    "@types/google-protobuf": "^3.15.3",
     "@types/jasmine": "3.6.9",
     "codelyzer": "~6.0.0",
     "fs-extra": "^9.1.0",
