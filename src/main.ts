@@ -10,6 +10,7 @@ import { firebaseManager } from "./app/core/utils/firebase";
 import { appTasks } from "./app/tasks";
 import { demoTaskGraph } from "./app/tasks/graph";
 import { getLogger } from "./app/core/utils/logger";
+import { remoteRecords, remoteTraces } from "~/app/core/persistence/remote";
 import { emaiFramework } from "@geotecinit/emai-framework";
 
 import { install } from "@nativescript-community/ui-chart";
@@ -31,7 +32,12 @@ firebaseManager
     );
 
 emaiFramework
-    .init(appTasks, demoTaskGraph, { customLogger: getLogger })
+    .init(appTasks, demoTaskGraph, {
+        externalRecordsStore: remoteRecords,
+        externalTracesStore: remoteTraces,
+        oldTracesMaxAgeHours: 24 * 7 /* one week */,
+        customLogger: getLogger,
+    })
     .catch((e) =>
         console.error("Could not initialize EMA/I framework. Reason:", e)
     );
