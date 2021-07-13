@@ -1,4 +1,4 @@
-import { serverApi, ServerApiClient } from "~/app/core/server";
+import { ServerApiClient } from "~/app/core/server";
 import { getPackageName, getDeviceInfo } from "~/app/core/utils/app-info";
 import { ApplicationSettings } from "@nativescript/core";
 
@@ -74,5 +74,3 @@ export class DeviceProfileControllerImpl implements DeviceProfileController {
         ApplicationSettings.setString(PATIENT_ID_KEY, patientId);
     }
 }
-
-export const deviceProfile = new DeviceProfileControllerImpl(serverApi);

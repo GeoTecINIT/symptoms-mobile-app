@@ -62,6 +62,7 @@ export class AppSettingsService {
         emitTreatmentStopEvent();
         await this.authService.logout();
         ApplicationSettings.clear();
+        this.accountService.reset();
         await clearEMAIDB();
     }
 
