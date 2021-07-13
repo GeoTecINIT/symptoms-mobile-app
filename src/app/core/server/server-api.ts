@@ -4,11 +4,13 @@ import { GRPCAuthInterceptor } from "~/app/core/auth";
 import { DevicesApiAdapter } from "./devices";
 import { PatientsApiAdapter } from "./patients";
 import { TherapistsApiAdapter } from "./therapists";
+import { UploadsApiAdapter } from "./uploads";
 
 export interface ServerApiClient {
     devices: DevicesApiAdapter;
     patients: PatientsApiAdapter;
     therapists: TherapistsApiAdapter;
+    uploads: UploadsApiAdapter;
 }
 
 class ServerApiAdapter implements ServerApiClient {
@@ -24,14 +26,20 @@ class ServerApiAdapter implements ServerApiClient {
         return this.therapistsAdapter;
     }
 
+    get uploads() {
+        return this.uploadsAdapter;
+    }
+
     private readonly devicesAdapter: DevicesApiAdapter;
     private readonly patientsAdapter: PatientsApiAdapter;
     private readonly therapistsAdapter: TherapistsApiAdapter;
+    private readonly uploadsAdapter: UploadsApiAdapter;
 
     constructor(url: string, options: GRPCServiceOptions) {
         this.devicesAdapter = new DevicesApiAdapter(url, options);
         this.patientsAdapter = new PatientsApiAdapter(url, options);
         this.therapistsAdapter = new TherapistsApiAdapter(url, options);
+        this.uploadsAdapter = new UploadsApiAdapter(url, options);
     }
 }
 
