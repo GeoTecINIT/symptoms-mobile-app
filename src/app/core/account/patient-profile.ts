@@ -1,5 +1,5 @@
-import { serverApi, ServerApiClient } from "~/app/core/server";
-import { deviceProfile, DeviceProfileController } from "./device-profile";
+import { ServerApiClient } from "~/app/core/server";
+import { DeviceProfileController } from "./device-profile";
 import { ApplicationSettings } from "@nativescript/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
@@ -130,8 +130,3 @@ export class PatientProfileControllerImpl implements PatientProfileController {
         return this.logger;
     }
 }
-
-export const patientProfile = new PatientProfileControllerImpl(
-    serverApi,
-    deviceProfile
-);

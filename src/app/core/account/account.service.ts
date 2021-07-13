@@ -1,16 +1,21 @@
 import { Injectable } from "@angular/core";
-import { deviceProfile, DeviceProfileController } from "./device-profile";
-import { patientProfile, PatientProfileController } from "./patient-profile";
+import { account, Account } from "./account";
+import { DeviceProfileController } from "./device-profile";
+import { PatientProfileController } from "./patient-profile";
 
 @Injectable({
     providedIn: "root",
 })
-export class AccountService {
+export class AccountService implements Account {
     get deviceProfile(): DeviceProfileController {
-        return deviceProfile;
+        return account.deviceProfile;
     }
 
     get patientProfile(): PatientProfileController {
-        return patientProfile;
+        return account.patientProfile;
+    }
+
+    reset() {
+        account.reset();
     }
 }
