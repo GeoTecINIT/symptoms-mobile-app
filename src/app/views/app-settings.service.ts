@@ -1,18 +1,15 @@
 import { Injectable } from "@angular/core";
 
-import {
-    Application,
-    ApplicationSettings,
-    isAndroid,
-} from "@nativescript/core";
+import { ApplicationSettings } from "@nativescript/core";
 
+import { FirebaseManagerService } from "~/app/core/utils/firebase";
 import { AuthService } from "./auth.service";
 import { emitTreatmentStopEvent } from "~/app/core/framework/events";
 import { clearEMAIDB } from "@geotecinit/emai-framework/storage";
 import { exportData } from "~/app/core/framework/data-exporter";
+import { getVersionName } from "~/app/core/utils/app-info";
+import { AccountService } from "~/app/core/account";
 
-const DATA_SHARING_CONSENT_KEY = "APP_SETTINGS_DATA_SHARING_CONSENT";
-const REPORT_USAGE_CONSENT_KEY = "APP_SETTINGS_REPORT_USAGE_CONSENT";
 const SETUP_COMPLETE_KEY = "APP_SETTINGS_SETUP_COMPLETE";
 
 @Injectable({
@@ -20,25 +17,37 @@ const SETUP_COMPLETE_KEY = "APP_SETTINGS_SETUP_COMPLETE";
 })
 export class AppSettingsService {
     get version(): string {
-        return getApplicationVersionName();
+        return getVersionName();
     }
 
-    constructor(private authService: AuthService) {}
+    constructor(
+        private accountService: AccountService,
+        private firebaseManagerService: FirebaseManagerService,
+        private authService: AuthService
+    ) {}
+
+    reloadPatientInfo(): Promise<void> {
+        return this.accountService.patientProfile.reloadInfo();
+    }
 
     async getDataSharingConsent(): Promise<boolean> {
-        return ApplicationSettings.getBoolean(DATA_SHARING_CONSENT_KEY, false);
+        return this.accountService.patientProfile.consentsToShareData;
     }
 
     async setDataSharingConsent(consents: boolean): Promise<void> {
-        ApplicationSettings.setBoolean(DATA_SHARING_CONSENT_KEY, consents);
+        return this.accountService.patientProfile.updateDataSharingConsent(
+            consents
+        );
     }
 
     async getReportUsageConsent(): Promise<boolean> {
-        return ApplicationSettings.getBoolean(REPORT_USAGE_CONSENT_KEY, false);
+        return this.firebaseManagerService.usageDataCollectionEnabled;
     }
 
     async setReportUsageConsent(consents: boolean): Promise<void> {
-        ApplicationSettings.setBoolean(REPORT_USAGE_CONSENT_KEY, consents);
+        return this.firebaseManagerService.updateUsageDataCollectionConsent(
+            consents
+        );
     }
 
     isSetupComplete(): boolean {
@@ -53,28 +62,11 @@ export class AppSettingsService {
         emitTreatmentStopEvent();
         await this.authService.logout();
         ApplicationSettings.clear();
+        this.accountService.reset();
         await clearEMAIDB();
     }
 
     exportData(): Promise<string> {
         return exportData("Abrir archivo comprimido con:");
-    }
-}
-
-function getApplicationVersionName(): string {
-    if (isAndroid) {
-        const PackageManager = android.content.pm.PackageManager;
-        const pkg = Application.android.context
-            .getPackageManager()
-            .getPackageInfo(
-                Application.android.context.getPackageName(),
-                PackageManager.GET_META_DATA
-            );
-
-        return pkg.versionName;
-    } else {
-        return NSBundle.mainBundle.objectForInfoDictionaryKey(
-            "CFBundleVersion"
-        );
     }
 }

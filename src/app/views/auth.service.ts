@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
-import { ApplicationSettings } from "@nativescript/core";
-
-const LOGGED_IN_KEY = "AUTH_LOGGED_IN";
+import { AccountService } from "~/app/core/account";
+import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Injectable({
     providedIn: "root",
@@ -14,20 +13,28 @@ export class AuthService {
 
     private authSubject = new ReplaySubject<boolean>(1);
 
-    constructor() {
-        const loggedIn = ApplicationSettings.getBoolean(LOGGED_IN_KEY, false);
-        this.authSubject.next(loggedIn);
+    private readonly logger: Logger;
+
+    constructor(private accountService: AccountService) {
+        this.authSubject.next(this.accountService.deviceProfile.linked);
+        this.logger = getLogger("AuthService");
     }
 
-    async login(authCode: string): Promise<boolean> {
-        ApplicationSettings.setBoolean(LOGGED_IN_KEY, true);
-        this.authSubject.next(true);
+    async login(accessCode: string): Promise<boolean> {
+        try {
+            await this.accountService.deviceProfile.linkApp(accessCode);
+            this.authSubject.next(true);
 
-        return true;
+            return true;
+        } catch (e) {
+            this.logger.warn(`Login error: ${JSON.stringify(e)}`);
+
+            return false;
+        }
     }
 
     async logout(): Promise<void> {
-        ApplicationSettings.setBoolean(LOGGED_IN_KEY, false);
+        await this.accountService.deviceProfile.logout();
         this.authSubject.next(false);
     }
 }
