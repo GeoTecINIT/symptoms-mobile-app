@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { AccountService } from "~/app/core/account";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { FirebaseAuthService } from "~/app/core/auth/firebase/firebase-auth.service.ts";
 
 @Injectable({
     providedIn: "root",
@@ -15,7 +16,10 @@ export class AuthService {
 
     private readonly logger: Logger;
 
-    constructor(private accountService: AccountService) {
+    constructor(
+        private accountService: AccountService,
+        private firebaseAuthService: FirebaseAuthService
+    ) {
         this.authSubject.next(this.accountService.deviceProfile.linked);
         this.logger = getLogger("AuthService");
     }
@@ -35,6 +39,7 @@ export class AuthService {
 
     async logout(): Promise<void> {
         await this.accountService.deviceProfile.logout();
+        await this.firebaseAuthService.clearSession();
         this.authSubject.next(false);
     }
 }
