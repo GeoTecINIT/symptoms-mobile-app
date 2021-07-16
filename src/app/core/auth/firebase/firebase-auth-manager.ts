@@ -1,11 +1,12 @@
-import { FirebaseManager, firebaseManager } from "../utils/firebase";
-import { Logger, getLogger } from "../utils/logger";
+import { FirebaseManager, firebaseManager } from "../../utils/firebase";
+import { Logger, getLogger } from "../../utils/logger";
 import { firebase as fb } from "@nativescript/firebase";
 import User = fb.User;
 
 export interface AuthManager {
     sessionData(): Promise<SessionData>;
     authToken(): Promise<string>;
+    clearSession(): Promise<void>;
 }
 
 class FirebaseAuthManager implements AuthManager {
@@ -50,6 +51,13 @@ class FirebaseAuthManager implements AuthManager {
         this.logger.info(`Token: ${token}`);
 
         return token;
+    }
+
+    async clearSession(): Promise<void> {
+        const firebase = await this.firebaseManager.getInstance();
+        await firebase.logout();
+        this.initPromise = undefined;
+        this.initialized = false;
     }
 
     private async loginAnonymously() {

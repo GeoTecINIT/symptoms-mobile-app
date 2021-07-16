@@ -1,8 +1,5 @@
 import * as grpc from "grpc-web";
-import {
-    AuthManager,
-    firebaseAuthManager,
-} from "~/app/core/auth/firebase-auth-manager.ts";
+import { AuthManager, firebaseAuthManager } from "./firebase";
 import { getLogger } from "~/app/core/utils/logger";
 
 export class GRPCAuthInterceptor implements grpc.UnaryInterceptor<any, any> {
