@@ -17,6 +17,10 @@ export class FirebaseAuthService implements AuthManager {
         return firebaseAuthManager.authToken();
     }
 
+    refreshToken(): Promise<void> {
+        return firebaseAuthManager.refreshToken();
+    }
+
     clearSession(): Promise<void> {
         return firebaseAuthManager.clearSession();
     }
