@@ -27,6 +27,7 @@ export class AuthService {
     async login(accessCode: string): Promise<boolean> {
         try {
             await this.accountService.deviceProfile.linkApp(accessCode);
+            await this.firebaseAuthService.refreshToken();
             this.authSubject.next(true);
 
             return true;

@@ -6,6 +6,7 @@ import User = fb.User;
 export interface AuthManager {
     sessionData(): Promise<SessionData>;
     authToken(): Promise<string>;
+    refreshToken(): Promise<void>;
     clearSession(): Promise<void>;
 }
 
@@ -45,12 +46,11 @@ class FirebaseAuthManager implements AuthManager {
     }
 
     async authToken(): Promise<string> {
-        const user = await this.getCurrentUser();
+        return this.getToken(false);
+    }
 
-        const token = await user.getIdToken();
-        this.logger.info(`Token: ${token}`);
-
-        return token;
+    async refreshToken(): Promise<void> {
+        await this.getToken(true);
     }
 
     async clearSession(): Promise<void> {
@@ -74,6 +74,15 @@ class FirebaseAuthManager implements AuthManager {
         await firebase.reloadUser();
 
         return firebase.getCurrentUser();
+    }
+
+    private async getToken(refresh: boolean): Promise<string> {
+        const user = await this.getCurrentUser();
+
+        const token = await user.getIdToken(refresh);
+        this.logger.info(`Token: ${token}`);
+
+        return token;
     }
 }
 
