@@ -20,6 +20,7 @@ export class DevicesApiAdapter {
         request.setAccessCode(req.accessCode);
         request.setAppId(req.appId);
         request.setOs(req.os);
+        request.setOsVersion(req.osVersion);
         request.setManufacturer(req.manufacturer);
         request.setModel(req.model);
 
