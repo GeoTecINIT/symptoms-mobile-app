@@ -19,10 +19,4 @@ describe("AppSettingsService", () => {
             expect(parseInt(segment, 10)).toEqual(jasmine.any(Number));
         }
     });
-
-    it("allows to set a data sharing policy and persist the decision", async () => {
-        await service.setDataSharingConsent(true);
-        const consents = await service.getDataSharingConsent();
-        expect(consents).toBeTruthy();
-    });
 });
