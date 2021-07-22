@@ -20,8 +20,20 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ["./under-exposure.component.scss"],
 })
 export class UnderExposureComponent {
-    ongoingExposure: Exposure;
-    inDanger: boolean;
+    ongoingExposure: Exposure = {
+        id: "",
+        startTime: new Date(),
+        emotionValues: [],
+        place: {
+            id: "",
+            name: "Lugar Falso",
+            radius: 0,
+            latitude: 0,
+            longitude: 0,
+        },
+        successful: false,
+    };
+    inDanger: boolean = false;
 
     private unloaded$ = new Subject();
 
@@ -39,8 +51,8 @@ export class UnderExposureComponent {
 
     @HostListener("loaded")
     onLoaded() {
-        this.subscribeToOngoingExposureChanges();
-        this.subscribeToInDangerChanges();
+        // this.subscribeToOngoingExposureChanges();
+        // this.subscribeToInDangerChanges();
     }
 
     @HostListener("unloaded")

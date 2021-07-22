@@ -1,8 +1,25 @@
 <GridLayout class="page" rows="*, auto" *ngIf="ongoingExposure">
     <StackLayout row="0" verticalAlignment="center">
-        <SymCircleIcon iconCode="&#xe55e;"></SymCircleIcon>
-        <Label class="body-text body-title" textWrap="true" [text]="'Estás realizando una exposición en:\n' + ongoingExposure.place.name"></Label>
-        <Label class="body-text body-subtitle" textWrap="true" text="Intenta permanecer en este lugar. La app te acompañará durante todo el proceso"></Label>
+        <Label class="body-text body-title" textWrap="true" [text]="'Tiempo de exposición en:\n' + ongoingExposure.place.name"></Label>
+        <Label class="minutes-counter" text="31"></Label>
+        <Label class="minutes-text" text="minutos"></Label>
+        <GridLayout class="segmented-progress" rows="auto, auto" columns="67*,17*,17*">
+            <Label row="0" col="0" class="note"></Label>
+            <Label row="0" col="1" class="note"></Label>
+            <Label row="0" col="2" class="note"></Label>
+            <GridLayout row="1" col="0" class="bg-grey first" rows="auto" columns="50* 50*">
+                <Label class="bg-complementary"></Label>
+            </GridLayout>
+            <GridLayout row="1" col="1" class="bg-dark-grey" rows="auto" columns="0* 100*">
+                <Label class="bg-complementary"></Label>
+            </GridLayout>
+            <GridLayout row="1" col="2" class="bg-dark-grey last" rows="auto" columns="0* 100*">
+                <Label class="bg-complementary"></Label>
+            </GridLayout>
+        </GridLayout>
+        <StackLayout class="flat-card">
+            <Label class="body-text" textWrap="true" text="Intenta permanecer en este lugar. La app te acompañará durante todo el proceso"></Label>
+        </StackLayout>
     </StackLayout>
     <StackLayout row="1">
         <ng-container *ngIf="inDanger; else outOfDanger">
