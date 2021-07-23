@@ -51,3 +51,16 @@ Label {
     font-size: 72;
     text-align: center;
 }
+
+// Custom background colors
+.bg-grey {
+    background-color: $grey;
+}
+
+.bg-dark-grey {
+    background-color: $dark-grey;
+}
+
+.bg-complementary {
+    background-color: $complementary;
+}
