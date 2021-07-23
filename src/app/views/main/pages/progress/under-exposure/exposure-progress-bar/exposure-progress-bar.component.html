@@ -1,0 +1,19 @@
+<GridLayout *ngIf="progress !== undefined" class="segmented-progress" rows="auto, auto" [columns]="segmentsColumns">
+    <Label row="0"
+           *ngFor="let note of segmentsNotes; let i = index"
+           [col]="i"
+           class="note"
+           [text]="note">
+    </Label>
+
+    <GridLayout row="1"
+                *ngFor="let segmentPercent of segmentsPercentages; let i = index"
+                [col]="i"
+                class="{{segmentPercent.backgroundColorClass}}"
+                [class.first]="i === 0"
+                [class.last]="i === segmentsPercentages.length - 1"
+                rows="auto"
+                columns="{{segmentPercent.progress}}* {{100 - segmentPercent.progress}}*">
+        <Label class="{{segmentPercent.progressColorClass}}"></Label>
+    </GridLayout>
+</GridLayout>

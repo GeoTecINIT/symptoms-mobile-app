@@ -20,6 +20,7 @@ import { BaseCardComponent } from "./common/cards/base-card/base-card.component"
 import { IconTextCardComponent } from "./common/cards/icon-text-card/icon-text-card.component";
 import { TitleContentCardComponent } from "./common/cards/title-content-card/title-content-card.component";
 import { ChartCardComponent } from "./common/cards/chart-card/chart-card.component";
+import { ExposureProgressBarComponent } from './under-exposure/exposure-progress-bar/exposure-progress-bar.component';
 
 registerElement(
     "LineChart",
@@ -50,6 +51,7 @@ registerElement(
         IconTextCardComponent,
         TitleContentCardComponent,
         ChartCardComponent,
+        ExposureProgressBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
