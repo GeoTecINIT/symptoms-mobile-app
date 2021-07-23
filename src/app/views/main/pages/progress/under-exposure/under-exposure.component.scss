@@ -16,7 +16,7 @@
 }
 
 .minutes-counter {
-  margin-top: 24;
+  margin-top: $global-spacing;
   color: $complementary;
   font-size: 36;
   text-align: center;
@@ -28,42 +28,11 @@
   margin-bottom: 16;
 }
 
-.bg-grey {
-  background-color: #c0c0c0;
-}
-
-.bg-dark-grey {
-  background-color: #9a9a9a;
-}
-
-.bg-complementary {
-  background-color: $complementary;
-}
-
-.segmented-progress {
-  & .note {
-    color: $accent;
-    text-align: center;
-  }
-  & GridLayout, & GridLayout Label {
-    height: 8;
-  }
-  & GridLayout {
-    margin: 0 1 0 1;
-    &.first, &.first Label {
-      border-radius: 4 0 0 4;
-    }
-    &.last, &.last Label {
-      border-radius: 0 4 4 0;
-    }
-  }
-}
-
 .flat-card {
-  border-color: #BDBDBD;
+  border-color: $dark-grey;
   border-width: 1;
   border-radius: 4;
   margin: 4;
   padding: 4;
-  margin-top: 36;
+  margin-top: 48;
 }
