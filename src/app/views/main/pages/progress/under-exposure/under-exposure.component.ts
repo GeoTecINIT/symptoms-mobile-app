@@ -10,14 +10,13 @@ import {
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
-import { combineLatest, Subject, timer } from "rxjs";
+import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
 import { BarSegment } from "./exposure-progress-bar";
 import { takeUntil } from "rxjs/operators";
 
 const REGULAR_EXPOSURE_TIME = 62;
 const EXTENSION_TIME = 15;
-const MS_IN_MINUTE = 60000;
 
 @Component({
     selector: "SymUnderExposure",
@@ -29,7 +28,7 @@ export class UnderExposureComponent {
         {
             from: 0,
             to: REGULAR_EXPOSURE_TIME,
-            note: "Total: ~60 min.",
+            note: `Total: ~${REGULAR_EXPOSURE_TIME - 2} min.`,
             progressColorClass: "bg-complementary",
             backgroundColorClass: "bg-grey",
             defaultVisibility: "visible",
