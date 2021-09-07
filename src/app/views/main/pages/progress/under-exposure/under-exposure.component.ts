@@ -12,7 +12,11 @@ import { emitExposureManuallyFinished } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
 import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
+import { BarSegment } from "./exposure-progress-bar";
 import { takeUntil } from "rxjs/operators";
+
+const REGULAR_EXPOSURE_TIME = 62;
+const EXTENSION_TIME = 15;
 
 @Component({
     selector: "SymUnderExposure",
@@ -20,7 +24,34 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ["./under-exposure.component.scss"],
 })
 export class UnderExposureComponent {
+    progressSegments: Array<BarSegment> = [
+        {
+            from: 0,
+            to: REGULAR_EXPOSURE_TIME,
+            note: `Total: ~${REGULAR_EXPOSURE_TIME - 2} min.`,
+            progressColorClass: "bg-complementary",
+            backgroundColorClass: "bg-grey",
+            defaultVisibility: "visible",
+        },
+        {
+            from: REGULAR_EXPOSURE_TIME + 1,
+            to: REGULAR_EXPOSURE_TIME + EXTENSION_TIME,
+            note: `+${EXTENSION_TIME}`,
+            progressColorClass: "bg-complementary",
+            backgroundColorClass: "bg-dark-grey",
+            defaultVisibility: "hidden",
+        },
+        {
+            from: REGULAR_EXPOSURE_TIME + EXTENSION_TIME + 1,
+            to: REGULAR_EXPOSURE_TIME + 2 * EXTENSION_TIME,
+            note: `+${EXTENSION_TIME}`,
+            progressColorClass: "bg-complementary",
+            backgroundColorClass: "bg-dark-grey",
+            defaultVisibility: "hidden",
+        },
+    ];
     ongoingExposure: Exposure;
+    exposureProgress: number;
     inDanger: boolean;
 
     private unloaded$ = new Subject();
@@ -40,6 +71,7 @@ export class UnderExposureComponent {
     @HostListener("loaded")
     onLoaded() {
         this.subscribeToOngoingExposureChanges();
+        this.subscribeToExposureProgressChanges();
         this.subscribeToInDangerChanges();
     }
 
@@ -72,6 +104,16 @@ export class UnderExposureComponent {
             .subscribe((exposure) => {
                 this.ngZone.run(() => {
                     this.ongoingExposure = exposure;
+                });
+            });
+    }
+
+    private subscribeToExposureProgressChanges() {
+        this.underExposureService.exposureProgress$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((exposureProgress) => {
+                this.ngZone.run(() => {
+                    this.exposureProgress = exposureProgress;
                 });
             });
     }
