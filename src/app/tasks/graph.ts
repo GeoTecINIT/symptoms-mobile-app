@@ -1,10 +1,15 @@
+import { getConfig } from "~/app/core/config";
+
 import {
     TaskGraph,
     EventListenerGenerator,
     RunnableTaskDescriptor,
 } from "@geotecinit/emai-framework/tasks/graph";
-
 import { TapActionType } from "@geotecinit/emai-framework/notifications";
+
+const exposureTimes = getConfig().exposureTimes;
+const EXPOSURE_TIME = exposureTimes.regular;
+const EXPOSURE_EXTENSION_TIME = exposureTimes.extension;
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
@@ -228,7 +233,7 @@ class DemoTaskGraph implements TaskGraph {
                 emotionThreshold: 5,
                 peakToLastThreshold: 3,
             })
-                .in(62, "minutes")
+                .in(EXPOSURE_TIME, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure evaluation results successful
@@ -276,7 +281,7 @@ class DemoTaskGraph implements TaskGraph {
             run("evaluateExposureExtension", {
                 emotionThreshold: 8,
             })
-                .in(15, "minutes")
+                .in(EXPOSURE_EXTENSION_TIME, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure extension evaluation results successful
@@ -305,7 +310,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("finishExposure", { successful: true })
-                .in(15, "minutes")
+                .in(EXPOSURE_EXTENSION_TIME, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         on(
@@ -314,7 +319,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Sabemos que no es fácil, pero te has esforzado mucho",
                 body: "Podemos finalizar la exposición por hoy",
             })
-                .in(15, "minutes")
+                .in(EXPOSURE_EXTENSION_TIME, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Finalization event
