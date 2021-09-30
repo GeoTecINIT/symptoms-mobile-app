@@ -1,4 +1,5 @@
 import { Component, HostListener, NgZone } from "@angular/core";
+import { getConfig } from "~/app/core/config";
 import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
@@ -15,8 +16,9 @@ import { Exposure } from "~/app/core/persistence/exposures";
 import { BarSegment } from "./exposure-progress-bar";
 import { takeUntil } from "rxjs/operators";
 
-const REGULAR_EXPOSURE_TIME = 62;
-const EXTENSION_TIME = 15;
+const exposureTimes = getConfig().exposureTimes;
+const REGULAR_EXPOSURE_TIME = exposureTimes.regular;
+const EXTENSION_TIME = exposureTimes.extension;
 
 @Component({
     selector: "SymUnderExposure",
