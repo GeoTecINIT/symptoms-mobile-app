@@ -1,3 +1,4 @@
+import AwaitLock from "await-lock";
 import { ApplicationSettings } from "@nativescript/core";
 import { firebase } from "@nativescript/firebase";
 import { crashlytics } from "@nativescript/firebase/crashlytics";
@@ -8,6 +9,7 @@ const DATA_COLLECTION_ENABLED = "firebase-manager/dataCollectionEnabled";
 export class FirebaseManager {
     private initialized = false;
     private initPromise: Promise<any>;
+    private initLock = new AwaitLock();
 
     get dataCollectionEnabled() {
         return ApplicationSettings.getBoolean(DATA_COLLECTION_ENABLED, false);
@@ -17,12 +19,14 @@ export class FirebaseManager {
         if (this.initialized) {
             return;
         }
+        await this.initLock.acquireAsync();
         if (!this.initPromise) {
             this.initPromise = firebase.init({
                 crashlyticsCollectionEnabled: this.dataCollectionEnabled,
                 analyticsCollectionEnabled: this.dataCollectionEnabled,
             });
         }
+        this.initLock.release();
         await this.initPromise;
         this.initialized = true;
     }
