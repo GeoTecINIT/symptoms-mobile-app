@@ -5,6 +5,7 @@ import { DevicesApiAdapter } from "./devices";
 import { PatientsApiAdapter } from "./patients";
 import { TherapistsApiAdapter } from "./therapists";
 import { UploadsApiAdapter } from "./uploads";
+import { GRPCDeadlineInterceptor } from "~/app/core/server/grpc-deadline-interceptor";
 
 export interface ServerApiClient {
     devices: DevicesApiAdapter;
@@ -46,6 +47,9 @@ class ServerApiAdapter implements ServerApiClient {
 export const serverApi = new ServerApiAdapter(
     `https://${getConfig().serverHostname}`,
     {
-        unaryInterceptors: [new GRPCAuthInterceptor()],
+        unaryInterceptors: [
+            new GRPCAuthInterceptor(),
+            new GRPCDeadlineInterceptor(),
+        ],
     }
 );
