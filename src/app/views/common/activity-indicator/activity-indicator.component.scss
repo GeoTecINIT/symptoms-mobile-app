@@ -1,7 +1,7 @@
 @import "src/app-variables";
 
 .indicator-background {
-  background-color: rgba(128, 128, 128, 0.7);
+  background-color: rgba(128, 128, 128, 0.8);
   width: 100%;
   height: 100%;
   vertical-align: center;
@@ -10,10 +10,13 @@
 
 .indicator {
   color: $complementary;
-  width: 200dp;
-  height: 200dp;
+  width: 150dp;
+  height: 150dp;
+  padding: 20dp;
+  background-color: white;
+  border-radius: 50;
   background-image: url("~/images/brand/square_no_text.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 70% 70%;
+  background-size: 50% 50%;
 }
