@@ -3,6 +3,7 @@ import {
     NativeScriptCommonModule,
     NativeScriptRouterModule,
 } from "@nativescript/angular";
+import { NativeScriptMaterialActivityIndicatorModule } from "@nativescript-community/ui-material-activityindicator/angular";
 
 import { CloseActionBarComponent } from "./close-action-bar/close-action-bar.component";
 import { BackActionBarComponent } from "./back-action-bar/back-action-bar.component";
@@ -19,9 +20,14 @@ import { NumericSelectorComponent } from "./numeric-selector/numeric-selector.co
 import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.component";
 import { DangerButtonComponent } from "./danger-button/danger-button.component";
 import { CircleIconComponent } from "./circle-icon/circle-icon.component";
+import { ActivityIndicatorComponent } from "./activity-indicator/activity-indicator.component";
 
 @NgModule({
-    imports: [NativeScriptCommonModule, NativeScriptRouterModule],
+    imports: [
+        NativeScriptCommonModule,
+        NativeScriptRouterModule,
+        NativeScriptMaterialActivityIndicatorModule,
+    ],
     declarations: [
         CloseActionBarComponent,
         BackActionBarComponent,
@@ -36,6 +42,7 @@ import { CircleIconComponent } from "./circle-icon/circle-icon.component";
         StepProgressBarComponent,
         DangerButtonComponent,
         CircleIconComponent,
+        ActivityIndicatorComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -51,6 +58,7 @@ import { CircleIconComponent } from "./circle-icon/circle-icon.component";
         StepProgressBarComponent,
         DangerButtonComponent,
         CircleIconComponent,
+        ActivityIndicatorComponent,
     ],
 })
 export class CommonComponentsModule {}
