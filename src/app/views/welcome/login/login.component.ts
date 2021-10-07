@@ -11,6 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class LoginComponent {
     canContinue = false;
+    waitingForResponse = false;
     authFailed = false;
 
     private code: string;
@@ -29,7 +30,9 @@ export class LoginComponent {
     }
 
     onContinueTap() {
-        if (!this.canContinue) return;
+        if (!this.canContinue || this.waitingForResponse) return;
+
+        this.waitingForResponse = true;
 
         this.authService.login(this.code).then((success) => {
             if (success) {
@@ -39,6 +42,7 @@ export class LoginComponent {
                     true
                 );
             } else {
+                this.waitingForResponse = false;
                 this.authFailed = true;
             }
         });
