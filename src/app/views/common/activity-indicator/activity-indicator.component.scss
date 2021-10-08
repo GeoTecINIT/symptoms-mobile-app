@@ -1,0 +1,27 @@
+@import "src/app-variables";
+
+.backdrop {
+  background-color: rgba(128, 128, 128, 0.8);
+  width: 100%;
+  height: 100%;
+  vertical-align: center;
+  z-index: 99;
+}
+
+.indicator-background {
+  background-color: white;
+  border-radius: 50;
+  width: 150;
+  height: 150;
+  padding: 20;
+}
+
+.indicator {
+  color: $complementary;
+  width: 100%;
+  height: 100%;
+  background-image: url("~/images/brand/square_no_text.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
+}
