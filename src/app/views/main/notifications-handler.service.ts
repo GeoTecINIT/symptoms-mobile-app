@@ -17,14 +17,19 @@ import {
 
 import {
     ConfirmModalOptionsDataEmbedder,
+    confirmPretendsToStartAnExposure,
     confirmWantsToStartAnExposure,
 } from "~/app/core/modals/confirm";
 import {
+    askCannotExposeFeedback,
     askForQuestionFrequencyFeedback,
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import { askAnxietyQuestions } from "~/app/core/modals/questions";
-import { emitExposureStartConfirmedEvent } from "~/app/core/framework/events";
+import {
+    emitExposureStartConfirmedEvent,
+    emitPreExposureStartConfirmedEvent,
+} from "~/app/core/framework/events";
 
 @Injectable({
     providedIn: "root",
@@ -103,20 +108,42 @@ export class NotificationsHandlerService {
 
     private async handleConfirmAction(notification: Notification) {
         const tapActionId = notification.tapAction.id;
-        if (tapActionId !== "start-exposure") {
-            throw new Error(`Unsupported confirm action: ${tapActionId}`);
-        }
         const { metadata } = notification.tapAction;
-        const wantsToStartExposure = await this.showConfirmModal(
-            new ConfirmModalOptionsDataEmbedder(
-                confirmWantsToStartAnExposure
-            ).embed(metadata),
-            notification
-        );
-        if (!wantsToStartExposure) {
-            await this.showFeedbackModal(askWantsToLeaveFeedback, notification);
-        } else {
-            emitExposureStartConfirmedEvent(metadata);
+        switch (tapActionId) {
+            case "exposure-intention":
+                const pretendsToStartExposure = await this.showConfirmModal(
+                    new ConfirmModalOptionsDataEmbedder(
+                        confirmPretendsToStartAnExposure
+                    ).embed(metadata),
+                    notification
+                );
+                if (!pretendsToStartExposure) {
+                    await this.showFeedbackModal(
+                        askCannotExposeFeedback,
+                        notification
+                    );
+                } else {
+                    emitPreExposureStartConfirmedEvent(metadata);
+                }
+                break;
+            case "start-exposure":
+                const wantsToStartExposure = await this.showConfirmModal(
+                    new ConfirmModalOptionsDataEmbedder(
+                        confirmWantsToStartAnExposure
+                    ).embed(metadata),
+                    notification
+                );
+                if (!wantsToStartExposure) {
+                    await this.showFeedbackModal(
+                        askWantsToLeaveFeedback,
+                        notification
+                    );
+                } else {
+                    emitExposureStartConfirmedEvent(metadata);
+                }
+                break;
+            default:
+                throw new Error(`Unsupported confirm action: ${tapActionId}`);
         }
     }
 
