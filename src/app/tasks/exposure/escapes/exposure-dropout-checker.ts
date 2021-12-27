@@ -23,9 +23,10 @@ export class ExposureDropoutChecker extends TraceableTask {
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
         const changes = invocationEvent.data as Array<AoIProximityChange>;
-        const result = await checkIfProximityChangesInvolveOngoingExposure(
+        const ongoingExposure = await this.store.getLastUnfinished(true);
+        const result = checkIfProximityChangesInvolveOngoingExposure(
             changes,
-            this.store
+            ongoingExposure
         );
         switch (result) {
             case "no-change":
