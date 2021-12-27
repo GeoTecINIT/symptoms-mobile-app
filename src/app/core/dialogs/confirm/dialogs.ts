@@ -6,6 +6,14 @@ export const confirmToContinueExposure: ConfirmDialogOptions = {
     negativeText: "Continuar",
 };
 
+export const confirmToDiscardExposure: ConfirmDialogOptions = {
+    question: "¿Te vas?",
+    body:
+        "Puedes realizar una exposición en otro momento. Recuerda que exponerse con frecuencia es la mejor forma de mejorar.",
+    positiveText: "Exponerme",
+    negativeText: "Salir",
+};
+
 export const confirmWantsToLeave: ConfirmDialogOptions = {
     question: "¿Te vas?",
     body:
