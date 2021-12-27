@@ -11,7 +11,7 @@ export function createExposuresStoreMock(): ExposuresStore {
         insert(exposure: Exposure): Promise<string> {
             return Promise.resolve("");
         },
-        getLastUnfinished(): Promise<Exposure> {
+        getLastUnfinished(andStarted?: boolean): Promise<Exposure> {
             return Promise.resolve(undefined);
         },
         update(exposure: Exposure): Promise<void> {
@@ -19,6 +19,9 @@ export function createExposuresStoreMock(): ExposuresStore {
         },
         getAll(): Promise<Array<Exposure>> {
             return Promise.resolve(undefined);
+        },
+        remove(id: string): Promise<void> {
+            return Promise.resolve();
         },
         clear(): Promise<void> {
             return Promise.resolve(undefined);

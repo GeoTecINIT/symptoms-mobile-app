@@ -7,6 +7,7 @@ export interface ExposuresStore {
     getLastUnfinished(andStarted?: boolean): Promise<Exposure>;
     update(exposure: Exposure): Promise<void>;
     getAll(): Promise<Array<Exposure>>;
+    remove(id: string): Promise<void>;
     clear(): Promise<void>;
 }
 
@@ -69,6 +70,10 @@ class ExposuresStoreDB implements ExposuresStore {
         }
 
         return unfinished[0];
+    }
+
+    async remove(id: string): Promise<void> {
+        await this.store.delete(id);
     }
 
     async clear(): Promise<void> {
