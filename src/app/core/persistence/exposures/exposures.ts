@@ -1,9 +1,10 @@
 import { Exposure } from "./exposure";
 import { EMAIStore } from "@geotecinit/emai-framework/storage";
+import { QueryLogicalOperator } from "nativescript-couchbase-plugin";
 
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;
-    getLastUnfinished(): Promise<Exposure>;
+    getLastUnfinished(andStarted?: boolean): Promise<Exposure>;
     update(exposure: Exposure): Promise<void>;
     getAll(): Promise<Array<Exposure>>;
     clear(): Promise<void>;
@@ -47,12 +48,21 @@ class ExposuresStoreDB implements ExposuresStore {
         });
     }
 
-    async getLastUnfinished(): Promise<Exposure> {
-        const unfinished = await this.store.fetch({
+    async getLastUnfinished(andStarted = false): Promise<Exposure> {
+        const query: any = {
             select: [],
             where: [{ property: "endTime", comparison: "equalTo", value: -1 }],
             order: [{ property: "startTime", direction: "desc" }],
-        });
+        };
+        if (andStarted) {
+            query.where.push({
+                logical: QueryLogicalOperator.AND,
+                property: "startTime",
+                comparison: "notEqualTo",
+                value: -1,
+            });
+        }
+        const unfinished = await this.store.fetch(query);
 
         if (unfinished.length === 0) {
             return null;

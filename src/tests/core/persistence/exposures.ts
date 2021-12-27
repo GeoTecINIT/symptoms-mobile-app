@@ -75,6 +75,12 @@ describe("Exposures store", () => {
         expect(lastExposure).toBeNull();
     });
 
+    it("returns null when instructed and last exposure is just pre-started", async () => {
+        await exposures.insert(newPreExposure);
+        const lastExposure = await exposures.getLastUnfinished(true);
+        expect(lastExposure).toBeNull();
+    });
+
     it("is able to update a previously created exposure", async () => {
         await exposures.insert(newExposure);
         const exposureToUpdate = await exposures.getLastUnfinished();

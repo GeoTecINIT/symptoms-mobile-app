@@ -76,7 +76,7 @@ export class UnderExposureService {
 
     private takeAndBroadcastLastUnfinishedExposure() {
         exposures
-            .getLastUnfinished()
+            .getLastUnfinished(true)
             .then((exposure) => this.lastUnfinishedExposure$.next(exposure));
     }
 
