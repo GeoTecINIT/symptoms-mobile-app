@@ -5,7 +5,7 @@ import {
     TraceableTask,
 } from "@geotecinit/emai-framework/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
-import { ExposureChange } from "~/app/tasks/exposure/change-record";
+import { ExposureChange } from "~/app/tasks/exposure/change-record.ts";
 import { Change } from "@geotecinit/emai-framework/entities";
 
 export class FinishExposureTask extends TraceableTask {
