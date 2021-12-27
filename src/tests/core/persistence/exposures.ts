@@ -116,6 +116,13 @@ describe("Exposures store", () => {
         expect(allExposures[1]).toEqual(jasmine.objectContaining(newExposure));
     });
 
+    it("is able to remove an existing exposure", async () => {
+        const id = await exposures.insert(newPreExposure);
+        await exposures.remove(id);
+        const missingExposure = await exposures.getLastUnfinished();
+        expect(missingExposure).toBeNull();
+    });
+
     afterEach(async () => {
         await exposures.clear();
     });
