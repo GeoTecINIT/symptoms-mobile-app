@@ -8,8 +8,9 @@ import {
 import { TapActionType } from "@geotecinit/emai-framework/notifications";
 
 const exposureTimes = getConfig().exposureTimes;
-const EXPOSURE_TIME = exposureTimes.regular;
-const EXPOSURE_EXTENSION_TIME = exposureTimes.extension;
+const EXPOSURE_MINUTES = exposureTimes.regular;
+const EXPOSURE_EXTENSION_MINUTES = exposureTimes.extension;
+const BETWEEN_QUESTIONS_MINUTES = exposureTimes.betweenQuestions;
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
@@ -182,7 +183,7 @@ class DemoTaskGraph implements TaskGraph {
                     id: "anxiety-questions",
                 },
             })
-                .every(5, "minutes")
+                .every(BETWEEN_QUESTIONS_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
@@ -233,7 +234,7 @@ class DemoTaskGraph implements TaskGraph {
                 emotionThreshold: 5,
                 peakToLastThreshold: 3,
             })
-                .in(EXPOSURE_TIME, "minutes")
+                .in(EXPOSURE_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure evaluation results successful
@@ -281,7 +282,7 @@ class DemoTaskGraph implements TaskGraph {
             run("evaluateExposureExtension", {
                 emotionThreshold: 8,
             })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure extension evaluation results successful
@@ -310,7 +311,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("finishExposure", { successful: true })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         on(
@@ -319,7 +320,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Sabemos que no es fácil, pero te has esforzado mucho",
                 body: "Podemos finalizar la exposición por hoy",
             })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Finalization event
