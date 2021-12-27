@@ -121,7 +121,7 @@ class DemoTaskGraph implements TaskGraph {
         // END: High resolution geolocation data collection
 
         // START: Pre-exposure events
-        // -> Stays nearby an area of interest for a while
+        // -> Watch exposure area outer radius proximity changes
         on(
             "movedInsideAreaOfInterest",
             run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
@@ -130,16 +130,34 @@ class DemoTaskGraph implements TaskGraph {
             "movedAwayFromAreaOfInterest",
             run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
         );
+        on("movedCloseToAreaOfInterest", run("checkPreExposureStatus"));
+        // -> Gets nearby an area of interest
+        on(
+            "approachedAreaWithNoOngoingExposure",
+            run("sendNotification", {
+                title: "Estás cerca de un lugar de exposición",
+                body: "¿Vas a hacer una exposición?",
+                tapAction: {
+                    type: "ask-confirmation",
+                    id: "exposure-intention",
+                },
+            })
+        );
+        // -> Confirms intends to carry on an exposure
+        on("preExposureStartConfirmed", run("preStartExposure"));
+        // -> Watch in case leaves the vicinity of the area without getting closer
+        on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
+        // -> Stays nearby an area of interest for a while
         on(
             "movedCloseToAreaOfInterest",
             run("sendNotification", {
-                title: "Has llegado a un lugar importante",
+                title: "Has llegado a un lugar de exposición",
                 body: "Exponerte te ayudará a superar tu problema, adelante",
             })
                 .in(10, "minutes")
                 .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
-        // -> Enters a exposure area
+        // -> Enters an exposure area
         on("movedInsideAreaOfInterest", run("checkExposureAreaStatus"));
         on(
             "enteredAreaWithNoOngoingExposure",
@@ -152,7 +170,7 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
-        // -> Confirms to start a exposure
+        // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
         on(
             "exposureStarted",
