@@ -72,7 +72,7 @@ function docFrom(exposure: Exposure): any {
     const { startTime, endTime, place, emotionValues, successful } = exposure;
 
     return {
-        startTime: startTime.getTime(),
+        startTime: startTime ? startTime.getTime() : -1,
         endTime: endTime ? endTime.getTime() : -1,
         place,
         emotionValues: [
@@ -90,7 +90,7 @@ function exposureFrom(doc: any): Exposure {
 
     return {
         id,
-        startTime: new Date(startTime),
+        startTime: startTime !== -1 ? new Date(startTime) : null,
         endTime: endTime !== -1 ? new Date(endTime) : null,
         place,
         emotionValues: [

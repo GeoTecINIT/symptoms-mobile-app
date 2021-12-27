@@ -10,6 +10,12 @@ describe("Exposures store", () => {
         radius: 30,
     };
 
+    const newPreExposure: Exposure = {
+        place,
+        emotionValues: [],
+        successful: false,
+    };
+
     const newExposure: Exposure = {
         startTime: new Date(2021, 4, 20, 18, 0),
         place,
@@ -41,6 +47,11 @@ describe("Exposures store", () => {
         await exposures.clear();
     });
 
+    it("successfully inserts a new pre-exposure", async () => {
+        const id = await exposures.insert(newPreExposure);
+        expect(id).toEqual(jasmine.any(String));
+    });
+
     it("successfully inserts a new exposure", async () => {
         const id = await exposures.insert(newExposure);
         expect(id).toEqual(jasmine.any(String));
@@ -50,6 +61,12 @@ describe("Exposures store", () => {
         await exposures.insert(newExposure);
         const lastExposure = await exposures.getLastUnfinished();
         expect(lastExposure).toEqual(jasmine.objectContaining(newExposure));
+    });
+
+    it("successfully gets the last pre-exposure", async () => {
+        await exposures.insert(newPreExposure);
+        const lastExposure = await exposures.getLastUnfinished();
+        expect(lastExposure).toEqual(jasmine.objectContaining(newPreExposure));
     });
 
     it("returns null when no exposure is ongoing", async () => {
