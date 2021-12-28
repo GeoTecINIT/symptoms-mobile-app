@@ -1,0 +1,21 @@
+<StackLayout class="container">
+    <StackLayout class="input-box"
+            [class.focused]="focus">
+        <TextField
+                class="text-input"
+                [text]="text"
+                [hint]="hint"
+                [returnKeyType]="returnKeyType"
+                (focus)="onFieldFocus()"
+                (blur)="onFieldBlur()"
+                (textChange)="onFieldTextChange($event)"
+                (returnPress)="onReturnPressed()">
+        </TextField>
+    </StackLayout>
+    <Label
+            *ngIf="helpText"
+            class="help-text"
+            textWrap="true"
+            [text]="helpText">
+    </Label>
+</StackLayout>
