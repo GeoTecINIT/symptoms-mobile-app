@@ -100,6 +100,18 @@ describe("Exposures store", () => {
         expect(lastExposure).toEqual(updatedExposure);
     });
 
+    it("is able to update a pre-exposure to become a exposure", async () => {
+        await exposures.insert(newPreExposure);
+        const exposureToUpdate = await exposures.getLastUnfinished();
+        const updatedExposure: Exposure = {
+            ...exposureToUpdate,
+            startTime: new Date(),
+        };
+        await exposures.update(updatedExposure);
+        const lastExposure = await exposures.getLastUnfinished(true);
+        expect(lastExposure).toEqual(updatedExposure);
+    });
+
     it("cannot update an exposure that has not been previously created", async () => {
         await expectAsync(exposures.update(newExposure)).toBeRejected();
     });

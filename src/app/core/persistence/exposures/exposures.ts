@@ -34,8 +34,11 @@ class ExposuresStoreDB implements ExposuresStore {
                 "Cannot update an exposure not previously inserted! (missing id)"
             );
         }
-        const { endTime, emotionValues, successful } = docFrom(exposure);
+        const { startTime, endTime, emotionValues, successful } = docFrom(
+            exposure
+        );
         await this.store.update(exposure.id, {
+            startTime,
             endTime,
             emotionValues,
             successful,
