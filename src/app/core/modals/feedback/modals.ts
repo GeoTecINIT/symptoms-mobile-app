@@ -79,12 +79,12 @@ export const askForQuestionFrequencyFeedback: FeedbackModalOptions = {
             },
         ],
     },
-    confirmScreen: {
+    completionScreen: {
         body: {
             iconCode: "\ue815",
             header: "¡Gracias!",
             message: "Tus respuestas nos ayudan a mejorar",
         },
-        confirm: "Volver a la app",
+        confirmButton: "Volver a la app",
     },
 };

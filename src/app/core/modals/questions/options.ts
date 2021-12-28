@@ -1,3 +1,5 @@
+import { CompletionScreenOptions } from "~/app/core/modals/common";
+
 export interface QuestionsModalOptions {
     title: string;
     body: {
@@ -6,6 +8,7 @@ export interface QuestionsModalOptions {
         text: string;
     };
     questions: Array<QuestionType>;
+    completionScreen?: CompletionScreenOptions;
 }
 
 export type QuestionType = RangeQuestion | FreeTextQuestion; // Append other question types here
