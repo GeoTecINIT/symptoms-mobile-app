@@ -1,0 +1,29 @@
+@import "src/app-variables";
+
+.container {
+  margin: 8;
+}
+
+.input-box {
+  background-color: const(grey);
+  border-radius: 4;
+  border-width: 2;
+  border-color: const(grey);
+  &.focused {
+    border-color: $complementary;
+  }
+}
+
+.text-input {
+  placeholder-color: $input-color;
+  color: $accent;
+  font-size: 16;
+  border-bottom-width: 0;
+  vertical-align: center;
+}
+
+.help-text {
+  font-size: 12;
+  color: $input-color;
+  margin-left: $global-spacing;
+}
