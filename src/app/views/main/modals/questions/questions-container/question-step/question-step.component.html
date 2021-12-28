@@ -11,6 +11,13 @@
                 width="100"
                 (valueChange)="onValueSelected($event)">
         </SymNumericSelector>
+        <SymTextInput
+            *ngSwitchCase="'free-text'"
+            [text]="savedAnswer?.answer"
+            [hint]="question.hint"
+            [helpText]="question.helpText"
+            (textChanged)="onValueSelected($event)">
+        </SymTextInput>
     </ng-container>
 
     <ng-container [ngSwitch]="stepType">
