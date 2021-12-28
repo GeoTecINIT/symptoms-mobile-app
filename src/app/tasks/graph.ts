@@ -136,7 +136,7 @@ class DemoTaskGraph implements TaskGraph {
             "approachedAreaWithNoOngoingExposure",
             run("sendNotification", {
                 title: "Estás cerca de un lugar de exposición",
-                body: "¿Vas a hacer una exposición?",
+                body: "¿Vas a hacer una?",
                 tapAction: {
                     type: "ask-confirmation",
                     id: "exposure-intention",
@@ -165,8 +165,8 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "enteredAreaWithNoOngoingExposure",
             run("sendNotification", {
-                title: "Estás en un lugar importante",
-                body: "Toca la notificación para iniciar una exposición",
+                title: "Has llegado a un lugar de exposición",
+                body: "¿Te animas a hacer una?",
                 tapAction: {
                     type: "ask-confirmation",
                     id: "start-exposure",
@@ -179,7 +179,7 @@ class DemoTaskGraph implements TaskGraph {
             "exposureStarted",
             run("sendNotification", {
                 title: "Acabas de iniciar una exposición",
-                body: "Pulsa aquí si tienes dudas",
+                body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
                     id: "c04",
