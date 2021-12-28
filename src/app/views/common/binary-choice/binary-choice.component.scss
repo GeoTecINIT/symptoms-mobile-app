@@ -1,0 +1,21 @@
+@import "src/app-variables";
+
+Label {
+  width: 100%;
+  padding: 8 0 8 0;
+  text-align: center;
+  border-color: #c4c4c4;
+  &.left {
+    border-width: 4 2 4 4;
+    border-radius: 5 0 0 5;
+  }
+  &.right {
+    border-width: 4 4 4 2;
+    border-radius: 0 5 5 0;
+  }
+  &.active {
+    background-color: $complementary;
+    border-color: $complementary;
+    color: const(white);
+  }
+}
