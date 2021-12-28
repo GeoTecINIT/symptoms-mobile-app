@@ -22,11 +22,11 @@ import {
 } from "~/app/core/modals/confirm";
 import {
     askCannotExposeFeedback,
-    askForQuestionFrequencyFeedback,
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import {
     askExposureQuestions,
+    askPostExposureQuestions,
     askPreExposureQuestions,
 } from "~/app/core/modals/questions";
 import {
@@ -154,11 +154,11 @@ export class NotificationsHandlerService {
         const tapActionId = notification.tapAction.id;
         let options: FeedbackModalOptions;
         switch (tapActionId) {
+            case "exposure-discarded":
+                options = askCannotExposeFeedback;
+                break;
             case "exposure-left":
                 options = askWantsToLeaveFeedback;
-                break;
-            case "question-frequency":
-                options = askForQuestionFrequencyFeedback;
                 break;
             default:
                 throw new Error(`Unsupported feedback action: ${tapActionId}`);
@@ -170,11 +170,14 @@ export class NotificationsHandlerService {
         const questionnaireId = notification.tapAction.id;
         let options: QuestionsModalOptions;
         switch (questionnaireId) {
+            case "pre-exposure-questions":
+                options = askPreExposureQuestions;
+                break;
             case "exposure-questions":
                 options = askExposureQuestions;
                 break;
-            case "pre-exposure-questions":
-                options = askPreExposureQuestions;
+            case "post-exposure-questions":
+                options = askPostExposureQuestions;
                 break;
             default:
                 throw new Error(`Unknown questionnaire: ${questionnaireId}`);

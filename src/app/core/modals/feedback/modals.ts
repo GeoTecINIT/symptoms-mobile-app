@@ -53,38 +53,3 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
         ],
     },
 };
-
-export const askForQuestionFrequencyFeedback: FeedbackModalOptions = {
-    title: "¿Qué tal lo estamos haciendo?",
-    feedbackScreen: {
-        body: {
-            iconCode: "\ue913",
-            text:
-                "Por favor, ayúdanos a mejorar respondiendo a unas cuestiones sobre la experiencia de uso de la aplicación",
-        },
-        question:
-            "¿Cómo valorarías la frecuencia con la que recibes preguntas?",
-        options: [
-            {
-                type: "predefined",
-                answer: "Alta, recibo muchas preguntas",
-            },
-            {
-                type: "predefined",
-                answer: "Adecuada, no me resulta pesado",
-            },
-            {
-                type: "predefined",
-                answer: "Baja, podría recibir más",
-            },
-        ],
-    },
-    completionScreen: {
-        body: {
-            iconCode: "\ue815",
-            header: "¡Gracias!",
-            message: "Tus respuestas nos ayudan a mejorar",
-        },
-        confirmButton: "Volver a la app",
-    },
-};
