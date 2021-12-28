@@ -14,6 +14,9 @@ export class TextInputComponent {
     @Input() hint = "";
     @Input() helpText = "";
 
+    @Input() marginTop = 0;
+    @Input() marginBottom = 0;
+
     @Output() textChanged = new EventEmitter<string>();
     @Output() returnKeyPressed = new EventEmitter<void>();
 
