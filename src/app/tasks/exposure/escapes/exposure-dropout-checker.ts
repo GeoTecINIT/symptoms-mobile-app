@@ -30,9 +30,10 @@ export class ExposureDropoutChecker extends TraceableTask {
         );
         switch (result) {
             case "no-change":
-            case "not-present":
+            case "not-ongoing":
+            case "pre-started":
                 return { eventName: this.outputEventNames[0] };
-            case "present":
+            case "ongoing":
                 return { eventName: EXPOSURE_DROPPED_OUT };
         }
     }
