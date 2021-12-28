@@ -11,7 +11,7 @@ export interface QuestionsModalOptions {
     completionScreen?: CompletionScreenOptions;
 }
 
-export type QuestionType = RangeQuestion | FreeTextQuestion; // Append other question types here
+export type QuestionType = RangeQuestion | FreeTextQuestion | BinaryQuestion; // Append other question types here
 
 interface Question {
     title: string;
@@ -27,4 +27,11 @@ interface FreeTextQuestion extends Question {
     type: "free-text";
     hint?: string;
     helpText?: string;
+}
+
+interface BinaryQuestion extends Question {
+    type: "binary";
+    left: string;
+    right: string;
+    default?: string;
 }
