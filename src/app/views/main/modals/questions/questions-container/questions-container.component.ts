@@ -12,6 +12,7 @@ export class QuestionsContainerComponent {
     options: QuestionsModalOptions;
     currentStep = 0;
     answers: Array<QuestionAnswer> = [];
+    showCompletionScreen = false;
 
     get currentStepAnswer(): QuestionAnswer {
         return this.answers[this.currentStep];
@@ -25,6 +26,10 @@ export class QuestionsContainerComponent {
         return this.questionsAmount - this.currentStep === 1;
     }
 
+    get hasCompletionScreen(): boolean {
+        return !!this.options.completionScreen;
+    }
+
     constructor(private params: ModalDialogParams) {
         this.options = params.context as QuestionsModalOptions;
     }
@@ -32,7 +37,11 @@ export class QuestionsContainerComponent {
     onAnswerProvided(result: QuestionStepResult) {
         this.updateAnswer(result);
         if (this.isLastQuestion) {
-            this.params.closeCallback(this.answers);
+            if (this.hasCompletionScreen) {
+                this.showCompletionScreen = true;
+            } else {
+                this.onClose();
+            }
 
             return;
         }
@@ -42,6 +51,10 @@ export class QuestionsContainerComponent {
     onBackTap() {
         if (this.currentStep === 0) return;
         this.currentStep--;
+    }
+
+    onClose() {
+        this.params.closeCallback(this.answers);
     }
 
     private updateAnswer(result: QuestionStepResult) {

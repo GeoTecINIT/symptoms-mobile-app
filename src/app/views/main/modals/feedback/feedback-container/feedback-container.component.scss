@@ -3,18 +3,3 @@
 Label {
   margin-bottom: 8;
 }
-
-StackLayout {
-  background-color: const(white);
-  height: 100%;
-  padding: $global-spacing;
-}
-
-.header {
-  font-size: 36;
-  text-align: center;
-}
-
-.message {
-  text-align: center;
-}
