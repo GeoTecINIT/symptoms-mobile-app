@@ -1,0 +1,16 @@
+<GridLayout columns="*,*" rows="auto" [marginTop]="marginTop" [marginBottom]="marginBottom">
+    <Label
+        col="0"
+        class="left"
+        [class.active]="selectedOption === left"
+        [text]="left"
+        (tap)="onOptionSelected($event)">
+    </Label>
+    <Label
+        col="1"
+        class="right"
+        [class.active]="selectedOption === right"
+        [text]="right"
+        (tap)="onOptionSelected($event)">
+    </Label>
+</GridLayout>
