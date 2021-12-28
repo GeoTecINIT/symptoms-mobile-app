@@ -8,7 +8,11 @@ export interface QuestionsModalOptions {
     questions: Array<QuestionType>;
 }
 
-export type QuestionType = RangeQuestion; // Append other question types here
+export type QuestionType = RangeQuestion | FreeTextQuestion; // Append other question types here
+
+interface Question {
+    title: string;
+}
 
 interface RangeQuestion extends Question {
     type: "range";
@@ -16,6 +20,8 @@ interface RangeQuestion extends Question {
     to: number;
 }
 
-interface Question {
-    title: string;
+interface FreeTextQuestion extends Question {
+    type: "free-text";
+    hint?: string;
+    helpText?: string;
 }
