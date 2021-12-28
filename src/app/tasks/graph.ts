@@ -159,6 +159,9 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Enters an exposure area
         on("movedInsideAreaOfInterest", run("checkExposureAreaStatus"));
+        // -> Enters exposure area with a pre-started exposure
+        on("enteredAreaWithPreStartedExposure", run("startExposure"));
+        // -> Enters exposure area with no ongoing exposure
         on(
             "enteredAreaWithNoOngoingExposure",
             run("sendNotification", {
