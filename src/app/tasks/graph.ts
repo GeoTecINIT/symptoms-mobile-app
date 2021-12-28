@@ -145,6 +145,17 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms intends to carry on an exposure
         on("preExposureStartConfirmed", run("preStartExposure"));
+        on(
+            "preExposureStartConfirmed",
+            run("sendNotification", {
+                title: "¿Podrías decirnos cómo te encuentras?",
+                body: "Toca la notificación para responder",
+                tapAction: {
+                    type: TapActionType.DELIVER_QUESTIONS,
+                    id: "pre-exposure-questions",
+                },
+            })
+        );
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
         // -> Stays nearby an area of interest for a while
@@ -201,7 +212,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Toca la notificación para responder",
                 tapAction: {
                     type: TapActionType.DELIVER_QUESTIONS,
-                    id: "anxiety-questions",
+                    id: "exposure-questions",
                 },
             })
                 .every(BETWEEN_QUESTIONS_MINUTES, "minutes")
