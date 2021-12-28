@@ -25,7 +25,10 @@ import {
     askForQuestionFrequencyFeedback,
     askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
-import { askAnxietyQuestions } from "~/app/core/modals/questions";
+import {
+    askExposureQuestions,
+    askPreExposureQuestions,
+} from "~/app/core/modals/questions";
 import {
     emitExposureStartConfirmedEvent,
     emitPreExposureStartConfirmedEvent,
@@ -167,8 +170,11 @@ export class NotificationsHandlerService {
         const questionnaireId = notification.tapAction.id;
         let options: QuestionsModalOptions;
         switch (questionnaireId) {
-            case "anxiety-questions":
-                options = askAnxietyQuestions;
+            case "exposure-questions":
+                options = askExposureQuestions;
+                break;
+            case "pre-exposure-questions":
+                options = askPreExposureQuestions;
                 break;
             default:
                 throw new Error(`Unknown questionnaire: ${questionnaireId}`);
