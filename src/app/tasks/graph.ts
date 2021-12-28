@@ -158,6 +158,17 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
+        on(
+            "preExposureCancelled",
+            run("sendNotification", {
+                title: "¿Te vas?",
+                body: "Por favor, pulsa aquí para indicar el motivo",
+                tapAction: {
+                    type: TapActionType.ASK_FEEDBACK,
+                    id: "exposure-discarded",
+                },
+            })
+        );
         // -> Stays nearby an area of interest for a while
         on(
             "movedCloseToAreaOfInterest",
@@ -361,29 +372,23 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on(
+            "exposureFinished",
+            run("sendNotification", {
+                title: "Has realizado un gran trabajo, enhorabuena",
+                body: "¿Podrías responder a estas preguntas?",
+                tapAction: {
+                    type: TapActionType.DELIVER_QUESTIONS,
+                    id: "post-exposure-questions",
+                },
+            })
+                .in(1, "minutes")
+                .cancelOn("stopEvent")
+        );
         on("exposureWasNotDroppedOut", run("calculateExposureAggregate"));
         on("exposureAggregateCalculated", run("writeRecords"));
         on("exposureWasNotDroppedOut", run("calculateExposurePlaceAggregate"));
         on("exposurePlaceAggregateCalculated", run("writeRecords"));
-        on(
-            "exposureWasNotDroppedOut",
-            run("limitedFeedbackDelivery", {
-                feedbackId: "question-frequency",
-                maxCount: 3,
-            })
-        );
-        on(
-            "canDeliverFeedback",
-            run("sendNotification", {
-                title: "¿Te animas a valorar la experiencia?",
-                tapAction: {
-                    type: TapActionType.ASK_FEEDBACK,
-                    id: "question-frequency",
-                },
-            })
-                .in(5, "minutes")
-                .cancelOn("stopEvent")
-        );
         // END: Post-exposure events
 
         // START: Patient feedback events
