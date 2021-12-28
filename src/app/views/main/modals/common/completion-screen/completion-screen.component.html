@@ -1,0 +1,7 @@
+<StackLayout @slideUp verticalAlignment="center">
+    <Label *ngIf="options.body.emoji" class="emoji-icon" [text]="options.body.emoji"></Label>
+    <SymCircleIcon *ngIf="options.body.iconCode" [iconCode]="options.body.iconCode"></SymCircleIcon>
+    <Label class="header" [text]="options.body.header"></Label>
+    <Label *ngIf="options.body.message" class="message" textWrap="true" [text]="options.body.message"></Label>
+    <SymPrimaryButton horizontalAlignment="center" [text]="options.confirmButton" (tap)="onConfirmTap()"></SymPrimaryButton>
+</StackLayout>
