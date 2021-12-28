@@ -4,7 +4,7 @@ import { Exposure } from "~/app/core/persistence/exposures";
 export function checkIfProximityChangesInvolveOngoingExposure(
     changes: Array<AoIProximityChange>,
     ongoingExposure: Exposure
-): "no-change" | "not-present" | "present" {
+): "no-change" | "not-ongoing" | "pre-started" | "ongoing" {
     if (!changes.length) {
         return "no-change";
     }
@@ -12,11 +12,15 @@ export function checkIfProximityChangesInvolveOngoingExposure(
     const aois = changes.map((change) => change.aoi);
 
     if (
-        ongoingExposure &&
-        aois.find((aoi) => aoi.id === ongoingExposure.place.id)
+        !ongoingExposure ||
+        !aois.find((aoi) => aoi.id === ongoingExposure.place.id)
     ) {
-        return "present";
-    } else {
-        return "not-present";
+        return "not-ongoing";
     }
+
+    if (!ongoingExposure.startTime) {
+        return "pre-started";
+    }
+
+    return "ongoing";
 }

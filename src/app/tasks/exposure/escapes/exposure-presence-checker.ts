@@ -36,9 +36,10 @@ export abstract class ExposurePresenceChecker extends TraceableTask {
 
         switch (result) {
             case "no-change":
-            case "not-present":
+            case "not-ongoing":
+            case "pre-started":
                 return { eventName: this.outputEventNames[0] };
-            case "present":
+            case "ongoing":
                 return {
                     eventName: this.outputEvent,
                     result: new ExposureAreaLeftRecord(
