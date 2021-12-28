@@ -5,7 +5,7 @@ import {
 } from "~/app/core/dialogs/confirm";
 
 export const confirmPretendsToStartAnExposure: ConfirmModalOptions = {
-    title: "Estás cerca de un lugar importante",
+    title: "Estás cerca de un lugar de exposición",
     body: {
         iconCode: "\ue55f",
         text: "Estás cerca de: {{0.aoi.name}}",
@@ -19,7 +19,7 @@ export const confirmPretendsToStartAnExposure: ConfirmModalOptions = {
 };
 
 export const confirmWantsToStartAnExposure: ConfirmModalOptions = {
-    title: "Estás en un lugar importante",
+    title: "Estás en un lugar de exposición",
     body: {
         iconCode: "\ue55f",
         text: "Has llegado a: {{0.aoi.name}}",
