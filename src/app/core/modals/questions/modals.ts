@@ -61,3 +61,35 @@ export const askExposureQuestions: QuestionsModalOptions = {
         },
     ],
 };
+
+export const askPostExposureQuestions: QuestionsModalOptions = {
+    title: "¿Cómo te encuentras?",
+    body: {
+        iconCode: "\ue94c",
+        text: "Responde con sinceridad a las preguntas que te planteamos",
+    },
+    questions: [
+        {
+            title:
+                "¿Se ha cumplido lo que pensabas que iba a ocurrir antes de la exposición",
+            type: "binary",
+            left: "Sí",
+            right: "No",
+        },
+        {
+            title:
+                "¿Has conseguido centrar tu atención en la exposición en todo momento?",
+            type: "binary",
+            left: "Sí",
+            right: "No",
+        },
+    ],
+    completionScreen: {
+        body: {
+            iconCode: "\ue815",
+            header: "¡Buen trabajo!",
+            message: "Con la práctica tolerarás mejor la situación",
+        },
+        confirmButton: "Volver a la app",
+    },
+};
