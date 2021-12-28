@@ -22,18 +22,32 @@ export class StartExposureTask extends TraceableTask {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
+        const place = invocationEvent.data[0].aoi as AreaOfInterest;
         const ongoingExposure = await this.store.getLastUnfinished();
+
         if (ongoingExposure) {
-            throw new Error("There is an exposure already ongoing!");
+            if (ongoingExposure.startTime) {
+                throw new Error("There is an exposure already ongoing!");
+            } else if (ongoingExposure.place.id !== place.id) {
+                throw new Error(
+                    "There is a pre-started exposure somewhere else!"
+                );
+            }
         }
 
-        const exposure: Exposure = {
-            startTime: new Date(),
-            place: invocationEvent.data[0].aoi as AreaOfInterest,
-            emotionValues: [],
-            successful: false,
-        };
-        await this.store.insert(exposure);
+        let exposure: Exposure;
+        if (!ongoingExposure) {
+            exposure = {
+                startTime: new Date(),
+                place,
+                emotionValues: [],
+                successful: false,
+            };
+            await this.store.insert(exposure);
+        } else {
+            exposure = { ...ongoingExposure, startTime: new Date() };
+            await this.store.update(exposure);
+        }
 
         return {
             result: new ExposureChange(
