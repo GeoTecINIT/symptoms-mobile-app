@@ -45,10 +45,8 @@ describe("Exposure status checker task", () => {
     });
 
     it("says that a pre-exposure is ongoing whe it is in the same visited area", async () => {
-        const preExposure = createNewFakeExposure(aoiChange1.aoi);
-        preExposure.startTime = undefined;
         spyOn(storeMock, "getLastUnfinished").and.returnValue(
-            Promise.resolve(preExposure)
+            Promise.resolve(createNewFakeExposure(aoiChange1.aoi, false))
         );
 
         const invocationEvent = createEvent("triggerEvent", {
