@@ -1,4 +1,8 @@
-import { Exposure, ExposuresStore } from "~/app/core/persistence/exposures";
+import {
+    EmotionValue,
+    Exposure,
+    ExposuresStore,
+} from "~/app/core/persistence/exposures";
 import {
     AoIProximityChange,
     AreaOfInterest,
@@ -47,11 +51,27 @@ export function createFakeAoIProximityChange(
     return new AoIProximityChange(aoi, proximity, change);
 }
 
-export function createNewFakeExposure(place: AreaOfInterest): Exposure {
-    return {
-        startTime: new Date(),
+export function createNewFakeExposure(
+    place: AreaOfInterest,
+    started = true,
+    emotionValues: Array<number> = []
+): Exposure {
+    const values: Array<EmotionValue> = emotionValues.map((value, index) => ({
+        timestamp: new Date(
+            Date.now() - (emotionValues.length - index - 1) * 8 * 60 * 1000
+        ),
+        value,
+    }));
+
+    const exposure: Exposure = {
         place,
-        emotionValues: [],
+        emotionValues: values,
         successful: false,
     };
+
+    if (started) {
+        exposure.startTime = new Date();
+    }
+
+    return exposure;
 }
