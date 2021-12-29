@@ -231,6 +231,39 @@ class DemoTaskGraph implements TaskGraph {
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         on("questionnaireAnswersAcquired", run("processExposureAnswers"));
+        // -> Evaluate exposure answers at runtime
+        on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
+        // -> Determines that the exposure is not needed due to low sustained anxiety level
+        on(
+            "patientShowsAnInitialSustainedLowAnxietyLevel",
+            run("finishExposure", { successful: true })
+        );
+        on(
+            "patientShowsAnInitialSustainedLowAnxietyLevel",
+            run("sendNotification", {
+                title: "Parece que manejas bien esta situación",
+                body: "Puedes terminar aquí o continuar un poco más",
+            })
+        );
+        // -> Determines that the patient requires some reinforcement due to high anxiety values
+        on(
+            "patientShowsAHighAnxietyLevel",
+            run("sendNotification", {
+                title: "Parece que estás ante una situación difícil...",
+                body: "Pulsa aquí, quizás esto te ayude",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "c05",
+                },
+            })
+        );
+        // -> Determines that the patient could get some reward
+        on(
+            "patientCouldGetSomeReward",
+            run("sendNotification", {
+                title: "Lo estás haciendo muy bien",
+            })
+        );
         // -> Leaving exposure area
         on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
