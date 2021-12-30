@@ -4,10 +4,7 @@ import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { FeedbackModalService } from "../../../modals/feedback";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import {
-    confirmToContinueExposure,
-    confirmWantsToLeave,
-} from "~/app/core/dialogs/confirm";
+import { confirmWantsToLeave } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
 import { emitExposureManuallyFinishedEvent } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
@@ -82,22 +79,14 @@ export class UnderExposureComponent {
         this.unloaded$.next();
     }
 
-    onWantsToLeaveTap() {
-        this.contentViewModalService.showContent("cg03");
-    }
-
-    onCallTherapistTap() {
-        this.underExposureService.callTherapist().then((success) => {
-            if (success) {
-                this.askIfWantsToContinue();
-            }
-        });
-    }
-
     onWantsToEndExposureTap() {
         this.dialogsService
             .askConfirmationWithPositiveAction(confirmWantsToLeave)
             .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
+    }
+
+    onWantsToLeaveTap() {
+        this.contentViewModalService.showContent("cg03");
     }
 
     private subscribeToOngoingExposureChanges() {
@@ -128,12 +117,6 @@ export class UnderExposureComponent {
                     this.inDanger = inDanger;
                 });
             });
-    }
-
-    private askIfWantsToContinue() {
-        this.dialogsService
-            .askConfirmationWithDestructiveAction(confirmToContinueExposure)
-            .then((wantsToLeave) => this.handleWantsToLeave(wantsToLeave));
     }
 
     private handleWantsToLeave(wantsToLeave: boolean) {
