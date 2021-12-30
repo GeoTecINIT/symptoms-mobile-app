@@ -8,12 +8,6 @@ export const confirmWantsToMakeEmergencyCall: ConfirmDialogOptions = {
     negativeText: "Continuar",
 };
 
-export const confirmToContinueExposure: ConfirmDialogOptions = {
-    question: "¿Deseas continuar con la exposición o terminar por hoy?",
-    positiveText: "Finalizar",
-    negativeText: "Continuar",
-};
-
 export const confirmToDiscardExposure: ConfirmDialogOptions = {
     question: "¿Te vas?",
     body:

@@ -8,7 +8,10 @@
             <Label class="body-text" textWrap="true" [text]="'Permanece en este lugar, limita el uso del teléfono y evita las distracciones.\n\nLa app te acompañará durante todo el proceso a través de notificaciones puntuales.'"></Label>
         </StackLayout>
     </StackLayout>
-    <StackLayout row="1">
+    <SymButtonLink row="1" *ngIf="!inDanger" margin="0" text="¿Necesitas irte?" (tap)="onWantsToEndExposureTap()"></SymButtonLink>
+    <SymButtonLink row="1" *ngIf="inDanger" margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
+
+    <!--<StackLayout row="1">
         <ng-container *ngIf="inDanger; else outOfDanger">
             <Label class="highlighted-text" textWrap="true" text="Llámame si lo necesitas"></Label>
             <SymConfirmButton horizontalAlignment="center" text="Llamar a Juani" (tap)="onCallTherapistTap()"></SymConfirmButton>
@@ -17,5 +20,5 @@
         <ng-template #outOfDanger>
             <SymButtonLink margin="0" text="¿Necesitas irte?" (tap)="onWantsToEndExposureTap()"></SymButtonLink>
         </ng-template>
-    </StackLayout>
+    </StackLayout>-->
 </GridLayout>
