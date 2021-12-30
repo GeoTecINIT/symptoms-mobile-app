@@ -31,3 +31,17 @@ export const confirmWantsToStartAnExposure: ConfirmModalOptions = {
     },
     cancelConfirmOptions: confirmWantsToLeave,
 };
+
+export const confirmDidNotLeaveAreaOnPurpose: ConfirmModalOptions = {
+    title: "¿Estás saliendo del área?",
+    body: {
+        iconCode: "\ue575",
+        text:
+            "Hemos detectado que has salido del área. Si no ha sido algo voluntario, no te preocupes.",
+    },
+    question: "¿Has salido del área de exposición?",
+    buttons: {
+        confirm: "No",
+        cancel: "Sí",
+    },
+};
