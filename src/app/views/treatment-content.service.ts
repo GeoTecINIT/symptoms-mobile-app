@@ -9,11 +9,17 @@ const SEEN_SEPARATOR = ";";
     providedIn: "root",
 })
 export class TreatmentContentService {
-    get contents$(): Observable<Array<TreatmentContent>> {
-        return this.contentUpdates.asObservable();
+    get guideliness$(): Observable<Array<TreatmentContent>> {
+        return this.guidelinesUpdates.asObservable();
+    }
+    get psychoeducations$(): Observable<Array<TreatmentContent>> {
+        return this.psychoeducationUpdates.asObservable();
     }
 
-    private contentUpdates = new ReplaySubject<Array<TreatmentContent>>(1);
+    private guidelinesUpdates = new ReplaySubject<Array<TreatmentContent>>(1);
+    private psychoeducationUpdates = new ReplaySubject<Array<TreatmentContent>>(
+        1
+    );
     private seen = new Set<string>();
 
     constructor() {
@@ -21,8 +27,10 @@ export class TreatmentContentService {
         this.propagateUpdates();
     }
 
-    async getAll(): Promise<Array<TreatmentContent>> {
-        return contents.map((content) => this.joinWithLocalData(content));
+    async getAll(type: TreatmentContentType): Promise<Array<TreatmentContent>> {
+        return contents
+            .map((content) => this.joinWithLocalData(content))
+            .filter((content) => content.type === type);
     }
 
     async getById(id: string): Promise<TreatmentContent> {
@@ -68,8 +76,13 @@ export class TreatmentContentService {
     }
 
     private propagateUpdates() {
-        this.getAll().then((latestContents) =>
-            this.contentUpdates.next(latestContents)
+        this.getAll(
+            TreatmentContentType.PSICHOEDUCATION
+        ).then((latestContents) =>
+            this.psychoeducationUpdates.next(latestContents)
+        );
+        this.getAll(TreatmentContentType.GUIDELINES).then((latestContents) =>
+            this.guidelinesUpdates.next(latestContents)
         );
     }
 
