@@ -40,7 +40,7 @@ export class ContentListComponent {
     }
 
     private subscribeToContentChanges() {
-        this.treatmentContentService.contents$
+        this.treatmentContentService.psychoeducations$
             .pipe(takeUntil(this.unloaded$))
             .subscribe((contents) => {
                 this.ngZone.run(() => {
