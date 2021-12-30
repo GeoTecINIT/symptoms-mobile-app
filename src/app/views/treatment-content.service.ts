@@ -86,14 +86,77 @@ export interface TreatmentContent extends RemoteTreatmentContent {
 interface RemoteTreatmentContent {
     id: string;
     index: number;
+    type: TreatmentContentType;
     title: string;
     body: string;
 }
 
+export enum TreatmentContentType {
+    GUIDELINES = "guidelines",
+    PSICHOEDUCATION = "psychoeducation",
+}
+
 const contents: Array<RemoteTreatmentContent> = [
     {
-        id: "c01",
+        id: "cg01",
         index: 1,
+        type: TreatmentContentType.GUIDELINES,
+        title: "¿Cómo llevar a cabo una exposición?",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg02",
+        index: 2,
+        type: TreatmentContentType.GUIDELINES,
+        title: "¿Cómo lidiar con la ansiedad?",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg03",
+        index: 3,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Sobre la evitación",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg04",
+        index: 4,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Refuerzo >= 5 y >= 3 USAs (60 min)",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg05",
+        index: 5,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Pautas > 5 y < 3 USAs (60 min)",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg06",
+        index: 6,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Refuerzo < 8 (75 min)",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg07",
+        index: 7,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Pautas >= 8 (75 min)",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cg08",
+        index: 8,
+        type: TreatmentContentType.GUIDELINES,
+        title: "Pautas 90 min",
+        body: "Incluir pautas aquí...",
+    },
+    {
+        id: "cp01",
+        index: 1,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "¿Qué es la ansiedad?",
         body: `Las emociones forman parte del funcionamiento normal de los seres humanos, tanto las positivas como las negativas, no es posible entender la vida sin la función importantísima que cumplen las emociones, juegan un papel fundamental y no son perjudiciales. El foco no está en deshacerse de las emociones, sino en conocerlas, ser más consciente de los factores asociados a las mismas y poder regularlas mejor.
 Una función fundamental de las emociones es alertarnos, avisarnos de que algo importante ha ocurrido (tanto en el medio externo como en el medio interno) y motivarnos para actuar. Las emociones nos inducen a la acción en situaciones importantes y son energizantes. Otra función de las emociones es comunicarnos con los demás. Las expresiones faciales son una parte importante de las emociones.
@@ -112,8 +175,9 @@ El miedo es una de las emociones básica que es tremendamente adaptativa y ha se
 Experimentar cierto temor a determinadas situaciones que ocurren a tu alrededor puede ser una reacción no problemática, el problema está en que tu experiencia no termine ahí sino que ese conjunto de reacciones (pensamientos, conductas y sensaciones físicas) interaccionen entre ellas, impidan que veamos la situación a la que nos enfrentamos de forma objetiva a la experiencia tal y como está sucediendo y se centre más bien en el pasado o en los que podría ocurrir en el futuro, convirtiéndose así en realmente amenazante o catastrófica. Es ahí cuando estas reacciones se convierten en extremadamente desadaptativas y podemos hablar de una emoción más compleja como la ansiedad y que se caracteriza por un miedo intenso.`,
     },
     {
-        id: "c02",
+        id: "cp02",
         index: 2,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "El papel de las cogniciones",
         body: `Ante cualquier situación o experiencia las personas podemos atender a una gran cantidad de aspectos distintos. La mente humana funciona como un filtro, focalizamos la atención sobre ciertos aspectos de una situación y les damos significado.
 
@@ -124,8 +188,9 @@ La mayor parte de las veces, este proceso se produce de forma tan rápida que no
 Nuestras interpretaciones influyen en lo que esperamos que ocurra en una determinada situación. Cuando sentimos emociones también aparecen pensamientos. Por ejemplo, alguien que sienta ansiedad en espacios cerrados puede tener pensamientos negativos relacionados con “se va a acabar el aire y me voy a ahogar”. Pues bien, este proceso de interpretaciones tiene importantes consecuencias en cómo nos sentimos y dependiendo de cada una de las interpretaciones la persona experimentará una determinada emoción u otra, a su vez cómo nos sintamos influye en las futuras valoraciones que hagamos.`,
     },
     {
-        id: "c03",
+        id: "cp03",
         index: 3,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "¿Qué es la evitación?",
         body: `El elemento fundamental que contribuye al mantenimiento del miedo intenso en múltiples situaciones es la evitación, es decir, el no enfrentarse a las situaciones temidas.
 
@@ -158,8 +223,9 @@ Quizás, durante tu vida has aprendido que el hecho de realizar ciertas conducta
 Es importante saber además que la evitación puede ser muy sutil y en ocasiones la persona pone en marcha conductas de seguridad (por ejemplo, tomar medicación para enfrentarse a esa situación) o utiliza señales de seguridad (ir siempre acompañado) y en ambos casos también estamos hablando de una evitación perjudicial para superar el problema.`,
     },
     {
-        id: "c04",
+        id: "cp04",
         index: 4,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "La importancia de exponerse",
         body: `Por todo lo que hemos comentado en la sección anterior, es importante exponerse. Esta técnica consiste en mantenerse en las situaciones ansiógenas, experimentando ansiedad el tiempo necesario hasta que la ansiedad disminuya, produciéndose lo que se denomina habituación. Es decir, consiste en enfrentarse a una situación temida hasta familiarizarse con ella, comprobar que no es peligrosa y adquirir las habilidades necesarias para actuar de forma eficaz. No te pedimos que te enfrentes a una situación peligrosa, de verdad para ti, sino que te expongas a situaciones que se entienden como amenazantes, pero realmente no entrañan un peligro real para tu vida. Esta exposición se hará de forma gradual y se establecerán distintos objetivos de exposición en función de la ansiedad que la persona experimente y el grado de evitación que tengan en las distintas situaciones que tema. De este modo, se empezará la exposición con objetivos más fáciles, para ir consiguiendo todos los objetivos uno a uno y avanzando a los más difíciles.
 
@@ -174,8 +240,9 @@ Es importante que prestes atención a los pensamientos, emociones y comportamien
 Recuerda, cuando te permites experimentar tus emociones de forma completa sin evitarlas, te estás dando la oportunidad de poner en marcha las estrategias adecuadas y eficaces para hacerles frente que, con la práctica, acaban convirtiéndose en estrategias automáticas.`,
     },
     {
-        id: "c05",
+        id: "cp05",
         index: 5,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "Curva de ansiedad y evitación",
         body: `Es fundamental que conozcas curva de ansiedad que se producirá durante las exposiciones, es decir, cómo aumenta la ansiedad al exponerse a la situación temida (esto es normal y es señal de que el proceso va bien) y después va descendiendo si permanecemos en la situación el tiempo suficiente sin realizar conductas de evitación.
 
@@ -186,8 +253,9 @@ La exposición, como alternativa a las conductas de evitación, nos permite enfr
 La exposición repetida a estas situaciones produce un descenso del malestar ya que permite que se empiecen a vivir y experimentar y es ahí donde actúa el proceso de habituación. Se trata de un fenómeno natural mediante el cual, si permanecemos el tiempo suficiente en una situación que no es amenazante de forma objetiva, ésta deja de afectarnos. Se reduce entonces la fuerza con la que se percibe el estímulo y hace que se disminuya el malestar que experimenta la personas ante el estímulo que teme. `,
     },
     {
-        id: "c06",
+        id: "cp06",
         index: 6,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "Efectos colaterales",
         body: `Cuando se comienza la exposición, es habitual que aparezcan algunos efectos colaterales de la misma, como son:
 
@@ -204,8 +272,9 @@ La exposición repetida a estas situaciones produce un descenso del malestar ya 
 Ten en cuenta estas características del momento de exposición por el que puedes estar pasando, porque al contrario de lo que podría parecer, indica que todo está funcionando bien y estás afrontando estas situaciones adecuadamente, a pesar de que experimentes efectos colaterales que irán despareciendo con el tiempo. Habla con tu terapeuta si no es así.`,
     },
     {
-        id: "c07",
+        id: "cp07",
         index: 7,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "Tácticas de manejo de la ansiedad",
         body: `Puedes apoyarte en algunas tácticas de control de la ansiedad durante el periodo de tiempo en el que estarás haciendo exposición. Algunas de estas tácticas son:
 
@@ -239,8 +308,9 @@ Ten en cuenta estas características del momento de exposición por el que puede
         j)  Cuando estés dispuesto a continuar, comienza de forma tranquila, relajada. No hay necesidad de sobreesforzarse ni de tener prisa.`,
     },
     {
-        id: "c08",
+        id: "cp08",
         index: 8,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "Situaciones difíciles",
         body: `El cambio es un proceso largo, con altibajos y lograr la consolidación definitiva del cambio requiere un esfuerzo por tu parte. Estos altibajos forman parte de la emoción de vivir y en cualquier momento se puede dar una situación que nos afecte especialmente y ante la que conviene saber cómo podríamos responder.
 
@@ -259,8 +329,9 @@ Todo esto forma parte de lo esperable, ya sabes que las emociones fluctúan y qu
 Una vez hayas reflexionado sobre estos aspectos trata de realizar un listado de esas situaciones y plantearte dos cuestiones 1º) ¿qué puedo hacer para afrontarlas?, y 2º) ¿con quién podría contar para apoyarme? De esta manera estarás más preparado/a para afrontarlas.`,
     },
     {
-        id: "c09",
+        id: "cp09",
         index: 9,
+        type: TreatmentContentType.PSICHOEDUCATION,
         title: "Mantenimiento de los logros",
         body: `Las principales estrategias de mantenimiento se pueden resumir en: 1) intenta practicar todo lo aprendido y 2) procura estar atento/a a posibles fluctuaciones en el estado de ánimo y a las posibles recaídas.
 

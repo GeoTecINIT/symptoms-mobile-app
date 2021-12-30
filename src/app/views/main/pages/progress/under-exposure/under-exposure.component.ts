@@ -83,7 +83,7 @@ export class UnderExposureComponent {
     }
 
     onWantsToLeaveTap() {
-        this.contentViewModalService.showContent("c03");
+        this.contentViewModalService.showContent("cg03");
     }
 
     onCallTherapistTap() {

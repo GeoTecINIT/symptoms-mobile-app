@@ -204,7 +204,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c04",
+                    id: "cg01",
                 },
             })
         );
@@ -253,7 +253,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, quizás esto te ayude",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c05",
+                    id: "cg02",
                 },
             })
         );
@@ -333,7 +333,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c05",
+                    id: "cg04",
                 },
             })
         );
@@ -349,7 +349,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c07",
+                    id: "cg05",
                 },
             })
         );
@@ -369,7 +369,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c08",
+                    id: "cg06",
                 },
             })
         );
