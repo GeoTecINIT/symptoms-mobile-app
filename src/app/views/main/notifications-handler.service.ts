@@ -16,6 +16,7 @@ import {
 } from "@geotecinit/emai-framework/notifications";
 
 import {
+    confirmDidNotLeaveAreaOnPurpose,
     ConfirmModalOptionsDataEmbedder,
     confirmPretendsToStartAnExposure,
     confirmWantsToStartAnExposure,
@@ -31,6 +32,8 @@ import {
 } from "~/app/core/modals/questions";
 import {
     emitExposureStartConfirmedEvent,
+    emitPatientDidNotLeaveExposureAreaOnPurposeEvent,
+    emitPatientLeftExposureAreaOnPurposeEvent,
     emitPreExposureStartConfirmedEvent,
 } from "~/app/core/framework/events";
 
@@ -143,6 +146,19 @@ export class NotificationsHandlerService {
                     );
                 } else {
                     emitExposureStartConfirmedEvent(metadata);
+                }
+                break;
+            case "escape-intention":
+                const didNotLeaveAreaOnPurpose = await this.showConfirmModal(
+                    new ConfirmModalOptionsDataEmbedder(
+                        confirmDidNotLeaveAreaOnPurpose
+                    ).embed(metadata),
+                    notification
+                );
+                if (didNotLeaveAreaOnPurpose) {
+                    emitPatientDidNotLeaveExposureAreaOnPurposeEvent();
+                } else {
+                    emitPatientLeftExposureAreaOnPurposeEvent();
                 }
                 break;
             default:
