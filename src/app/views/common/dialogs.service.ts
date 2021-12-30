@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { CommonComponentsModule } from "./common-components.module";
 import {
     alert,
     AlertOptions,
@@ -13,7 +12,7 @@ import { InfoDialogOptions } from "~/app/core/dialogs/info";
 import { ConfirmDialogOptions } from "~/app/core/dialogs/confirm";
 
 @Injectable({
-    providedIn: CommonComponentsModule,
+    providedIn: "root",
 })
 export class DialogsService {
     private logger: Logger;
