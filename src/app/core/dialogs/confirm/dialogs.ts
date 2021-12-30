@@ -1,5 +1,13 @@
 import { ConfirmDialogOptions } from "./options";
 
+export const confirmWantsToMakeEmergencyCall: ConfirmDialogOptions = {
+    question: "Utiliza esta opción solo si crees que necesitas ayuda",
+    body:
+        "Si has pulsado aquí por error, selecciona CANCELAR. En caso contrario, pulsa CONTINUAR",
+    positiveText: "Cancelar",
+    negativeText: "Continuar",
+};
+
 export const confirmToContinueExposure: ConfirmDialogOptions = {
     question: "¿Deseas continuar con la exposición o terminar por hoy?",
     positiveText: "Finalizar",
