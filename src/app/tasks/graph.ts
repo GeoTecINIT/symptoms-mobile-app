@@ -215,7 +215,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Possible exposure finalization causes
         on("exposureFinished", run("emitExposureForcedToFinishEvent"));
         on("stopEvent", run("emitExposureForcedToFinishEvent"));
-        // -> Deliver questions every 5 minutes as long as the exposure lasts
+        // -> Deliver questions every 8 minutes as long as the exposure lasts
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -270,7 +270,29 @@ class DemoTaskGraph implements TaskGraph {
             "exposureAreaLeft",
             run("sendNotification", {
                 title: "Parece que has salido del lugar de exposición",
-                body: "Recuerda que debes quedarte cerca del área",
+                body: "Pulsa sobre la notificación, por favor",
+                tapAction: {
+                    type: "ask-confirmation",
+                    id: "escape-intention",
+                },
+            })
+        );
+        on(
+            "patientDidNotLeaveExposureAreaOnPurpose",
+            run("sendNotification", {
+                title: "Puedes continuar como hasta ahora",
+                body: "Intenta permanecer cerca del área",
+            })
+        );
+        on(
+            "patientLeftExposureAreaOnPurpose",
+            run("sendNotification", {
+                title: "Evitar la situación puede ser perjudicial para ti",
+                body: "Pulsa aquí para recordar el papel de la evitación",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg03",
+                },
             })
         );
         on("exposureAreaLeft", run("writeRecords"));
