@@ -437,7 +437,7 @@ class DemoTaskGraph implements TaskGraph {
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(
-            "exposureFinished",
+            "exposureWasNotDroppedOut",
             run("sendNotification", {
                 title: "Has realizado un gran trabajo, enhorabuena",
                 body: "¿Podrías responder a estas preguntas?",
