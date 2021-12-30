@@ -3,6 +3,7 @@ import { Component, Input } from "@angular/core";
 import { SettingsModalService } from "../../modals/settings/settings-modal.service";
 import { SimulationModalService } from "../../modals/simulation/simulation-modal.service";
 import { getConfig } from "~/app/core/config";
+import { PanicButtonService } from "~/app/views/main/panic-button.service";
 
 @Component({
     selector: "SymMainActionBar",
@@ -15,7 +16,8 @@ export class MainActionBarComponent {
 
     constructor(
         private settingsModalService: SettingsModalService,
-        private simulationModalService: SimulationModalService
+        private simulationModalService: SimulationModalService,
+        private panicButtonService: PanicButtonService
     ) {
         this.development = !getConfig().production;
     }
@@ -26,5 +28,9 @@ export class MainActionBarComponent {
 
     onSettingsTap() {
         this.settingsModalService.show();
+    }
+
+    onHelpTap() {
+        this.panicButtonService.intendsToMakeEmergencyCall();
     }
 }
