@@ -18,16 +18,24 @@ export function emitExposureStartConfirmedEvent(data: any) {
     emaiFramework.emitEvent("exposureStartConfirmed", data);
 }
 
-export function emitQuestionnaireAnswersAcquired(
+export function emitPatientDidNotLeaveExposureAreaOnPurposeEvent() {
+    emaiFramework.emitEvent("patientDidNotLeaveExposureAreaOnPurpose");
+}
+
+export function emitPatientLeftExposureAreaOnPurposeEvent() {
+    emaiFramework.emitEvent("patientLeftExposureAreaOnPurpose");
+}
+
+export function emitQuestionnaireAnswersAcquiredEvent(
     answers: QuestionnaireAnswers
 ) {
     emaiFramework.emitEvent("questionnaireAnswersAcquired", answers);
 }
 
-export function emitPatientFeedbackAcquired(feedback: PatientFeedback) {
+export function emitPatientFeedbackAcquiredEvent(feedback: PatientFeedback) {
     emaiFramework.emitEvent("patientFeedbackAcquired", feedback);
 }
 
-export function emitExposureManuallyFinished() {
+export function emitExposureManuallyFinishedEvent() {
     emaiFramework.emitEvent("exposureManuallyFinished");
 }

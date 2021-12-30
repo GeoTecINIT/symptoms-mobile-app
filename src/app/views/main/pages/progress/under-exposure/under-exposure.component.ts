@@ -9,7 +9,7 @@ import {
     confirmWantsToLeave,
 } from "~/app/core/dialogs/confirm";
 import { askWantsToLeaveFeedback } from "~/app/core/modals/feedback";
-import { emitExposureManuallyFinished } from "~/app/core/framework/events";
+import { emitExposureManuallyFinishedEvent } from "~/app/core/framework/events";
 import { UnderExposureService } from "~/app/views/main/pages/progress/under-exposure/under-exposure.service";
 import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
@@ -138,7 +138,7 @@ export class UnderExposureComponent {
 
     private handleWantsToLeave(wantsToLeave: boolean) {
         if (!wantsToLeave) return;
-        emitExposureManuallyFinished();
+        emitExposureManuallyFinishedEvent();
         this.feedbackModalService
             .askFeedback("exposure-left", askWantsToLeaveFeedback)
             .catch((e) =>
