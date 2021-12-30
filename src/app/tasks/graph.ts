@@ -302,7 +302,7 @@ class DemoTaskGraph implements TaskGraph {
             "returnedToExposureArea",
             run("sendNotification", {
                 title: "Vemos que has vuelto al lugar de exposición",
-                body: "Nos alegra que hayas vuelto. Puedes hacerlo",
+                body: "Nos alegra que hayas vuelto, adelante",
             })
         );
         on("returnedToExposureArea", run("writeRecords"));
@@ -403,7 +403,12 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Puedes hablar con tu terapeuta pulsando aquí",
+                title: "A veces puede resultar difícil afrontar la situación",
+                body: "Pulsa aquí, quizás estas pautas te ayuden",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg07",
+                },
             })
         );
         on(
@@ -415,8 +420,12 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Sabemos que no es fácil, pero te has esforzado mucho",
-                body: "Podemos finalizar la exposición por hoy",
+                title: "Sabemos que no es fácil. Te has esforzado mucho",
+                body: "Podemos finalizar la exposición por hoy. Pulsa aquí",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg08",
+                },
             })
                 .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
