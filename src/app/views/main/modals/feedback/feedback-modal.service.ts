@@ -7,7 +7,7 @@ import {
     FeedbackModalOptions,
     PatientFeedback,
 } from "~/app/core/modals/feedback";
-import { emitPatientFeedbackAcquired } from "~/app/core/framework/events";
+import { emitPatientFeedbackAcquiredEvent } from "~/app/core/framework/events";
 
 @Injectable({
     providedIn: "root",
@@ -23,7 +23,7 @@ export class FeedbackModalService {
         return this.mainViewService
             .showFullScreenAnimatedModal(FeedbackModalComponent, options)
             .then((feedback) => {
-                emitPatientFeedbackAcquired(
+                emitPatientFeedbackAcquiredEvent(
                     new PatientFeedback(
                         feedbackId,
                         options.feedbackScreen.question,
