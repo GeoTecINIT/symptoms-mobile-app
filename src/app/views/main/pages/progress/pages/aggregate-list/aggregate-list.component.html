@@ -2,6 +2,8 @@
 
 <ListView [items]="aggregates" separatorColor="White">
     <ng-template let-item="item">
-        <SymChartCard chartType="line" [record]="item"></SymChartCard>
+        <SymProgressSection [title]="item.placeName" btnText="Exposiciones" (btnTap)="onSeeMoreTap(item.placeId)">
+            <SymChartCard chartType="bar" [record]="item"></SymChartCard>
+        </SymProgressSection>
     </ng-template>
 </ListView>
