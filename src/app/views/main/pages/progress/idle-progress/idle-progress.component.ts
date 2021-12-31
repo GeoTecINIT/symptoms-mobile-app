@@ -21,10 +21,10 @@ export class IdleProgressComponent {
     development: boolean;
 
     latestData: Record;
-    hasLatestData: boolean;
+    hasLatestData = false;
 
     summaryData: Record;
-    hasSummaryData: boolean;
+    hasSummaryData = false;
 
     private unloaded$ = new Subject();
 
