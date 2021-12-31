@@ -11,7 +11,7 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
 
 import { ProgressContainerComponent } from "./progress-container.component";
 import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
-import { ProgressSectionComponent } from "./idle-progress/progress-section/progress-section.component";
+import { ProgressSectionComponent } from "./common/progress-section/progress-section.component";
 import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
 import { RecordsListComponent } from "./pages/records-list/records-list.component";
 import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
