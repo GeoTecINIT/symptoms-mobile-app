@@ -1,4 +1,4 @@
-<SymBackActionBar title="Tus exposiciones"></SymBackActionBar>
+<SymBackActionBar [title]="aoi ? aoi.name : 'Tus exposiciones'"></SymBackActionBar>
 
 <ListView [items]="records" separatorColor="White">
     <ng-template let-item="item">
