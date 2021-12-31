@@ -17,7 +17,7 @@ describe("TreatmentContentService", () => {
 
     it("returns a sorted list of treatment psychoeducations", async () => {
         const contents = await service.getAll(
-            TreatmentContentType.PSICHOEDUCATION
+            TreatmentContentType.Psychoeducation
         );
         expect(contents.length).toBeGreaterThan(0);
         for (let i = 1; i < contents.length; i++) {
@@ -26,7 +26,7 @@ describe("TreatmentContentService", () => {
     });
 
     it("returns a sorted list of treatment guidelines", async () => {
-        const contents = await service.getAll(TreatmentContentType.GUIDELINES);
+        const contents = await service.getAll(TreatmentContentType.Guidelines);
         expect(contents.length).toBeGreaterThan(0);
         for (let i = 1; i < contents.length; i++) {
             expect(contents[i].index).toBeGreaterThan(contents[i - 1].index);
@@ -36,7 +36,7 @@ describe("TreatmentContentService", () => {
     it("allows to retrieve a content by its id", async () => {
         const expectedContent = await getRandomContent(
             service,
-            TreatmentContentType.PSICHOEDUCATION
+            TreatmentContentType.Psychoeducation
         );
         const oneContent = await service.getById(expectedContent.id);
         expect(oneContent).toEqual(expectedContent);
@@ -45,7 +45,7 @@ describe("TreatmentContentService", () => {
     it("allows to mark a content as seen", async () => {
         const oneContent = await getRandomContent(
             service,
-            TreatmentContentType.PSICHOEDUCATION
+            TreatmentContentType.Psychoeducation
         );
         await service.markAsSeen(oneContent.id);
         const updatedContent = await service.getById(oneContent.id);
