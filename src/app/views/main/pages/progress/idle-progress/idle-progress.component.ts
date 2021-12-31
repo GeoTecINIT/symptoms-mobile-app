@@ -60,10 +60,6 @@ export class IdleProgressComponent {
         }
     }
 
-    onSeeRecordsTap() {
-        this.navigate("../records-list");
-    }
-
     onSeeAggregatesTap() {
         this.navigate("../aggregate-list");
     }

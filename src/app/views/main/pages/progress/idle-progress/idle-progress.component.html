@@ -1,14 +1,14 @@
 <ScrollView>
     <StackLayout>
         <Button *ngIf="development" marginTop="0" marginLeft="0" marginRight="0" text="Generar datos" (tap)="onGenerateDataTap()"></Button>
-        <SymProgressSection title="Última exposición" btnText="Ver todas" [btnActive]="hasLatestData" (btnTap)="onSeeRecordsTap()">
+        <SymProgressSection title="Última exposición">
             <SymChartCard *ngIf="hasLatestData; else noRecords" chartType="line" [record]="latestData"></SymChartCard>
             <ng-template #noRecords>
                 <SymIconTextCard iconCode="&#xe26b;" text="Aquí podrás ver los registros de tu última exposición en cuanto realices una">
                 </SymIconTextCard>
             </ng-template>
         </SymProgressSection>
-        <SymProgressSection title="Evolución" btnText="Ver detalle" [btnActive]="hasSummaryData" (btnTap)="onSeeAggregatesTap()">
+        <SymProgressSection title="Evolución" btnText="Por lugar" [btnActive]="hasSummaryData" (btnTap)="onSeeAggregatesTap()">
             <SymChartCard *ngIf="hasSummaryData; else noSummary" chartType="bar" [record]="summaryData"></SymChartCard>
             <ng-template #noSummary>
                 <SymIconTextCard iconCode="&#xf092;" text="Conforme vayas realizando exposiciones te iremos mostrando tus avances aquí">
