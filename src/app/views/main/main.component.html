@@ -1,12 +1,12 @@
 <GridLayout rows="*, auto">
     <GridLayout row="0">
-        <StackLayout [visibility]="selectedTab === navigationTabs.Progress ? 'visible' : 'collapsed'">
+        <StackLayout [visibility]="selectedTab === NavigationTab.Progress ? 'visible' : 'collapsed'">
             <router-outlet name="progressTab"></router-outlet>
         </StackLayout>
-        <StackLayout [visibility]="selectedTab === navigationTabs.Content ? 'visible' : 'collapsed'">
+        <StackLayout [visibility]="selectedTab === NavigationTab.Content ? 'visible' : 'collapsed'">
             <router-outlet name="contentTab"></router-outlet>
         </StackLayout>
-        <StackLayout [visibility]="selectedTab === navigationTabs.Notifications ? 'visible' : 'collapsed'">
+        <StackLayout [visibility]="selectedTab === NavigationTab.Notifications ? 'visible' : 'collapsed'">
             <router-outlet name="notificationsTab"></router-outlet>
         </StackLayout>
     </GridLayout>
