@@ -44,7 +44,7 @@ describe("Exposure status checker task", () => {
         );
     });
 
-    it("says that a pre-exposure is ongoing whe it is in the same visited area", async () => {
+    it("says that a pre-exposure is ongoing when it is in the same visited area", async () => {
         spyOn(storeMock, "getLastUnfinished").and.returnValue(
             Promise.resolve(createNewFakeExposure(aoiChange1.aoi, false))
         );
