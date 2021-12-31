@@ -16,7 +16,7 @@ import { NotificationsReaderService } from "~/app/views/main/notifications-reade
 
 import { NavigationService } from "../navigation.service";
 
-import { MainViewService } from "./main-view.service";
+import { MainViewService, NavigationTab } from "./main-view.service";
 
 import {
     BottomNavigationBar,
@@ -31,20 +31,17 @@ import { takeUntil } from "rxjs/operators";
 
 const APP_EVENTS_KEY = "MainComponent";
 
-const navigationTabs = {
-    Progress: 0,
-    Content: 1,
-    Notifications: 2,
-};
-
 @Component({
     selector: "SymMain",
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.scss"],
 })
 export class MainComponent implements OnInit {
-    navigationTabs = navigationTabs;
-    selectedTab = navigationTabs.Progress;
+    NavigationTab = NavigationTab;
+
+    get selectedTab(): NavigationTab {
+        return this.mainViewService.selectedTab;
+    }
 
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
@@ -54,6 +51,7 @@ export class MainComponent implements OnInit {
     private logger: Logger;
 
     constructor(
+        private mainViewService: MainViewService,
         private authService: AuthService,
         private dialogsService: DialogsService,
         private notificationsHandlerService: NotificationsHandlerService,
@@ -61,12 +59,14 @@ export class MainComponent implements OnInit {
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         page: Page,
-        mainViewService: MainViewService,
         vcRef: ViewContainerRef
     ) {
         this.logger = getLogger("MainComponent");
         page.actionBarHidden = true;
         mainViewService.setViewContainerRef(vcRef);
+        mainViewService.onTabSelected((tab) =>
+            this.updateNavigationBarTab(tab)
+        );
     }
 
     ngOnInit() {
@@ -95,7 +95,7 @@ export class MainComponent implements OnInit {
 
     onNavigationBarLoaded(args: any) {
         this.navigationBar = args.object;
-        this.navigationBar.selectTab(this.selectedTab);
+        this.updateNavigationBarTab(this.selectedTab);
         this.subscribeToPendingNotifications();
     }
 
@@ -104,7 +104,12 @@ export class MainComponent implements OnInit {
     }
 
     onTabSelected(args: TabSelectedEventData) {
-        this.selectedTab = args.newIndex;
+        this.mainViewService.setSelectedTab(args.newIndex);
+    }
+
+    private updateNavigationBarTab(tab: NavigationTab) {
+        if (!this.navigationBar) return;
+        this.navigationBar.selectTab(tab);
     }
 
     private loadTabOutlets() {
@@ -140,11 +145,11 @@ export class MainComponent implements OnInit {
 
                 if (
                     !unread ||
-                    this.selectedTab === navigationTabs.Notifications
+                    this.selectedTab === NavigationTab.Notifications
                 ) {
-                    navigationBar.removeBadge(navigationTabs.Notifications);
+                    navigationBar.removeBadge(NavigationTab.Notifications);
                 } else {
-                    navigationBar.showBadge(navigationTabs.Notifications);
+                    navigationBar.showBadge(NavigationTab.Notifications);
                 }
             });
     }
