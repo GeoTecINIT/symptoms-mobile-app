@@ -126,7 +126,7 @@ function meetsConditions(
     conditions: Array<QueryCondition>
 ): boolean {
     for (const condition of conditions) {
-        const propertyValue = record[condition.property];
+        const propertyValue = getPropertyValue(record, condition.property);
         if (propertyValue === undefined) {
             return false;
         }
@@ -150,4 +150,14 @@ function meetsConditions(
 function areEqual(obj1: any, obj2: any) {
     // Naive equality comparison, will fail if object properties are reordered
     return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+function getPropertyValue(object: any, path: string) {
+    const segments = path.split(".");
+    let property = object;
+    for (const segment of segments) {
+        property = property[segment];
+    }
+
+    return property;
 }
