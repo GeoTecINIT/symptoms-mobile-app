@@ -1,0 +1,11 @@
+@import "src/app-variables";
+
+MDTabStripItem Label {
+  color: const(white);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+MDTabs MDTabStrip {
+  highlight-color: $accent;
+}

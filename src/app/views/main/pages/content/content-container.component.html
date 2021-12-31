@@ -1,0 +1,19 @@
+<SymMainActionBar title="Contenido"></SymMainActionBar>
+
+<MDTabs>
+    <MDTabStrip>
+        <MDTabStripItem>
+            <Label text="Pautas"></Label>
+        </MDTabStripItem>
+        <MDTabStripItem>
+            <Label text="Psicoeducación"></Label>
+        </MDTabStripItem>
+    </MDTabStrip>
+
+    <MDTabContentItem>
+        <SymContentList [contents]="guidelines" (listItemTapped)="onContentTap($event)"></SymContentList>
+    </MDTabContentItem>
+    <MDTabContentItem>
+        <SymContentList [contents]="psychoeducations" (listItemTapped)="onContentTap($event)"></SymContentList>
+    </MDTabContentItem>
+</MDTabs>
