@@ -60,5 +60,7 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/filepaths" />
 		</provider>
+
+		<service android:name="com.mapbox.services.android.telemetry.service.TelemetryService" />
 	</application>
 </manifest>

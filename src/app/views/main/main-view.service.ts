@@ -3,6 +3,7 @@ import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular";
 
 export enum NavigationTab {
     Progress,
+    Places,
     Content,
     Notifications,
 }
