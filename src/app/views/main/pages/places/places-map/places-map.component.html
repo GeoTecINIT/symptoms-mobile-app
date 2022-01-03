@@ -1,0 +1,20 @@
+<AbsoluteLayout>
+    <ContentView class="map-container">
+        <Mapbox
+                [accessToken]="accessToken"
+                showUserLocation="true"
+                (mapReady)="onMapReady($event)">
+        </Mapbox>
+    </ContentView>
+    <GridLayout top="5" left="5" class="map-btn" (tap)="onZoomOutTapped()">
+        <Label class="circle"></Label>
+        <Label class="icon mdi-ro" text="&#xe56b;"></Label>
+    </GridLayout>
+</AbsoluteLayout>
+
+<StackLayout
+        *ngIf="!initialized"
+        class="indicator-container"
+        verticalAlignment="center">
+    <MDActivityIndicator class="indicator" busy="true"></MDActivityIndicator>
+</StackLayout>
