@@ -1,0 +1,13 @@
+@import "src/app-variables";
+
+.body {
+  margin-top: 18;
+  font-size: 18;
+}
+
+.no-places {
+  height: 100%;
+  width: 100%;
+  background-color: const(white);
+  vertical-align: center;
+}
