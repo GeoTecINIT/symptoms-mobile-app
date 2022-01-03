@@ -6,4 +6,6 @@ export const environment = {
         extension: 15,
         betweenQuestions: 8,
     },
+    mapboxAccessToken:
+        "pk.eyJ1Ijoic3ltcHRvbXMiLCJhIjoiY2pqeDNuZGc4MG1hbjNxbjZ5djFqZGsyYiJ9.uN5mBydVi_mKZ2HeemwTLw",
 };
