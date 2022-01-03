@@ -64,3 +64,10 @@ Label {
 .bg-complementary {
     background-color: $complementary;
 }
+
+.card {
+    border-radius: 4;
+    android-elevation: 2;
+    margin: 4;
+    padding: 16;
+}
