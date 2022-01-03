@@ -3,6 +3,9 @@
         <StackLayout [visibility]="selectedTab === NavigationTab.Progress ? 'visible' : 'collapsed'">
             <router-outlet name="progressTab"></router-outlet>
         </StackLayout>
+        <StackLayout [visibility]="selectedTab === NavigationTab.Places ? 'visible' : 'collapsed'">
+            <router-outlet name="placesTab"></router-outlet>
+        </StackLayout>
         <StackLayout [visibility]="selectedTab === NavigationTab.Content ? 'visible' : 'collapsed'">
             <router-outlet name="contentTab"></router-outlet>
         </StackLayout>
@@ -16,6 +19,7 @@
             (unloaded)="onNavigationBarUnloaded()"
             (tabSelected)="onTabSelected($event)">
         <BottomNavigationTab title="Progreso" icon="res://round_double_arrow_black_24"></BottomNavigationTab>
+        <BottomNavigationTab title="Lugares" icon="res://round_map_black_24"></BottomNavigationTab>
         <BottomNavigationTab title="Contenido" icon="res://round_library_books_black_24"></BottomNavigationTab>
         <BottomNavigationTab title="Notificaciones" icon="res://round_notifications_black_24"></BottomNavigationTab>
     </BottomNavigationBar>
