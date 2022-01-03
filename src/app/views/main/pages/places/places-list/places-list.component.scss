@@ -1,0 +1,17 @@
+@import "src/app-variables";
+
+.header {
+  padding: 8 $global-spacing;
+  & Label {
+    font-weight: bold;
+  }
+}
+
+.separator {
+  background-color: $dark-grey;
+  height: 1;
+}
+
+ListView {
+  separator-color: transparent;
+}

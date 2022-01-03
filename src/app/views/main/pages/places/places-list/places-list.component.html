@@ -1,0 +1,14 @@
+<GridLayout rows="auto,*">
+    <StackLayout row="0">
+        <StackLayout class="header">
+            <Label text="Lugares de exposición"></Label>
+        </StackLayout>
+        <Label class="separator"></Label>
+    </StackLayout>
+    <ListView row="1" [items]="places" (itemTap)="onListItemTap($event)">
+        <ng-template let-item="item">
+            <SymPlacesListItem [place]="item"></SymPlacesListItem>
+        </ng-template>
+    </ListView>
+</GridLayout>
+
