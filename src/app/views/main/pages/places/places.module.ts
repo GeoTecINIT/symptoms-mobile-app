@@ -10,8 +10,8 @@ import { CommonMainModule } from "~/app/views/main/common/common-main.module";
 import { PlacesMapComponent } from "./places-map/places-map.component";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { NativeScriptMaterialActivityIndicatorModule } from "@nativescript-community/ui-material-activityindicator/angular";
-import { PlacesListComponent } from './places-list/places-list.component';
-import { PlacesListItemComponent } from './places-list/places-list-item/places-list-item.component';
+import { PlacesListComponent } from "./places-list/places-list.component";
+import { PlacesListItemComponent } from "./places-list/places-list-item/places-list-item.component";
 
 registerElement(
     "Mapbox",
@@ -19,7 +19,12 @@ registerElement(
 );
 
 @NgModule({
-    declarations: [PlacesContainerComponent, PlacesMapComponent, PlacesListComponent, PlacesListItemComponent],
+    declarations: [
+        PlacesContainerComponent,
+        PlacesMapComponent,
+        PlacesListComponent,
+        PlacesListItemComponent,
+    ],
     imports: [
         PlacesRoutingModule,
         NativeScriptCommonModule,
