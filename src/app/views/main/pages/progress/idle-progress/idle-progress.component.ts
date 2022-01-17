@@ -12,6 +12,8 @@ import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
 import { takeUntil } from "rxjs/operators";
 
+const GENERATE_DATA_TIMEOUT = 2000;
+
 @Component({
     selector: "SymIdleProgress",
     templateUrl: "./idle-progress.component.html",
@@ -26,8 +28,9 @@ export class IdleProgressComponent {
     summaryData: Record;
     hasSummaryData = false;
 
-    private unloaded$ = new Subject();
+    generatingData = false;
 
+    private unloaded$ = new Subject();
     private readonly generateData: DataGenerator;
 
     constructor(
@@ -58,6 +61,8 @@ export class IdleProgressComponent {
         if (exposureChange) {
             emaiFramework.emitEvent("exposureFinished", exposureChange);
         }
+        this.generatingData = true;
+        setTimeout(() => (this.generatingData = false), GENERATE_DATA_TIMEOUT);
     }
 
     onSeeAggregatesTap() {
