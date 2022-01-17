@@ -1,7 +1,7 @@
 <SymMainActionBar title="Tus lugares"></SymMainActionBar>
 
 <GridLayout rows="*,*">
-    <SymPlacesMap row="0" [places]="places" [highlightedPlace]="selectedPlace" (zoomOutTapped)="onZoomOutTapped()"></SymPlacesMap>
+    <SymPlacesMap row="0" [places]="places" [highlightedPlace]="selectedPlace"></SymPlacesMap>
     <SymPlacesList row="1" [places]="places" (placeSelected)="onPlaceSelected($event)"></SymPlacesList>
 </GridLayout>
 

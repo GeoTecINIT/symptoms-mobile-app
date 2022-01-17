@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
 import { getConfig } from "~/app/core/config";
 import { EventData } from "@nativescript/core";
@@ -42,7 +42,6 @@ export class PlacesMapComponent {
         if (!this.map) return;
         this.centerViewport(true, place);
     }
-    @Output() zoomOutTapped = new EventEmitter<void>();
 
     get accessToken(): string {
         return getConfig().mapboxAccessToken;
@@ -70,7 +69,7 @@ export class PlacesMapComponent {
     }
 
     onZoomOutTapped() {
-        this.zoomOutTapped.emit();
+        this.highlightedPlace = undefined;
     }
 
     private async reInitMap() {
