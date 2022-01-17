@@ -1,6 +1,6 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, HostListener, NgZone } from "@angular/core";
 
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
 import { PlacesService } from "./places.service";
 import { takeUntil } from "rxjs/operators";
@@ -16,8 +16,16 @@ export class PlacesContainerComponent {
 
     private unloaded$ = new Subject();
 
-    constructor(private placesService: PlacesService, private ngZone: NgZone) {
+    constructor(private placesService: PlacesService, private ngZone: NgZone) {}
+
+    @HostListener("loaded")
+    onLoaded() {
         this.subscribeToPlacesUpdates();
+    }
+
+    @HostListener("unloaded")
+    onUnloaded() {
+        this.unloaded$.next();
     }
 
     onPlaceSelected(place: AreaOfInterest) {
