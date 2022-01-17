@@ -52,7 +52,7 @@ export class CalculateExposurePlaceAggregate extends TraceableTask {
         );
 
         // FIXME: Temporal workaround for multiple concurrent record writes
-        await returnIn(500);
+        await returnIn(1000);
 
         return { result: aggregate };
     }
