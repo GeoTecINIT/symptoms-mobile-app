@@ -32,10 +32,6 @@ export class PlacesContainerComponent {
         this.selectedPlace = place;
     }
 
-    onZoomOutTapped() {
-        this.selectedPlace = undefined;
-    }
-
     private subscribeToPlacesUpdates() {
         this.placesService.aois$
             .pipe(takeUntil(this.unloaded$))
