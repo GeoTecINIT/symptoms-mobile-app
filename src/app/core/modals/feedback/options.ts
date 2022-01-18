@@ -1,3 +1,5 @@
+import { CompletionScreenOptions } from "~/app/core/modals/common";
+
 export interface FeedbackModalOptions {
     title: string;
     feedbackScreen: {
@@ -9,15 +11,7 @@ export interface FeedbackModalOptions {
         question: string;
         options: Array<AnswerOption>;
     };
-    confirmScreen?: {
-        body: {
-            emoji?: string;
-            iconCode?: string;
-            header: string;
-            message?: string;
-        };
-        confirm: string;
-    };
+    completionScreen?: CompletionScreenOptions;
 }
 
 type AnswerOption = PredefinedAnswer | FreeTextAnswer;

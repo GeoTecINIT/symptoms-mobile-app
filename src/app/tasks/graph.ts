@@ -8,8 +8,9 @@ import {
 import { TapActionType } from "@geotecinit/emai-framework/notifications";
 
 const exposureTimes = getConfig().exposureTimes;
-const EXPOSURE_TIME = exposureTimes.regular;
-const EXPOSURE_EXTENSION_TIME = exposureTimes.extension;
+const EXPOSURE_MINUTES = exposureTimes.regular;
+const EXPOSURE_EXTENSION_MINUTES = exposureTimes.extension;
+const BETWEEN_QUESTIONS_MINUTES = exposureTimes.betweenQuestions;
 
 class DemoTaskGraph implements TaskGraph {
     async describe(
@@ -120,7 +121,7 @@ class DemoTaskGraph implements TaskGraph {
         // END: High resolution geolocation data collection
 
         // START: Pre-exposure events
-        // -> Stays nearby an area of interest for a while
+        // -> Watch exposure area outer radius proximity changes
         on(
             "movedInsideAreaOfInterest",
             run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
@@ -129,35 +130,78 @@ class DemoTaskGraph implements TaskGraph {
             "movedAwayFromAreaOfInterest",
             run("emitMovedOutsideAreaOfInterestOuterRadiusEvent")
         );
+        on("movedCloseToAreaOfInterest", run("checkPreExposureStatus"));
+        // -> Gets nearby an area of interest
+        on(
+            "approachedAreaWithNoOngoingExposure",
+            run("sendNotification", {
+                title: "Estás cerca de un lugar de exposición",
+                body: "¿Vas a hacer una?",
+                tapAction: {
+                    type: "ask-confirmation",
+                    id: "exposure-intention",
+                },
+            })
+        );
+        // -> Confirms intends to carry on an exposure
+        on("preExposureStartConfirmed", run("preStartExposure"));
+        on(
+            "preExposureStartConfirmed",
+            run("sendNotification", {
+                title: "¿Podrías decirnos cómo te encuentras?",
+                body: "Toca la notificación para responder",
+                tapAction: {
+                    type: TapActionType.DELIVER_QUESTIONS,
+                    id: "pre-exposure-questions",
+                },
+            })
+        );
+        // -> Watch in case leaves the vicinity of the area without getting closer
+        on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
+        on(
+            "preExposureCancelled",
+            run("sendNotification", {
+                title: "¿Te vas?",
+                body: "Por favor, pulsa aquí para indicar el motivo",
+                tapAction: {
+                    type: TapActionType.ASK_FEEDBACK,
+                    id: "exposure-discarded",
+                },
+            })
+        );
+        // -> Stays nearby an area of interest for a while
         on(
             "movedCloseToAreaOfInterest",
             run("sendNotification", {
-                title: "Has llegado a un lugar importante",
+                title: "Has llegado a un lugar de exposición",
                 body: "Exponerte te ayudará a superar tu problema, adelante",
             })
                 .in(10, "minutes")
                 .cancelOn("movedOutsideAreaOfInterestOuterRadius")
         );
-        // -> Enters a exposure area
+        // -> Enters an exposure area
         on("movedInsideAreaOfInterest", run("checkExposureAreaStatus"));
+        // -> Enters exposure area with a pre-started exposure
+        on("enteredAreaWithPreStartedExposure", run("startExposure"));
+        // -> Enters exposure area with no ongoing exposure
         on(
             "enteredAreaWithNoOngoingExposure",
             run("sendNotification", {
-                title: "Estás en un lugar importante",
-                body: "Toca la notificación para iniciar una exposición",
+                title: "Has llegado a un lugar de exposición",
+                body: "¿Te animas a hacer una?",
                 tapAction: {
                     type: "ask-confirmation",
                     id: "start-exposure",
                 },
             })
         );
-        // -> Confirms to start a exposure
+        // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
         on(
             "exposureStarted",
             run("sendNotification", {
                 title: "Acabas de iniciar una exposición",
-                body: "Pulsa aquí si tienes dudas",
+                body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
                     id: "c04",
@@ -179,10 +223,10 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Toca la notificación para responder",
                 tapAction: {
                     type: TapActionType.DELIVER_QUESTIONS,
-                    id: "anxiety-questions",
+                    id: "exposure-questions",
                 },
             })
-                .every(5, "minutes")
+                .every(BETWEEN_QUESTIONS_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
@@ -233,7 +277,7 @@ class DemoTaskGraph implements TaskGraph {
                 emotionThreshold: 5,
                 peakToLastThreshold: 3,
             })
-                .in(EXPOSURE_TIME, "minutes")
+                .in(EXPOSURE_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure evaluation results successful
@@ -281,7 +325,7 @@ class DemoTaskGraph implements TaskGraph {
             run("evaluateExposureExtension", {
                 emotionThreshold: 8,
             })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Exposure extension evaluation results successful
@@ -310,7 +354,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("finishExposure", { successful: true })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         on(
@@ -319,7 +363,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Sabemos que no es fácil, pero te has esforzado mucho",
                 body: "Podemos finalizar la exposición por hoy",
             })
-                .in(EXPOSURE_EXTENSION_TIME, "minutes")
+                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Finalization event
@@ -328,29 +372,23 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on(
+            "exposureFinished",
+            run("sendNotification", {
+                title: "Has realizado un gran trabajo, enhorabuena",
+                body: "¿Podrías responder a estas preguntas?",
+                tapAction: {
+                    type: TapActionType.DELIVER_QUESTIONS,
+                    id: "post-exposure-questions",
+                },
+            })
+                .in(1, "minutes")
+                .cancelOn("stopEvent")
+        );
         on("exposureWasNotDroppedOut", run("calculateExposureAggregate"));
         on("exposureAggregateCalculated", run("writeRecords"));
         on("exposureWasNotDroppedOut", run("calculateExposurePlaceAggregate"));
         on("exposurePlaceAggregateCalculated", run("writeRecords"));
-        on(
-            "exposureWasNotDroppedOut",
-            run("limitedFeedbackDelivery", {
-                feedbackId: "question-frequency",
-                maxCount: 3,
-            })
-        );
-        on(
-            "canDeliverFeedback",
-            run("sendNotification", {
-                title: "¿Te animas a valorar la experiencia?",
-                tapAction: {
-                    type: TapActionType.ASK_FEEDBACK,
-                    id: "question-frequency",
-                },
-            })
-                .in(5, "minutes")
-                .cancelOn("stopEvent")
-        );
         // END: Post-exposure events
 
         // START: Patient feedback events

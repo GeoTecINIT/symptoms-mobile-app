@@ -30,7 +30,7 @@ export class UnderExposureComponent {
         {
             from: 0,
             to: REGULAR_EXPOSURE_TIME,
-            note: `Total: ~${REGULAR_EXPOSURE_TIME - 2} min.`,
+            note: `Total: ${REGULAR_EXPOSURE_TIME} min.`,
             progressColorClass: "bg-complementary",
             backgroundColorClass: "bg-grey",
             defaultVisibility: "visible",

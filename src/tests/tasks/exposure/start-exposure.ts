@@ -5,6 +5,7 @@ import {
     createExposuresStoreMock,
     createFakeAoI,
     createFakeAoIProximityChange,
+    createNewFakeExposure,
 } from "./index";
 import {
     createEvent,
@@ -16,10 +17,13 @@ describe("Start exposure task", () => {
     let storeMock: ExposuresStore;
     let task: StartExposureTask;
 
+    const aoiChange1 = createFakeAoIProximityChange(createFakeAoI("AoI1"));
+
     beforeEach(() => {
         storeMock = createExposuresStoreMock();
         task = new StartExposureTask(storeMock);
         spyOn(storeMock, "insert");
+        spyOn(storeMock, "update");
     });
 
     it("begins a new exposure when no other exposure is ongoing", async () => {
@@ -27,9 +31,8 @@ describe("Start exposure task", () => {
             Promise.resolve(null)
         );
 
-        const aoi = createFakeAoI("AoI1");
         const invocationEvent = createEvent("eventTrigger", {
-            data: [createFakeAoIProximityChange(aoi)],
+            data: [aoiChange1],
         });
 
         const resultPromise = listenToEventTrigger(
@@ -45,7 +48,41 @@ describe("Start exposure task", () => {
             jasmine.objectContaining({
                 type: "exposure-change",
                 change: Change.START,
-                place: aoi,
+                place: aoiChange1.aoi,
+                emotionValues: [],
+                successful: false,
+            })
+        );
+        expect(result.timestamp).toEqual(jasmine.any(Date));
+    });
+
+    it("begins a new exposure when it was already pre-started", async () => {
+        const preExposure = createNewFakeExposure(aoiChange1.aoi);
+        preExposure.startTime = undefined;
+
+        spyOn(storeMock, "getLastUnfinished").and.returnValue(
+            Promise.resolve(preExposure)
+        );
+
+        const invocationEvent = createEvent("eventTrigger", {
+            data: [aoiChange1],
+        });
+
+        const resultPromise = listenToEventTrigger(
+            "exposureStarted",
+            invocationEvent.id
+        );
+
+        task.run({}, invocationEvent);
+
+        const result = (await resultPromise) as ExposureChange;
+        expect(storeMock.insert).not.toHaveBeenCalled();
+        expect(storeMock.update).toHaveBeenCalled();
+        expect(result).toEqual(
+            jasmine.objectContaining({
+                type: "exposure-change",
+                change: Change.START,
+                place: aoiChange1.aoi,
                 emotionValues: [],
                 successful: false,
             })

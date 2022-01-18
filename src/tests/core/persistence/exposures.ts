@@ -10,6 +10,12 @@ describe("Exposures store", () => {
         radius: 30,
     };
 
+    const newPreExposure: Exposure = {
+        place,
+        emotionValues: [],
+        successful: false,
+    };
+
     const newExposure: Exposure = {
         startTime: new Date(2021, 4, 20, 18, 0),
         place,
@@ -41,6 +47,11 @@ describe("Exposures store", () => {
         await exposures.clear();
     });
 
+    it("successfully inserts a new pre-exposure", async () => {
+        const id = await exposures.insert(newPreExposure);
+        expect(id).toEqual(jasmine.any(String));
+    });
+
     it("successfully inserts a new exposure", async () => {
         const id = await exposures.insert(newExposure);
         expect(id).toEqual(jasmine.any(String));
@@ -52,9 +63,21 @@ describe("Exposures store", () => {
         expect(lastExposure).toEqual(jasmine.objectContaining(newExposure));
     });
 
+    it("successfully gets the last pre-exposure", async () => {
+        await exposures.insert(newPreExposure);
+        const lastExposure = await exposures.getLastUnfinished();
+        expect(lastExposure).toEqual(jasmine.objectContaining(newPreExposure));
+    });
+
     it("returns null when no exposure is ongoing", async () => {
         await exposures.insert(finishedExposure);
         const lastExposure = await exposures.getLastUnfinished();
+        expect(lastExposure).toBeNull();
+    });
+
+    it("returns null when instructed and last exposure is just pre-started", async () => {
+        await exposures.insert(newPreExposure);
+        const lastExposure = await exposures.getLastUnfinished(true);
         expect(lastExposure).toBeNull();
     });
 
@@ -77,6 +100,18 @@ describe("Exposures store", () => {
         expect(lastExposure).toEqual(updatedExposure);
     });
 
+    it("is able to update a pre-exposure to become a exposure", async () => {
+        await exposures.insert(newPreExposure);
+        const exposureToUpdate = await exposures.getLastUnfinished();
+        const updatedExposure: Exposure = {
+            ...exposureToUpdate,
+            startTime: new Date(),
+        };
+        await exposures.update(updatedExposure);
+        const lastExposure = await exposures.getLastUnfinished(true);
+        expect(lastExposure).toEqual(updatedExposure);
+    });
+
     it("cannot update an exposure that has not been previously created", async () => {
         await expectAsync(exposures.update(newExposure)).toBeRejected();
     });
@@ -91,6 +126,13 @@ describe("Exposures store", () => {
             jasmine.objectContaining(finishedExposure)
         );
         expect(allExposures[1]).toEqual(jasmine.objectContaining(newExposure));
+    });
+
+    it("is able to remove an existing exposure", async () => {
+        const id = await exposures.insert(newPreExposure);
+        await exposures.remove(id);
+        const missingExposure = await exposures.getLastUnfinished();
+        expect(missingExposure).toBeNull();
     });
 
     afterEach(async () => {

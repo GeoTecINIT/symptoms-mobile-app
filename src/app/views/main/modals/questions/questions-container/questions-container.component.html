@@ -18,3 +18,11 @@
         </SymQuestionStep>
     </ng-container>
 </SymModalBody>
+
+<StackLayout *ngIf="showCompletionScreen">
+    <SymCompletionScreen
+            [options]="options.completionScreen"
+            (confirmTapped)="onClose()">
+    </SymCompletionScreen>
+</StackLayout>
+

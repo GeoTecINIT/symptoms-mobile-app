@@ -1,34 +1,19 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
-import { animate, style, transition, trigger } from "@angular/animations";
 import { FeedbackModalOptions } from "~/app/core/modals/feedback";
 
 @Component({
     selector: "SymFeedbackContainer",
     templateUrl: "./feedback-container.component.html",
     styleUrls: ["./feedback-container.component.scss"],
-    animations: [
-        trigger("slideUp", [
-            transition(":enter", [
-                style({ transform: "translateY(600%)" }),
-                animate(
-                    "300ms ease-in-out",
-                    style({ transform: "translateY(0)" })
-                ),
-            ]),
-        ]),
-    ],
 })
 export class FeedbackContainerComponent {
     options: FeedbackModalOptions;
     answer: string;
+    showConfirmScreen = false;
 
-    get showConfirmScreen(): boolean {
-        return this.hasConfirmScreen && !!this.answer;
-    }
-
-    get hasConfirmScreen(): boolean {
-        return !!this.options.confirmScreen;
+    get hasCompletionScreen(): boolean {
+        return !!this.options.completionScreen;
     }
 
     constructor(private params: ModalDialogParams) {
@@ -41,7 +26,9 @@ export class FeedbackContainerComponent {
 
     onAnswer(answer: string) {
         this.answer = answer;
-        if (!this.hasConfirmScreen) {
+        if (this.hasCompletionScreen) {
+            this.showConfirmScreen = true;
+        } else {
             this.onClose();
         }
     }

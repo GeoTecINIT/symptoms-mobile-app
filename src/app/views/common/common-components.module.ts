@@ -21,6 +21,8 @@ import { StepProgressBarComponent } from "./step-progress-bar/step-progress-bar.
 import { DangerButtonComponent } from "./danger-button/danger-button.component";
 import { CircleIconComponent } from "./circle-icon/circle-icon.component";
 import { ActivityIndicatorComponent } from "./activity-indicator/activity-indicator.component";
+import { TextInputComponent } from "./text-input/text-input.component";
+import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
 
 @NgModule({
     imports: [
@@ -43,6 +45,8 @@ import { ActivityIndicatorComponent } from "./activity-indicator/activity-indica
         DangerButtonComponent,
         CircleIconComponent,
         ActivityIndicatorComponent,
+        TextInputComponent,
+        BinaryChoiceComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -59,6 +63,8 @@ import { ActivityIndicatorComponent } from "./activity-indicator/activity-indica
         DangerButtonComponent,
         CircleIconComponent,
         ActivityIndicatorComponent,
+        TextInputComponent,
+        BinaryChoiceComponent,
     ],
 })
 export class CommonComponentsModule {}

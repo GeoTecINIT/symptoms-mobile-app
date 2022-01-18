@@ -11,6 +11,24 @@
                 width="100"
                 (valueChange)="onValueSelected($event)">
         </SymNumericSelector>
+        <SymTextInput
+            *ngSwitchCase="'free-text'"
+            [text]="savedAnswer?.answer"
+            [hint]="question.hint"
+            [helpText]="question.helpText"
+            marginTop="24"
+            marginBottom="24"
+            (textChanged)="onValueSelected($event)">
+        </SymTextInput>
+        <SymBinaryChoice
+            *ngSwitchCase="'binary'"
+            [left]="question.left"
+            [right]="question.right"
+            [defaultOption]="savedAnswer?.answer ? savedAnswer?.answer : question.default"
+            marginTop="24"
+            marginBottom="24"
+            (optionSelected)="onValueSelected($event)">
+        </SymBinaryChoice>
     </ng-container>
 
     <ng-container [ngSwitch]="stepType">

@@ -1,23 +1,26 @@
 import { AoIProximityChange } from "@geotecinit/emai-framework/entities/aois";
-import { ExposuresStore } from "~/app/core/persistence/exposures";
+import { Exposure } from "~/app/core/persistence/exposures";
 
-export async function checkIfProximityChangesInvolveOngoingExposure(
+export function checkIfProximityChangesInvolveOngoingExposure(
     changes: Array<AoIProximityChange>,
-    store: ExposuresStore
-): Promise<"no-change" | "not-present" | "present"> {
+    ongoingExposure: Exposure
+): "no-change" | "not-ongoing" | "pre-started" | "ongoing" {
     if (!changes.length) {
         return "no-change";
     }
 
     const aois = changes.map((change) => change.aoi);
-    const ongoingExposure = await store.getLastUnfinished();
 
     if (
-        ongoingExposure &&
-        aois.find((aoi) => aoi.id === ongoingExposure.place.id)
+        !ongoingExposure ||
+        !aois.find((aoi) => aoi.id === ongoingExposure.place.id)
     ) {
-        return "present";
-    } else {
-        return "not-present";
+        return "not-ongoing";
     }
+
+    if (!ongoingExposure.startTime) {
+        return "pre-started";
+    }
+
+    return "ongoing";
 }

@@ -11,10 +11,9 @@
     </ng-container>
 </SymModalBody>
 
-<StackLayout @slideUp *ngIf="showConfirmScreen" verticalAlignment="center">
-    <Label *ngIf="options.confirmScreen.body.emoji" class="emoji-icon" [text]="options.confirmScreen.body.emoji"></Label>
-    <SymCircleIcon *ngIf="options.confirmScreen.body.iconCode" [iconCode]="options.confirmScreen.body.iconCode"></SymCircleIcon>
-    <Label class="header" [text]="options.confirmScreen.body.header"></Label>
-    <Label *ngIf="options.confirmScreen.body.message" class="message" textWrap="true" [text]="options.confirmScreen.body.message"></Label>
-    <SymPrimaryButton horizontalAlignment="center" [text]="options.confirmScreen.confirm" (tap)="onClose()"></SymPrimaryButton>
+<StackLayout *ngIf="showConfirmScreen">
+    <SymCompletionScreen
+            [options]="options.completionScreen"
+            (confirmTapped)="onClose()">
+    </SymCompletionScreen>
 </StackLayout>

@@ -1,3 +1,5 @@
+import { CompletionScreenOptions } from "~/app/core/modals/common";
+
 export interface QuestionsModalOptions {
     title: string;
     body: {
@@ -6,9 +8,14 @@ export interface QuestionsModalOptions {
         text: string;
     };
     questions: Array<QuestionType>;
+    completionScreen?: CompletionScreenOptions;
 }
 
-export type QuestionType = RangeQuestion; // Append other question types here
+export type QuestionType = RangeQuestion | FreeTextQuestion | BinaryQuestion; // Append other question types here
+
+interface Question {
+    title: string;
+}
 
 interface RangeQuestion extends Question {
     type: "range";
@@ -16,6 +23,15 @@ interface RangeQuestion extends Question {
     to: number;
 }
 
-interface Question {
-    title: string;
+interface FreeTextQuestion extends Question {
+    type: "free-text";
+    hint?: string;
+    helpText?: string;
+}
+
+interface BinaryQuestion extends Question {
+    type: "binary";
+    left: string;
+    right: string;
+    default?: string;
 }

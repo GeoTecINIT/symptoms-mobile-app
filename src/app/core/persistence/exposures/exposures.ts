@@ -1,11 +1,13 @@
 import { Exposure } from "./exposure";
 import { EMAIStore } from "@geotecinit/emai-framework/storage";
+import { QueryLogicalOperator } from "nativescript-couchbase-plugin";
 
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;
-    getLastUnfinished(): Promise<Exposure>;
+    getLastUnfinished(andStarted?: boolean): Promise<Exposure>;
     update(exposure: Exposure): Promise<void>;
     getAll(): Promise<Array<Exposure>>;
+    remove(id: string): Promise<void>;
     clear(): Promise<void>;
 }
 
@@ -32,8 +34,11 @@ class ExposuresStoreDB implements ExposuresStore {
                 "Cannot update an exposure not previously inserted! (missing id)"
             );
         }
-        const { endTime, emotionValues, successful } = docFrom(exposure);
+        const { startTime, endTime, emotionValues, successful } = docFrom(
+            exposure
+        );
         await this.store.update(exposure.id, {
+            startTime,
             endTime,
             emotionValues,
             successful,
@@ -47,18 +52,31 @@ class ExposuresStoreDB implements ExposuresStore {
         });
     }
 
-    async getLastUnfinished(): Promise<Exposure> {
-        const unfinished = await this.store.fetch({
+    async getLastUnfinished(andStarted = false): Promise<Exposure> {
+        const query: any = {
             select: [],
             where: [{ property: "endTime", comparison: "equalTo", value: -1 }],
             order: [{ property: "startTime", direction: "desc" }],
-        });
+        };
+        if (andStarted) {
+            query.where.push({
+                logical: QueryLogicalOperator.AND,
+                property: "startTime",
+                comparison: "notEqualTo",
+                value: -1,
+            });
+        }
+        const unfinished = await this.store.fetch(query);
 
         if (unfinished.length === 0) {
             return null;
         }
 
         return unfinished[0];
+    }
+
+    async remove(id: string): Promise<void> {
+        await this.store.delete(id);
     }
 
     async clear(): Promise<void> {
@@ -72,7 +90,7 @@ function docFrom(exposure: Exposure): any {
     const { startTime, endTime, place, emotionValues, successful } = exposure;
 
     return {
-        startTime: startTime.getTime(),
+        startTime: startTime ? startTime.getTime() : -1,
         endTime: endTime ? endTime.getTime() : -1,
         place,
         emotionValues: [
@@ -90,7 +108,7 @@ function exposureFrom(doc: any): Exposure {
 
     return {
         id,
-        startTime: new Date(startTime),
+        startTime: startTime !== -1 ? new Date(startTime) : null,
         endTime: endTime !== -1 ? new Date(endTime) : null,
         place,
         emotionValues: [

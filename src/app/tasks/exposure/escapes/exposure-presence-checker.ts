@@ -28,18 +28,18 @@ export abstract class ExposurePresenceChecker extends TraceableTask {
     ): Promise<TaskOutcome> {
         const changes = invocationEvent.data as Array<AoIProximityChange>;
 
-        const result = await checkIfProximityChangesInvolveOngoingExposure(
+        const ongoingExposure = await this.store.getLastUnfinished(true);
+        const result = checkIfProximityChangesInvolveOngoingExposure(
             changes,
-            this.store
+            ongoingExposure
         );
 
         switch (result) {
             case "no-change":
-            case "not-present":
+            case "not-ongoing":
+            case "pre-started":
                 return { eventName: this.outputEventNames[0] };
-            case "present":
-                const ongoingExposure = await this.store.getLastUnfinished();
-
+            case "ongoing":
                 return {
                     eventName: this.outputEvent,
                     result: new ExposureAreaLeftRecord(

@@ -39,7 +39,14 @@ export class QuestionStepComponent {
     btnSize: any = "md";
 
     get gotAnswer(): boolean {
-        return this.answer !== undefined;
+        if (this.answer === undefined || this.answer === null) {
+            return false;
+        }
+        if (typeof this.answer === "string") {
+            return this.answer.length > 0;
+        }
+
+        return true;
     }
 
     get stepType(): QuestionStepType {
@@ -56,8 +63,8 @@ export class QuestionStepComponent {
         return "middle";
     }
 
-    onValueSelected(value: number) {
-        this.answer = value;
+    onValueSelected(value: number | string | boolean) {
+        this.answer = typeof value === "string" ? value.trim() : value;
         this.answerTime =
             this.savedAnswer && this.savedAnswer.answer === value
                 ? this.savedAnswer.answerTime
