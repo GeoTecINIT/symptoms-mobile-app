@@ -3,6 +3,7 @@ import { PreStartExposureTask } from "~/app/tasks/exposure/pre-start-exposure";
 import { CancelPreExposureTask } from "~/app/tasks/exposure/cancel-pre-exposure";
 import { StartExposureTask } from "./start-exposure";
 import { ProcessExposureAnswers } from "./process-answers";
+import { EvaluateExposureAnswers } from "~/app/tasks/exposure/evaluate-answers";
 import { EvaluateExposureTask } from "./evaluate-exposure";
 import { EvaluateExposureExtensionTask } from "./evaluate-exposure-ext";
 import { FinishExposureTask } from "./finish-exposure";
@@ -21,6 +22,7 @@ export const exposureTasks: Array<Task> = [
     new CancelPreExposureTask(),
     new StartExposureTask(),
     new ProcessExposureAnswers(),
+    new EvaluateExposureAnswers(),
     new EvaluateExposureTask(),
     new EvaluateExposureExtensionTask(),
     new FinishExposureTask(),

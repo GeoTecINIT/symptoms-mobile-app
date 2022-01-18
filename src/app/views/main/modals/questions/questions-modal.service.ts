@@ -4,7 +4,7 @@ import { MainViewService } from "~/app/views/main/main-view.service";
 import { QuestionsModalComponent } from "./questions-modal.component";
 import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer } from "./answers";
-import { emitQuestionnaireAnswersAcquired } from "~/app/core/framework/events";
+import { emitQuestionnaireAnswersAcquiredEvent } from "~/app/core/framework/events";
 import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 @Injectable({
@@ -24,7 +24,7 @@ export class QuestionsModalService {
             .showFullScreenAnimatedModal(QuestionsModalComponent, options)
             .then((answers: Array<QuestionAnswer>) => {
                 if (answers) {
-                    emitQuestionnaireAnswersAcquired(
+                    emitQuestionnaireAnswersAcquiredEvent(
                         processQuestionnaireAnswers(answers, {
                             openTime,
                             questionnaireId,

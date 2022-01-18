@@ -204,7 +204,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c04",
+                    id: "cg01",
                 },
             })
         );
@@ -215,7 +215,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Possible exposure finalization causes
         on("exposureFinished", run("emitExposureForcedToFinishEvent"));
         on("stopEvent", run("emitExposureForcedToFinishEvent"));
-        // -> Deliver questions every 5 minutes as long as the exposure lasts
+        // -> Deliver questions every 8 minutes as long as the exposure lasts
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -231,13 +231,68 @@ class DemoTaskGraph implements TaskGraph {
         );
         on("questionnaireAnswersAcquired", run("writeRecords"));
         on("questionnaireAnswersAcquired", run("processExposureAnswers"));
+        // -> Evaluate exposure answers at runtime
+        on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
+        // -> Determines that the exposure is not needed due to low sustained anxiety level
+        on(
+            "patientShowsAnInitialSustainedLowAnxietyLevel",
+            run("finishExposure", { successful: true })
+        );
+        on(
+            "patientShowsAnInitialSustainedLowAnxietyLevel",
+            run("sendNotification", {
+                title: "Parece que manejas bien esta situación",
+                body: "Puedes terminar aquí o continuar un poco más",
+            })
+        );
+        // -> Determines that the patient requires some reinforcement due to high anxiety values
+        on(
+            "patientShowsAHighAnxietyLevel",
+            run("sendNotification", {
+                title: "Parece que estás ante una situación difícil...",
+                body: "Pulsa aquí, quizás esto te ayude",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg02",
+                },
+            })
+        );
+        // -> Determines that the patient could get some reward
+        on(
+            "patientCouldGetSomeReward",
+            run("sendNotification", {
+                title: "Lo estás haciendo muy bien",
+            })
+        );
         // -> Leaving exposure area
         on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
             "exposureAreaLeft",
             run("sendNotification", {
                 title: "Parece que has salido del lugar de exposición",
-                body: "Recuerda que debes quedarte cerca del área",
+                body: "Pulsa sobre la notificación, por favor",
+                tapAction: {
+                    type: "ask-confirmation",
+                    id: "escape-intention",
+                },
+            })
+        );
+        on(
+            "patientDidNotLeaveExposureAreaOnPurpose",
+            run("sendNotification", {
+                title: "Puedes continuar como hasta ahora",
+                body: "Intenta permanecer cerca del área",
+            })
+        );
+        on(
+            "patientLeftExposureAreaOnPurpose",
+            run("sendNotification", {
+                title: "Evitar la situación puede ser perjudicial para ti",
+                body: "Pulsa aquí para recordar el papel de la evitación",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg03",
+                },
             })
         );
         on("exposureAreaLeft", run("writeRecords"));
@@ -247,7 +302,7 @@ class DemoTaskGraph implements TaskGraph {
             "returnedToExposureArea",
             run("sendNotification", {
                 title: "Vemos que has vuelto al lugar de exposición",
-                body: "Nos alegra que hayas vuelto. Puedes hacerlo",
+                body: "Nos alegra que hayas vuelto, adelante",
             })
         );
         on("returnedToExposureArea", run("writeRecords"));
@@ -300,7 +355,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c05",
+                    id: "cg04",
                 },
             })
         );
@@ -316,7 +371,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c07",
+                    id: "cg05",
                 },
             })
         );
@@ -336,7 +391,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "c08",
+                    id: "cg06",
                 },
             })
         );
@@ -348,7 +403,12 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Puedes hablar con tu terapeuta pulsando aquí",
+                title: "A veces puede resultar difícil afrontar la situación",
+                body: "Pulsa aquí, quizás estas pautas te ayuden",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg07",
+                },
             })
         );
         on(
@@ -360,8 +420,12 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Sabemos que no es fácil, pero te has esforzado mucho",
-                body: "Podemos finalizar la exposición por hoy",
+                title: "Sabemos que no es fácil. Te has esforzado mucho",
+                body: "Podemos finalizar la exposición por hoy. Pulsa aquí",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg08",
+                },
             })
                 .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
@@ -373,7 +437,7 @@ class DemoTaskGraph implements TaskGraph {
         // START: Post-exposure events
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(
-            "exposureFinished",
+            "exposureWasNotDroppedOut",
             run("sendNotification", {
                 title: "Has realizado un gran trabajo, enhorabuena",
                 body: "¿Podrías responder a estas preguntas?",

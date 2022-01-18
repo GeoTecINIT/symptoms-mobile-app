@@ -57,11 +57,8 @@ describe("Start exposure task", () => {
     });
 
     it("begins a new exposure when it was already pre-started", async () => {
-        const preExposure = createNewFakeExposure(aoiChange1.aoi);
-        preExposure.startTime = undefined;
-
         spyOn(storeMock, "getLastUnfinished").and.returnValue(
-            Promise.resolve(preExposure)
+            Promise.resolve(createNewFakeExposure(aoiChange1.aoi, false))
         );
 
         const invocationEvent = createEvent("eventTrigger", {
