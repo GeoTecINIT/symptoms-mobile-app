@@ -10,6 +10,10 @@ import { NotificationsHandlerService } from "~/app/views/main/notifications-hand
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { appEvents } from "~/app/core/app-events";
 import { Application } from "@nativescript/core";
+import {
+    MainViewService,
+    NavigationTab,
+} from "~/app/views/main/main-view.service";
 
 const APP_EVENTS_KEY = "NotificationsListComponent";
 
@@ -28,6 +32,7 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
     constructor(
         private notificationsReaderService: NotificationsReaderService,
         private notificationsHandlerService: NotificationsHandlerService,
+        private mainViewService: MainViewService,
         private ngZone: NgZone
     ) {
         this.logger = getLogger("NotificationsListComponent");
@@ -57,6 +62,10 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
                     `Could not handle notification tap. Reason: ${e}`
                 );
             });
+    }
+
+    onSeeProgressTap() {
+        this.mainViewService.setSelectedTab(NavigationTab.Progress);
     }
 
     private subscribeToNotificationUpdates() {

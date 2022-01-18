@@ -2,9 +2,9 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { ContentListComponent } from "./content-list.component";
+import { ContentContainerComponent } from "./content-container.component";
 
-const routes: Routes = [{ path: "", component: ContentListComponent }];
+const routes: Routes = [{ path: "", component: ContentContainerComponent }];
 
 @NgModule({
     imports: [NativeScriptRouterModule.forChild(routes)],

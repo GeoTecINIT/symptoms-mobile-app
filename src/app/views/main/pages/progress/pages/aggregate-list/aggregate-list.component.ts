@@ -1,7 +1,10 @@
 import { Component, HostListener, NgZone } from "@angular/core";
-import { Subject } from "rxjs";
-import { Record } from "@geotecinit/emai-framework/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
+import { NavigationService } from "~/app/views/navigation.service";
+import { ActivatedRoute } from "@angular/router";
+import { Subject } from "rxjs";
+
+import { Record } from "@geotecinit/emai-framework/entities";
 import { RecordType } from "~/app/core/record-type";
 import { takeUntil } from "rxjs/operators";
 
@@ -17,6 +20,8 @@ export class AggregateListComponent {
 
     constructor(
         private patientDataService: PatientDataService,
+        private navigationService: NavigationService,
+        private activeRoute: ActivatedRoute,
         private ngZone: NgZone
     ) {}
 
@@ -42,5 +47,15 @@ export class AggregateListComponent {
                     this.aggregates = aggregates;
                 });
             });
+    }
+
+    onSeeMoreTap(placeId: string) {
+        this.navigate("../records-list", placeId);
+    }
+
+    private navigate(route: string, param?: any) {
+        const url = [route];
+        if (param !== undefined && param !== null) url.push(param);
+        this.navigationService.navigate(url, this.activeRoute);
     }
 }

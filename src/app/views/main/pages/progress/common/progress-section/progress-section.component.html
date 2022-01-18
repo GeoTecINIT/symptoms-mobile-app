@@ -1,6 +1,6 @@
 <GridLayout rows="auto, *" columns="*, auto">
     <Label row="0" col="0" [text]="title"></Label>
-    <SymPrimaryButton row="0" col="1" size="md" [flat]="true" [margin]="0" [text]="btnText" [enabled]="btnActive" (tap)="onBtnTap()"></SymPrimaryButton>
+    <SymPrimaryButton *ngIf="btnText" row="0" col="1" size="md" [flat]="true" [margin]="0" [text]="btnText" [enabled]="btnActive" (tap)="onBtnTap()"></SymPrimaryButton>
     <StackLayout row="1" col="0" colSpan="2">
         <ng-content></ng-content>
     </StackLayout>
