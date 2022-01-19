@@ -16,7 +16,7 @@ export const askPreExposureQuestions: QuestionsModalOptions = {
         },
         {
             title:
-                "De 0 a 10, ¿cómo puntuarías las ganas que tienes de salir de aquí?",
+                "De 0 a 10, ¿cómo puntuarías las ganas que tienes de marcharte de aquí?",
             type: "range",
             from: 0,
             to: 10,
