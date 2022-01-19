@@ -1,0 +1,25 @@
+@import "src/app-variables";
+
+.circle {
+  height: 68;
+  width: 68;
+  background-color: const(grey);
+  border-radius: 34;
+}
+
+.icon {
+  horizontal-align: center;
+  vertical-align: center;
+  font-size: 36;
+  color: $accent;
+}
+
+.name {
+  font-weight: 500;
+  margin: 16;
+}
+
+.arrow {
+  color: $dark-grey;
+  font-size: 36;
+}

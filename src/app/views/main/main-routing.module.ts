@@ -22,6 +22,15 @@ const routes: Routes = [
                 outlet: "progressTab",
             },
             {
+                path: "places",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./pages/places/places.module").then(
+                        (m) => m.PlacesModule
+                    ),
+                outlet: "placesTab",
+            },
+            {
                 path: "content",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>

@@ -1,0 +1,13 @@
+<SymMainActionBar title="Tus lugares"></SymMainActionBar>
+
+<GridLayout rows="*,*">
+    <SymPlacesMap row="0" [places]="places" [highlightedPlace]="selectedPlace"></SymPlacesMap>
+    <SymPlacesList row="1" [places]="places" (placeSelected)="onPlaceSelected($event)"></SymPlacesList>
+</GridLayout>
+
+<StackLayout *ngIf="places && places.length === 0" class="no-places">
+    <StackLayout verticalAlignment="center">
+        <SymCircleIcon iconCode="&#xe0c7;"></SymCircleIcon>
+        <Label class="body" textWrap="true" textAlignment="center" text="No hay lugares dados de alta. Habla con tu terapeuta, quizás olvidó incluirlos"></Label>
+    </StackLayout>
+</StackLayout>

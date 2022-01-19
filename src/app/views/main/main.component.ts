@@ -116,6 +116,7 @@ export class MainComponent implements OnInit {
         this.navigationService.outletNavigation(
             {
                 progressTab: ["progress"],
+                placesTab: ["places"],
                 contentTab: ["content"],
                 notificationsTab: ["notifications"],
             },
