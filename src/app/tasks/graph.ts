@@ -260,8 +260,11 @@ class DemoTaskGraph implements TaskGraph {
         // -> Determines that the patient could get some reward
         on(
             "patientCouldGetSomeReward",
-            run("sendNotification", {
-                title: "Lo estás haciendo muy bien",
+            run("sendRandomNotification", {
+                options: [
+                    { title: "Lo estás haciendo muy bien" },
+                    { title: "Estás tolerando muy bien el malestar" },
+                ],
             })
         );
         // -> Leaving exposure area
