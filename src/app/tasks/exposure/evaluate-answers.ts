@@ -59,19 +59,17 @@ export class EvaluateExposureAnswers extends TraceableTask {
                 eventName: PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
             };
         }
-        if (
-            previousValuesShowSignsOfHighAnxiety(emotionValues) &&
-            lastValuesShowSignsOfHighAnxiety(emotionValues)
-        ) {
-            return {
-                eventName: PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
-            };
-        }
 
         if (lastValuesShowSignsOfHighAnxiety(emotionValues)) {
-            return {
-                eventName: PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
-            };
+            if (previousValuesShowSignsOfHighAnxiety(emotionValues)) {
+                return {
+                    eventName: PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
+                };
+            } else {
+                return {
+                    eventName: PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
+                };
+            }
         }
 
         if (valuesNumberIsEven(emotionValues)) {
