@@ -82,6 +82,36 @@ describe("Evaluate exposure answers task", () => {
         );
     });
 
+    it("reports that patient keeps on a high anxiety level strike when it is the case", async () => {
+        const ongoingExposure = crateFakeExposure([9, 9, 8, 9]);
+
+        await invokeWithDataAndWaitUntilDone(
+            task,
+            ongoingExposure,
+            "patientUnderAHighAnxietyLevelStrike"
+        );
+    });
+
+    it("reports nothing when the patient has overcome the strike", async () => {
+        const ongoingExposure = crateFakeExposure([9, 9, 8, 9, 7]);
+
+        await invokeWithDataAndWaitUntilDone(
+            task,
+            ongoingExposure,
+            "exposureAnswersEvaluated"
+        );
+    });
+
+    it("reports that patient high anxiety values have returned after recovery", async () => {
+        const ongoingExposure = crateFakeExposure([9, 9, 8, 9, 7, 9, 9]);
+
+        await invokeWithDataAndWaitUntilDone(
+            task,
+            ongoingExposure,
+            "patientShowsAHighAnxietyLevel"
+        );
+    });
+
     it("reports that patient could get some reward when none of the above apply, and every 2 reports", async () => {
         const ongoingExposure = crateFakeExposure([9, 8, 7, 8, 7, 8]);
 
