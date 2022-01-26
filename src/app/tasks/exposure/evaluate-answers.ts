@@ -11,6 +11,8 @@ const EXPOSURE_ANSWERS_EVALUATED = "exposureAnswersEvaluated";
 const PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL =
     "patientShowsAnInitialSustainedLowAnxietyLevel";
 const PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL = "patientShowsAHighAnxietyLevel";
+const PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE =
+    "patientUnderAHighAnxietyLevelStrike";
 const PATIENT_COULD_GET_SOME_REWARD = "patientCouldGetSomeReward";
 
 const LOW_ANXIETY_THRESHOLD = 3;
@@ -25,6 +27,7 @@ export class EvaluateExposureAnswers extends TraceableTask {
                 EXPOSURE_ANSWERS_EVALUATED,
                 PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
                 PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
+                PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
                 PATIENT_COULD_GET_SOME_REWARD,
             ],
         });
@@ -56,6 +59,15 @@ export class EvaluateExposureAnswers extends TraceableTask {
                 eventName: PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
             };
         }
+        if (
+            previousValuesShowSignsOfHighAnxiety(emotionValues) &&
+            lastValuesShowSignsOfHighAnxiety(emotionValues)
+        ) {
+            return {
+                eventName: PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
+            };
+        }
+
         if (lastValuesShowSignsOfHighAnxiety(emotionValues)) {
             return {
                 eventName: PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
@@ -77,6 +89,12 @@ function containsExactlyThreeValuesAndNoneIsAboveTheLowAnxietyThreshold(
         emotionValues.length === 3 &&
         emotionValues.every((item) => item.value <= LOW_ANXIETY_THRESHOLD)
     );
+}
+
+function previousValuesShowSignsOfHighAnxiety(
+    emotionValues: Array<EmotionValue>
+) {
+    return lastValuesShowSignsOfHighAnxiety(emotionValues.slice(0, -1));
 }
 
 function lastValuesShowSignsOfHighAnxiety(
