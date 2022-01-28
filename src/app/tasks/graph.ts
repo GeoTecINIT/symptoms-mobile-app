@@ -161,7 +161,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "preExposureCancelled",
             run("sendNotification", {
-                title: "¿Te vas?",
+                title: "¿Dificultades para realizar la exposición?",
                 body: "Por favor, pulsa aquí para indicar el motivo",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
@@ -241,7 +241,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "patientShowsAnInitialSustainedLowAnxietyLevel",
             run("sendNotification", {
-                title: "Parece que manejas bien esta situación",
+                title: "Enhorabuena, toleras bien esta situación",
                 body: "Puedes terminar aquí o continuar un poco más",
             })
         );
@@ -249,7 +249,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "patientShowsAHighAnxietyLevel",
             run("sendNotification", {
-                title: "Parece que estás ante una situación difícil...",
+                title: "Tu ansiedad actual parece muy intensa",
                 body: "Pulsa aquí, quizás esto te ayude",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -290,7 +290,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "patientLeftExposureAreaOnPurpose",
             run("sendNotification", {
-                title: "Evitar la situación puede ser perjudicial para ti",
+                title: "Abandonar ahora retrasaría tu recuperación",
                 body: "Pulsa aquí para recordar el papel de la evitación",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -315,7 +315,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureDroppedOut",
             run("sendNotification", {
-                title: "Has abandonado el lugar de exposición",
+                title: "Sentimos que hayas dejado la exposición",
                 body: "Por favor, pulsa aquí para indicar el motivo",
                 tapAction: {
                     type: TapActionType.ASK_FEEDBACK,
@@ -342,7 +342,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureEvaluationResultedSuccessful",
             run("sendNotification", {
-                title: "Bien, has manejado la situación",
+                title: "¡Has tolerado muy bien la ansiedad!",
                 body: "Puedes terminar aquí o continuar un poco más",
             })
         );
@@ -354,7 +354,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureEvaluationResultedNeutral",
             run("sendNotification", {
-                title: "Has conseguido reducir tu ansiedad, es un gran logro",
+                title: "Has conseguido tolerar tu ansiedad, es un gran logro",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -370,8 +370,8 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "Puedes prolongar tu tiempo de exposición",
-                body: "Pulsa aquí, leer esto puede resultarte de ayuda",
+                title: "Te recomendamos permanecer un poco más",
+                body: "Pulsa aquí, leer esto te puede resultar de ayuda",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
                     id: "cg05",
@@ -390,7 +390,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedSuccessful",
             run("sendNotification", {
-                title: "Te has esforzado mucho, con la práctica mejorarás",
+                title: "Bien hecho, será más tolerable con la práctica",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
@@ -406,7 +406,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("sendNotification", {
-                title: "A veces puede resultar difícil afrontar la situación",
+                title: "A veces resulta difícil tolerar la ansiedad",
                 body: "Pulsa aquí, quizás estas pautas te ayuden",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
