@@ -16,6 +16,10 @@ import { ReportUsageOptionComponent } from "./report-usage-option/report-usage-o
         ReportUsageOptionComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
-    exports: [DataSharingOptionComponent, ReportUsageOptionComponent],
+    exports: [
+        GenericSettingsOptionComponent,
+        DataSharingOptionComponent,
+        ReportUsageOptionComponent,
+    ],
 })
 export class AppSettingsOptionsModule {}

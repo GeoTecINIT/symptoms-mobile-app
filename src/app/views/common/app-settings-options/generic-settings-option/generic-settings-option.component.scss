@@ -1,5 +1,9 @@
 @import "src/app-variables";
 
+Label {
+  vertical-align: center;
+}
+
 GridLayout {
   padding-left: $global-spacing;
 }
