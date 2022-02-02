@@ -2,11 +2,15 @@ import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
+import { NavigationService } from "~/app/views/navigation.service";
+import { ActivatedRoute } from "@angular/router";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import {
     confirmWantsToExport,
     confirmWantsToUnlink,
 } from "~/app/core/dialogs/confirm";
+
+const TAPS_TO_ENTER_ADVANCED_SETTINGS = 5;
 
 @Component({
     selector: "SymSettingsContainer",
@@ -19,11 +23,14 @@ export class SettingsContainerComponent {
     }
 
     private logger: Logger;
+    private versionTapCount = 0;
 
     constructor(
         private params: ModalDialogParams,
         private dialogsService: DialogsService,
-        private appSettingsService: AppSettingsService
+        private appSettingsService: AppSettingsService,
+        private navigationService: NavigationService,
+        private activeRoute: ActivatedRoute
     ) {
         this.logger = getLogger("SettingsContainerComponent");
     }
@@ -66,5 +73,14 @@ export class SettingsContainerComponent {
                         );
                 }
             });
+    }
+
+    onVersionTap() {
+        if (this.versionTapCount < TAPS_TO_ENTER_ADVANCED_SETTINGS - 1) {
+            this.versionTapCount++;
+
+            return;
+        }
+        this.navigationService.navigate(["./advanced"], this.activeRoute);
     }
 }
