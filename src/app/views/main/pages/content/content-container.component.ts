@@ -14,7 +14,6 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
     styleUrls: ["./content-container.component.scss"],
 })
 export class ContentContainerComponent {
-    guidelines: Array<TreatmentContent>;
     psychoeducations: Array<TreatmentContent>;
 
     private unloaded$ = new Subject();
@@ -50,13 +49,6 @@ export class ContentContainerComponent {
     }
 
     private subscribeToContentChanges() {
-        this.treatmentContentService.guideliness$
-            .pipe(takeUntil(this.unloaded$))
-            .subscribe((guidelines) => {
-                this.ngZone.run(() => {
-                    this.guidelines = guidelines;
-                });
-            });
         this.treatmentContentService.psychoeducations$
             .pipe(takeUntil(this.unloaded$))
             .subscribe((psychoeducations) => {
