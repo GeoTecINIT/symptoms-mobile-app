@@ -12,7 +12,7 @@
         <Button text="Exportar datos recopilados" class="bg-primary" (tap)="onExportTap()"></Button>
     </SymSettingsSection>
     <SymSettingsSection title="Información sobre la aplicación" [withSeparator]="false">
-        <Label horizontalAlignment="center" class="version" text="SyMptOMS Mobile App v{{version}}"></Label>
+        <Label horizontalAlignment="center" class="version" text="SyMptOMS Mobile App v{{version}}" (tap)="onVersionTap()"></Label>
     </SymSettingsSection>
 </StackLayout>
 
