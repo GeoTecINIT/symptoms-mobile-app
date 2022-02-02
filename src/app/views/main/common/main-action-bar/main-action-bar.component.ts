@@ -4,6 +4,7 @@ import { SettingsModalService } from "../../modals/settings/settings-modal.servi
 import { SimulationModalService } from "../../modals/simulation/simulation-modal.service";
 import { getConfig } from "~/app/core/config";
 import { PanicButtonService } from "~/app/views/main/panic-button.service";
+import { AdvancedSetting, AdvancedSettingsService } from "~/app/core/account";
 
 @Component({
     selector: "SymMainActionBar",
@@ -14,12 +15,18 @@ export class MainActionBarComponent {
     @Input() title: string;
     development: boolean;
 
+    panicButtonActive: boolean;
+
     constructor(
         private settingsModalService: SettingsModalService,
         private simulationModalService: SimulationModalService,
+        private advancedSettingsService: AdvancedSettingsService,
         private panicButtonService: PanicButtonService
     ) {
         this.development = !getConfig().production;
+        this.panicButtonActive = this.advancedSettingsService.getBoolean(
+            AdvancedSetting.PanicButton
+        );
     }
 
     onSimulationTap() {
