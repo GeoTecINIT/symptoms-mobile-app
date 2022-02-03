@@ -65,12 +65,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> All frequencies & modes
         on("geolocationAcquired", run("writeRecords"));
         // END: Low resolution data collection
-        console.log(
-            advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius)
-        );
-        console.log(
-            advancedSettings.getNumber(AdvancedSetting.ExposureRadiusOffset)
-        );
+
         // START: Geofence detection
         on(
             "geolocationAcquired",
