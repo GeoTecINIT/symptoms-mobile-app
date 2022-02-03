@@ -1,11 +1,12 @@
 import { getConfig } from "~/app/core/config";
 
 import {
-    TaskGraph,
     EventListenerGenerator,
     RunnableTaskDescriptor,
+    TaskGraph,
 } from "@geotecinit/emai-framework/tasks/graph";
 import { TapActionType } from "@geotecinit/emai-framework/notifications";
+import { AdvancedSetting, advancedSettings } from "~/app/core/account";
 
 const exposureTimes = getConfig().exposureTimes;
 const EXPOSURE_MINUTES = exposureTimes.regular;
@@ -64,13 +65,22 @@ class DemoTaskGraph implements TaskGraph {
         // -> All frequencies & modes
         on("geolocationAcquired", run("writeRecords"));
         // END: Low resolution data collection
-
+        console.log(
+            advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius)
+        );
+        console.log(
+            advancedSettings.getNumber(AdvancedSetting.ExposureRadiusOffset)
+        );
         // START: Geofence detection
         on(
             "geolocationAcquired",
             run("checkAreaOfInterestProximity", {
-                nearbyRange: 100,
-                offset: 15,
+                nearbyRange: advancedSettings.getNumber(
+                    AdvancedSetting.NearbyExposureRadius
+                ),
+                offset: advancedSettings.getNumber(
+                    AdvancedSetting.ExposureRadiusOffset
+                ),
             })
         );
         on("movedCloseToAreaOfInterest", run("writeRecords"));
