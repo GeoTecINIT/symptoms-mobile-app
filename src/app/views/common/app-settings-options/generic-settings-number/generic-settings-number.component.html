@@ -1,0 +1,10 @@
+<GridLayout columns="*, auto" rows="auto" [marginBottom]="marginBottom">
+    <Label col="0"
+           textWrap="true"
+           [text]="text"
+           [class.font-weight-bold]="bold"
+           [class.font-italic]="italic">
+    </Label>
+    <Label col="1" text="{{currentValue}}{{unit}}" class="value" (tap)="onWantsToUpdateValue()">
+    </Label>
+</GridLayout>
