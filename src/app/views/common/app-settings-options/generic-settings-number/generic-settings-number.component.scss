@@ -1,0 +1,13 @@
+@import "src/app-variables";
+
+Label {
+  vertical-align: center;
+}
+
+.value {
+  color: $dark-grey;
+}
+
+GridLayout {
+  padding: $global-spacing;
+}
