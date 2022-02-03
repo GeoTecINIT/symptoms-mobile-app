@@ -17,7 +17,7 @@ export class PanicButtonOptionComponent {
     private logger: Logger;
 
     constructor(private advancedSettingsService: AdvancedSettingsService) {
-        this.logger = getLogger("DataSharingOptionComponent");
+        this.logger = getLogger("PanicButtonOptionComponent");
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
             AdvancedSetting.PanicButton
         );
