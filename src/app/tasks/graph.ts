@@ -262,7 +262,7 @@ class DemoTaskGraph implements TaskGraph {
                 },
             })
         );
-        // -> Determines that the patient could get some reward
+        // -> Determines that the patient could get some reward (or booster)
         on(
             "patientCouldGetSomeReward",
             run("sendRandomNotification", {
@@ -270,6 +270,12 @@ class DemoTaskGraph implements TaskGraph {
                     { title: "Lo estás haciendo muy bien" },
                     { title: "Estás tolerando muy bien el malestar" },
                 ],
+            })
+        );
+        on(
+            "patientCouldGetABooster",
+            run("sendNotification", {
+                title: "Lo estás haciendo muy bien",
             })
         );
         // -> Leaving exposure area
