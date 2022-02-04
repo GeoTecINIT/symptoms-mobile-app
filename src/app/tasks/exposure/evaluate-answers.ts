@@ -14,6 +14,7 @@ const PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL = "patientShowsAHighAnxietyLevel";
 const PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE =
     "patientUnderAHighAnxietyLevelStrike";
 const PATIENT_COULD_GET_SOME_REWARD = "patientCouldGetSomeReward";
+const PATIENT_COULD_GET_A_BOOSTER = "patientCouldGetABooster";
 
 const LOW_ANXIETY_THRESHOLD = 3;
 const HIGH_ANXIETY_THRESHOLD = 8;
@@ -29,6 +30,7 @@ export class EvaluateExposureAnswers extends TraceableTask {
                 PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
                 PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
                 PATIENT_COULD_GET_SOME_REWARD,
+                PATIENT_COULD_GET_A_BOOSTER,
             ],
         });
     }
@@ -50,6 +52,10 @@ export class EvaluateExposureAnswers extends TraceableTask {
         }
 
         const { emotionValues } = ongoingExposure;
+        if (emotionValues.length === 0) {
+            throw new Error("Cannot evaluate answers when there are none!");
+        }
+
         if (
             containsExactlyThreeValuesAndNoneIsAboveTheLowAnxietyThreshold(
                 emotionValues
@@ -73,7 +79,11 @@ export class EvaluateExposureAnswers extends TraceableTask {
         }
 
         if (valuesNumberIsEven(emotionValues)) {
-            return { eventName: PATIENT_COULD_GET_SOME_REWARD };
+            if (getLastValue(emotionValues) < 8) {
+                return { eventName: PATIENT_COULD_GET_SOME_REWARD };
+            } else {
+                return { eventName: PATIENT_COULD_GET_A_BOOSTER };
+            }
         }
 
         return { eventName: EXPOSURE_ANSWERS_EVALUATED };
@@ -156,4 +166,8 @@ function containsAMinimumSetOfValuesAndAllMeetTheThreshold(
 
 function valuesNumberIsEven(emotionValues: Array<EmotionValue>): boolean {
     return emotionValues.length % 2 === 0;
+}
+
+function getLastValue(emotionValues: Array<EmotionValue>): number {
+    return emotionValues[emotionValues.length - 1].value;
 }

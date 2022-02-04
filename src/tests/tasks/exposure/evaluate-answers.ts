@@ -113,12 +113,22 @@ describe("Evaluate exposure answers task", () => {
     });
 
     it("reports that patient could get some reward when none of the above apply, and every 2 reports", async () => {
-        const ongoingExposure = crateFakeExposure([9, 8, 7, 8, 7, 8]);
+        const ongoingExposure = crateFakeExposure([9, 8, 7, 8, 7, 7]);
 
         await invokeWithDataAndWaitUntilDone(
             task,
             ongoingExposure,
             "patientCouldGetSomeReward"
+        );
+    });
+
+    it("reports that patient could get a booster when the above applies and last value is eight or more", async () => {
+        const ongoingExposure = crateFakeExposure([9, 8, 7, 8, 7, 8]);
+
+        await invokeWithDataAndWaitUntilDone(
+            task,
+            ongoingExposure,
+            "patientCouldGetABooster"
         );
     });
 
