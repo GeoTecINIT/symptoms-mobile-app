@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { RouterExtensions } from "@nativescript/angular";
+import { NavigationService } from "~/app/views/navigation.service";
 
 @Component({
     selector: "SymBackActionBar",
@@ -9,9 +9,9 @@ import { RouterExtensions } from "@nativescript/angular";
 export class BackActionBarComponent {
     @Input() title: string;
 
-    constructor(private routerExtension: RouterExtensions) {}
+    constructor(private navigationService: NavigationService) {}
 
     onBack() {
-        this.routerExtension.back();
+        this.navigationService.goBack();
     }
 }
