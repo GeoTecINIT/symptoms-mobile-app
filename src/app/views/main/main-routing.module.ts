@@ -94,6 +94,15 @@ const routes: Routes = [
                 outlet: "feedbackModal",
             },
             {
+                path: "panic-button",
+                component: NSEmptyOutletComponent,
+                loadChildren: () =>
+                    import("./modals/panic-button/panic-button.module").then(
+                        (m) => m.PanicButtonModule
+                    ),
+                outlet: "panicButtonModal",
+            },
+            {
                 path: "simulation",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
