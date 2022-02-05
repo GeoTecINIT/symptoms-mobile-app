@@ -4,19 +4,17 @@ import {
 } from "~/app/core/account/advanced-settings";
 
 describe("Advanced settings", () => {
+    beforeAll(() => advancedSettings.reset());
+
     it("Returns default values", async () => {
         expect(
-            await advancedSettings.getBoolean(AdvancedSetting.PanicButton)
+            advancedSettings.getBoolean(AdvancedSetting.PanicButton)
         ).toBeFalse();
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.NearbyExposureRadius
-            )
+            advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius)
         ).toBe(100);
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.ExposureRadiusOffset
-            )
+            advancedSettings.getNumber(AdvancedSetting.ExposureRadiusOffset)
         ).toBe(15);
     });
 
@@ -32,17 +30,13 @@ describe("Advanced settings", () => {
         );
 
         expect(
-            await advancedSettings.getBoolean(AdvancedSetting.PanicButton)
+            advancedSettings.getBoolean(AdvancedSetting.PanicButton)
         ).toBeTrue();
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.NearbyExposureRadius
-            )
+            advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius)
         ).toBe(200);
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.ExposureRadiusOffset
-            )
+            advancedSettings.getNumber(AdvancedSetting.ExposureRadiusOffset)
         ).toBe(20);
     });
 
@@ -60,17 +54,13 @@ describe("Advanced settings", () => {
         await advancedSettings.reset();
 
         expect(
-            await advancedSettings.getBoolean(AdvancedSetting.PanicButton)
+            advancedSettings.getBoolean(AdvancedSetting.PanicButton)
         ).toBeFalse();
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.NearbyExposureRadius
-            )
+            advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius)
         ).toBe(100);
         expect(
-            await advancedSettings.getNumber(
-                AdvancedSetting.ExposureRadiusOffset
-            )
+            advancedSettings.getNumber(AdvancedSetting.ExposureRadiusOffset)
         ).toBe(15);
     });
 
