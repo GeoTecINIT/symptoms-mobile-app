@@ -30,7 +30,7 @@ export class GenericSettingsNumberComponent {
 
     onWantsToUpdateValue() {
         const minText = this.min !== undefined ? ` (min: ${this.min})` : "";
-        let options: PromptOptions = {
+        const options: PromptOptions = {
             title: `Introduce un nuevo valor${minText}`,
             defaultText: `${this.currentValue}`,
             okButtonText: "Confirmar",
