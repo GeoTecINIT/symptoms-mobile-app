@@ -1,0 +1,16 @@
+$label-margin: 16;
+
+Label {
+  horizontal-align: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 36;
+  margin: $label-margin;
+}
+
+.body {
+  font-size: 18;
+  margin: 0 $label-margin $label-margin;
+}
