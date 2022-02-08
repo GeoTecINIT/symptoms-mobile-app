@@ -9,14 +9,14 @@ export const askPreExposureQuestions: QuestionsModalOptions = {
     questions: [
         {
             title:
-                "De 0 (ninguna) a 10 (máxima), ¿cómo puntuarías tu nivel de ansiedad en este momento?",
+                "De 0 (ninguno) a 10 (máximo), ¿cómo puntuarías tu nivel de ansiedad en este momento?",
             type: "range",
             from: 0,
             to: 10,
         },
         {
             title:
-                "De 0 (ningunas) a 10 (muchísimas), ¿cómo puntuarías las ganas que tienes de marcharte de aquí?",
+                "De 0 (ninguna) a 10 (mucha), ¿cómo puntuarías tu capacidad para tolerar la emoción que sientes ahora?",
             type: "range",
             from: 0,
             to: 10,
@@ -47,14 +47,14 @@ export const askExposureQuestions: QuestionsModalOptions = {
     questions: [
         {
             title:
-                "De 0 (ninguna) a 10 (máxima), ¿cómo puntuarías tu nivel de ansiedad en este momento?",
+                "De 0 (ninguno) a 10 (máximo), ¿cómo puntuarías tu nivel de ansiedad en este momento?",
             type: "range",
             from: 0,
             to: 10,
         },
         {
             title:
-                "De 0 (ningunas) a 10 (muchísimas), ¿cómo puntuarías las ganas que tienes de salir de aquí?",
+                "De 0 (ninguna) a 10 (mucha), ¿cómo puntuarías tu capacidad para tolerar la emoción que sientes ahora?",
             type: "range",
             from: 0,
             to: 10,
