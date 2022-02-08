@@ -23,7 +23,7 @@ export class PanicButtonOptionComponent {
         );
     }
 
-    onDataSharingCheckChange(checked: boolean) {
+    onPanicButtonActiveStatusChange(checked: boolean) {
         this.advancedSettingsService
             .setBoolean(AdvancedSetting.PanicButton, checked)
             .catch((e) =>
