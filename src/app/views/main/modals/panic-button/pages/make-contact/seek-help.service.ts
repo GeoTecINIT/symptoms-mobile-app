@@ -7,7 +7,7 @@ import { confirmWantsToMakeEmergencyCall } from "~/app/core/dialogs/confirm";
 @Injectable({
     providedIn: "root",
 })
-export class PanicButtonService {
+export class SeekHelpService {
     private readonly therapistPhone: string;
 
     private logger: Logger;

@@ -56,4 +56,8 @@ export class NavigationService {
                 )
             );
     }
+
+    goBack() {
+        this.routerExtension.back();
+    }
 }
