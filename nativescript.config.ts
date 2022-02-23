@@ -1,11 +1,14 @@
-import { NativeScriptConfig } from '@nativescript/core'
+import { NativeScriptConfig } from "@nativescript/core";
 
 export default {
-  id: 'es.uji.geotec.symptomsapp',
-  appPath: 'src',
-  appResourcesPath: 'App_Resources',
-  android: {
-    v8Flags: '--expose_gc',
-    markingMode: 'none',
-  },
-} as NativeScriptConfig
+    appPath: "src",
+    appResourcesPath: "App_Resources",
+    android: {
+        id: "es.uji.geotec.alert.symptomsapp",
+        v8Flags: "--expose_gc",
+        markingMode: "none",
+    },
+    ios: {
+        id: "es.uji.geotec.symptomsapp",
+    },
+} as NativeScriptConfig;
