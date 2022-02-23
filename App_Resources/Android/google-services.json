@@ -30,6 +30,49 @@
             {
               "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "956576921484-01164bugppib5cajfn7ups8h3p11l9b9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "es.uji.geotec.symptomsapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956576921484:android:123ff00a1ca2ea167b48a9",
+        "android_client_info": {
+          "package_name": "es.uji.geotec.alert.symptomsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjKAO_7s9SPvK_-IVd8CFl3s4nPcsijs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "956576921484-01164bugppib5cajfn7ups8h3p11l9b9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "es.uji.geotec.symptomsapp"
+              }
             }
           ]
         }
@@ -59,6 +102,13 @@
             {
               "client_id": "956576921484-a8c1tbgts764cf90g5ha3kcjdnne51b2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "956576921484-01164bugppib5cajfn7ups8h3p11l9b9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "es.uji.geotec.symptomsapp"
+              }
             }
           ]
         }
