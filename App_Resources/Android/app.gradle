@@ -16,6 +16,7 @@ android {
   ndkVersion "22.1.7171670"
   defaultConfig {
     minSdkVersion 19
+    targetSdkVersion 30
     multiDexEnabled true
     generatedDensities = []
   }
