@@ -16,14 +16,20 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '16.x'
   displayName: 'Install Node.js'
 
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
 - script: |
-    echo no | npm install -g nativescript@7
-    tns usage-reporting disable
-    tns error-reporting disable
-  displayName: 'install NativeScript CLI'
+    echo no | npm install -g nativescript
+    ns usage-reporting disable
+    ns error-reporting disable
+  displayName: 'Install NativeScript CLI'
 
 - script: |
     npm install
@@ -34,12 +40,12 @@ steps:
   displayName: 'Lint'
 
 - script: |
-    tns build android
+    ns build android
   displayName: 'Build'
 
 - script: |
     ./ci-tools/wait-for-emulator.sh
-    tns test android --watch false --justlaunch
+    ns test android --watch false --justlaunch
   displayName: 'Test'
 
 - task: PublishTestResults@2
