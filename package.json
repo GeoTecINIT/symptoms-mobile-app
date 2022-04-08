@@ -38,7 +38,7 @@
     "@turf/helpers": "^6.5.0",
     "await-lock": "^2.1.0",
     "nativescript-inappbrowser": "^3.0.2",
-    "nativescript-permissions": "^1.3.8",
+    "nativescript-permissions": "~1.3.11",
     "nativescript-phone": "^2.0.0",
     "nativescript-task-dispatcher": "^2.0.1",
     "reflect-metadata": "~0.1.12",
