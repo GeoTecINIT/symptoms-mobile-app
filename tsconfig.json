@@ -30,5 +30,5 @@
     "node_modules",
     "platforms"
   ],
-  "files": ["./src/main.ts", "./reference.d.ts", "./src/polyfills.ts"]
+  "files": ["./reference.d.ts", "./src/main.ts", "./src/polyfills.ts"]
 }
