@@ -3,7 +3,7 @@
     "compilerOptions": {
         "sourceMap": true
     },
-	"files": ["src/test.ts"],
+	"files": ["./reference.d.ts", "src/test.ts"],
 	"include": ["src/**/*.spec.ts", "src/**/*.d.ts"],
 	"exclude": ["node_modules", "platforms", "e2e"]
 }
