@@ -11,7 +11,7 @@ import { Application, Page } from "@nativescript/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
+import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
 import { NavigationService } from "../navigation.service";
