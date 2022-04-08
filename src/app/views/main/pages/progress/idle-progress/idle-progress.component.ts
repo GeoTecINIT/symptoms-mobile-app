@@ -30,7 +30,7 @@ export class IdleProgressComponent {
 
     generatingData = false;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
     private readonly generateData: DataGenerator;
 
     constructor(

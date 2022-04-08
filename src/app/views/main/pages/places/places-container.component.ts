@@ -14,7 +14,7 @@ export class PlacesContainerComponent {
     places: Array<AreaOfInterest>;
     selectedPlace: AreaOfInterest;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     constructor(private placesService: PlacesService, private ngZone: NgZone) {}
 
