@@ -16,7 +16,7 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
 export class ContentContainerComponent {
     psychoeducations: Array<TreatmentContent>;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
     private logger: Logger;
 
     constructor(

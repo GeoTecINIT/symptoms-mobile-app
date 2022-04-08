@@ -25,7 +25,7 @@ export class RecordsListComponent implements OnInit {
     placeId?: string;
     aoi?: AreaOfInterest;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
     private logger: Logger;
 
     constructor(

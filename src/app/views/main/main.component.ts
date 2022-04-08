@@ -46,7 +46,7 @@ export class MainComponent implements OnInit {
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 

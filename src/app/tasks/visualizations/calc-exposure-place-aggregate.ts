@@ -10,7 +10,7 @@ import { EmotionValue } from "~/app/core/persistence/exposures";
 import { calculateEmotionValuesAvg } from "~/app/tasks/visualizations/common";
 import { ExposurePlaceAggregate } from "~/app/tasks/visualizations/exposure-place-aggregate";
 import { RecordType } from "~/app/core/record-type";
-import { take } from "rxjs/operators";
+import { firstValueFrom } from "rxjs";
 
 export class CalculateExposurePlaceAggregate extends TraceableTask {
     constructor(private store: PatientData = patientData) {
@@ -33,13 +33,12 @@ export class CalculateExposurePlaceAggregate extends TraceableTask {
             value: calculateEmotionValuesAvg(emotionValues),
         };
 
-        const prevAggregate = await this.store
-            .observeLastByRecordType<ExposurePlaceAggregate>(
+        const prevAggregate = await firstValueFrom(
+            this.store.observeLastByRecordType<ExposurePlaceAggregate>(
                 RecordType.ExposurePlaceAggregate,
                 [{ property: "placeId", comparison: "=", value: id }]
             )
-            .pipe(take(1))
-            .toPromise();
+        );
 
         const updatedEmotionValues = prevAggregate
             ? [...prevAggregate.emotionValues, newEntry]

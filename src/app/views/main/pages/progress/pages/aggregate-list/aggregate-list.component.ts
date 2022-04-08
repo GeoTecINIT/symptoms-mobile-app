@@ -16,7 +16,7 @@ import { takeUntil } from "rxjs/operators";
 export class AggregateListComponent {
     aggregates: Array<Record>;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     constructor(
         private patientDataService: PatientDataService,
