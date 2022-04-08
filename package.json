@@ -40,7 +40,6 @@
     "nativescript-inappbrowser": "^3.0.2",
     "nativescript-permissions": "~1.3.11",
     "nativescript-phone": "^2.0.0",
-    "nativescript-task-dispatcher": "^2.0.1",
     "reflect-metadata": "~0.1.12",
     "rxjs": "~7.5.0",
     "zone.js": "~0.11.0"
