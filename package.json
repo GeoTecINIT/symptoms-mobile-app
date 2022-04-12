@@ -29,7 +29,7 @@
     "@nativescript/core": "~8.2.0",
     "@nativescript/firebase": "file:vendor/nativescript-firebase-11.1.4.tgz",
     "@nativescript/localize": "^5.0.4",
-    "@nativescript/theme": "~2.3.0",
+    "@nativescript/theme": "~3.0.0",
     "@nativescript/unit-test-runner": "~3.0.0",
     "@nativescript/zip": "^5.0.0",
     "@symptoms/api-client": "file:vendor/symptoms-api-client-1.0.1.tgz",
