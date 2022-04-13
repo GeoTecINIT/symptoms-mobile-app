@@ -113,14 +113,18 @@ export class MainComponent implements OnInit {
     }
 
     private loadTabOutlets() {
-        this.navigationService.outletNavigation(
-            {
-                progressTab: ["progress"],
-                placesTab: ["places"],
-                contentTab: ["content"],
-                notificationsTab: ["notifications"],
-            },
-            this.activeRoute
+        // FIXME: This moves outlet navigation outside the component rendering lifecycle,
+        //  to be improved by completely getting rid of named outlets
+        setTimeout(() =>
+            this.navigationService.outletNavigation(
+                {
+                    progressTab: ["progress"],
+                    placesTab: ["places"],
+                    contentTab: ["content"],
+                    notificationsTab: ["notifications"],
+                },
+                this.activeRoute
+            )
         );
     }
 
