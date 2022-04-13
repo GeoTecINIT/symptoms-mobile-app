@@ -16,7 +16,7 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
 export class ProgressContainerComponent {
     idle: boolean;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { MainViewService } from "~/app/views/main/main-view.service";
-import { PanicButtonModalComponent } from "~/app/views/main/modals/panic-button/panic-button-modal.component.ts";
+import { PanicButtonModalComponent } from "~/app/views/main/modals/panic-button/panic-button-modal.component";
 
 @Injectable({
     providedIn: "root",

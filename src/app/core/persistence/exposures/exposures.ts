@@ -1,6 +1,8 @@
 import { Exposure } from "./exposure";
-import { EMAIStore } from "@geotecinit/emai-framework/storage";
-import { QueryLogicalOperator } from "nativescript-couchbase-plugin";
+import {
+    EMAIStore,
+    QueryLogicalOperator,
+} from "@geotecinit/emai-framework/storage";
 
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;
@@ -34,9 +36,8 @@ class ExposuresStoreDB implements ExposuresStore {
                 "Cannot update an exposure not previously inserted! (missing id)"
             );
         }
-        const { startTime, endTime, emotionValues, successful } = docFrom(
-            exposure
-        );
+        const { startTime, endTime, emotionValues, successful } =
+            docFrom(exposure);
         await this.store.update(exposure.id, {
             startTime,
             endTime,

@@ -1,4 +1,4 @@
-import { getConfig, setEnvironment, Environment } from "~/app/core/config";
+import { getConfig, setEnvironment } from "~/app/core/config";
 
 describe("Config", () => {
     it("returns development environment by default", () => {

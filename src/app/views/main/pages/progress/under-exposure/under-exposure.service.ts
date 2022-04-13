@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { combineLatest, Observable, ReplaySubject, timer } from "rxjs";
+import { map } from "rxjs/operators";
+
 import { Exposure, exposures } from "~/app/core/persistence/exposures";
-import { map } from "rxjs/internal/operators";
 
 const DANGER_THRESHOLD = 8;
 const MS_IN_MINUTE = 60000;

@@ -11,7 +11,7 @@ import { Application, Page } from "@nativescript/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
+import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
 import { NavigationService } from "../navigation.service";
@@ -46,7 +46,7 @@ export class MainComponent implements OnInit {
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 
@@ -113,14 +113,18 @@ export class MainComponent implements OnInit {
     }
 
     private loadTabOutlets() {
-        this.navigationService.outletNavigation(
-            {
-                progressTab: ["progress"],
-                placesTab: ["places"],
-                contentTab: ["content"],
-                notificationsTab: ["notifications"],
-            },
-            this.activeRoute
+        // FIXME: This moves outlet navigation outside the component rendering lifecycle,
+        //  to be improved by completely getting rid of named outlets
+        setTimeout(() =>
+            this.navigationService.outletNavigation(
+                {
+                    progressTab: ["progress"],
+                    placesTab: ["places"],
+                    contentTab: ["content"],
+                    notificationsTab: ["notifications"],
+                },
+                this.activeRoute
+            )
         );
     }
 

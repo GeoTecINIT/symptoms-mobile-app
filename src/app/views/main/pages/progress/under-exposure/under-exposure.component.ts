@@ -53,7 +53,7 @@ export class UnderExposureComponent {
     exposureProgress: number;
     inDanger: boolean;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 
@@ -86,7 +86,13 @@ export class UnderExposureComponent {
     }
 
     onWantsToLeaveTap() {
-        this.contentViewModalService.showContent("cg03");
+        this.contentViewModalService
+            .showContent("cg03")
+            .catch((err) =>
+                this.logger.error(
+                    `Could not show content! Reason: ${JSON.stringify(err)}`
+                )
+            );
     }
 
     private subscribeToOngoingExposureChanges() {
