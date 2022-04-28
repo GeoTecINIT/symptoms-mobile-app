@@ -1,5 +1,5 @@
-import { RecordsStore } from "@geotecinit/emai-framework/storage/records";
-import { Record } from "@geotecinit/emai-framework/entities";
+import { RecordsStore } from "@awarns/core/storage/records";
+import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
 import { serverApi, ServerApiClient } from "~/app/core/server";
 import { account, Account } from "~/app/core/account";
@@ -21,11 +21,11 @@ class RemoteRecordsStore implements RecordsStore {
         ]);
     }
 
-    getAll(reverseOrder?: boolean, limitSize?: number): Promise<Array<Record>> {
+    getAll(_reverseOrder?: boolean, _limitSize?: number): Promise<Array<Record>> {
         throw new Error("Unimplemented");
     }
 
-    list(size?: number): Observable<Array<Record>> {
+    list(_size?: number): Observable<Array<Record>> {
         throw new Error("Unimplemented");
     }
 

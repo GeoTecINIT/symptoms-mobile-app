@@ -1,5 +1,5 @@
 import { ExposureChange } from "~/app/tasks/exposure";
-import { Change } from "@geotecinit/emai-framework/entities";
+import { Change } from "@awarns/core/entities";
 import {
     CuttingLines,
     YAxisDataRange,

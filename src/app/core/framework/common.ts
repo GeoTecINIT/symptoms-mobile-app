@@ -1,10 +1,10 @@
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { awarns } from "@awarns/core";
 
 export async function preparePlugin(): Promise<boolean> {
-    const isReady = await emaiFramework.isReady();
+    const isReady = await awarns.isReady();
     if (isReady) return true;
     try {
-        await emaiFramework.prepare();
+        await awarns.prepare();
 
         return true;
     } catch (e) {

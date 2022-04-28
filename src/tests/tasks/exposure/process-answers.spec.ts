@@ -7,8 +7,8 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
-import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
+} from "@awarns/core/testing/events";
+import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
 
 describe("Process exposure answers task", () => {
     let storeMock: ExposuresStore;

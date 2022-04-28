@@ -1,15 +1,15 @@
-import { NotificationSenderTask } from "@geotecinit/emai-framework/internal/tasks/notifications/notification-sender";
-import { TracerConfig } from "@geotecinit/emai-framework/internal/tasks/tracing";
+import { NotificationSenderTask } from "@awarns/core/internal/tasks/notifications/notification-sender";
+import { TracerConfig } from "@awarns/core/internal/tasks/tracing";
 import {
     notificationsManager,
     NotificationsManager,
-} from "@geotecinit/emai-framework/internal/notifications/manager";
+} from "@awarns/core/internal/notifications/manager";
 import {
     DispatchableEvent,
     TaskOutcome,
     TaskParams,
-} from "@geotecinit/emai-framework/tasks";
-import { TapAction } from "@geotecinit/emai-framework/internal/notifications";
+} from "@awarns/core/tasks";
+import { TapAction } from "@awarns/core/internal/notifications";
 
 export class RandomNotificationSenderTask extends NotificationSenderTask {
     constructor(

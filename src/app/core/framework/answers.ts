@@ -2,7 +2,7 @@ import { QuestionAnswer } from "~/app/views/main/modals/questions";
 import {
     QuestionnaireAnswer,
     QuestionnaireAnswers,
-} from "@geotecinit/emai-framework/entities/answers";
+} from "@awarns/core/entities/answers";
 
 export function processQuestionnaireAnswers(
     answers: Array<QuestionAnswer>,

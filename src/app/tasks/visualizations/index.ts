@@ -1,4 +1,4 @@
-import { Task } from "@geotecinit/emai-framework/tasks";
+import { Task } from "@awarns/core/tasks";
 import { CalculateExposureAggregate } from "./calc-exposure-aggregate";
 import { CalculateExposurePlaceAggregate } from "./calc-exposure-place-aggregate";
 

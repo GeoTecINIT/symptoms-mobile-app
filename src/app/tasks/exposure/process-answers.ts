@@ -3,9 +3,9 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
-import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
 
 export class ProcessExposureAnswers extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {

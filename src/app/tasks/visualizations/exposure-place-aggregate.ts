@@ -1,4 +1,4 @@
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { RecordType } from "~/app/core/record-type";
 import { EmotionValue } from "~/app/core/persistence/exposures";
 

@@ -7,7 +7,7 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
+} from "@awarns/core/testing/events";
 
 const MILD_ANXIETY = 5;
 const GOOD_PEAK_DIFF = 3;

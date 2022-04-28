@@ -9,9 +9,9 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
-import { GeofencingProximity } from "@geotecinit/emai-framework/internal/tasks/geofencing/geofencing-state";
+} from "@awarns/core/testing/events";
+import { Change } from "@awarns/core/internal/providers";
+import { GeofencingProximity } from "@awarns/core/internal/tasks/geofencing/geofencing-state";
 
 describe("Pre-start exposure task", () => {
     let storeMock: ExposuresStore;

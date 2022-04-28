@@ -8,8 +8,8 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+} from "@awarns/core/testing/events";
+import { Change } from "@awarns/core/internal/providers";
 
 describe("Finish exposure task", () => {
     let storeMock: ExposuresStore;

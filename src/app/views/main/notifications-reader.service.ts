@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, ReplaySubject } from "rxjs";
-import { Notification } from "@geotecinit/emai-framework/notifications";
+import { Notification } from "@awarns/core/notifications";
 
 // FIXME: Replace with external API once declared
-import { notificationsStoreDB } from "@geotecinit/emai-framework/internal/persistence/stores/notifications";
+import { notificationsStoreDB } from "@awarns/core/internal/persistence/stores/notifications";
 
 import { map } from "rxjs/operators";
 import { approximateDiff, ApproximateTimeDiff } from "~/app/core/utils/time";

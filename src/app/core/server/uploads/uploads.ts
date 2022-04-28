@@ -4,16 +4,16 @@ import {
     UploadTelemetryRequest,
 } from "@symptoms/api-client/uploads";
 import { GRPCServiceOptions } from "~/app/core/server/common";
-import { Change, Record } from "@geotecinit/emai-framework/entities";
+import { Change, Record } from "@awarns/core/entities";
 import {
     Trace,
     TraceType,
     TraceResult,
-} from "@geotecinit/emai-framework/storage/traces";
+} from "@awarns/core/storage/traces";
 import { Record as PBRecord, RecordSource } from "@symptoms/api-client/records";
 import { Trace as PBTrace } from "@symptoms/api-client/traces";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
-import { jsonDateReplacer } from "@geotecinit/emai-framework/internal/utils/date";
+import { jsonDateReplacer } from "@awarns/core/internal/utils/date";
 
 export type ApiRecord = Record & UploadMetadata;
 export type ApiTrace = Trace & UploadMetadata;

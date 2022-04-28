@@ -1,6 +1,6 @@
-import { Change, Record } from "@geotecinit/emai-framework/entities";
+import { Change, Record } from "@awarns/core/entities";
 import { EmotionValue } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 import { RecordType } from "~/app/core/record-type";
 
 export class ExposureChange extends Record {

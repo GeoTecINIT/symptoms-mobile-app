@@ -7,12 +7,12 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
-import { Task } from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/testing/events";
+import { Task } from "@awarns/core/tasks";
 import {
     EventData,
     TaskDispatcherEvent,
-} from "@geotecinit/emai-framework/events";
+} from "@awarns/core/events";
 
 describe("Evaluate exposure answers task", () => {
     let task: EvaluateExposureAnswers;

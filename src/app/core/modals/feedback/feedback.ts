@@ -1,4 +1,4 @@
-import { Record, Change } from "@geotecinit/emai-framework/entities";
+import { Record, Change } from "@awarns/core/entities";
 import { RecordType } from "~/app/core/record-type";
 
 export class PatientFeedback extends Record {

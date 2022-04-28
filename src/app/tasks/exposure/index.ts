@@ -1,4 +1,4 @@
-import { Task } from "@geotecinit/emai-framework/tasks";
+import { Task } from "@awarns/core/tasks";
 import { PreStartExposureTask } from "~/app/tasks/exposure/pre-start-exposure";
 import { CancelPreExposureTask } from "~/app/tasks/exposure/cancel-pre-exposure";
 import { StartExposureTask } from "./start-exposure";

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { patientData, QueryCondition } from "~/app/core/framework/patient-data";
 
 @Injectable({

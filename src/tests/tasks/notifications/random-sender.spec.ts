@@ -1,11 +1,11 @@
 import { RandomNotificationSenderTask } from "~/app/tasks/notifications/random-sender";
-import { NotificationsManager } from "@geotecinit/emai-framework/internal/notifications/manager";
+import { NotificationsManager } from "@awarns/core/internal/notifications/manager";
 import {
     Notification,
     TapAction,
     TapActionType,
-} from "@geotecinit/emai-framework/notifications";
-import { createEvent } from "@geotecinit/emai-framework/testing/events";
+} from "@awarns/core/notifications";
+import { createEvent } from "@awarns/core/testing/events";
 
 describe("Random notification sender", () => {
     const initialTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;

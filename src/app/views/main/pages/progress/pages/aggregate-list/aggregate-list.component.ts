@@ -4,7 +4,7 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { RecordType } from "~/app/core/record-type";
 import { takeUntil } from "rxjs/operators";
 

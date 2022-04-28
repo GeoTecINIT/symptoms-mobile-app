@@ -2,7 +2,7 @@ import { Exposure } from "./exposure";
 import {
     EMAIStore,
     QueryLogicalOperator,
-} from "@geotecinit/emai-framework/storage";
+} from "@awarns/core/storage";
 
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;

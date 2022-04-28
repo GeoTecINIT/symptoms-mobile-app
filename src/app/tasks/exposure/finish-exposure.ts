@@ -3,10 +3,10 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import { ExposureChange } from "~/app/tasks/exposure/change-record";
-import { Change } from "@geotecinit/emai-framework/entities";
+import { Change } from "@awarns/core/entities";
 
 export class FinishExposureTask extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {

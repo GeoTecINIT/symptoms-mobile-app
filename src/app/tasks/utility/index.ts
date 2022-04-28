@@ -1,4 +1,4 @@
-import { Task } from "@geotecinit/emai-framework/tasks";
+import { Task } from "@awarns/core/tasks";
 import { EventConverterTask } from "~/app/tasks/utility/event-converter";
 
 export const utilityTasks: Array<Task> = [

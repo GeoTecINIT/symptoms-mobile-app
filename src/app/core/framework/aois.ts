@@ -2,7 +2,7 @@ import { getLogger } from "~/app/core/utils/logger";
 import {
     AreaOfInterest,
     areasOfInterest,
-} from "@geotecinit/emai-framework/entities/aois";
+} from "@awarns/core/entities/aois";
 
 export type AoIChangeListener = () => void;
 

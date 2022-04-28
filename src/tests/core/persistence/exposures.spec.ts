@@ -1,5 +1,5 @@
 import { Exposure, exposures } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 
 describe("Exposures store", () => {
     const place: AreaOfInterest = {
