@@ -50,13 +50,6 @@ export class CalculateExposurePlaceAggregate extends TraceableTask {
             updatedEmotionValues
         );
 
-        // FIXME: Temporal workaround for multiple concurrent record writes
-        await returnIn(1000);
-
         return { result: aggregate };
     }
-}
-
-function returnIn(ms: number): Promise<void> {
-    return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
