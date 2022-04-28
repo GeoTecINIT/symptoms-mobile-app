@@ -1,4 +1,4 @@
-import { Change, Record } from "@geotecinit/emai-framework/entities";
+import { Change, Record } from "@awarns/core/entities";
 import { RecordType } from "~/app/core/record-type";
 
 export class BatteryLevel extends Record {

@@ -13,7 +13,7 @@ import {
     Notification,
     notificationsManager,
     TapActionType,
-} from "@geotecinit/emai-framework/notifications";
+} from "@awarns/core/notifications";
 
 import {
     confirmDidNotLeaveAreaOnPurpose,

@@ -3,7 +3,7 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { ExposureChange } from "~/app/tasks/exposure";
 
 const EXPOSURE_DROPPED_OUT = "exposureWasDroppedOut";

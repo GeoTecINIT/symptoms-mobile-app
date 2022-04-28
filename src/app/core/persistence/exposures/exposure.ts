@@ -1,4 +1,4 @@
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 
 export interface Exposure {
     id?: string;

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ModalDialogParams } from "@nativescript/angular";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { awarns } from "@awarns/core";
 
 @Component({
     selector: "SymSimulationActions",
@@ -21,7 +21,7 @@ export class SimulationActionsComponent {
         this.params.closeCallback();
     }
 
-    emitEMAIFrameworkEvent(eventName: string, data?: any) {
-        emaiFramework.emitEvent(eventName, data);
+    emitAwarnsFrameworkEvent(eventName: string, data?: any) {
+        awarns.emitEvent(eventName, data);
     }
 }

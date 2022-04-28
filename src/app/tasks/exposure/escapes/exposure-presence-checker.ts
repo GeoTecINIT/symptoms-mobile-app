@@ -3,10 +3,10 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+} from "@awarns/core/tasks";
+import { Change } from "@awarns/core/internal/providers";
 import { ExposuresStore } from "~/app/core/persistence/exposures";
-import { AoIProximityChange } from "@geotecinit/emai-framework/entities/aois";
+import { AoIProximityChange } from "@awarns/core/entities/aois";
 import { ExposureAreaLeftRecord } from "./exposure-area-left";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 

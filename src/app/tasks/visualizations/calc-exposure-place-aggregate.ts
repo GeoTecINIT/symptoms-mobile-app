@@ -3,7 +3,7 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { patientData, PatientData } from "~/app/core/framework/patient-data";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { EmotionValue } from "~/app/core/persistence/exposures";

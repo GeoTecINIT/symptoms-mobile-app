@@ -9,9 +9,9 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
+} from "@awarns/core/testing/events";
 import { ExposureAreaLeftRecord } from "~/app/tasks/exposure/escapes/exposure-area-left";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+import { Change } from "@awarns/core/internal/providers";
 
 describe("Exposure return checker task", () => {
     let storeMock: ExposuresStore;

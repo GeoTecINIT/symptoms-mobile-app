@@ -1,8 +1,8 @@
-import { RecordType as EMAIRecordType } from "@geotecinit/emai-framework/entities";
+import { RecordType as AwarnsRecordType } from "@awarns/core/entities";
 
 // tslint:disable-next-line:variable-name
 export const RecordType = {
-    ...EMAIRecordType,
+    ...AwarnsRecordType,
     PatientFeedback: "patient-feedback",
     BatteryLevel: "battery-level",
     PreExposureStarted: "pre-exposure-started",

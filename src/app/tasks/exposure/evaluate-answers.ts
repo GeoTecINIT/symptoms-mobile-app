@@ -3,7 +3,7 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { EmotionValue, Exposure } from "~/app/core/persistence/exposures";
 
 const TASK_NAME = "evaluateExposureAnswers";

@@ -1,4 +1,4 @@
 export {
     Logger,
     AbstractLogger,
-} from "@geotecinit/emai-framework/utils/logger";
+} from "@awarns/core/utils/logger";

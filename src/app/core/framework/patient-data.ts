@@ -1,9 +1,9 @@
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
 import {
     RecordsStore,
     recordsStore,
-} from "@geotecinit/emai-framework/storage/records";
+} from "@awarns/core/storage/records";
 import { distinctUntilChanged, map } from "rxjs/operators";
 
 export interface PatientData {
