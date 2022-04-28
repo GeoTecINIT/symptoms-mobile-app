@@ -1,14 +1,14 @@
 import { Component, HostListener, NgZone, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { RecordType } from "~/app/core/record-type";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+import { Change } from "@awarns/core/internal/providers";
 import { takeUntil } from "rxjs/operators";
 import {
     AreaOfInterest,
     areasOfInterest,
-} from "@geotecinit/emai-framework/entities/aois";
+} from "@awarns/core/entities/aois";
 import { ActivatedRoute } from "@angular/router";
 import { Logger, getLogger } from "~/app/core/utils/logger";
 import { QueryCondition } from "~/app/core/framework/patient-data";

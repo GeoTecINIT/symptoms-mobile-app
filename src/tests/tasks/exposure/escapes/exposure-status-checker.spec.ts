@@ -9,7 +9,7 @@ import {
 import {
     createEvent,
     listenToEventTrigger,
-} from "@geotecinit/emai-framework/testing/events";
+} from "@awarns/core/testing/events";
 
 describe("Exposure status checker task", () => {
     let storeMock: ExposuresStore;

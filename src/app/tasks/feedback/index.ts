@@ -1,4 +1,4 @@
-import { Task } from "@geotecinit/emai-framework/tasks";
+import { Task } from "@awarns/core/tasks";
 import { FeedbackTracker } from "~/app/tasks/feedback/feedback-tracker";
 import { FeedbackDeliveryLimiter } from "~/app/tasks/feedback/feedback-delivery-limiter";
 

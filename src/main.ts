@@ -14,7 +14,7 @@ import { appTasks } from "./app/tasks";
 import { demoTaskGraph } from "./app/tasks/graph";
 import { getLogger } from "./app/core/utils/logger";
 import { remoteRecords, remoteTraces } from "~/app/core/persistence/remote";
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { awarns } from "@awarns/core";
 
 import { install } from "@nativescript-community/ui-chart";
 
@@ -34,7 +34,7 @@ firebaseManager
         )
     );
 
-emaiFramework
+awarns
     .init(appTasks, demoTaskGraph, {
         externalRecordsStore: remoteRecords,
         externalTracesStore: remoteTraces,

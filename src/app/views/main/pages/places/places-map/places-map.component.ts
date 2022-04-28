@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 import { getConfig } from "~/app/core/config";
 import { EventData } from "@nativescript/core";
 import { Bounds, MapboxView } from "@nativescript-community/ui-mapbox";

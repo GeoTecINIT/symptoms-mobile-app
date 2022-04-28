@@ -1,4 +1,4 @@
-import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
 import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 describe("Framework answers toolkit", () => {

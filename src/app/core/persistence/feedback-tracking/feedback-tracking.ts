@@ -1,4 +1,4 @@
-import { EMAIStore } from "@geotecinit/emai-framework/storage";
+import { EMAIStore } from "@awarns/core/storage";
 import { TrackedFeedback } from "~/app/core/persistence/feedback-tracking/tracked-feedback";
 
 export interface FeedbackTracking {

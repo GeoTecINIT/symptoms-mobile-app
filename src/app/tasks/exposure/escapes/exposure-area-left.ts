@@ -1,5 +1,5 @@
-import { Change, Record } from "@geotecinit/emai-framework/entities";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { Change, Record } from "@awarns/core/entities";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 import { RecordType } from "~/app/core/record-type";
 
 export class ExposureAreaLeftRecord extends Record {

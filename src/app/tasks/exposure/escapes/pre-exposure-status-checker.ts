@@ -4,8 +4,8 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
-import { AoIProximityChange } from "@geotecinit/emai-framework/entities/aois";
+} from "@awarns/core/tasks";
+import { AoIProximityChange } from "@awarns/core/entities/aois";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 
 const TASK_NAME = "checkPreExposureStatus";

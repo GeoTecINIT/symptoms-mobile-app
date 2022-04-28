@@ -1,4 +1,4 @@
-import { Task } from "@geotecinit/emai-framework/tasks";
+import { Task } from "@awarns/core/tasks";
 
 import { utilityTasks } from "./utility";
 import { exposureTasks } from "./exposure";

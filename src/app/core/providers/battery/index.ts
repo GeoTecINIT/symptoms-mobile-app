@@ -3,10 +3,10 @@ import { Application, isAndroid } from "@nativescript/core";
 import {
     PullProvider,
     ProviderInterruption,
-} from "@geotecinit/emai-framework/data-sources";
-import { RecordType } from "@geotecinit/emai-framework/entities";
+} from "@awarns/core/data-sources";
+import { RecordType } from "@awarns/core/entities";
 
-// TODO: This is a candidate to be moved to the EMAI framework
+// TODO: This is a candidate to be moved to the AwarNS framework
 export class BatteryProvider implements PullProvider {
     get provides() {
         // FIXME: Could be great to be able to return a string here

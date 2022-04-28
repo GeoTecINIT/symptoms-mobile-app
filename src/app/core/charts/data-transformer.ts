@@ -1,4 +1,4 @@
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { ChartDescription } from "~/app/core/charts/chart-description";
 import { RecordType } from "~/app/core/record-type";
 import { ExposureChange } from "~/app/tasks/exposure";

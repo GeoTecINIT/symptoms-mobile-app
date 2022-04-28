@@ -3,13 +3,13 @@ import {
     TaskOutcome,
     TaskParams,
     TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import {
     Exposure,
     exposures,
     ExposuresStore,
 } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/core/entities/aois";
 import { PreExposureStarted } from "~/app/tasks/exposure/pre-exposure-start-record";
 
 export class PreStartExposureTask extends TraceableTask {

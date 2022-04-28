@@ -5,7 +5,7 @@ import { map, takeUntil } from "rxjs/operators";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { RecordType } from "~/app/core/record-type";
-import { Change } from "@geotecinit/emai-framework/entities";
+import { Change } from "@awarns/core/entities";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
 @Component({

@@ -4,8 +4,8 @@ import {
     EventListenerGenerator,
     RunnableTaskDescriptor,
     TaskGraph,
-} from "@geotecinit/emai-framework/tasks/graph";
-import { TapActionType } from "@geotecinit/emai-framework/notifications";
+} from "@awarns/core/tasks/graph";
+import { TapActionType } from "@awarns/core/notifications";
 import { AdvancedSetting, advancedSettings } from "~/app/core/account";
 
 const exposureTimes = getConfig().exposureTimes;

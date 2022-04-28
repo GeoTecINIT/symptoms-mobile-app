@@ -3,7 +3,7 @@ import {
     Task,
     TaskOutcome,
     TaskParams,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 
 export class EventConverterTask extends Task {
     constructor(outputEvent: string) {
