@@ -1,5 +1,5 @@
 import { Change, Record } from "@awarns/core/entities";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 import { RecordType } from "~/app/core/record-type";
 
 export class ExposureAreaLeftRecord extends Record {

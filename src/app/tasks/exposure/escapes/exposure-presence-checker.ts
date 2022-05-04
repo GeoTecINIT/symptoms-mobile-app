@@ -6,7 +6,7 @@ import {
 } from "@awarns/core/tasks";
 import { Change } from "@awarns/core/internal/providers";
 import { ExposuresStore } from "~/app/core/persistence/exposures";
-import { AoIProximityChange } from "@awarns/core/entities/aois";
+import { AoIProximityChange } from "@awarns/geofencing";
 import { ExposureAreaLeftRecord } from "./exposure-area-left";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 

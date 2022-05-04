@@ -8,7 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import {
     AreaOfInterest,
     areasOfInterest,
-} from "@awarns/core/entities/aois";
+} from "@awarns/geofencing";
 import { ActivatedRoute } from "@angular/router";
 import { Logger, getLogger } from "~/app/core/utils/logger";
 import { QueryCondition } from "~/app/core/framework/patient-data";

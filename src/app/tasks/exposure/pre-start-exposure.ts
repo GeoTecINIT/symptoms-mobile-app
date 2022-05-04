@@ -9,7 +9,7 @@ import {
     exposures,
     ExposuresStore,
 } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 import { PreExposureStarted } from "~/app/tasks/exposure/pre-exposure-start-record";
 
 export class PreStartExposureTask extends TraceableTask {

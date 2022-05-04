@@ -1,4 +1,4 @@
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 
 export interface Exposure {
     id?: string;

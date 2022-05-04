@@ -5,7 +5,7 @@ import {
     TaskParams,
     TraceableTask,
 } from "@awarns/core/tasks";
-import { AoIProximityChange } from "@awarns/core/entities/aois";
+import { AoIProximityChange } from "@awarns/geofencing";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 
 const TASK_NAME = "checkExposureAreaStatus";

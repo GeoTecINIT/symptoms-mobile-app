@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 
 @Component({
     selector: "SymPlacesListItem",
