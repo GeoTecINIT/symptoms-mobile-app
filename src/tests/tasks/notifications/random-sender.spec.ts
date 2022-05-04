@@ -1,10 +1,6 @@
 import { RandomNotificationSenderTask } from "~/app/tasks/notifications/random-sender";
-import { NotificationsManager } from "@awarns/core/internal/notifications/manager";
-import {
-    Notification,
-    TapAction,
-    TapActionType,
-} from "@awarns/core/notifications";
+import { NotificationsManager } from "@awarns/notifications/internal/manager";
+import { Notification, TapAction, TapActionType } from "@awarns/notifications";
 import { createEvent } from "@awarns/core/testing/events";
 
 describe("Random notification sender", () => {
@@ -13,10 +9,8 @@ describe("Random notification sender", () => {
     afterAll(() => (jasmine.DEFAULT_TIMEOUT_INTERVAL = initialTimeout));
 
     it("delivers a random notification among the ones provided", async () => {
-        const [
-            fakeNotificationManager,
-            deliveredNotifications,
-        ] = createFakeNotificationsManager();
+        const [fakeNotificationManager, deliveredNotifications] =
+            createFakeNotificationsManager();
 
         const task = new RandomNotificationSenderTask(
             "sendRandomNotification",

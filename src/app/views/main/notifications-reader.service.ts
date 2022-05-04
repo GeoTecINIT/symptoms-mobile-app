@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, ReplaySubject } from "rxjs";
-import { Notification } from "@awarns/core/notifications";
-
-// FIXME: Replace with external API once declared
-import { notificationsStoreDB } from "@awarns/core/internal/persistence/stores/notifications";
+import {
+    Notification,
+    notifications as notificationsStore,
+} from "@awarns/notifications";
 
 import { map } from "rxjs/operators";
 import { approximateDiff, ApproximateTimeDiff } from "~/app/core/utils/time";
@@ -28,7 +28,7 @@ export class NotificationsReaderService {
     >(1);
 
     constructor() {
-        notificationsStoreDB.list().subscribe((notifications) => {
+        notificationsStore.list().subscribe((notifications) => {
             const timeRef = new Date();
 
             const processedNotifications = notifications.map((notification) =>
