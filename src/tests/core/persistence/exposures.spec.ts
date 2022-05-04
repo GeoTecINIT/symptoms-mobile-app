@@ -1,5 +1,5 @@
 import { Exposure, exposures } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 
 describe("Exposures store", () => {
     const place: AreaOfInterest = {

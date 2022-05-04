@@ -1,16 +1,13 @@
 import { BatteryLevel } from "./battery-level";
 import { Application, isAndroid } from "@nativescript/core";
-import {
-    PullProvider,
-    ProviderInterruption,
-} from "@awarns/core/data-sources";
-import { RecordType } from "@awarns/core/entities";
+import { PullProvider, ProviderInterruption } from "@awarns/core/data-sources";
+import { RecordType } from "~/app/core/record-type";
 
 // TODO: This is a candidate to be moved to the AwarNS framework
 export class BatteryProvider implements PullProvider {
     get provides() {
         // FIXME: Could be great to be able to return a string here
-        return RecordType.Geolocation;
+        return RecordType.BatteryLevel;
     }
 
     constructor(private sdkVersion?: number) {
@@ -39,9 +36,10 @@ export class BatteryProvider implements PullProvider {
             return -1;
         }
         if (this.sdkVersion >= 21) {
-            const batteryManager: android.os.BatteryManager = Application.android.context.getSystemService(
-                android.content.Context.BATTERY_SERVICE
-            );
+            const batteryManager: android.os.BatteryManager =
+                Application.android.context.getSystemService(
+                    android.content.Context.BATTERY_SERVICE
+                );
 
             return batteryManager.getIntProperty(
                 android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY

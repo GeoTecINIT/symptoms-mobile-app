@@ -7,7 +7,7 @@ import {
     AoIProximityChange,
     AreaOfInterest,
     GeofencingProximity,
-} from "@awarns/core/entities/aois";
+} from "@awarns/geofencing";
 import { Change } from "@awarns/core/entities";
 
 export function createExposuresStoreMock(): ExposuresStore {

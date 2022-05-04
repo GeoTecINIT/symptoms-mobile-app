@@ -6,12 +6,9 @@ import {
     createFakeAoI,
     createFakeAoIProximityChange,
 } from "./index";
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
 import { Change } from "@awarns/core/internal/providers";
-import { GeofencingProximity } from "@awarns/core/internal/tasks/geofencing/geofencing-state";
+import { GeofencingProximity } from "@awarns/geofencing";
 
 describe("Cancel pre-exposure task", () => {
     let storeMock: ExposuresStore;
