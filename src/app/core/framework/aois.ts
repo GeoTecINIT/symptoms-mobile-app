@@ -2,7 +2,7 @@ import { getLogger } from "~/app/core/utils/logger";
 import {
     AreaOfInterest,
     areasOfInterest,
-} from "@awarns/core/entities/aois";
+} from "@awarns/geofencing";
 
 export type AoIChangeListener = () => void;
 
