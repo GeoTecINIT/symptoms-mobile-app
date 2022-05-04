@@ -5,10 +5,12 @@ import {
     startDetectingCoarseHumanActivityChangesTask,
     stopDetectingCoarseHumanActivityChangesTask,
 } from "@awarns/human-activity";
+import { sendNotificationTask } from "@awarns/notifications";
 
 export const awarnsTasks: Array<Task> = [
     startDetectingCoarseHumanActivityChangesTask(),
     stopDetectingCoarseHumanActivityChangesTask(),
     acquirePhoneGeolocationTask({ bestOf: 3, timeout: 10000 }),
     checkAreaOfInterestProximityTask(),
+    sendNotificationTask(),
 ];

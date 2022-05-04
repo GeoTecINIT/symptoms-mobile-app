@@ -5,7 +5,7 @@ import {
     RunnableTaskDescriptor,
     TaskGraph,
 } from "@awarns/core/tasks/graph";
-import { TapActionType } from "@awarns/core/notifications";
+import { TapActionType } from "@awarns/notifications";
 import { AdvancedSetting, advancedSettings } from "~/app/core/account";
 
 const exposureTimes = getConfig().exposureTimes;

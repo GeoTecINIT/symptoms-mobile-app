@@ -5,7 +5,7 @@ import {
     TraceableTask,
 } from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
-import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/notifications";
 
 export class ProcessExposureAnswers extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {
@@ -18,7 +18,8 @@ export class ProcessExposureAnswers extends TraceableTask {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
-        const questionnaireAnswers = invocationEvent.data as QuestionnaireAnswers;
+        const questionnaireAnswers =
+            invocationEvent.data as QuestionnaireAnswers;
         const ongoingExposure = await this.store.getLastUnfinished();
         if (!ongoingExposure) {
             throw new Error("There is no exposure ongoing!");

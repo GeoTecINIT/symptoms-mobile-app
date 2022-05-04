@@ -14,6 +14,7 @@ import { awarns } from "@awarns/core";
 import { appTasks } from "./app/tasks";
 import { appTaskGraph } from "./app/tasks/graph";
 import { registerHumanActivityPlugin } from "@awarns/human-activity";
+import { registerNotificationsPlugin } from "@awarns/notifications";
 import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
 import { getLogger } from "./app/core/utils/logger";
 
@@ -35,12 +36,17 @@ firebaseManager
     );
 
 awarns
-    .init(appTasks, appTaskGraph, [registerHumanActivityPlugin()], {
-        externalRecordsStore: remoteRecords,
-        externalTracesStore: remoteTraces,
-        oldTracesMaxAgeHours: 24 * 7 /* one week */,
-        customLogger: getLogger,
-    })
+    .init(
+        appTasks,
+        appTaskGraph,
+        [registerHumanActivityPlugin(), registerNotificationsPlugin()],
+        {
+            externalRecordsStore: remoteRecords,
+            externalTracesStore: remoteTraces,
+            oldTracesMaxAgeHours: 24 * 7 /* one week */,
+            customLogger: getLogger,
+        }
+    )
     .catch((e) =>
         console.error("Could not initialize EMA/I framework. Reason:", e)
     );

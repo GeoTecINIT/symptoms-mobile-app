@@ -1,15 +1,11 @@
-import { NotificationSenderTask } from "@awarns/core/internal/tasks/notifications/notification-sender";
+import { NotificationSenderTask } from "@awarns/notifications/internal/sender";
 import { TracerConfig } from "@awarns/core/internal/tasks/tracing";
 import {
     notificationsManager,
     NotificationsManager,
-} from "@awarns/core/internal/notifications/manager";
-import {
-    DispatchableEvent,
-    TaskOutcome,
-    TaskParams,
-} from "@awarns/core/tasks";
-import { TapAction } from "@awarns/core/internal/notifications";
+} from "@awarns/notifications/internal/manager";
+import { DispatchableEvent, TaskOutcome, TaskParams } from "@awarns/core/tasks";
+import { TapAction } from "@awarns/notifications";
 
 export class RandomNotificationSenderTask extends NotificationSenderTask {
     constructor(

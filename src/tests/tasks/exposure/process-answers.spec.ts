@@ -4,11 +4,8 @@ import {
     createExposuresStoreMock,
     createFakeAoI,
 } from "~/tests/tasks/exposure/index";
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
-import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
+import { QuestionnaireAnswers } from "@awarns/notifications";
 
 describe("Process exposure answers task", () => {
     let storeMock: ExposuresStore;

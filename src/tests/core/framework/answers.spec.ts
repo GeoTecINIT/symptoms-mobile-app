@@ -1,4 +1,4 @@
-import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/notifications";
 import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
 
 describe("Framework answers toolkit", () => {
