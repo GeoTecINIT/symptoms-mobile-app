@@ -11,7 +11,7 @@ import {
 } from "~/app/core/persistence/exposures";
 import { ExposureChange } from "./change-record";
 import { Change } from "@awarns/core/entities";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 
 export class StartExposureTask extends TraceableTask {
     constructor(private store: ExposuresStore = exposures) {

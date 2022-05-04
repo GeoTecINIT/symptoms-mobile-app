@@ -1,4 +1,4 @@
-import { AoIProximityChange } from "@awarns/core/entities/aois";
+import { AoIProximityChange } from "@awarns/geofencing";
 import { Exposure } from "~/app/core/persistence/exposures";
 
 export function checkIfProximityChangesInvolveOngoingExposure(

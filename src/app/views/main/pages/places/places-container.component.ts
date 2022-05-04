@@ -1,7 +1,7 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 
 import { Subject } from "rxjs";
-import { AreaOfInterest } from "@awarns/core/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 import { PlacesService } from "./places.service";
 import { takeUntil } from "rxjs/operators";
 
