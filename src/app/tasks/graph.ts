@@ -483,4 +483,4 @@ class DemoTaskGraph implements TaskGraph {
     }
 }
 
-export const demoTaskGraph = new DemoTaskGraph();
+export const appTaskGraph = new DemoTaskGraph();

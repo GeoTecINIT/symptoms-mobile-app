@@ -1,12 +1,11 @@
 import { BatteryLevel } from "./battery-level";
 import { Application, isAndroid } from "@nativescript/core";
-import { PullProvider, ProviderInterruption } from "@awarns/core/data-sources";
+import { PullProvider, ProviderInterruption } from "@awarns/core/providers";
 import { RecordType } from "~/app/core/record-type";
 
 // TODO: This is a candidate to be moved to the AwarNS framework
 export class BatteryProvider implements PullProvider {
     get provides() {
-        // FIXME: Could be great to be able to return a string here
         return RecordType.BatteryLevel;
     }
 

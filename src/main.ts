@@ -6,18 +6,18 @@ import {
 
 import { AppModule } from "./app/app.module";
 
-import { appEvents } from "~/app/core/app-events";
+import { appEvents } from "./app/core/app-events";
 
 import { firebaseManager } from "./app/core/utils/firebase";
 
-import { appTasks } from "./app/tasks";
-import { demoTaskGraph } from "./app/tasks/graph";
-import { getLogger } from "./app/core/utils/logger";
-import { remoteRecords, remoteTraces } from "~/app/core/persistence/remote";
 import { awarns } from "@awarns/core";
+import { appTasks } from "./app/tasks";
+import { appTaskGraph } from "./app/tasks/graph";
+import { registerHumanActivityPlugin } from "@awarns/human-activity";
+import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
+import { getLogger } from "./app/core/utils/logger";
 
 import { install } from "@nativescript-community/ui-chart";
-
 appEvents.listen();
 
 firebaseManager
@@ -35,7 +35,7 @@ firebaseManager
     );
 
 awarns
-    .init(appTasks, demoTaskGraph, {
+    .init(appTasks, appTaskGraph, [registerHumanActivityPlugin()], {
         externalRecordsStore: remoteRecords,
         externalTracesStore: remoteTraces,
         oldTracesMaxAgeHours: 24 * 7 /* one week */,

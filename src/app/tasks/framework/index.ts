@@ -1,8 +1,14 @@
 import { Task } from "@awarns/core/tasks";
-import { geofencingTask } from "@awarns/geofencing";
-import { singleGeolocationTask } from "@awarns/geolocation";
+import { checkAreaOfInterestProximityTask } from "@awarns/geofencing";
+import { acquirePhoneGeolocationTask } from "@awarns/geolocation";
+import {
+    startDetectingCoarseHumanActivityChangesTask,
+    stopDetectingCoarseHumanActivityChangesTask,
+} from "@awarns/human-activity";
 
 export const awarnsTasks: Array<Task> = [
-    singleGeolocationTask({ bestOf: 3, timeout: 10000 }),
-    geofencingTask(),
+    startDetectingCoarseHumanActivityChangesTask(),
+    stopDetectingCoarseHumanActivityChangesTask(),
+    acquirePhoneGeolocationTask({ bestOf: 3, timeout: 10000 }),
+    checkAreaOfInterestProximityTask(),
 ];
