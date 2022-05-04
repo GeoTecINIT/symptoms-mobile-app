@@ -1,5 +1,5 @@
 import { awarns } from "@awarns/core";
-import { QuestionnaireAnswers } from "@awarns/core/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/notifications";
 import { PatientFeedback } from "~/app/core/modals/feedback";
 
 export function emitTreatmentStartEvent() {

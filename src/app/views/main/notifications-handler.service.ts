@@ -13,7 +13,7 @@ import {
     Notification,
     notificationsManager,
     TapActionType,
-} from "@awarns/core/notifications";
+} from "@awarns/notifications";
 
 import {
     confirmDidNotLeaveAreaOnPurpose,
