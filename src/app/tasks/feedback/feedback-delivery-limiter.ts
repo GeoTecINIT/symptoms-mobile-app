@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import {
     feedbackTracking,
@@ -12,14 +12,14 @@ import {
 const CAN_DELIVER = "canDeliverFeedback";
 const CANNOT_DELIVER = "cannotDeliverFeedback";
 
-export class FeedbackDeliveryLimiter extends TraceableTask {
+export class FeedbackDeliveryLimiter extends Task {
     constructor(private store: FeedbackTracking = feedbackTracking) {
         super("limitedFeedbackDelivery", {
             outputEventNames: [CAN_DELIVER, CANNOT_DELIVER],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

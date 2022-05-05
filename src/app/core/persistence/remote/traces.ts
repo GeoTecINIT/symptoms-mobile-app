@@ -1,4 +1,4 @@
-import { Trace, TracesStore } from "@awarns/core/storage/traces";
+import { Trace, TracesStore } from "@awarns/tracing";
 import { Observable } from "rxjs";
 import { account, Account } from "~/app/core/account";
 import { serverApi, ServerApiClient } from "~/app/core/server";
@@ -23,7 +23,10 @@ class RemoteTracesStore implements TracesStore {
         ]);
     }
 
-    getAll(_reverseOrder?: boolean, _limitSize?: number): Promise<Array<Trace>> {
+    getAll(
+        _reverseOrder?: boolean,
+        _limitSize?: number
+    ): Promise<Array<Trace>> {
         throw new Error("Unimplemented");
     }
 

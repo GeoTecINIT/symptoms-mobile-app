@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import {
@@ -13,14 +13,14 @@ import {
 const RESULT_SUCCESSFUL = "exposureExtensionEvaluationResultedSuccessful";
 const RESULT_UNSUCCESSFUL = "exposureExtensionEvaluationResultedUnsuccessful";
 
-export class EvaluateExposureExtensionTask extends TraceableTask {
+export class EvaluateExposureExtensionTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("evaluateExposureExtension", {
             outputEventNames: [RESULT_SUCCESSFUL, RESULT_UNSUCCESSFUL],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

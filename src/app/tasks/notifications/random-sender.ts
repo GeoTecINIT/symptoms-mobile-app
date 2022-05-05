@@ -1,22 +1,26 @@
 import { NotificationSenderTask } from "@awarns/notifications/internal/sender";
-import { TracerConfig } from "@awarns/core/internal/tasks/tracing";
 import {
     notificationsManager,
     NotificationsManager,
 } from "@awarns/notifications/internal/manager";
-import { DispatchableEvent, TaskOutcome, TaskParams } from "@awarns/core/tasks";
+import {
+    DispatchableEvent,
+    TaskConfig,
+    TaskOutcome,
+    TaskParams,
+} from "@awarns/core/tasks";
 import { TapAction } from "@awarns/notifications";
 
 export class RandomNotificationSenderTask extends NotificationSenderTask {
     constructor(
         name: string,
-        taskConfig?: TracerConfig,
+        taskConfig?: TaskConfig,
         manager: NotificationsManager = notificationsManager
     ) {
         super(name, taskConfig, manager);
     }
 
-    protected onTracedRun(
+    protected onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
@@ -31,7 +35,7 @@ export class RandomNotificationSenderTask extends NotificationSenderTask {
             defaultTapAction
         );
 
-        return super.onTracedRun(newParams, invocationEvent);
+        return super.onRun(newParams, invocationEvent);
     }
 
     private static pickOneNotificationFrom(

@@ -1,20 +1,16 @@
-import {
-    DispatchableEvent,
-    TaskParams,
-    TraceableTask,
-} from "@awarns/core/tasks";
+import { DispatchableEvent, Task, TaskParams } from "@awarns/core/tasks";
 import {
     feedbackTracking,
     FeedbackTracking,
 } from "~/app/core/persistence/feedback-tracking";
 import { PatientFeedback } from "~/app/core/modals/feedback";
 
-export class FeedbackTracker extends TraceableTask {
+export class FeedbackTracker extends Task {
     constructor(private store: FeedbackTracking = feedbackTracking) {
         super("trackFeedbackAcquisition");
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<void> {

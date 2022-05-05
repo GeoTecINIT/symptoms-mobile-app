@@ -1,5 +1,8 @@
 import { RandomNotificationSenderTask } from "./random-sender";
+import { makeTraceable } from "@awarns/tracing";
 
 export const notificationsTasks = [
-    new RandomNotificationSenderTask("sendRandomNotification"),
+    ...makeTraceable([
+        new RandomNotificationSenderTask("sendRandomNotification"),
+    ]),
 ];

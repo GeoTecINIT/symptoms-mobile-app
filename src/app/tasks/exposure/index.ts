@@ -13,24 +13,29 @@ import { ExposureStatusChecker } from "./escapes/exposure-status-checker";
 import { ExposureLeaveChecker } from "./escapes/exposure-leave-checker";
 import { ExposureReturnChecker } from "./escapes/exposure-return-checker";
 import { ExposureDropoutChecker } from "./escapes/exposure-dropout-checker";
+import { makeTraceable } from "@awarns/tracing";
 
 export { ExposureChange } from "./change-record";
 
 export const exposureTasks: Array<Task> = [
     // --> General tasks
-    new PreStartExposureTask(),
-    new CancelPreExposureTask(),
-    new StartExposureTask(),
-    new ProcessExposureAnswers(),
-    new EvaluateExposureAnswers(),
-    new EvaluateExposureTask(),
-    new EvaluateExposureExtensionTask(),
-    new FinishExposureTask(),
-    new ExposureFinalizationDropoutChecker(),
+    ...makeTraceable([
+        new PreStartExposureTask(),
+        new CancelPreExposureTask(),
+        new StartExposureTask(),
+        new ProcessExposureAnswers(),
+        new EvaluateExposureAnswers(),
+        new EvaluateExposureTask(),
+        new EvaluateExposureExtensionTask(),
+        new FinishExposureTask(),
+        new ExposureFinalizationDropoutChecker(),
+    ]),
     // --> Escapes
-    new PreExposureStatusChecker(),
-    new ExposureStatusChecker(),
-    new ExposureLeaveChecker(),
-    new ExposureReturnChecker(),
-    new ExposureDropoutChecker(),
+    ...makeTraceable([
+        new PreExposureStatusChecker(),
+        new ExposureStatusChecker(),
+        new ExposureLeaveChecker(),
+        new ExposureReturnChecker(),
+        new ExposureDropoutChecker(),
+    ]),
 ];
