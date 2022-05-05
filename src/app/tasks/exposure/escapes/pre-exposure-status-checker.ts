@@ -1,9 +1,9 @@
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { AoIProximityChange } from "@awarns/geofencing";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
@@ -12,7 +12,7 @@ const TASK_NAME = "checkPreExposureStatus";
 const CLOSE_WITH_NO_ONGOING_EXPOSURE = "approachedAreaWithNoOngoingExposure";
 const CLOSE_WITH_ONGOING_EXPOSURE = "approachedAreaWithOngoingExposure";
 
-export class PreExposureStatusChecker extends TraceableTask {
+export class PreExposureStatusChecker extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super(TASK_NAME, {
             outputEventNames: [
@@ -23,7 +23,7 @@ export class PreExposureStatusChecker extends TraceableTask {
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

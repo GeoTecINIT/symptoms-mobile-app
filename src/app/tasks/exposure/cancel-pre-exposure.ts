@@ -1,20 +1,20 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import { PreExposureCancelled } from "~/app/tasks/exposure/pre-exposure-cancelled-record";
 
-export class CancelPreExposureTask extends TraceableTask {
+export class CancelPreExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("cancelPreExposure", {
             outputEventNames: ["preExposureCancelled"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

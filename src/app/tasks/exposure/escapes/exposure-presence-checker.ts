@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { Change } from "@awarns/core/internal/providers";
 import { ExposuresStore } from "~/app/core/persistence/exposures";
@@ -10,7 +10,7 @@ import { AoIProximityChange } from "@awarns/geofencing";
 import { ExposureAreaLeftRecord } from "./exposure-area-left";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 
-export abstract class ExposurePresenceChecker extends TraceableTask {
+export abstract class ExposurePresenceChecker extends Task {
     protected constructor(
         name: string,
         private outputEvent: string,
@@ -22,7 +22,7 @@ export abstract class ExposurePresenceChecker extends TraceableTask {
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

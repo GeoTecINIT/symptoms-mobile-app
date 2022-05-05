@@ -1,20 +1,20 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import { QuestionnaireAnswers } from "@awarns/notifications";
 
-export class ProcessExposureAnswers extends TraceableTask {
+export class ProcessExposureAnswers extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("processExposureAnswers", {
             outputEventNames: ["exposureAnswersProcessed"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { EmotionValue, Exposure } from "~/app/core/persistence/exposures";
 
@@ -21,7 +21,7 @@ const HIGH_ANXIETY_THRESHOLD = 8;
 const VERY_HIGH_ANXIETY_THRESHOLD = 9;
 const EXTREME_ANXIETY_THRESHOLD = 10;
 
-export class EvaluateExposureAnswers extends TraceableTask {
+export class EvaluateExposureAnswers extends Task {
     constructor() {
         super(TASK_NAME, {
             outputEventNames: [
@@ -35,7 +35,7 @@ export class EvaluateExposureAnswers extends TraceableTask {
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
