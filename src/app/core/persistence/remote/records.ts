@@ -1,4 +1,4 @@
-import { RecordsStore } from "@awarns/core/storage/records";
+import { RecordsStore } from "@awarns/persistence";
 import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
 import { serverApi, ServerApiClient } from "~/app/core/server";
@@ -21,7 +21,10 @@ class RemoteRecordsStore implements RecordsStore {
         ]);
     }
 
-    getAll(_reverseOrder?: boolean, _limitSize?: number): Promise<Array<Record>> {
+    getAll(
+        _reverseOrder?: boolean,
+        _limitSize?: number
+    ): Promise<Array<Record>> {
         throw new Error("Unimplemented");
     }
 
