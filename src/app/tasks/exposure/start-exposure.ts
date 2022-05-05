@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import {
     Exposure,
@@ -13,12 +13,12 @@ import { ExposureChange } from "./change-record";
 import { Change } from "@awarns/core/entities";
 import { AreaOfInterest } from "@awarns/geofencing";
 
-export class StartExposureTask extends TraceableTask {
+export class StartExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("startExposure", { outputEventNames: ["exposureStarted"] });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

@@ -19,6 +19,7 @@ import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
 import { getLogger } from "./app/core/utils/logger";
 
 import { install } from "@nativescript-community/ui-chart";
+import { registerTracingPlugin } from "@awarns/tracing";
 appEvents.listen();
 
 firebaseManager
@@ -39,11 +40,16 @@ awarns
     .init(
         appTasks,
         appTaskGraph,
-        [registerHumanActivityPlugin(), registerNotificationsPlugin()],
+        [
+            registerHumanActivityPlugin(),
+            registerNotificationsPlugin(),
+            registerTracingPlugin({
+                externalTracesStore: remoteTraces,
+                oldTracesMaxAgeHours: 24 * 7 /* one week */,
+            }),
+        ],
         {
             externalRecordsStore: remoteRecords,
-            externalTracesStore: remoteTraces,
-            oldTracesMaxAgeHours: 24 * 7 /* one week */,
             customLogger: getLogger,
         }
     )

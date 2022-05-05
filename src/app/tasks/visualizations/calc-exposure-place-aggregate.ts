@@ -1,8 +1,8 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { patientData, PatientData } from "~/app/core/framework/patient-data";
 import { ExposureChange } from "~/app/tasks/exposure";
@@ -12,14 +12,14 @@ import { ExposurePlaceAggregate } from "~/app/tasks/visualizations/exposure-plac
 import { RecordType } from "~/app/core/record-type";
 import { firstValueFrom } from "rxjs";
 
-export class CalculateExposurePlaceAggregate extends TraceableTask {
+export class CalculateExposurePlaceAggregate extends Task {
     constructor(private store: PatientData = patientData) {
         super("calculateExposurePlaceAggregate", {
             outputEventNames: ["exposurePlaceAggregateCalculated"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

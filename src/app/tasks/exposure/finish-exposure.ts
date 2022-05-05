@@ -1,21 +1,21 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
 } from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import { ExposureChange } from "~/app/tasks/exposure/change-record";
 import { Change } from "@awarns/core/entities";
 
-export class FinishExposureTask extends TraceableTask {
+export class FinishExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("finishExposure", {
             outputEventNames: ["exposureFinished"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

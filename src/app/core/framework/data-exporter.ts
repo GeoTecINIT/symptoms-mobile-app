@@ -1,8 +1,6 @@
 import { Folder, knownFolders, path } from "@nativescript/core";
-import {
-    createRecordsExporter,
-    createTracesExporter,
-} from "@awarns/core/storage/exporters";
+import { createRecordsExporter } from "@awarns/core/storage/exporters";
+import { createTracesExporter } from "@awarns/tracing";
 import { ShareFile } from "@nativescript-community/ui-share-file";
 import { Zip } from "@nativescript/zip";
 import { getDeviceInfo } from "~/app/core/utils/app-info";
