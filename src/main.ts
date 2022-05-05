@@ -15,11 +15,13 @@ import { appTasks } from "./app/tasks";
 import { appTaskGraph } from "./app/tasks/graph";
 import { registerHumanActivityPlugin } from "@awarns/human-activity";
 import { registerNotificationsPlugin } from "@awarns/notifications";
+import { registerPersistencePlugin } from "@awarns/persistence";
+import { registerTracingPlugin } from "@awarns/tracing";
+
 import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
 import { getLogger } from "./app/core/utils/logger";
 
 import { install } from "@nativescript-community/ui-chart";
-import { registerTracingPlugin } from "@awarns/tracing";
 appEvents.listen();
 
 firebaseManager
@@ -43,13 +45,15 @@ awarns
         [
             registerHumanActivityPlugin(),
             registerNotificationsPlugin(),
+            registerPersistencePlugin({
+                externalRecordsStore: remoteRecords,
+            }),
             registerTracingPlugin({
                 externalTracesStore: remoteTraces,
                 oldTracesMaxAgeHours: 24 * 7 /* one week */,
             }),
         ],
         {
-            externalRecordsStore: remoteRecords,
             customLogger: getLogger,
         }
     )

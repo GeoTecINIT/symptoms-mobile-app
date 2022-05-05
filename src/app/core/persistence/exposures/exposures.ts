@@ -1,8 +1,5 @@
 import { Exposure } from "./exposure";
-import {
-    EMAIStore,
-    QueryLogicalOperator,
-} from "@awarns/core/storage";
+import { AwarnsStore, QueryLogicalOperator } from "@awarns/persistence";
 
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;
@@ -20,10 +17,10 @@ class ExposuresStoreDB implements ExposuresStore {
         return this.store.changes;
     }
 
-    private readonly store: EMAIStore<Exposure>;
+    private readonly store: AwarnsStore<Exposure>;
 
     constructor() {
-        this.store = new EMAIStore<Exposure>(DOC_TYPE, docFrom, exposureFrom);
+        this.store = new AwarnsStore<Exposure>(DOC_TYPE, docFrom, exposureFrom);
     }
 
     insert(exposure: Exposure): Promise<string> {

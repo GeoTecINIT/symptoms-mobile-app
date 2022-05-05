@@ -1,9 +1,6 @@
 import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
-import {
-    RecordsStore,
-    recordsStore,
-} from "@awarns/core/storage/records";
+import { RecordsStore, recordsStore } from "@awarns/persistence";
 import { distinctUntilChanged, map } from "rxjs/operators";
 
 export interface PatientData {

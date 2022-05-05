@@ -7,6 +7,7 @@ import {
 import { acquirePhoneGeolocationTask } from "@awarns/geolocation";
 import { checkAreaOfInterestProximityTask } from "@awarns/geofencing";
 import { sendNotificationTask } from "@awarns/notifications";
+import { writeRecordsTask } from "@awarns/persistence";
 
 export const awarnsTasks: Array<Task> = [
     ...makeTraceable([
@@ -21,4 +22,5 @@ export const awarnsTasks: Array<Task> = [
         ],
         { outputsSensitiveData: true }
     ),
+    writeRecordsTask(),
 ];
