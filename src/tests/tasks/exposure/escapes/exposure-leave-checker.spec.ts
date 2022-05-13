@@ -6,13 +6,10 @@ import {
     createNewFakeExposure,
 } from "~/tests/tasks/exposure";
 
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
 import { ExposureLeaveChecker } from "~/app/tasks/exposure/escapes/exposure-leave-checker";
 import { ExposureAreaLeftRecord } from "~/app/tasks/exposure/escapes/exposure-area-left";
-import { Change } from "@awarns/core/internal/providers";
+import { Change } from "@awarns/core/entities";
 
 describe("Exposure leave checker task", () => {
     let storeMock: ExposuresStore;
