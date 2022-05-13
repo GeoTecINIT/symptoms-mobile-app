@@ -9,7 +9,7 @@ import { Trace, TraceType, TraceResult } from "@awarns/tracing";
 import { Record as PBRecord, RecordSource } from "@symptoms/api-client/records";
 import { Trace as PBTrace } from "@symptoms/api-client/traces";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
-import { jsonDateReplacer } from "@awarns/core/internal/utils/date";
+import { jsonDateReplacer } from "@awarns/core/utils/date";
 
 export type ApiRecord = Record & UploadMetadata;
 export type ApiTrace = Trace & UploadMetadata;

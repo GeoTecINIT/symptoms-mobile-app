@@ -4,9 +4,8 @@ import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
-import { Record } from "@awarns/core/entities";
+import { Record, Change } from "@awarns/core/entities";
 import { RecordType } from "~/app/core/record-type";
-import { Change } from "@awarns/core/internal/providers";
 import { awarns } from "@awarns/core";
 import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";

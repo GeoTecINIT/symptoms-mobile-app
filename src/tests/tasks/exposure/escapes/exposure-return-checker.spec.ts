@@ -6,12 +6,9 @@ import {
     createFakeAoIProximityChange,
     createNewFakeExposure,
 } from "~/tests/tasks/exposure";
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
 import { ExposureAreaLeftRecord } from "~/app/tasks/exposure/escapes/exposure-area-left";
-import { Change } from "@awarns/core/internal/providers";
+import { Change } from "@awarns/core/entities";
 
 describe("Exposure return checker task", () => {
     let storeMock: ExposuresStore;

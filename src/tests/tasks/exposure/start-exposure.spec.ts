@@ -7,11 +7,8 @@ import {
     createFakeAoIProximityChange,
     createNewFakeExposure,
 } from "./index";
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
-import { Change } from "@awarns/core/internal/providers";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
+import { Change } from "@awarns/core/entities";
 
 describe("Start exposure task", () => {
     let storeMock: ExposuresStore;

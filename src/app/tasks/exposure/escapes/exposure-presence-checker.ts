@@ -4,7 +4,7 @@ import {
     TaskOutcome,
     TaskParams,
 } from "@awarns/core/tasks";
-import { Change } from "@awarns/core/internal/providers";
+import { Change } from "@awarns/core/entities";
 import { ExposuresStore } from "~/app/core/persistence/exposures";
 import { AoIProximityChange } from "@awarns/geofencing";
 import { ExposureAreaLeftRecord } from "./exposure-area-left";
