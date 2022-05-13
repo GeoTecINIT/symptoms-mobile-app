@@ -1,14 +1,10 @@
 import { Component, HostListener, NgZone, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { Record } from "@awarns/core/entities";
+import { Record, Change } from "@awarns/core/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { RecordType } from "~/app/core/record-type";
-import { Change } from "@awarns/core/internal/providers";
 import { takeUntil } from "rxjs/operators";
-import {
-    AreaOfInterest,
-    areasOfInterest,
-} from "@awarns/geofencing";
+import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { ActivatedRoute } from "@angular/router";
 import { Logger, getLogger } from "~/app/core/utils/logger";
 import { QueryCondition } from "~/app/core/framework/patient-data";

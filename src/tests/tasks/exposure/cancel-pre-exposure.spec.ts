@@ -7,7 +7,7 @@ import {
     createFakeAoIProximityChange,
 } from "./index";
 import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
-import { Change } from "@awarns/core/internal/providers";
+import { Change } from "@awarns/core/entities";
 import { GeofencingProximity } from "@awarns/geofencing";
 
 describe("Cancel pre-exposure task", () => {

@@ -5,11 +5,8 @@ import {
     createExposuresStoreMock,
     createFakeAoI,
 } from "~/tests/tasks/exposure/index";
-import {
-    createEvent,
-    listenToEventTrigger,
-} from "@awarns/core/testing/events";
-import { Change } from "@awarns/core/internal/providers";
+import { createEvent, listenToEventTrigger } from "@awarns/core/testing/events";
+import { Change } from "@awarns/core/entities";
 
 describe("Finish exposure task", () => {
     let storeMock: ExposuresStore;
