@@ -48,6 +48,9 @@ describe("Framework answers toolkit", () => {
             ],
             0
         );
+        const { id, ...expectedQuestionnaireAnswersProps } =
+            expectedQuestionnaireAnswers;
+
         const questionnaireAnswers = processQuestionnaireAnswers(
             sortedAnswers,
             {
@@ -58,7 +61,9 @@ describe("Framework answers toolkit", () => {
             }
         );
 
-        expect(questionnaireAnswers).toEqual(expectedQuestionnaireAnswers);
+        expect(questionnaireAnswers).toEqual(
+            jasmine.objectContaining(expectedQuestionnaireAnswersProps)
+        );
     });
 
     it("correctly processes an unsorted set of answers as questionnaire answers", () => {
@@ -107,6 +112,9 @@ describe("Framework answers toolkit", () => {
             ],
             0
         );
+        const { id, ...expectedQuestionnaireAnswersProps } =
+            expectedQuestionnaireAnswers;
+
         const questionnaireAnswers = processQuestionnaireAnswers(
             unsortedAnswers,
             {
@@ -117,6 +125,8 @@ describe("Framework answers toolkit", () => {
             }
         );
 
-        expect(questionnaireAnswers).toEqual(expectedQuestionnaireAnswers);
+        expect(questionnaireAnswers).toEqual(
+            jasmine.objectContaining(expectedQuestionnaireAnswersProps)
+        );
     });
 });
