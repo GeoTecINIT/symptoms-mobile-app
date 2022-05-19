@@ -24,7 +24,7 @@
     "@awarns/geolocation": "^1.0.0-alpha.11",
     "@awarns/human-activity": "^1.0.0-alpha.11",
     "@awarns/notifications": "^1.0.0-alpha.13",
-    "@awarns/persistence": "^1.0.0-alpha.14",
+    "@awarns/persistence": "^1.0.0-alpha.15",
     "@awarns/tracing": "^1.0.0-alpha.13",
     "@nativescript-community/ui-chart": "^1.2.18",
     "@nativescript-community/ui-mapbox": "^6.2.15",
