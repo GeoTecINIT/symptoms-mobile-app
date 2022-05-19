@@ -42,28 +42,6 @@ class PatientDataStore implements PatientData {
             distinctUntilChanged(areEqual)
         );
     }
-
-    observeRecordsByType<T extends Record>(
-        recordType: string,
-        conditions: Array<QueryCondition> = []
-    ): Observable<Array<T>> {
-        return this.store.list(INT_MAX_VALUE).pipe(
-            map((records) => {
-                const filteredRecords: Array<T> = [];
-                for (const record of records) {
-                    if (
-                        record.type === recordType &&
-                        meetsConditions(record, conditions)
-                    ) {
-                        filteredRecords.push(record as T);
-                    }
-                }
-
-                return filteredRecords;
-            }),
-            distinctUntilChanged(areEqual)
-        );
-    }
 }
 
 export const patientData = new PatientDataStore();
