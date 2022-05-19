@@ -5,7 +5,6 @@ import { utilityTasks } from "./utility";
 import { exposureTasks } from "./exposure";
 import { feedbackTasks } from "./feedback";
 import { visualizationTasks } from "./visualizations";
-import { notificationsTasks } from "./notifications";
 
 export const appTasks: Array<Task> = [
     ...awarnsTasks,
@@ -13,5 +12,4 @@ export const appTasks: Array<Task> = [
     ...feedbackTasks,
     ...exposureTasks,
     ...visualizationTasks,
-    ...notificationsTasks,
 ];
