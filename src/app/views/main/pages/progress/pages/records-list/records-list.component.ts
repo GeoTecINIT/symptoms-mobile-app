@@ -36,11 +36,16 @@ export class RecordsListComponent implements OnInit {
         const routeParams = this.activeRoute.snapshot.paramMap;
         if (!routeParams.has(PLACE_ID_KEY)) return;
         this.placeId = routeParams.get(PLACE_ID_KEY);
-        this.retrieveAoIData().catch((err) => {
-            this.logger.error(
-                `Could not retrieve aoi (${this.placeId}) data. Reason: ${err}`
-            );
-        });
+        areasOfInterest
+            .getById(this.placeId)
+            .then((aoi) => {
+                this.aoi = aoi;
+            })
+            .catch((err) => {
+                this.logger.error(
+                    `Could not retrieve aoi (${this.placeId}) data. Reason: ${err}`
+                );
+            });
     }
 
     @HostListener("loaded")
@@ -51,11 +56,6 @@ export class RecordsListComponent implements OnInit {
     @HostListener("unloaded")
     onUnloaded() {
         this.unloaded$.next();
-    }
-
-    private async retrieveAoIData() {
-        const aois = await areasOfInterest.getAll();
-        this.aoi = aois.find((aoi) => aoi.id === this.placeId);
     }
 
     private subscribeToRecordChanges() {
