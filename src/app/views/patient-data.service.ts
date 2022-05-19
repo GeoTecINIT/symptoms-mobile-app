@@ -21,16 +21,4 @@ export class PatientDataService {
     ): Observable<Array<T>> {
         return patientData.observeRecordsByType<T>(recordType, conditions);
     }
-
-    observeLatestGroupedRecordsByType<T extends Record>(
-        recordType: string,
-        groupByProperty: string,
-        conditions: Array<QueryCondition> = []
-    ): Observable<Array<T>> {
-        return patientData.observeLatestGroupedRecordsByType<T>(
-            recordType,
-            groupByProperty,
-            conditions
-        );
-    }
 }

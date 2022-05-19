@@ -1,10 +1,10 @@
 import { Component, HostListener, NgZone } from "@angular/core";
-import { PatientDataService } from "~/app/views/patient-data.service";
 import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { Record } from "@awarns/core/entities";
+import { recordsStore } from "@awarns/persistence";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
 
@@ -19,7 +19,6 @@ export class AggregateListComponent {
     private unloaded$ = new Subject<void>();
 
     constructor(
-        private patientDataService: PatientDataService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
@@ -36,11 +35,8 @@ export class AggregateListComponent {
     }
 
     private subscribeToAggregateChanges() {
-        this.patientDataService
-            .observeLatestGroupedRecordsByType(
-                AppRecordType.ExposurePlaceAggregate,
-                "placeId"
-            )
+        recordsStore
+            .listLastGroupedBy(AppRecordType.ExposurePlaceAggregate, "placeId")
             .pipe(takeUntil(this.unloaded$))
             .subscribe((aggregates) => {
                 this.ngZone.run(() => {
