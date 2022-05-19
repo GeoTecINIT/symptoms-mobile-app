@@ -279,7 +279,7 @@ export class NotificationsHandlerService {
         notification: Notification
     ): Promise<void> {
         try {
-            await this.contentViewModalService.showContent(id);
+            await this.contentViewModalService.showContent(id, notification.id);
             await this.markAsSeen(notification);
         } catch (e) {
             this.logger.error(`Could not show content (id=${id}): ${e}`);
