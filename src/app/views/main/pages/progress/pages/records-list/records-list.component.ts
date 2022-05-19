@@ -1,13 +1,12 @@
 import { Component, HostListener, NgZone, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { Record, Change } from "@awarns/core/entities";
-import { PatientDataService } from "~/app/views/patient-data.service";
+import { FetchCondition, recordsStore } from "@awarns/persistence";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
 import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { ActivatedRoute } from "@angular/router";
 import { Logger, getLogger } from "~/app/core/utils/logger";
-import { QueryCondition } from "~/app/core/framework/patient-data";
 
 export const PLACE_ID_KEY = "placeId";
 
@@ -24,11 +23,7 @@ export class RecordsListComponent implements OnInit {
     private unloaded$ = new Subject<void>();
     private logger: Logger;
 
-    constructor(
-        private patientDataService: PatientDataService,
-        private activeRoute: ActivatedRoute,
-        private ngZone: NgZone
-    ) {
+    constructor(private activeRoute: ActivatedRoute, private ngZone: NgZone) {
         this.logger = getLogger("RecordsListComponent");
     }
 
@@ -59,7 +54,7 @@ export class RecordsListComponent implements OnInit {
     }
 
     private subscribeToRecordChanges() {
-        const conditions: Array<QueryCondition> = [
+        const conditions: Array<FetchCondition> = [
             { property: "change", comparison: "=", value: Change.END },
             { property: "successful", comparison: "=", value: true },
         ];
@@ -71,8 +66,8 @@ export class RecordsListComponent implements OnInit {
             });
         }
 
-        this.patientDataService
-            .observeRecordsByType(AppRecordType.ExposureChange, conditions)
+        recordsStore
+            .listBy(AppRecordType.ExposureChange, "desc", conditions)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((records) => {
                 this.ngZone.run(() => {
