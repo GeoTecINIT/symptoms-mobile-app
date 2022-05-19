@@ -1,4 +1,8 @@
-import { RecordsStore } from "@awarns/persistence";
+import {
+    RecordsStore,
+    ResultsOrder,
+    FetchCondition,
+} from "@awarns/persistence";
 import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
 import { serverApi, ServerApiClient } from "~/app/core/server";
@@ -29,6 +33,29 @@ class RemoteRecordsStore implements RecordsStore {
     }
 
     list(_size?: number): Observable<Array<Record>> {
+        throw new Error("Unimplemented");
+    }
+
+    listBy(
+        recordType: string,
+        order?: ResultsOrder,
+        conditions?: Array<FetchCondition>
+    ): Observable<Array<Record>> {
+        return undefined;
+    }
+
+    listLast(
+        recordType: string,
+        conditions?: Array<FetchCondition>
+    ): Observable<Record> {
+        throw new Error("Unimplemented");
+    }
+
+    listLastGroupedBy(
+        recordType: string,
+        groupByProperty: string,
+        conditions?: Array<FetchCondition>
+    ): Observable<Array<Record>> {
         throw new Error("Unimplemented");
     }
 
