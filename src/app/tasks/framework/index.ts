@@ -6,7 +6,10 @@ import {
 } from "@awarns/human-activity";
 import { acquirePhoneGeolocationTask } from "@awarns/geolocation";
 import { checkAreaOfInterestProximityTask } from "@awarns/geofencing";
-import { sendNotificationTask } from "@awarns/notifications";
+import {
+    sendNotificationTask,
+    sendRandomNotificationTask,
+} from "@awarns/notifications";
 import { writeRecordsTask } from "@awarns/persistence";
 
 export const awarnsTasks: Array<Task> = [
@@ -19,6 +22,7 @@ export const awarnsTasks: Array<Task> = [
             acquirePhoneGeolocationTask({ bestOf: 3, timeout: 10000 }),
             checkAreaOfInterestProximityTask(),
             sendNotificationTask(),
+            sendRandomNotificationTask(),
         ],
         { outputsSensitiveData: true }
     ),
