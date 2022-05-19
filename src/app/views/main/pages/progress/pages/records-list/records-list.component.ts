@@ -2,7 +2,7 @@ import { Component, HostListener, NgZone, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { Record, Change } from "@awarns/core/entities";
 import { PatientDataService } from "~/app/views/patient-data.service";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
 import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { ActivatedRoute } from "@angular/router";
@@ -72,7 +72,7 @@ export class RecordsListComponent implements OnInit {
         }
 
         this.patientDataService
-            .observeRecordsByType(RecordType.ExposureChange, conditions)
+            .observeRecordsByType(AppRecordType.ExposureChange, conditions)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((records) => {
                 this.ngZone.run(() => {

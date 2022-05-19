@@ -4,7 +4,7 @@ import { map, takeUntil } from "rxjs/operators";
 
 import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { Change } from "@awarns/core/entities";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
@@ -39,7 +39,9 @@ export class ProgressContainerComponent {
 
     private subscribeToExposureChanges() {
         this.patientDataService
-            .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
+            .observeLastByRecordType<ExposureChange>(
+                AppRecordType.ExposureChange
+            )
             .pipe(
                 takeUntil(this.unloaded$),
                 map(

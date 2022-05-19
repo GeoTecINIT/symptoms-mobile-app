@@ -1,8 +1,5 @@
-import { KnownTypes } from "@awarns/core/entities";
-
 // tslint:disable-next-line:variable-name
-export const RecordType = {
-    ...KnownTypes,
+export const AppRecordType = {
     PatientFeedback: "patient-feedback",
     PreExposureStarted: "pre-exposure-started",
     PreExposureCancelled: "pre-exposure-cancelled",

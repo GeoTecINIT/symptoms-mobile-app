@@ -1,5 +1,5 @@
 import { Record, Change } from "@awarns/core/entities";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 
 export class PatientFeedback extends Record {
     constructor(
@@ -9,6 +9,6 @@ export class PatientFeedback extends Record {
         public notificationId?: number,
         obtainedAt: Date = new Date()
     ) {
-        super(RecordType.PatientFeedback, obtainedAt, Change.NONE);
+        super(AppRecordType.PatientFeedback, obtainedAt, Change.NONE);
     }
 }

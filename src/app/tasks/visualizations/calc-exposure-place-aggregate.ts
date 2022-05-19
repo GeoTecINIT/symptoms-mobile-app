@@ -9,7 +9,7 @@ import { ExposureChange } from "~/app/tasks/exposure";
 import { EmotionValue } from "~/app/core/persistence/exposures";
 import { calculateEmotionValuesAvg } from "~/app/tasks/visualizations/common";
 import { ExposurePlaceAggregate } from "~/app/tasks/visualizations/exposure-place-aggregate";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { firstValueFrom } from "rxjs";
 
 export class CalculateExposurePlaceAggregate extends Task {
@@ -35,7 +35,7 @@ export class CalculateExposurePlaceAggregate extends Task {
 
         const prevAggregate = await firstValueFrom(
             this.store.observeLastByRecordType<ExposurePlaceAggregate>(
-                RecordType.ExposurePlaceAggregate,
+                AppRecordType.ExposurePlaceAggregate,
                 [{ property: "placeId", comparison: "=", value: id }]
             )
         );
