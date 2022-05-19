@@ -6,7 +6,7 @@ import {
 } from "@awarns/core/tasks";
 import { patientData, PatientData } from "~/app/core/framework/patient-data";
 import { ExposureChange } from "~/app/tasks/exposure";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import {
     ExposureAggregate,
     ExposureAggregatePoint,
@@ -42,7 +42,7 @@ export class CalculateExposureAggregate extends Task {
 
         const prevAggregate = await firstValueFrom(
             this.store.observeLastByRecordType<ExposureAggregate>(
-                RecordType.ExposureAggregate
+                AppRecordType.ExposureAggregate
             )
         );
 

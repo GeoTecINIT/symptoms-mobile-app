@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { Record, Change } from "@awarns/core/entities";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { awarns } from "@awarns/core";
 import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
@@ -70,7 +70,7 @@ export class IdleProgressComponent {
 
     private subscribeToLatestData() {
         this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureChange, [
+            .observeLastByRecordType(AppRecordType.ExposureChange, [
                 { property: "change", comparison: "=", value: Change.END },
                 { property: "successful", comparison: "=", value: true },
             ])
@@ -85,7 +85,7 @@ export class IdleProgressComponent {
 
     private subscribeToSummaryData() {
         this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureAggregate)
+            .observeLastByRecordType(AppRecordType.ExposureAggregate)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((summary) => {
                 this.ngZone.run(() => {

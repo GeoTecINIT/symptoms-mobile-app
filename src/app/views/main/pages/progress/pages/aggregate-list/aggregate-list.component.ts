@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { Record } from "@awarns/core/entities";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -38,7 +38,7 @@ export class AggregateListComponent {
     private subscribeToAggregateChanges() {
         this.patientDataService
             .observeLatestGroupedRecordsByType(
-                RecordType.ExposurePlaceAggregate,
+                AppRecordType.ExposurePlaceAggregate,
                 "placeId"
             )
             .pipe(takeUntil(this.unloaded$))
