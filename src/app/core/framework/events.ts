@@ -3,6 +3,7 @@ import {
     QuestionnaireAnswers,
     UserConfirmation,
     UserFeedback,
+    UserReadContent,
 } from "@awarns/notifications";
 
 export function emitTreatmentStartEvent() {
@@ -43,6 +44,12 @@ export function emitPatientConfirmationAcquiredEvent(
     confirmation: UserConfirmation
 ) {
     awarns.emitEvent("patientConfirmationAcquired", confirmation);
+}
+
+export function emitPatientReadContentAcquiredEvent(
+    contentRead: UserReadContent
+) {
+    awarns.emitEvent("patientReadContentAcquired", contentRead);
 }
 
 export function emitExposureManuallyFinishedEvent() {

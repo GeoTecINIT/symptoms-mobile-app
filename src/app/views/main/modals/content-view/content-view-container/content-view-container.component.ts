@@ -19,7 +19,8 @@ export class ContentViewContainerComponent {
 
     private readonly contentId: string;
     private contentHeight: number;
-    private seen: boolean;
+    private seenBefore: boolean;
+    private seenDuringSession = false;
     private logger: Logger;
 
     constructor(
@@ -29,11 +30,11 @@ export class ContentViewContainerComponent {
         this.logger = getLogger("ContentViewContainerComponent");
         this.contentId = params.context.id;
         this.content$ = this.treatmentContentService.getById(this.contentId);
-        this.content$.then((content) => (this.seen = content.seen));
+        this.content$.then((content) => (this.seenBefore = content.seen));
     }
 
     onClose() {
-        this.params.closeCallback();
+        this.params.closeCallback(this.seenDuringSession);
     }
 
     onContentRendered(event: EventData) {
@@ -46,20 +47,22 @@ export class ContentViewContainerComponent {
         const scrollPositionEnd =
             scroll.getActualSize().height + scroll.verticalOffset;
 
-        if (this.hasReachedTheEndAndIsTheFirstRead(scrollPositionEnd)) {
-            this.seen = true;
-            this.treatmentContentService
-                .markAsSeen(this.contentId)
-                .catch((e) =>
-                    this.logger.error(
-                        `Could not mark content as seen. Reason: ${e}`
-                    )
-                );
+        if (this.hasReachedTheEnd(scrollPositionEnd)) {
+            this.seenDuringSession = true;
+
+            if (!this.seenBefore) {
+                this.treatmentContentService
+                    .markAsSeen(this.contentId)
+                    .catch((e) =>
+                        this.logger.error(
+                            `Could not mark content as seen. Reason: ${e}`
+                        )
+                    );
+            }
         }
     }
 
-    private hasReachedTheEndAndIsTheFirstRead(scrollPositionEnd: number) {
-        if (this.seen) return false;
+    private hasReachedTheEnd(scrollPositionEnd: number) {
         if (this.contentHeight === undefined) return false;
 
         return (
