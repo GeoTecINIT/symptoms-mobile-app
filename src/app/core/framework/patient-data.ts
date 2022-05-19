@@ -8,15 +8,6 @@ export interface PatientData {
         recordType: string,
         conditions?: Array<QueryCondition>
     ): Observable<T>;
-    observeRecordsByType<T extends Record>(
-        recordType: string,
-        conditions?: Array<QueryCondition>
-    ): Observable<Array<T>>;
-    observeLatestGroupedRecordsByType<T extends Record>(
-        recordType: string,
-        groupByProperty: string,
-        conditions?: Array<QueryCondition>
-    ): Observable<Array<T>>;
 }
 
 export interface QueryCondition {
@@ -69,47 +60,6 @@ class PatientDataStore implements PatientData {
                 }
 
                 return filteredRecords;
-            }),
-            distinctUntilChanged(areEqual)
-        );
-    }
-
-    observeLatestGroupedRecordsByType<T extends Record>(
-        recordType: string,
-        groupByProperty: string,
-        conditions: Array<QueryCondition> = []
-    ): Observable<Array<T>> {
-        return this.store.list(INT_MAX_VALUE).pipe(
-            map((records) => {
-                const groups = new Set<string>();
-                for (const record of records) {
-                    const groupedProperty = record[groupByProperty];
-                    if (
-                        record.type === recordType &&
-                        groupedProperty &&
-                        meetsConditions(record, conditions)
-                    ) {
-                        groups.add(groupedProperty);
-                    }
-                }
-
-                const filteredRecords: Array<T> = [];
-                for (const group of groups) {
-                    for (const record of records) {
-                        if (
-                            record.type === recordType &&
-                            record[groupByProperty] === group &&
-                            meetsConditions(record, conditions)
-                        ) {
-                            filteredRecords.push(record as T);
-                            break;
-                        }
-                    }
-                }
-
-                return filteredRecords.sort(
-                    (r1, r2) => r2.timestamp.getTime() - r1.timestamp.getTime()
-                );
             }),
             distinctUntilChanged(areEqual)
         );
