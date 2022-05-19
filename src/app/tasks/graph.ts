@@ -474,6 +474,10 @@ class DemoTaskGraph implements TaskGraph {
         on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
         // END: Patient feedback events
 
+        // START: Patient confirmation events
+        on("patientConfirmationAcquired", run("writeRecords"));
+        // END: Patient confirmation events
+
         // START: App usage events
         // -> Notification tap
         on("notificationTapped", run("writeRecords"));
