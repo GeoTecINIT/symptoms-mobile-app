@@ -118,6 +118,7 @@ export class NotificationsHandlerService {
         switch (tapActionId) {
             case "exposure-intention":
                 const pretendsToStartExposure = await this.showConfirmModal(
+                    tapActionId,
                     new ConfirmModalOptionsDataEmbedder(
                         confirmPretendsToStartAnExposure
                     ).embed(metadata),
@@ -134,6 +135,7 @@ export class NotificationsHandlerService {
                 break;
             case "start-exposure":
                 const wantsToStartExposure = await this.showConfirmModal(
+                    tapActionId,
                     new ConfirmModalOptionsDataEmbedder(
                         confirmWantsToStartAnExposure
                     ).embed(metadata),
@@ -150,6 +152,7 @@ export class NotificationsHandlerService {
                 break;
             case "escape-intention":
                 const didNotLeaveAreaOnPurpose = await this.showConfirmModal(
+                    tapActionId,
                     new ConfirmModalOptionsDataEmbedder(
                         confirmDidNotLeaveAreaOnPurpose
                     ).embed(metadata),
@@ -207,11 +210,16 @@ export class NotificationsHandlerService {
     }
 
     private async showConfirmModal(
+        confirmationId: string,
         options: ConfirmModalOptions,
         notification: Notification
     ): Promise<boolean | void> {
         try {
-            const result = await this.confirmModalService.show(options);
+            const result = await this.confirmModalService.show(
+                confirmationId,
+                options,
+                notification.id
+            );
             if (result !== undefined) {
                 await this.markAsSeen(notification);
             }

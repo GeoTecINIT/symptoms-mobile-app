@@ -1,6 +1,9 @@
 import { awarns } from "@awarns/core";
-import { QuestionnaireAnswers } from "@awarns/notifications";
-import { PatientFeedback } from "~/app/core/modals/feedback";
+import {
+    QuestionnaireAnswers,
+    UserConfirmation,
+    UserFeedback,
+} from "@awarns/notifications";
 
 export function emitTreatmentStartEvent() {
     awarns.emitEvent("startEvent");
@@ -34,6 +37,12 @@ export function emitQuestionnaireAnswersAcquiredEvent(
 
 export function emitPatientFeedbackAcquiredEvent(feedback: UserFeedback) {
     awarns.emitEvent("patientFeedbackAcquired", feedback);
+}
+
+export function emitPatientConfirmationAcquiredEvent(
+    confirmation: UserConfirmation
+) {
+    awarns.emitEvent("patientConfirmationAcquired", confirmation);
 }
 
 export function emitExposureManuallyFinishedEvent() {
