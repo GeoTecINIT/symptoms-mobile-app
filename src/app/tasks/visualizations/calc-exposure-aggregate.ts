@@ -4,7 +4,7 @@ import {
     TaskOutcome,
     TaskParams,
 } from "@awarns/core/tasks";
-import { patientData, PatientData } from "~/app/core/framework/patient-data";
+import { recordsStore, RecordsStore } from "@awarns/persistence";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { AppRecordType } from "~/app/core/app-record-type";
 import {
@@ -15,7 +15,7 @@ import { firstValueFrom } from "rxjs";
 import { calculateEmotionValuesAvg } from "~/app/tasks/visualizations/common";
 
 export class CalculateExposureAggregate extends Task {
-    constructor(private store: PatientData = patientData) {
+    constructor(private store: RecordsStore = recordsStore) {
         super("calculateExposureAggregate", {
             outputEventNames: ["exposureAggregateCalculated"],
         });
@@ -40,11 +40,9 @@ export class CalculateExposureAggregate extends Task {
             emotionValues: [newEmotionValue],
         };
 
-        const prevAggregate = await firstValueFrom(
-            this.store.observeLastByRecordType<ExposureAggregate>(
-                AppRecordType.ExposureAggregate
-            )
-        );
+        const prevAggregate = (await firstValueFrom(
+            this.store.listLast(AppRecordType.ExposureAggregate)
+        )) as ExposureAggregate;
 
         const samePlace = (placeAggregate) => placeAggregate.placeId === id;
 
