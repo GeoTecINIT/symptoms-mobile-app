@@ -23,7 +23,7 @@
     "@awarns/geofencing": "^1.0.0-alpha.9",
     "@awarns/geolocation": "^1.0.0-alpha.9",
     "@awarns/human-activity": "^1.0.0-alpha.9",
-    "@awarns/notifications": "^1.0.0-alpha.9",
+    "@awarns/notifications": "^1.0.0-alpha.10",
     "@awarns/persistence": "^1.0.0-alpha.9",
     "@awarns/tracing": "^1.0.0-alpha.9",
     "@nativescript-community/ui-chart": "^1.2.18",
