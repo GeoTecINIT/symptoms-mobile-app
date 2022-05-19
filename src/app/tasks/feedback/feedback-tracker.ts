@@ -3,7 +3,7 @@ import {
     feedbackTracking,
     FeedbackTracking,
 } from "~/app/core/persistence/feedback-tracking";
-import { PatientFeedback } from "~/app/core/modals/feedback";
+import { UserFeedback } from "@awarns/notifications";
 
 export class FeedbackTracker extends Task {
     constructor(private store: FeedbackTracking = feedbackTracking) {
@@ -14,7 +14,7 @@ export class FeedbackTracker extends Task {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<void> {
-        const feedback = invocationEvent.data as PatientFeedback;
+        const feedback = invocationEvent.data as UserFeedback;
 
         await this.store.track(feedback.feedbackId);
     }

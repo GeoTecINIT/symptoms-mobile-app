@@ -32,7 +32,7 @@ export function emitQuestionnaireAnswersAcquiredEvent(
     awarns.emitEvent("questionnaireAnswersAcquired", answers);
 }
 
-export function emitPatientFeedbackAcquiredEvent(feedback: PatientFeedback) {
+export function emitPatientFeedbackAcquiredEvent(feedback: UserFeedback) {
     awarns.emitEvent("patientFeedbackAcquired", feedback);
 }
 

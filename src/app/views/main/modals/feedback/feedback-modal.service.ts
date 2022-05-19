@@ -3,10 +3,8 @@ import { Injectable } from "@angular/core";
 import { MainViewService } from "../../main-view.service";
 
 import { FeedbackModalComponent } from "./feedback-modal.component";
-import {
-    FeedbackModalOptions,
-    PatientFeedback,
-} from "~/app/core/modals/feedback";
+import { FeedbackModalOptions } from "~/app/core/modals/feedback";
+import { UserFeedback } from "@awarns/notifications";
 import { emitPatientFeedbackAcquiredEvent } from "~/app/core/framework/events";
 
 @Injectable({
@@ -24,7 +22,7 @@ export class FeedbackModalService {
             .showFullScreenAnimatedModal(FeedbackModalComponent, options)
             .then((feedback) => {
                 emitPatientFeedbackAcquiredEvent(
-                    new PatientFeedback(
+                    new UserFeedback(
                         feedbackId,
                         options.feedbackScreen.question,
                         feedback,
