@@ -4,7 +4,6 @@ import { KnownTypes } from "@awarns/core/entities";
 export const RecordType = {
     ...KnownTypes,
     PatientFeedback: "patient-feedback",
-    BatteryLevel: "battery-level",
     PreExposureStarted: "pre-exposure-started",
     PreExposureCancelled: "pre-exposure-cancelled",
     ExposureChange: "exposure-change",
