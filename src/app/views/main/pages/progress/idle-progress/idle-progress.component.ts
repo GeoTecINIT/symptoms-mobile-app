@@ -1,10 +1,10 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
-import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { Record, Change } from "@awarns/core/entities";
+import { recordsStore } from "@awarns/persistence";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { awarns } from "@awarns/core";
 import { createFakeDataGenerator, DataGenerator } from "./data";
@@ -33,7 +33,6 @@ export class IdleProgressComponent {
     private readonly generateData: DataGenerator;
 
     constructor(
-        private patientDataService: PatientDataService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
@@ -69,8 +68,8 @@ export class IdleProgressComponent {
     }
 
     private subscribeToLatestData() {
-        this.patientDataService
-            .observeLastByRecordType(AppRecordType.ExposureChange, [
+        recordsStore
+            .listLast(AppRecordType.ExposureChange, [
                 { property: "change", comparison: "=", value: Change.END },
                 { property: "successful", comparison: "=", value: true },
             ])
@@ -84,8 +83,8 @@ export class IdleProgressComponent {
     }
 
     private subscribeToSummaryData() {
-        this.patientDataService
-            .observeLastByRecordType(AppRecordType.ExposureAggregate)
+        recordsStore
+            .listLast(AppRecordType.ExposureAggregate)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((summary) => {
                 this.ngZone.run(() => {
