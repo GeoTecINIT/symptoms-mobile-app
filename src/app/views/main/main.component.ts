@@ -56,6 +56,10 @@ export class MainComponent implements OnInit {
         }
     }
 
+    get isBusy(): boolean {
+        return this.mainViewService.isBusy;
+    }
+
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
