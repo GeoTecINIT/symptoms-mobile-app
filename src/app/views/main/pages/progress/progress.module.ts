@@ -10,8 +10,6 @@ import { CommonProgressModule } from "./common/common-progress.module";
 import { ProgressContainerComponent } from "./progress-container.component";
 import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
 import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
-import { RecordsListComponent } from "./pages/records-list/records-list.component";
-import { AggregateListComponent } from "./pages/aggregate-list/aggregate-list.component";
 import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress-bar/exposure-progress-bar.component";
 
 @NgModule({
@@ -26,8 +24,6 @@ import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress
         ProgressContainerComponent,
         IdleProgressComponent,
         UnderExposureComponent,
-        RecordsListComponent,
-        AggregateListComponent,
         ExposureProgressBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],

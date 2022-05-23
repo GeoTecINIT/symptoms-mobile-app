@@ -113,6 +113,13 @@ const routes: Routes = [
             },
         ],
     },
+    {
+        path: "progress-detail",
+        loadChildren: () =>
+            import("./pages/progress/pages/progress-pages.module").then(
+                (m) => m.ProgressPagesModule
+            ),
+    },
 ];
 
 @NgModule({
