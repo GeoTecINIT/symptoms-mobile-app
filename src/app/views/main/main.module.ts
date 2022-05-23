@@ -8,12 +8,23 @@ import { MainComponent } from "./main.component";
 import { CommonComponentsModule } from "../common/common-components.module";
 import { NativeScriptMaterialBottomNavigationBarModule } from "@nativescript-community/ui-material-bottomnavigationbar/angular";
 
+import { ContentModule } from "./pages/content/content.module";
+import { NotificationsModule } from "./pages/notifications/notifications.module";
+import { PlacesModule } from "./pages/places/places.module";
+import { ProgressModule } from "./pages/progress/progress.module";
+import { CommonMainModule } from "./common/common-main.module";
+
 @NgModule({
     imports: [
         NativeScriptCommonModule,
         MainRoutingModule,
         CommonComponentsModule,
         NativeScriptMaterialBottomNavigationBarModule,
+        ProgressModule,
+        PlacesModule,
+        ContentModule,
+        NotificationsModule,
+        CommonMainModule,
     ],
     declarations: [MainComponent],
     schemas: [NO_ERRORS_SCHEMA],

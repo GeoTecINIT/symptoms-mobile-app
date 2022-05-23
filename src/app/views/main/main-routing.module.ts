@@ -13,42 +13,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "progress",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./pages/progress/progress.module").then(
-                        (m) => m.ProgressModule
-                    ),
-                outlet: "progressTab",
-            },
-            {
-                path: "places",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./pages/places/places.module").then(
-                        (m) => m.PlacesModule
-                    ),
-                outlet: "placesTab",
-            },
-            {
-                path: "content",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./pages/content/content.module").then(
-                        (m) => m.ContentModule
-                    ),
-                outlet: "contentTab",
-            },
-            {
-                path: "notifications",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./pages/notifications/notifications.module").then(
-                        (m) => m.NotificationsModule
-                    ),
-                outlet: "notificationsTab",
-            },
-            {
                 path: "settings",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
