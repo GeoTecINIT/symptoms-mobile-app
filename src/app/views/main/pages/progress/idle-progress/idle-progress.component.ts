@@ -64,7 +64,7 @@ export class IdleProgressComponent {
     }
 
     onSeeAggregatesTap() {
-        this.navigate("../aggregate-list");
+        this.navigate("/main/progress-detail/aggregate-list");
     }
 
     private subscribeToLatestData() {
@@ -95,6 +95,6 @@ export class IdleProgressComponent {
     }
 
     private navigate(route: string) {
-        this.navigationService.navigate([route], this.activeRoute);
+        this.navigationService.navigate([route], undefined);
     }
 }
