@@ -3,7 +3,6 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProgressRoutingModule } from "./progress-routing.module";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 
-import { CommonMainModule } from "../../common/common-main.module";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { CommonProgressModule } from "./common/common-progress.module";
 
@@ -16,7 +15,6 @@ import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress
     imports: [
         ProgressRoutingModule,
         NativeScriptCommonModule,
-        CommonMainModule,
         CommonComponentsModule,
         CommonProgressModule,
     ],
@@ -27,5 +25,6 @@ import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress
         ExposureProgressBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
+    exports: [ProgressContainerComponent],
 })
 export class ProgressModule {}

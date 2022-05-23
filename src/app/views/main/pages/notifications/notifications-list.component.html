@@ -1,8 +1,6 @@
-<SymMainActionBar title="Notificaciones"></SymMainActionBar>
-
 <ng-container *ngIf="notifications">
     <ng-container *ngIf="notifications.length > 0; else notificationsRead">
-        <ListView [items]="notifications" (itemTap)="onListItemTap($event)">
+        <ListView [items]="notifications" (itemTap)="onListItemTap($event)" height="100%">
             <ng-template let-item="item">
                 <SymNotificationsListItem [notification]="item"></SymNotificationsListItem>
             </ng-template>
@@ -10,7 +8,7 @@
     </ng-container>
 
     <ng-template #notificationsRead>
-        <StackLayout verticalAlignment="center">
+        <StackLayout verticalAlignment="center" height="100%">
             <SymCircleIcon iconCode="&#xf18b;"></SymCircleIcon>
             <Label class="body" textWrap="true" textAlignment="center" text="No tienes notificaciones pendientes"></Label>
             <SymPrimaryButton horizontalAlignment="center" margin="36" text="Ver mi progreso" (tap)="onSeeProgressTap()"></SymPrimaryButton>
