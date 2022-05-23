@@ -18,8 +18,13 @@ export class MainViewService {
         return this._selectedTab;
     }
 
+    get isBusy(): boolean {
+        return this._isBusy;
+    }
+
     private viewContainerRef: ViewContainerRef;
     private _selectedTab = NavigationTab.Progress;
+    private _isBusy = false;
     private tabSelectionCallback: TabSelectionCallback;
 
     constructor(private modalService: ModalDialogService) {}
@@ -49,5 +54,13 @@ export class MainViewService {
         };
 
         return this.modalService.showModal(modalComponent, options);
+    }
+
+    showActivityIndicator() {
+        this._isBusy = true;
+    }
+
+    hideActivityIndicator() {
+        this._isBusy = false;
     }
 }
