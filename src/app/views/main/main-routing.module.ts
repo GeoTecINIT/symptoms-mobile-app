@@ -13,15 +13,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "content-view",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/content-view/content-view.module").then(
-                        (m) => m.ContentViewModule
-                    ),
-                outlet: "contentViewModal",
-            },
-            {
                 path: "questions",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
@@ -55,6 +46,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./pages/progress/pages/progress-pages.module").then(
                 (m) => m.ProgressPagesModule
+            ),
+    },
+    {
+        path: "content-view",
+        loadChildren: () =>
+            import("./modals/content-view/content-view.module").then(
+                (m) => m.ContentViewModule
             ),
     },
     {
