@@ -36,11 +36,10 @@ export class LoginComponent {
 
         this.authService.login(this.code).then((success) => {
             if (success) {
-                this.navigationService.navigate(
-                    ["../tutorial"],
-                    this.activeRoute,
-                    true
-                );
+                this.navigationService.navigate(["../tutorial"], {
+                    source: this.activeRoute,
+                    clearHistory: true,
+                });
             } else {
                 this.waitingForResponse = false;
                 this.authFailed = true;

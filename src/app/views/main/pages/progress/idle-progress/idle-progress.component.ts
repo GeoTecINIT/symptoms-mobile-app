@@ -99,6 +99,6 @@ export class IdleProgressComponent {
     }
 
     private navigate(route: string) {
-        this.navigationService.navigate([route], undefined);
+        this.navigationService.navigate([route]);
     }
 }

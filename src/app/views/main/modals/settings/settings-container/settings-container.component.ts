@@ -81,6 +81,8 @@ export class SettingsContainerComponent {
 
             return;
         }
-        this.navigationService.navigate(["./advanced"], this.activeRoute);
+        this.navigationService.navigate(["./advanced"], {
+            source: this.activeRoute,
+        });
     }
 }

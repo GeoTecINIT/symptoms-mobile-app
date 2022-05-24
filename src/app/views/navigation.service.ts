@@ -3,6 +3,9 @@ import { RouterExtensions } from "@nativescript/angular";
 import { ActivatedRoute } from "@angular/router";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
+const DEFAULT_TRANSITION = "slide";
+const DEFAULT_DURATION = 300;
+
 @Injectable({
     providedIn: "root",
 })
@@ -13,15 +16,13 @@ export class NavigationService {
         this.logger = getLogger("NavigationService");
     }
 
-    navigate(
-        route: Array<any>,
-        source: ActivatedRoute,
-        clearHistory: boolean = false
-    ) {
+    navigate(route: Array<any>, options: NavigationOptions = {}) {
+        const { source, transition, duration, clearHistory } =
+            addNavigationDefaults(options);
         this.routerExtension
             .navigate(route, {
                 relativeTo: source,
-                transition: { name: "slide", duration: 300 },
+                transition: { name: transition, duration },
                 clearHistory,
             })
             .catch((e) =>
@@ -60,4 +61,34 @@ export class NavigationService {
     goBack() {
         this.routerExtension.back();
     }
+}
+
+type FlipTransition = "flip" | "flipRight" | "flipLeft";
+type SlideTransition =
+    | "slide"
+    | "slideRight"
+    | "slideLeft"
+    | "slideTop"
+    | "slideBottom";
+
+interface NavigationOptions {
+    source?: ActivatedRoute;
+    clearHistory?: boolean;
+    transition?: "fade" | FlipTransition | SlideTransition;
+    duration?: number;
+}
+
+function addNavigationDefaults(options: NavigationOptions): NavigationOptions {
+    const copy = { ...options };
+    if (options.clearHistory === undefined) {
+        copy.clearHistory = false;
+    }
+    if (options.transition === undefined) {
+        copy.transition = DEFAULT_TRANSITION;
+    }
+    if (options.duration === undefined) {
+        copy.duration = DEFAULT_DURATION;
+    }
+
+    return copy;
 }
