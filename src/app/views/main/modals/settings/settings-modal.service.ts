@@ -1,25 +1,17 @@
 import { Injectable } from "@angular/core";
 
-import { MainViewService } from "../../main-view.service";
-
-import { SettingsModalComponent } from "./settings-modal.component";
-import { getLogger, Logger } from "~/app/core/utils/logger";
+import { NavigationService } from "~/app/views/navigation.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class SettingsModalService {
-    private logger: Logger;
-
-    constructor(private mainViewService: MainViewService) {
-        this.logger = getLogger("SettingsModalService");
-    }
+    constructor(private navigationService: NavigationService) {}
 
     show() {
-        this.mainViewService
-            .showFullScreenAnimatedModal(SettingsModalComponent)
-            .catch((e) =>
-                this.logger.error(`Error while opening settings modal: ${e}`)
-            );
+        this.navigationService.navigate(["/main/settings"], {
+            transition: "fade",
+            duration: 200,
+        });
     }
 }

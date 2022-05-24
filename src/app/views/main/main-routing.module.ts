@@ -13,15 +13,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "settings",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/settings/settings.module").then(
-                        (m) => m.SettingsModule
-                    ),
-                outlet: "settingsModal",
-            },
-            {
                 path: "content-view",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
@@ -82,6 +73,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./pages/progress/pages/progress-pages.module").then(
                 (m) => m.ProgressPagesModule
+            ),
+    },
+    {
+        path: "settings",
+        loadChildren: () =>
+            import("./modals/settings/settings.module").then(
+                (m) => m.SettingsModule
             ),
     },
 ];

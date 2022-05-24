@@ -8,7 +8,6 @@ import { ConfirmModalComponent } from "./confirm/confirm-modal.component";
 import { ContentViewModalComponent } from "./content-view/content-view-modal.component";
 import { FeedbackModalComponent } from "./feedback/feedback-modal.component";
 import { QuestionsModalComponent } from "./questions/questions-modal.component";
-import { SettingsModalComponent } from "./settings/settings-modal.component";
 import { PanicButtonModalComponent } from "./panic-button/panic-button-modal.component";
 import { SimulationModalComponent } from "./simulation/simulation-modal.component";
 
@@ -17,7 +16,6 @@ const MODAL_COMPONENTS = [
     ContentViewModalComponent,
     FeedbackModalComponent,
     QuestionsModalComponent,
-    SettingsModalComponent,
     PanicButtonModalComponent,
     SimulationModalComponent,
 ];
