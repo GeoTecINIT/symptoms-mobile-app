@@ -1,28 +1,11 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
-import {
-    NSEmptyOutletComponent,
-    NativeScriptRouterModule,
-} from "@nativescript/angular";
+import { NativeScriptRouterModule } from "@nativescript/angular";
 import { MainComponent } from "~/app/views/main/main.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "default", pathMatch: "full" },
-    {
-        path: "default",
-        component: MainComponent,
-        children: [
-            {
-                path: "panic-button",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/panic-button/panic-button.module").then(
-                        (m) => m.PanicButtonModule
-                    ),
-                outlet: "panicButtonModal",
-            },
-        ],
-    },
+    { path: "default", component: MainComponent },
     {
         path: "progress-detail",
         loadChildren: () =>
@@ -56,6 +39,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./modals/feedback/feedback.module").then(
                 (m) => m.FeedbackModule
+            ),
+    },
+    {
+        path: "panic-button",
+        loadChildren: () =>
+            import("./modals/panic-button/panic-button.module").then(
+                (m) => m.PanicButtonModule
             ),
     },
     {
