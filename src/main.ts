@@ -6,8 +6,6 @@ import {
 
 import { AppModule } from "./app/app.module";
 
-import { appEvents } from "./app/core/app-events";
-
 import { firebaseManager } from "./app/core/utils/firebase";
 
 import { awarns } from "@awarns/core";
@@ -22,7 +20,6 @@ import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
 import { getLogger } from "./app/core/utils/logger";
 
 import { install } from "@nativescript-community/ui-chart";
-appEvents.listen();
 
 firebaseManager
     .init()
