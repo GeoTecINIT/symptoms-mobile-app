@@ -19,7 +19,7 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
     instanceId: number;
     options: ConfirmModalOptions;
 
-    private backCallback: () => void;
+    private readonly backCallback: () => void;
 
     get hasCancelConfirm(): boolean {
         return this.options.cancelConfirmOptions !== undefined;

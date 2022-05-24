@@ -2,9 +2,14 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { ContentViewContainerComponent } from "./content-view-container/content-view-container.component";
+import {
+    CONTENT_ID_KEY,
+    ContentViewModalComponent,
+} from "./content-view-modal.component";
 
-const routes: Routes = [{ path: "", component: ContentViewContainerComponent }];
+const routes: Routes = [
+    { path: `:${CONTENT_ID_KEY}`, component: ContentViewModalComponent },
+];
 
 @NgModule({
     imports: [NativeScriptRouterModule.forChild(routes)],

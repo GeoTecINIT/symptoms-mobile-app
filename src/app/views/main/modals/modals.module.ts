@@ -4,13 +4,11 @@ import {
     NativeScriptRouterModule,
 } from "@nativescript/angular";
 
-import { ContentViewModalComponent } from "./content-view/content-view-modal.component";
 import { FeedbackModalComponent } from "./feedback/feedback-modal.component";
 import { QuestionsModalComponent } from "./questions/questions-modal.component";
 import { PanicButtonModalComponent } from "./panic-button/panic-button-modal.component";
 
 const MODAL_COMPONENTS = [
-    ContentViewModalComponent,
     FeedbackModalComponent,
     QuestionsModalComponent,
     PanicButtonModalComponent,
