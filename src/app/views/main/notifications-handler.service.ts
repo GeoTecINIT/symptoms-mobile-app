@@ -126,6 +126,7 @@ export class NotificationsHandlerService {
                 );
                 if (pretendsToStartExposure === undefined) return;
                 if (!pretendsToStartExposure) {
+                    await pause();
                     await this.showFeedbackModal(
                         askCannotExposeFeedback,
                         notification
@@ -144,6 +145,7 @@ export class NotificationsHandlerService {
                 );
                 if (wantsToStartExposure === undefined) return;
                 if (!wantsToStartExposure) {
+                    await pause();
                     await this.showFeedbackModal(
                         askWantsToLeaveFeedback,
                         notification
@@ -298,4 +300,9 @@ export class NotificationsHandlerService {
             );
         }
     }
+}
+
+const PAUSE_TIME = 500;
+function pause(): Promise<void> {
+    return new Promise<void>((resolve) => setTimeout(resolve, PAUSE_TIME));
 }
