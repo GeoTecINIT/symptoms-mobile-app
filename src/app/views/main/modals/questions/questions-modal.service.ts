@@ -1,17 +1,19 @@
 import { Injectable } from "@angular/core";
-import { MainViewService } from "~/app/views/main/main-view.service";
+import { NavigationService } from "~/app/views/navigation.service";
 
-import { QuestionsModalComponent } from "./questions-modal.component";
 import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer } from "./answers";
 import { emitQuestionnaireAnswersAcquiredEvent } from "~/app/core/framework/events";
 import { processQuestionnaireAnswers } from "~/app/core/framework/answers";
+import { filter, firstValueFrom, Subject, map, tap } from "rxjs";
 
 @Injectable({
     providedIn: "root",
 })
 export class QuestionsModalService {
-    constructor(private mainViewService: MainViewService) {}
+    private answeredEvents = new Subject<AnsweredEvent>();
+
+    constructor(private navigationService: NavigationService) {}
 
     deliverQuestions(
         questionnaireId: string,
@@ -20,10 +22,21 @@ export class QuestionsModalService {
     ): Promise<Array<QuestionAnswer>> {
         const openTime = new Date();
 
-        return this.mainViewService
-            .showFullScreenAnimatedModal(QuestionsModalComponent, options)
-            .then((answers: Array<QuestionAnswer>) => {
-                if (answers) {
+        this.navigationService.navigate(
+            ["/main/questions", openTime.getTime()],
+            {
+                transition: "fade",
+                duration: 200,
+                state: options,
+            }
+        );
+
+        return firstValueFrom(
+            this.answeredEvents.pipe(
+                filter((evt) => evt.instanceId === openTime.getTime()),
+                map((evt) => evt.answers),
+                tap((answers) => {
+                    if (answers === undefined) return;
                     emitQuestionnaireAnswersAcquiredEvent(
                         processQuestionnaireAnswers(answers, {
                             openTime,
@@ -31,9 +44,17 @@ export class QuestionsModalService {
                             notificationId,
                         })
                     );
-                }
-
-                return answers;
-            });
+                })
+            )
+        );
     }
+
+    gotAnswers(instanceId: number, answers?: Array<QuestionAnswer>) {
+        this.answeredEvents.next({ instanceId, answers });
+    }
+}
+
+interface AnsweredEvent {
+    instanceId: number;
+    answers?: Array<QuestionAnswer>;
 }
