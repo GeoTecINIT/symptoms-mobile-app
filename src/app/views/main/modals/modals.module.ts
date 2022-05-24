@@ -4,10 +4,9 @@ import {
     NativeScriptRouterModule,
 } from "@nativescript/angular";
 
-import { FeedbackModalComponent } from "./feedback/feedback-modal.component";
 import { PanicButtonModalComponent } from "./panic-button/panic-button-modal.component";
 
-const MODAL_COMPONENTS = [FeedbackModalComponent, PanicButtonModalComponent];
+const MODAL_COMPONENTS = [PanicButtonModalComponent];
 
 @NgModule({
     imports: [NativeScriptCommonModule, NativeScriptRouterModule],
