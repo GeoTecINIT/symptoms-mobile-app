@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { RouterExtensions } from "@nativescript/angular";
 import { ActivatedRoute } from "@angular/router";
 import { getLogger, Logger } from "~/app/core/utils/logger";
@@ -12,24 +12,30 @@ const DEFAULT_DURATION = 300;
 export class NavigationService {
     private logger: Logger;
 
-    constructor(private routerExtension: RouterExtensions) {
+    constructor(
+        private routerExtension: RouterExtensions,
+        private ngZone: NgZone
+    ) {
         this.logger = getLogger("NavigationService");
     }
 
     navigate(route: Array<any>, options: NavigationOptions = {}) {
-        const { source, transition, duration, clearHistory } =
+        const { source, transition, duration, clearHistory, state } =
             addNavigationDefaults(options);
-        this.routerExtension
-            .navigate(route, {
-                relativeTo: source,
-                transition: { name: transition, duration },
-                clearHistory,
-            })
-            .catch((e) =>
-                this.logger.error(
-                    `Could not navigate to ${route}. Reason: ${e}`
-                )
-            );
+        this.ngZone.run(() => {
+            this.routerExtension
+                .navigate(route, {
+                    relativeTo: source,
+                    transition: { name: transition, duration },
+                    clearHistory,
+                    state,
+                })
+                .catch((e) =>
+                    this.logger.error(
+                        `Could not navigate to ${route}. Reason: ${e}`
+                    )
+                );
+        });
     }
 
     forceNavigate(absoluteRoute: Array<any>) {
@@ -76,6 +82,7 @@ interface NavigationOptions {
     clearHistory?: boolean;
     transition?: "fade" | FlipTransition | SlideTransition;
     duration?: number;
+    state?: { [key: string]: any };
 }
 
 function addNavigationDefaults(options: NavigationOptions): NavigationOptions {
