@@ -30,6 +30,8 @@ export class ContentDeliveryComponent {
     }
 
     onMakeContact() {
-        this.navigationService.navigate(["./make-contact"], this.activeRoute);
+        this.navigationService.navigate(["./make-contact"], {
+            source: this.activeRoute,
+        });
     }
 }
