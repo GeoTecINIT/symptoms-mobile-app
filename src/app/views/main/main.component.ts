@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { Application } from "@nativescript/core";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
@@ -19,11 +18,8 @@ import {
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin } from "~/app/core/framework";
-import { appEvents } from "~/app/core/app-events";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
 import { takeUntil } from "rxjs/operators";
-
-const APP_EVENTS_KEY = "MainComponent";
 
 @Component({
     selector: "SymMain",
@@ -76,20 +72,12 @@ export class MainComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.checkEMAIFrameworkStatus();
-
-        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
-            this.logger.debug("Notification handler initialized");
-            this.notificationsHandlerService.resume();
-        });
-        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
-            this.logger.debug("Notification handler paused");
-            this.notificationsHandlerService.pause();
-        });
+        this.notificationsHandlerService.setup();
     }
 
     @HostListener("loaded")
     onLoaded() {
+        this.checkEMAIFrameworkStatus();
         this.controlAppLoginStatus();
     }
 

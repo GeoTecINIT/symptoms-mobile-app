@@ -53,7 +53,7 @@ export class NotificationsHandlerService {
         this.logger = getLogger("NotificationsHandlerService");
     }
 
-    resume() {
+    setup() {
         this.setNotificationTapCallback((notification) =>
             this.handle(notification)
         );
@@ -70,13 +70,6 @@ export class NotificationsHandlerService {
             });
             this.savedNotification = undefined;
         }
-    }
-
-    pause() {
-        this.setNotificationTapCallback((notification) => {
-            this.logger.debug("Saving notification for later");
-            this.savedNotification = notification;
-        });
     }
 
     handle(notification: Notification): Promise<void> {
