@@ -1,24 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-
-import { NavigationService } from "~/app/views/navigation.service";
-
-import { ActivatedRoute } from "@angular/router";
+import { Component } from "@angular/core";
+import { NavigationService } from "../../../navigation.service";
+import { getLogger, Logger } from "~/app/core/utils/logger";
+import { awarns } from "@awarns/core";
 
 @Component({
-    selector: "SymNotificationsModal",
+    selector: "SymSimulationModal",
     templateUrl: "./simulation-modal.component.html",
     styleUrls: ["./simulation-modal.component.scss"],
 })
-export class SimulationModalComponent implements OnInit {
-    constructor(
-        private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute
-    ) {}
+export class SimulationModalComponent {
+    btnMargin = 4;
 
-    ngOnInit() {
-        this.navigationService.outletNavigation(
-            { simulationModal: ["simulation"] },
-            this.activeRoute
-        );
+    private logger: Logger;
+
+    constructor(private navigationService: NavigationService) {
+        this.logger = getLogger("SimulationModalComponent");
+    }
+
+    onCloseTap() {
+        this.navigationService.goBack();
+    }
+
+    emitAwarnsFrameworkEvent(eventName: string, data?: any) {
+        awarns.emitEvent(eventName, data);
     }
 }

@@ -4,8 +4,8 @@ import { SimulationRoutingModule } from "./simulation-routing.module";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
-import { SimulationActionsComponent } from "./simulation-actions/simulation-actions.component";
-import { SimulationSectionComponent } from "./simulation-actions/simulation-section/simulation-section.component";
+import { SimulationModalComponent } from "./simulation-modal.component";
+import { SimulationSectionComponent } from "./simulation-section/simulation-section.component";
 
 @NgModule({
     imports: [
@@ -13,7 +13,7 @@ import { SimulationSectionComponent } from "./simulation-actions/simulation-sect
         NativeScriptCommonModule,
         CommonComponentsModule,
     ],
-    declarations: [SimulationActionsComponent, SimulationSectionComponent],
+    declarations: [SimulationModalComponent, SimulationSectionComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class SimulationModule {}
