@@ -2,11 +2,11 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { SettingsContainerComponent } from "./settings-container/settings-container.component";
+import { SettingsModalComponent } from "./settings-modal.component";
 import { AdvancedSettingsContainerComponent } from "./advanced-settings-container/advanced-settings-container.component";
 
 const routes: Routes = [
-    { path: "", component: SettingsContainerComponent },
+    { path: "", component: SettingsModalComponent },
     { path: "advanced", component: AdvancedSettingsContainerComponent },
 ];
 
