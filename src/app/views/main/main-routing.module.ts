@@ -57,15 +57,6 @@ const routes: Routes = [
                     ),
                 outlet: "panicButtonModal",
             },
-            {
-                path: "simulation",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/simulation/simulation.module").then(
-                        (m) => m.SimulationModule
-                    ),
-                outlet: "simulationModal",
-            },
         ],
     },
     {
@@ -80,6 +71,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./modals/settings/settings.module").then(
                 (m) => m.SettingsModule
+            ),
+    },
+    {
+        path: "simulation",
+        loadChildren: () =>
+            import("./modals/simulation/simulation.module").then(
+                (m) => m.SimulationModule
             ),
     },
 ];
