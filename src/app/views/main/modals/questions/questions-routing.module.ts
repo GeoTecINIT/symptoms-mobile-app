@@ -2,9 +2,14 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
 
-import { QuestionsContainerComponent } from "./questions-container/questions-container.component";
+import {
+    INSTANCE_ID_KEY,
+    QuestionsModalComponent,
+} from "./questions-modal.component";
 
-const routes: Routes = [{ path: "", component: QuestionsContainerComponent }];
+const routes: Routes = [
+    { path: `:${INSTANCE_ID_KEY}`, component: QuestionsModalComponent },
+];
 
 @NgModule({
     imports: [NativeScriptRouterModule.forChild(routes)],

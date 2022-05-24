@@ -13,15 +13,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "questions",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/questions/questions.module").then(
-                        (m) => m.QuestionsModule
-                    ),
-                outlet: "questionsModal",
-            },
-            {
                 path: "feedback",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
@@ -60,6 +51,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./modals/confirm/confirm.module").then(
                 (m) => m.ConfirmModule
+            ),
+    },
+    {
+        path: "questions",
+        loadChildren: () =>
+            import("./modals/questions/questions.module").then(
+                (m) => m.QuestionsModule
             ),
     },
     {

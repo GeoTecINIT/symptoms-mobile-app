@@ -5,8 +5,8 @@ import { NativeScriptCommonModule } from "@nativescript/angular";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { CommonModalsModule } from "../common/common-modals.module";
 
-import { QuestionsContainerComponent } from "./questions-container/questions-container.component";
-import { QuestionStepComponent } from "./questions-container/question-step/question-step.component";
+import { QuestionsModalComponent } from "./questions-modal.component";
+import { QuestionStepComponent } from "./question-step/question-step.component";
 
 @NgModule({
     imports: [
@@ -15,7 +15,7 @@ import { QuestionStepComponent } from "./questions-container/question-step/quest
         CommonComponentsModule,
         CommonModalsModule,
     ],
-    declarations: [QuestionsContainerComponent, QuestionStepComponent],
+    declarations: [QuestionsModalComponent, QuestionStepComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class QuestionsModule {}
