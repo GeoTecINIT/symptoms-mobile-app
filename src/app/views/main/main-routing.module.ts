@@ -13,15 +13,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "feedback",
-                component: NSEmptyOutletComponent,
-                loadChildren: () =>
-                    import("./modals/feedback/feedback.module").then(
-                        (m) => m.FeedbackModule
-                    ),
-                outlet: "feedbackModal",
-            },
-            {
                 path: "panic-button",
                 component: NSEmptyOutletComponent,
                 loadChildren: () =>
@@ -58,6 +49,13 @@ const routes: Routes = [
         loadChildren: () =>
             import("./modals/questions/questions.module").then(
                 (m) => m.QuestionsModule
+            ),
+    },
+    {
+        path: "feedback",
+        loadChildren: () =>
+            import("./modals/feedback/feedback.module").then(
+                (m) => m.FeedbackModule
             ),
     },
     {
