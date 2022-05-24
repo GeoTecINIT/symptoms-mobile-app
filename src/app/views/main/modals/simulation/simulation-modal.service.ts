@@ -1,10 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { MainViewService } from "../../main-view.service";
-
-import { SimulationModalComponent } from "./simulation-modal.component";
-import { getLogger, Logger } from "~/app/core/utils/logger";
-import { NavigationService } from "../../../navigation.service";
+import { NavigationService } from "~/app/views/navigation.service";
 
 @Injectable({
     providedIn: "root",

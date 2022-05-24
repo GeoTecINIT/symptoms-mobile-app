@@ -1,11 +1,5 @@
-import {
-    Component,
-    HostListener,
-    OnInit,
-    ViewContainerRef,
-} from "@angular/core";
+import { Component, HostListener, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
 import { Application } from "@nativescript/core";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
@@ -73,12 +67,9 @@ export class MainComponent implements OnInit {
         private dialogsService: DialogsService,
         private notificationsHandlerService: NotificationsHandlerService,
         private notificationsReaderService: NotificationsReaderService,
-        private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute,
-        vcRef: ViewContainerRef
+        private navigationService: NavigationService
     ) {
         this.logger = getLogger("MainComponent");
-        mainViewService.setViewContainerRef(vcRef);
         mainViewService.onTabSelected((tab) =>
             this.updateNavigationBarTab(tab)
         );

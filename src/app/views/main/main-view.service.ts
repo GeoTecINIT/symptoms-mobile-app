@@ -1,5 +1,4 @@
-import { Injectable, ViewContainerRef, Type } from "@angular/core";
-import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular";
+import { Injectable } from "@angular/core";
 
 export enum NavigationTab {
     Progress,
@@ -22,16 +21,9 @@ export class MainViewService {
         return this._isBusy;
     }
 
-    private viewContainerRef: ViewContainerRef;
     private _selectedTab = NavigationTab.Progress;
     private _isBusy = false;
     private tabSelectionCallback: TabSelectionCallback;
-
-    constructor(private modalService: ModalDialogService) {}
-
-    setViewContainerRef(vcRef: ViewContainerRef) {
-        this.viewContainerRef = vcRef;
-    }
 
     setSelectedTab(tab: NavigationTab) {
         this._selectedTab = tab;
@@ -40,20 +32,6 @@ export class MainViewService {
 
     onTabSelected(cb: TabSelectionCallback) {
         this.tabSelectionCallback = cb;
-    }
-
-    showFullScreenAnimatedModal(
-        modalComponent: Type<any>,
-        params?: any
-    ): Promise<any> {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRef,
-            fullscreen: true,
-            animated: true,
-            context: params,
-        };
-
-        return this.modalService.showModal(modalComponent, options);
     }
 
     showActivityIndicator() {
