@@ -81,7 +81,7 @@ export class NotificationsHandlerService {
 
     handle(notification: Notification): Promise<void> {
         switch (notification.tapAction.type) {
-            case "ask-confirmation":
+            case TapActionType.ASK_CONFIRMATION:
                 return this.handleConfirmAction(notification);
             case TapActionType.ASK_FEEDBACK:
                 return this.handleFeedbackAction(notification);
@@ -124,6 +124,7 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (pretendsToStartExposure === undefined) return;
                 if (!pretendsToStartExposure) {
                     await this.showFeedbackModal(
                         askCannotExposeFeedback,
@@ -141,6 +142,7 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (wantsToStartExposure === undefined) return;
                 if (!wantsToStartExposure) {
                     await this.showFeedbackModal(
                         askWantsToLeaveFeedback,
@@ -158,6 +160,7 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (didNotLeaveAreaOnPurpose === undefined) return;
                 if (didNotLeaveAreaOnPurpose) {
                     emitPatientDidNotLeaveExposureAreaOnPurposeEvent();
                 } else {
