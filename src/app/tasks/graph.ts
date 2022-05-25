@@ -267,15 +267,15 @@ class DemoTaskGraph implements TaskGraph {
             "patientCouldGetSomeReward",
             run("sendRandomNotification", {
                 options: [
-                    { title: "Lo estás haciendo muy bien" },
-                    { title: "Estás tolerando muy bien el malestar" },
+                    { title: "¡Lo estás haciendo genial! 💪" },
+                    { title: "Estás tolerando el malestar 🙂" },
                 ],
             })
         );
         on(
             "patientCouldGetABooster",
             run("sendNotification", {
-                title: "Lo estás haciendo muy bien",
+                title: "Lo estás haciendo muy bien 🙂",
             })
         );
         // -> Leaving exposure area
