@@ -3,6 +3,8 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
+import { MainViewService } from "~/app/views/main/main-view.service";
+
 import { Record, Change } from "@awarns/core/entities";
 import { recordsStore } from "@awarns/persistence";
 import { AppRecordType } from "~/app/core/app-record-type";
@@ -27,12 +29,11 @@ export class IdleProgressComponent {
     summaryData: Record;
     hasSummaryData = false;
 
-    generatingData = false;
-
     private unloaded$ = new Subject<void>();
     private readonly generateData: DataGenerator;
 
     constructor(
+        private mainViewService: MainViewService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
@@ -59,12 +60,15 @@ export class IdleProgressComponent {
         if (exposureChange) {
             awarns.emitEvent("exposureFinished", exposureChange);
         }
-        this.generatingData = true;
-        setTimeout(() => (this.generatingData = false), GENERATE_DATA_TIMEOUT);
+        this.mainViewService.showActivityIndicator();
+        setTimeout(
+            () => this.mainViewService.hideActivityIndicator(),
+            GENERATE_DATA_TIMEOUT
+        );
     }
 
     onSeeAggregatesTap() {
-        this.navigate("../aggregate-list");
+        this.navigate("/main/progress-detail/aggregate-list");
     }
 
     private subscribeToLatestData() {
@@ -95,6 +99,6 @@ export class IdleProgressComponent {
     }
 
     private navigate(route: string) {
-        this.navigationService.navigate([route], this.activeRoute);
+        this.navigationService.navigate([route], undefined);
     }
 }

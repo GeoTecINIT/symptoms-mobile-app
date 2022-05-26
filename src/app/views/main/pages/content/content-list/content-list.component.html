@@ -1,4 +1,4 @@
-<ListView [items]="contents" (itemTap)="onListItemTap($event)">
+<ListView [items]="contents" (itemTap)="onListItemTap($event)" height="100%">
     <ng-template let-item="item">
         <SymContentListItem [content]="item"></SymContentListItem>
     </ng-template>

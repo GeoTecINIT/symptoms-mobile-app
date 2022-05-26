@@ -1,16 +1,18 @@
+<SymMainActionBar [title]="actionBarTitle"></SymMainActionBar>
+
 <GridLayout rows="*, auto">
     <GridLayout row="0">
         <StackLayout [visibility]="selectedTab === NavigationTab.Progress ? 'visible' : 'collapsed'">
-            <router-outlet name="progressTab"></router-outlet>
+            <SymProgressContainer></SymProgressContainer>
         </StackLayout>
         <StackLayout [visibility]="selectedTab === NavigationTab.Places ? 'visible' : 'collapsed'">
-            <router-outlet name="placesTab"></router-outlet>
+            <SymPlacesContainer></SymPlacesContainer>
         </StackLayout>
         <StackLayout [visibility]="selectedTab === NavigationTab.Content ? 'visible' : 'collapsed'">
-            <router-outlet name="contentTab"></router-outlet>
+            <SymContentContainer></SymContentContainer>
         </StackLayout>
         <StackLayout [visibility]="selectedTab === NavigationTab.Notifications ? 'visible' : 'collapsed'">
-            <router-outlet name="notificationsTab"></router-outlet>
+            <SymNotificationsList></SymNotificationsList>
         </StackLayout>
     </GridLayout>
     <BottomNavigationBar
@@ -24,3 +26,4 @@
         <BottomNavigationTab title="Notificaciones" icon="res://round_notifications_black_24"></BottomNavigationTab>
     </BottomNavigationBar>
 </GridLayout>
+<SymActivityIndicator *ngIf="isBusy"></SymActivityIndicator>

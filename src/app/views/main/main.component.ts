@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { Application, Page } from "@nativescript/core";
+import { Application } from "@nativescript/core";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
@@ -43,6 +43,23 @@ export class MainComponent implements OnInit {
         return this.mainViewService.selectedTab;
     }
 
+    get actionBarTitle(): string {
+        switch (this.selectedTab) {
+            case NavigationTab.Progress:
+                return "Tu progreso";
+            case NavigationTab.Places:
+                return "Tus lugares";
+            case NavigationTab.Content:
+                return "Contenido";
+            case NavigationTab.Notifications:
+                return "Notificaciones";
+        }
+    }
+
+    get isBusy(): boolean {
+        return this.mainViewService.isBusy;
+    }
+
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
@@ -58,11 +75,9 @@ export class MainComponent implements OnInit {
         private notificationsReaderService: NotificationsReaderService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
-        page: Page,
         vcRef: ViewContainerRef
     ) {
         this.logger = getLogger("MainComponent");
-        page.actionBarHidden = true;
         mainViewService.setViewContainerRef(vcRef);
         mainViewService.onTabSelected((tab) =>
             this.updateNavigationBarTab(tab)
@@ -70,7 +85,6 @@ export class MainComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadTabOutlets();
         this.checkEMAIFrameworkStatus();
 
         appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
@@ -110,22 +124,6 @@ export class MainComponent implements OnInit {
     private updateNavigationBarTab(tab: NavigationTab) {
         if (!this.navigationBar) return;
         this.navigationBar.selectTab(tab);
-    }
-
-    private loadTabOutlets() {
-        // FIXME: This moves outlet navigation outside the component rendering lifecycle,
-        //  to be improved by completely getting rid of named outlets
-        setTimeout(() =>
-            this.navigationService.outletNavigation(
-                {
-                    progressTab: ["progress"],
-                    placesTab: ["places"],
-                    contentTab: ["content"],
-                    notificationsTab: ["notifications"],
-                },
-                this.activeRoute
-            )
-        );
     }
 
     private controlAppLoginStatus() {
