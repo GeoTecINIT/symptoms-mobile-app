@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "@nativescript/angular";
-import { ContentDeliveryComponent } from "./pages/content-delivery/content-delivery.component";
-import { MakeContactComponent } from "./pages/make-contact/make-contact.component";
+import { PanicButtonModalComponent } from "./panic-button-modal.component";
+import { MakeContactComponent } from "./make-contact/make-contact.component";
 
 const routes: Routes = [
-    { path: "", component: ContentDeliveryComponent },
+    { path: "", component: PanicButtonModalComponent },
     { path: "make-contact", component: MakeContactComponent },
 ];
 

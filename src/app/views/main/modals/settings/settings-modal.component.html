@@ -1,1 +1,18 @@
-<page-router-outlet name="settingsModal"></page-router-outlet>
+<SymCloseActionBar title="Ajustes" (close)="onClose()"></SymCloseActionBar>
+
+<StackLayout>
+    <SymSettingsSection title="Cuenta">
+        <SymDataSharingOption></SymDataSharingOption>
+        <SymReportUsageOption></SymReportUsageOption>
+    </SymSettingsSection>
+    <SymSettingsSection title="Dispositivo">
+        <Button text="Desvincular" class="bg-danger" (tap)="onUnlinkTap()"></Button>
+    </SymSettingsSection>
+    <SymSettingsSection title="Datos">
+        <Button text="Exportar datos recopilados" class="bg-primary" (tap)="onExportTap()"></Button>
+    </SymSettingsSection>
+    <SymSettingsSection title="Información sobre la aplicación" [withSeparator]="false">
+        <Label horizontalAlignment="center" class="version" text="SyMptOMS Mobile App v{{version}}" (tap)="onVersionTap()"></Label>
+    </SymSettingsSection>
+</StackLayout>
+

@@ -1,1 +1,20 @@
-<page-router-outlet name="simulationModal"></page-router-outlet>
+<SymCloseActionBar title="Simulación" (close)="onCloseTap()"></SymCloseActionBar>
+
+<ScrollView>
+    <StackLayout class="page">
+        <StackLayout class="flat-card">
+            <Label class="card-header" textWrap="true" textAlignment="center" text="Acciones de apoyo al desarollo"></Label>
+            <Label textWrap="true" textAlignment="center" text="Estas acciones simulan eventos reales lanzados por el hardware del dispositivo."></Label>
+        </StackLayout>
+        <SymSimulationSection title="Actividad humana">
+            <SymPrimaryButton [margin]="btnMargin" text="Simular movimiento" (tap)="emitAwarnsFrameworkEvent('userFinishedBeingStill')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Simular reposo" (tap)="emitAwarnsFrameworkEvent('userStartedBeingStill')"></SymPrimaryButton>
+        </SymSimulationSection>
+        <SymSimulationSection title="Geofencing">
+            <SymPrimaryButton [margin]="btnMargin" text="Acercarse al área" (tap)="emitAwarnsFrameworkEvent('movedCloseToAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Entrar en el área" (tap)="emitAwarnsFrameworkEvent('movedInsideAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Salir del área" (tap)="emitAwarnsFrameworkEvent('movedOutsideAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Alejarse del área" (tap)="emitAwarnsFrameworkEvent('movedAwayFromAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
+        </SymSimulationSection>
+    </StackLayout>
+</ScrollView>

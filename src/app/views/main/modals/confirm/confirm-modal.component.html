@@ -1,1 +1,24 @@
-<page-router-outlet name="confirmModal"></page-router-outlet>
+<SymBasicActionBar [title]="options.title"></SymBasicActionBar>
+
+<SymModalBody
+        [emoji]="options.body.emoji"
+        [iconCode]="options.body.iconCode"
+        [bodyText]="options.body.text">
+    <Label
+            textWrap="true"
+            marginBottom="18"
+            [text]="options.question">
+    </Label>
+    <SymPrimaryButton
+            size="lg"
+            horizontalAlignment="center"
+            [text]="options.buttons.confirm"
+            (tap)="onConfirmTap()">
+    </SymPrimaryButton>
+    <SymButtonLink
+            margin="0"
+            horizontalAlignment="center"
+            [text]="options.buttons.cancel"
+            (tap)="onCancelTap()">
+    </SymButtonLink>
+</SymModalBody>

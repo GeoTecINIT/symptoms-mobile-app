@@ -52,6 +52,6 @@ export class AggregateListComponent {
     private navigate(route: string, param?: any) {
         const url = [route];
         if (param !== undefined && param !== null) url.push(param);
-        this.navigationService.navigate(url, this.activeRoute);
+        this.navigationService.navigate(url, { source: this.activeRoute });
     }
 }

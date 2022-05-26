@@ -53,7 +53,7 @@ export class NotificationsHandlerService {
         this.logger = getLogger("NotificationsHandlerService");
     }
 
-    resume() {
+    setup() {
         this.setNotificationTapCallback((notification) =>
             this.handle(notification)
         );
@@ -72,16 +72,9 @@ export class NotificationsHandlerService {
         }
     }
 
-    pause() {
-        this.setNotificationTapCallback((notification) => {
-            this.logger.debug("Saving notification for later");
-            this.savedNotification = notification;
-        });
-    }
-
     handle(notification: Notification): Promise<void> {
         switch (notification.tapAction.type) {
-            case "ask-confirmation":
+            case TapActionType.ASK_CONFIRMATION:
                 return this.handleConfirmAction(notification);
             case TapActionType.ASK_FEEDBACK:
                 return this.handleFeedbackAction(notification);
@@ -124,7 +117,9 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (pretendsToStartExposure === undefined) return;
                 if (!pretendsToStartExposure) {
+                    await pause();
                     await this.showFeedbackModal(
                         askCannotExposeFeedback,
                         notification
@@ -141,7 +136,9 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (wantsToStartExposure === undefined) return;
                 if (!wantsToStartExposure) {
+                    await pause();
                     await this.showFeedbackModal(
                         askWantsToLeaveFeedback,
                         notification
@@ -158,6 +155,7 @@ export class NotificationsHandlerService {
                     ).embed(metadata),
                     notification
                 );
+                if (didNotLeaveAreaOnPurpose === undefined) return;
                 if (didNotLeaveAreaOnPurpose) {
                     emitPatientDidNotLeaveExposureAreaOnPurposeEvent();
                 } else {
@@ -295,4 +293,9 @@ export class NotificationsHandlerService {
             );
         }
     }
+}
+
+const PAUSE_TIME = 500;
+function pause(): Promise<void> {
+    return new Promise<void>((resolve) => setTimeout(resolve, PAUSE_TIME));
 }
