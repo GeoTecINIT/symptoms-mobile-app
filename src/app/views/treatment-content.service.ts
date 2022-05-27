@@ -238,7 +238,7 @@ Eso sí, debes exponerte de manera repetida, una y otra vez hasta poder avanzar 
     },
     {
         id: "cg09",
-        index: 3,
+        index: 9,
         type: TreatmentContentType.Guidelines,
         title: "¿Por qué no deberías irte ahora?",
         body: `Te animamos a continuar y seguir practicando un poco más, para trabajar la tolerancia al malestar, hasta que tus niveles de ansiedad se reduzcan.
