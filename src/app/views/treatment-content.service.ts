@@ -241,7 +241,7 @@ Eso sí, debes exponerte de manera repetida, una y otra vez hasta poder avanzar 
         index: 3,
         type: TreatmentContentType.Guidelines,
         title: "¿Por qué no deberías irte ahora?",
-        body: `Te animamos a continuar y seguir practicando un poco más, para trabajar la tolerancia al malestar, hasta que tus niveles de ansiedad sean moderados.
+        body: `Te animamos a continuar y seguir practicando un poco más, para trabajar la tolerancia al malestar, hasta que tus niveles de ansiedad se reduzcan.
 
 Evitar en este momento y marcharte, hará que la ansiedad sea mayor cuando vuelvas a intentarlo, como te ha ocurrido en otras ocasiones.
 
