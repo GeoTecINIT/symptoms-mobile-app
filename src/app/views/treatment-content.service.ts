@@ -76,10 +76,8 @@ export class TreatmentContentService {
     }
 
     private propagateUpdates() {
-        this.getAll(
-            TreatmentContentType.Psychoeducation
-        ).then((latestContents) =>
-            this.psychoeducationUpdates.next(latestContents)
+        this.getAll(TreatmentContentType.Psychoeducation).then(
+            (latestContents) => this.psychoeducationUpdates.next(latestContents)
         );
         this.getAll(TreatmentContentType.Guidelines).then((latestContents) =>
             this.guidelinesUpdates.next(latestContents)
@@ -237,6 +235,25 @@ Te animamos  a permanecer algo más de tiempo en este lugar para poder trabajar 
 La clave para tu mejoría es aumentar todo lo posible tu tolerancia al malestar y eso solo es posible si practicas las habilidades de regulación emocional que has entrenado en terapia en las situaciones que te generan malestar.
 
 Eso sí, debes exponerte de manera repetida, una y otra vez hasta poder avanzar en tu jerarquía. Te animamos a repetir esta exposición en otro momento.`,
+    },
+    {
+        id: "cg09",
+        index: 9,
+        type: TreatmentContentType.Guidelines,
+        title: "¿Por qué no deberías irte ahora?",
+        body: `Te animamos a continuar y seguir practicando un poco más, para trabajar la tolerancia al malestar, hasta que tus niveles de ansiedad se reduzcan.
+
+Evitar en este momento y marcharte, hará que la ansiedad sea mayor cuando vuelvas a intentarlo, como te ha ocurrido en otras ocasiones.
+
+Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
+
+        -  Centra tu atención en lo que está sucediendo ahora, no en lo que puede llegar a suceder.
+
+        -  No intentes protegerte de la ansiedad o rechazarla, es solo una emoción más que puedes llegar a tolerar.
+
+        -  Afrontar esta ansiedad (en lugar de evitarla) hará que aumentes tu tolerancia al malestar y, como consecuencia, te resultará más fácil conseguir tus objetivos.
+
+        -  Si identificas pensamientos negativos, intenta generar pensamientos alternativos más realistas o probables.`,
     },
     {
         id: "cp01",
