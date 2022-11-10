@@ -1,1 +1,2 @@
 project.ext.googlePlayServicesVersion = "17.+"
+project.ext.androidXBrowser = "1.4.+"
