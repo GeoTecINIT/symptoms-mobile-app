@@ -1,41 +1,57 @@
-import { emaiFramework } from "@geotecinit/emai-framework";
-import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
-import { PatientFeedback } from "~/app/core/modals/feedback";
+import { awarns } from "@awarns/core";
+import {
+    QuestionnaireAnswers,
+    UserConfirmation,
+    UserFeedback,
+    UserReadContent,
+} from "@awarns/notifications";
 
 export function emitTreatmentStartEvent() {
-    emaiFramework.emitEvent("startEvent");
+    awarns.emitEvent("startEvent");
 }
 
 export function emitTreatmentStopEvent() {
-    emaiFramework.emitEvent("stopEvent");
+    awarns.emitEvent("stopEvent");
 }
 
 export function emitPreExposureStartConfirmedEvent(data: any) {
-    emaiFramework.emitEvent("preExposureStartConfirmed", data);
+    awarns.emitEvent("preExposureStartConfirmed", data);
 }
 
 export function emitExposureStartConfirmedEvent(data: any) {
-    emaiFramework.emitEvent("exposureStartConfirmed", data);
+    awarns.emitEvent("exposureStartConfirmed", data);
 }
 
 export function emitPatientDidNotLeaveExposureAreaOnPurposeEvent() {
-    emaiFramework.emitEvent("patientDidNotLeaveExposureAreaOnPurpose");
+    awarns.emitEvent("patientDidNotLeaveExposureAreaOnPurpose");
 }
 
 export function emitPatientLeftExposureAreaOnPurposeEvent() {
-    emaiFramework.emitEvent("patientLeftExposureAreaOnPurpose");
+    awarns.emitEvent("patientLeftExposureAreaOnPurpose");
 }
 
 export function emitQuestionnaireAnswersAcquiredEvent(
     answers: QuestionnaireAnswers
 ) {
-    emaiFramework.emitEvent("questionnaireAnswersAcquired", answers);
+    awarns.emitEvent("questionnaireAnswersAcquired", answers);
 }
 
-export function emitPatientFeedbackAcquiredEvent(feedback: PatientFeedback) {
-    emaiFramework.emitEvent("patientFeedbackAcquired", feedback);
+export function emitPatientFeedbackAcquiredEvent(feedback: UserFeedback) {
+    awarns.emitEvent("patientFeedbackAcquired", feedback);
+}
+
+export function emitPatientConfirmationAcquiredEvent(
+    confirmation: UserConfirmation
+) {
+    awarns.emitEvent("patientConfirmationAcquired", confirmation);
+}
+
+export function emitPatientReadContentAcquiredEvent(
+    contentRead: UserReadContent
+) {
+    awarns.emitEvent("patientReadContentAcquired", contentRead);
 }
 
 export function emitExposureManuallyFinishedEvent() {
-    emaiFramework.emitEvent("exposureManuallyFinished");
+    awarns.emitEvent("exposureManuallyFinished");
 }

@@ -1,4 +1,4 @@
-<ScrollView>
+<ScrollView height="100%">
     <StackLayout>
         <Button *ngIf="development" marginTop="0" marginLeft="0" marginRight="0" text="Generar datos" (tap)="onGenerateDataTap()"></Button>
         <SymProgressSection title="Última exposición">
@@ -17,4 +17,3 @@
         </SymProgressSection>
     </StackLayout>
 </ScrollView>
-<SymActivityIndicator *ngIf="generatingData"></SymActivityIndicator>

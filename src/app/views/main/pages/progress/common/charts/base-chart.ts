@@ -62,7 +62,7 @@ export abstract class BaseChart<
 
     private xAxisFormatter?: AxisValueFormatter;
     private textFont = Font.default.withFontSize(TEXT_FONT_SIZE);
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     constructor() {
         this.colorScheme = COLOR_SCHEME.map((color) => {

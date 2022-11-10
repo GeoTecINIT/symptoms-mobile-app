@@ -4,16 +4,12 @@ import {
     UploadTelemetryRequest,
 } from "@symptoms/api-client/uploads";
 import { GRPCServiceOptions } from "~/app/core/server/common";
-import { Change, Record } from "@geotecinit/emai-framework/entities";
-import {
-    Trace,
-    TraceType,
-    TraceResult,
-} from "@geotecinit/emai-framework/storage/traces";
+import { Change, Record } from "@awarns/core/entities";
+import { Trace, TraceType, TraceResult } from "@awarns/tracing";
 import { Record as PBRecord, RecordSource } from "@symptoms/api-client/records";
 import { Trace as PBTrace } from "@symptoms/api-client/traces";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
-import { jsonDateReplacer } from "@geotecinit/emai-framework/internal/utils/date";
+import { jsonDateReplacer } from "@awarns/core/utils/date";
 
 export type ApiRecord = Record & UploadMetadata;
 export type ApiTrace = Trace & UploadMetadata;
@@ -64,13 +60,8 @@ export class UploadsApiAdapter {
 
 function pbRecordsFrom(records: Array<ApiRecord>): Array<PBRecord> {
     return records.map((record) => {
-        const {
-            timestamp,
-            type,
-            change,
-            deviceId,
-            ...extraProperties
-        } = record;
+        const { timestamp, type, change, deviceId, ...extraProperties } =
+            record;
 
         const pbRecord = new PBRecord();
         pbRecord.setType(type);
@@ -99,15 +90,8 @@ function pbRecordChangeFrom(change: Change): PBRecord.Change {
 
 function pbTracesFrom(traces: Array<ApiTrace>): Array<PBTrace> {
     return traces.map((trace) => {
-        const {
-            deviceId,
-            timestamp,
-            chainId,
-            name,
-            type,
-            result,
-            content,
-        } = trace;
+        const { deviceId, timestamp, chainId, name, type, result, content } =
+            trace;
 
         const apiTrace = new PBTrace();
         apiTrace.setDeviceId(deviceId);

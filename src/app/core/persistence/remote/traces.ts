@@ -1,4 +1,4 @@
-import { Trace, TracesStore } from "@geotecinit/emai-framework/storage/traces";
+import { Trace, TracesStore } from "@awarns/tracing";
 import { Observable } from "rxjs";
 import { account, Account } from "~/app/core/account";
 import { serverApi, ServerApiClient } from "~/app/core/server";
@@ -23,11 +23,14 @@ class RemoteTracesStore implements TracesStore {
         ]);
     }
 
-    getAll(reverseOrder?: boolean, limitSize?: number): Promise<Array<Trace>> {
+    getAll(
+        _reverseOrder?: boolean,
+        _limitSize?: number
+    ): Promise<Array<Trace>> {
         throw new Error("Unimplemented");
     }
 
-    list(size?: number): Observable<Array<Trace>> {
+    list(_size?: number): Observable<Array<Trace>> {
         throw new Error("Unimplemented");
     }
 

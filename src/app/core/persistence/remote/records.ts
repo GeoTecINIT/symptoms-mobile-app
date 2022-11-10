@@ -1,5 +1,9 @@
-import { RecordsStore } from "@geotecinit/emai-framework/storage/records";
-import { Record } from "@geotecinit/emai-framework/entities";
+import {
+    RecordsStore,
+    ResultsOrder,
+    FetchCondition,
+} from "@awarns/persistence";
+import { Record } from "@awarns/core/entities";
 import { Observable } from "rxjs";
 import { serverApi, ServerApiClient } from "~/app/core/server";
 import { account, Account } from "~/app/core/account";
@@ -21,11 +25,37 @@ class RemoteRecordsStore implements RecordsStore {
         ]);
     }
 
-    getAll(reverseOrder?: boolean, limitSize?: number): Promise<Array<Record>> {
+    getAll(
+        _reverseOrder?: boolean,
+        _limitSize?: number
+    ): Promise<Array<Record>> {
         throw new Error("Unimplemented");
     }
 
-    list(size?: number): Observable<Array<Record>> {
+    list(_size?: number): Observable<Array<Record>> {
+        throw new Error("Unimplemented");
+    }
+
+    listBy(
+        recordType: string,
+        order?: ResultsOrder,
+        conditions?: Array<FetchCondition>
+    ): Observable<Array<Record>> {
+        return undefined;
+    }
+
+    listLast(
+        recordType: string,
+        conditions?: Array<FetchCondition>
+    ): Observable<Record> {
+        throw new Error("Unimplemented");
+    }
+
+    listLastGroupedBy(
+        recordType: string,
+        groupByProperty: string,
+        conditions?: Array<FetchCondition>
+    ): Observable<Array<Record>> {
         throw new Error("Unimplemented");
     }
 

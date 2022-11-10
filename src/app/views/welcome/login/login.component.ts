@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { InAppBrowserService } from "~/app/views/common/in-app-browser.service";
-import { AuthService } from "~/app/views/auth.service.ts";
+import { AuthService } from "~/app/views/auth.service";
 import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 
@@ -36,11 +36,10 @@ export class LoginComponent {
 
         this.authService.login(this.code).then((success) => {
             if (success) {
-                this.navigationService.navigate(
-                    ["../tutorial"],
-                    this.activeRoute,
-                    true
-                );
+                this.navigationService.navigate(["../tutorial"], {
+                    source: this.activeRoute,
+                    clearHistory: true,
+                });
             } else {
                 this.waitingForResponse = false;
                 this.authFailed = true;

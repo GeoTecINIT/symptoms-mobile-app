@@ -5,7 +5,7 @@ import { ApplicationSettings } from "@nativescript/core";
 import { FirebaseManagerService } from "~/app/core/utils/firebase";
 import { AuthService } from "./auth.service";
 import { emitTreatmentStopEvent } from "~/app/core/framework/events";
-import { clearEMAIDB } from "@geotecinit/emai-framework/storage";
+import { clearAwarnsDB } from "@awarns/persistence";
 import { exportData } from "~/app/core/framework/data-exporter";
 import { getVersionName } from "~/app/core/utils/app-info";
 import { AccountService } from "~/app/core/account";
@@ -63,7 +63,7 @@ export class AppSettingsService {
         await this.authService.logout();
         ApplicationSettings.clear();
         this.accountService.reset();
-        await clearEMAIDB();
+        await clearAwarnsDB();
     }
 
     exportData(): Promise<string> {

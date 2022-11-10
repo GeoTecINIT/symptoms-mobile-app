@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { ChartDescription } from "~/app/core/charts/chart-description";
 import { transformIntoChartDescription } from "~/app/core/charts/data-transformer";
 

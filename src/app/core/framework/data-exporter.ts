@@ -1,8 +1,6 @@
 import { Folder, knownFolders, path } from "@nativescript/core";
-import {
-    createRecordsExporter,
-    createTracesExporter,
-} from "@geotecinit/emai-framework/storage/exporters";
+import { createRecordsExporter } from "@awarns/persistence";
+import { createTracesExporter } from "@awarns/tracing";
 import { ShareFile } from "@nativescript-community/ui-share-file";
 import { Zip } from "@nativescript/zip";
 import { getDeviceInfo } from "~/app/core/utils/app-info";

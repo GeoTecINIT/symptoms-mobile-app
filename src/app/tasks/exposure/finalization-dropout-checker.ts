@@ -1,22 +1,22 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { ExposureChange } from "~/app/tasks/exposure";
 
 const EXPOSURE_DROPPED_OUT = "exposureWasDroppedOut";
 const EXPOSURE_NOT_DROPPED_OUT = "exposureWasNotDroppedOut";
 
-export class ExposureFinalizationDropoutChecker extends TraceableTask {
+export class ExposureFinalizationDropoutChecker extends Task {
     constructor() {
         super("checkIfExposureWasDroppedOut", {
             outputEventNames: [EXPOSURE_DROPPED_OUT, EXPOSURE_NOT_DROPPED_OUT],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

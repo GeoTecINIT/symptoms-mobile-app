@@ -1,27 +1,27 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
-import { patientData, PatientData } from "~/app/core/framework/patient-data";
+} from "@awarns/core/tasks";
+import { recordsStore, RecordsStore } from "@awarns/persistence";
 import { ExposureChange } from "~/app/tasks/exposure";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import {
     ExposureAggregate,
     ExposureAggregatePoint,
 } from "~/app/tasks/visualizations/exposure-aggregate";
-import { take } from "rxjs/operators";
+import { firstValueFrom } from "rxjs";
 import { calculateEmotionValuesAvg } from "~/app/tasks/visualizations/common";
 
-export class CalculateExposureAggregate extends TraceableTask {
-    constructor(private store: PatientData = patientData) {
+export class CalculateExposureAggregate extends Task {
+    constructor(private store: RecordsStore = recordsStore) {
         super("calculateExposureAggregate", {
             outputEventNames: ["exposureAggregateCalculated"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
@@ -40,12 +40,9 @@ export class CalculateExposureAggregate extends TraceableTask {
             emotionValues: [newEmotionValue],
         };
 
-        const prevAggregate = await this.store
-            .observeLastByRecordType<ExposureAggregate>(
-                RecordType.ExposureAggregate
-            )
-            .pipe(take(1))
-            .toPromise();
+        const prevAggregate = (await firstValueFrom(
+            this.store.listLast(AppRecordType.ExposureAggregate)
+        )) as ExposureAggregate;
 
         const samePlace = (placeAggregate) => placeAggregate.placeId === id;
 

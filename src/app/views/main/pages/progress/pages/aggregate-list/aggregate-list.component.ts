@@ -1,11 +1,11 @@
 import { Component, HostListener, NgZone } from "@angular/core";
-import { PatientDataService } from "~/app/views/patient-data.service";
 import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
-import { Record } from "@geotecinit/emai-framework/entities";
-import { RecordType } from "~/app/core/record-type";
+import { Record } from "@awarns/core/entities";
+import { recordsStore } from "@awarns/persistence";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -16,10 +16,9 @@ import { takeUntil } from "rxjs/operators";
 export class AggregateListComponent {
     aggregates: Array<Record>;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     constructor(
-        private patientDataService: PatientDataService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
@@ -36,11 +35,8 @@ export class AggregateListComponent {
     }
 
     private subscribeToAggregateChanges() {
-        this.patientDataService
-            .observeLatestGroupedRecordsByType(
-                RecordType.ExposurePlaceAggregate,
-                "placeId"
-            )
+        recordsStore
+            .listLastGroupedBy(AppRecordType.ExposurePlaceAggregate, "placeId")
             .pipe(takeUntil(this.unloaded$))
             .subscribe((aggregates) => {
                 this.ngZone.run(() => {
@@ -56,6 +52,6 @@ export class AggregateListComponent {
     private navigate(route: string, param?: any) {
         const url = [route];
         if (param !== undefined && param !== null) url.push(param);
-        this.navigationService.navigate(url, this.activeRoute);
+        this.navigationService.navigate(url, { source: this.activeRoute });
     }
 }

@@ -1,13 +1,14 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
-import { PatientDataService } from "~/app/views/patient-data.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
-import { Record } from "@geotecinit/emai-framework/entities";
-import { RecordType } from "~/app/core/record-type";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
-import { emaiFramework } from "@geotecinit/emai-framework";
+import { MainViewService } from "~/app/views/main/main-view.service";
+
+import { Record, Change } from "@awarns/core/entities";
+import { recordsStore } from "@awarns/persistence";
+import { AppRecordType } from "~/app/core/app-record-type";
+import { awarns } from "@awarns/core";
 import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
 import { takeUntil } from "rxjs/operators";
@@ -28,13 +29,11 @@ export class IdleProgressComponent {
     summaryData: Record;
     hasSummaryData = false;
 
-    generatingData = false;
-
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
     private readonly generateData: DataGenerator;
 
     constructor(
-        private patientDataService: PatientDataService,
+        private mainViewService: MainViewService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private ngZone: NgZone
@@ -59,19 +58,22 @@ export class IdleProgressComponent {
     onGenerateDataTap() {
         const exposureChange = this.generateData();
         if (exposureChange) {
-            emaiFramework.emitEvent("exposureFinished", exposureChange);
+            awarns.emitEvent("exposureFinished", exposureChange);
         }
-        this.generatingData = true;
-        setTimeout(() => (this.generatingData = false), GENERATE_DATA_TIMEOUT);
+        this.mainViewService.showActivityIndicator();
+        setTimeout(
+            () => this.mainViewService.hideActivityIndicator(),
+            GENERATE_DATA_TIMEOUT
+        );
     }
 
     onSeeAggregatesTap() {
-        this.navigate("../aggregate-list");
+        this.navigate("/main/progress-detail/aggregate-list");
     }
 
     private subscribeToLatestData() {
-        this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureChange, [
+        recordsStore
+            .listLast(AppRecordType.ExposureChange, [
                 { property: "change", comparison: "=", value: Change.END },
                 { property: "successful", comparison: "=", value: true },
             ])
@@ -85,8 +87,8 @@ export class IdleProgressComponent {
     }
 
     private subscribeToSummaryData() {
-        this.patientDataService
-            .observeLastByRecordType(RecordType.ExposureAggregate)
+        recordsStore
+            .listLast(AppRecordType.ExposureAggregate)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((summary) => {
                 this.ngZone.run(() => {
@@ -97,6 +99,6 @@ export class IdleProgressComponent {
     }
 
     private navigate(route: string) {
-        this.navigationService.navigate([route], this.activeRoute);
+        this.navigationService.navigate([route]);
     }
 }

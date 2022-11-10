@@ -1,24 +1,25 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
-import { QuestionnaireAnswers } from "@geotecinit/emai-framework/entities/answers";
+import { QuestionnaireAnswers } from "@awarns/notifications";
 
-export class ProcessExposureAnswers extends TraceableTask {
+export class ProcessExposureAnswers extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("processExposureAnswers", {
             outputEventNames: ["exposureAnswersProcessed"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
-        const questionnaireAnswers = invocationEvent.data as QuestionnaireAnswers;
+        const questionnaireAnswers =
+            invocationEvent.data as QuestionnaireAnswers;
         const ongoingExposure = await this.store.getLastUnfinished();
         if (!ongoingExposure) {
             throw new Error("There is no exposure ongoing!");

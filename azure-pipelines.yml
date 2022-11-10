@@ -52,4 +52,4 @@ steps:
   condition: succeededOrFailed()
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: 'test-reports/**/report.xml'
+    testResultsFiles: 'src/test-reports/**/report.xml'

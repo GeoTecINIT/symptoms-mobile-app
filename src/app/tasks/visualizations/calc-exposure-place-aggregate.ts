@@ -1,25 +1,25 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
-import { patientData, PatientData } from "~/app/core/framework/patient-data";
+} from "@awarns/core/tasks";
+import { recordsStore, RecordsStore } from "@awarns/persistence";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { EmotionValue } from "~/app/core/persistence/exposures";
 import { calculateEmotionValuesAvg } from "~/app/tasks/visualizations/common";
 import { ExposurePlaceAggregate } from "~/app/tasks/visualizations/exposure-place-aggregate";
-import { RecordType } from "~/app/core/record-type";
-import { take } from "rxjs/operators";
+import { AppRecordType } from "~/app/core/app-record-type";
+import { firstValueFrom } from "rxjs";
 
-export class CalculateExposurePlaceAggregate extends TraceableTask {
-    constructor(private store: PatientData = patientData) {
+export class CalculateExposurePlaceAggregate extends Task {
+    constructor(private store: RecordsStore = recordsStore) {
         super("calculateExposurePlaceAggregate", {
             outputEventNames: ["exposurePlaceAggregateCalculated"],
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
@@ -33,13 +33,11 @@ export class CalculateExposurePlaceAggregate extends TraceableTask {
             value: calculateEmotionValuesAvg(emotionValues),
         };
 
-        const prevAggregate = await this.store
-            .observeLastByRecordType<ExposurePlaceAggregate>(
-                RecordType.ExposurePlaceAggregate,
-                [{ property: "placeId", comparison: "=", value: id }]
-            )
-            .pipe(take(1))
-            .toPromise();
+        const prevAggregate = (await firstValueFrom(
+            this.store.listLast(AppRecordType.ExposurePlaceAggregate, [
+                { property: "placeId", comparison: "=", value: id },
+            ])
+        )) as ExposurePlaceAggregate;
 
         const updatedEmotionValues = prevAggregate
             ? [...prevAggregate.emotionValues, newEntry]
@@ -51,13 +49,6 @@ export class CalculateExposurePlaceAggregate extends TraceableTask {
             updatedEmotionValues
         );
 
-        // FIXME: Temporal workaround for multiple concurrent record writes
-        await returnIn(1000);
-
         return { result: aggregate };
     }
-}
-
-function returnIn(ms: number): Promise<void> {
-    return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }

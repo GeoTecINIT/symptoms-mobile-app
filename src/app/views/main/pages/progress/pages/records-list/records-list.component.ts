@@ -1,17 +1,12 @@
 import { Component, HostListener, NgZone, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { Record } from "@geotecinit/emai-framework/entities";
-import { PatientDataService } from "~/app/views/patient-data.service";
-import { RecordType } from "~/app/core/record-type";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+import { Record, Change } from "@awarns/core/entities";
+import { FetchCondition, recordsStore } from "@awarns/persistence";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { takeUntil } from "rxjs/operators";
-import {
-    AreaOfInterest,
-    areasOfInterest,
-} from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { ActivatedRoute } from "@angular/router";
 import { Logger, getLogger } from "~/app/core/utils/logger";
-import { QueryCondition } from "~/app/core/framework/patient-data";
 
 export const PLACE_ID_KEY = "placeId";
 
@@ -25,14 +20,10 @@ export class RecordsListComponent implements OnInit {
     placeId?: string;
     aoi?: AreaOfInterest;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
     private logger: Logger;
 
-    constructor(
-        private patientDataService: PatientDataService,
-        private activeRoute: ActivatedRoute,
-        private ngZone: NgZone
-    ) {
+    constructor(private activeRoute: ActivatedRoute, private ngZone: NgZone) {
         this.logger = getLogger("RecordsListComponent");
     }
 
@@ -40,11 +31,16 @@ export class RecordsListComponent implements OnInit {
         const routeParams = this.activeRoute.snapshot.paramMap;
         if (!routeParams.has(PLACE_ID_KEY)) return;
         this.placeId = routeParams.get(PLACE_ID_KEY);
-        this.retrieveAoIData().catch((err) => {
-            this.logger.error(
-                `Could not retrieve aoi (${this.placeId}) data. Reason: ${err}`
-            );
-        });
+        areasOfInterest
+            .getById(this.placeId)
+            .then((aoi) => {
+                this.aoi = aoi;
+            })
+            .catch((err) => {
+                this.logger.error(
+                    `Could not retrieve aoi (${this.placeId}) data. Reason: ${err}`
+                );
+            });
     }
 
     @HostListener("loaded")
@@ -57,13 +53,8 @@ export class RecordsListComponent implements OnInit {
         this.unloaded$.next();
     }
 
-    private async retrieveAoIData() {
-        const aois = await areasOfInterest.getAll();
-        this.aoi = aois.find((aoi) => aoi.id === this.placeId);
-    }
-
     private subscribeToRecordChanges() {
-        const conditions: Array<QueryCondition> = [
+        const conditions: Array<FetchCondition> = [
             { property: "change", comparison: "=", value: Change.END },
             { property: "successful", comparison: "=", value: true },
         ];
@@ -75,8 +66,8 @@ export class RecordsListComponent implements OnInit {
             });
         }
 
-        this.patientDataService
-            .observeRecordsByType(RecordType.ExposureChange, conditions)
+        recordsStore
+            .listBy(AppRecordType.ExposureChange, "desc", conditions)
             .pipe(takeUntil(this.unloaded$))
             .subscribe((records) => {
                 this.ngZone.run(() => {

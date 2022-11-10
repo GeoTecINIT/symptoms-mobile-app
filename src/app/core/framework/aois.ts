@@ -1,16 +1,5 @@
 import { getLogger } from "~/app/core/utils/logger";
-import {
-    AreaOfInterest,
-    areasOfInterest,
-} from "@geotecinit/emai-framework/entities/aois";
-
-export type AoIChangeListener = () => void;
-
-const changeListeners: Array<AoIChangeListener> = [];
-
-export function onAoIListUpdated(cb: AoIChangeListener) {
-    changeListeners.push(cb);
-}
+import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 
 export async function setupAreasOfInterest() {
     const logger = getLogger("AreasOfInterestManager");
@@ -25,7 +14,6 @@ export async function setupAreasOfInterest() {
     }
     await areasOfInterest.deleteAll();
     await areasOfInterest.insert(newAoIs);
-    notifyAoIsDidChange();
     logger.info("Areas of interest updated");
 }
 
@@ -61,11 +49,3 @@ function sort(aois: Array<AreaOfInterest>): Array<AreaOfInterest> {
         return 0;
     });
 }
-
-function notifyAoIsDidChange() {
-    for (const notify of changeListeners) {
-        notify();
-    }
-}
-
-export { AreaOfInterest, areasOfInterest };

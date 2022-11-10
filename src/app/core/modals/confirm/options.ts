@@ -12,5 +12,6 @@ export interface ConfirmModalOptions {
         confirm: string;
         cancel: string;
     };
+    negative: boolean;
     cancelConfirmOptions?: ConfirmDialogOptions;
 }

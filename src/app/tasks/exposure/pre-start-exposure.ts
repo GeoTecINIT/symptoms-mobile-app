@@ -1,23 +1,23 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import {
     Exposure,
     exposures,
     ExposuresStore,
 } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 import { PreExposureStarted } from "~/app/tasks/exposure/pre-exposure-start-record";
 
-export class PreStartExposureTask extends TraceableTask {
+export class PreStartExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("preStartExposure", { outputEventNames: ["preExposureStarted"] });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

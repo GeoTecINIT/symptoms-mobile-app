@@ -2,16 +2,15 @@ import { QuestionAnswer } from "~/app/views/main/modals/questions";
 import {
     QuestionnaireAnswer,
     QuestionnaireAnswers,
-} from "@geotecinit/emai-framework/entities/answers";
+} from "@awarns/notifications";
 
 export function processQuestionnaireAnswers(
     answers: Array<QuestionAnswer>,
     metadata: QuestionnaireMetadata
 ): QuestionnaireAnswers {
     const sortedIndexes = getSortedAnswersIndexes(answers);
-    const questionnaireAnswers: Array<QuestionnaireAnswer> = new Array<
-        QuestionnaireAnswer
-    >(answers.length);
+    const questionnaireAnswers: Array<QuestionnaireAnswer> =
+        new Array<QuestionnaireAnswer>(answers.length);
     for (let position = 0; position < sortedIndexes.length; position++) {
         const sortedIndex = sortedIndexes[position];
         const prevTime =

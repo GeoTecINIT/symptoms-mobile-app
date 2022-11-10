@@ -1,17 +1,10 @@
-import {
-    Component,
-    HostListener,
-    OnInit,
-    ViewContainerRef,
-} from "@angular/core";
+import { Component, HostListener, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
-import { Application, Page } from "@nativescript/core";
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { AuthService } from "../auth.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service.ts";
+import { NotificationsHandlerService } from "~/app/views/main/notifications-handler.service";
 import { NotificationsReaderService } from "~/app/views/main/notifications-reader.service";
 
 import { NavigationService } from "../navigation.service";
@@ -25,11 +18,8 @@ import {
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin } from "~/app/core/framework";
-import { appEvents } from "~/app/core/app-events";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
 import { takeUntil } from "rxjs/operators";
-
-const APP_EVENTS_KEY = "MainComponent";
 
 @Component({
     selector: "SymMain",
@@ -43,10 +33,27 @@ export class MainComponent implements OnInit {
         return this.mainViewService.selectedTab;
     }
 
+    get actionBarTitle(): string {
+        switch (this.selectedTab) {
+            case NavigationTab.Progress:
+                return "Tu progreso";
+            case NavigationTab.Places:
+                return "Tus lugares";
+            case NavigationTab.Content:
+                return "Contenido";
+            case NavigationTab.Notifications:
+                return "Notificaciones";
+        }
+    }
+
+    get isBusy(): boolean {
+        return this.mainViewService.isBusy;
+    }
+
     private navigationBar: BottomNavigationBar;
     private navigationBarDestroyed$ = new Subject<void>();
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 
@@ -56,35 +63,21 @@ export class MainComponent implements OnInit {
         private dialogsService: DialogsService,
         private notificationsHandlerService: NotificationsHandlerService,
         private notificationsReaderService: NotificationsReaderService,
-        private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute,
-        page: Page,
-        vcRef: ViewContainerRef
+        private navigationService: NavigationService
     ) {
         this.logger = getLogger("MainComponent");
-        page.actionBarHidden = true;
-        mainViewService.setViewContainerRef(vcRef);
         mainViewService.onTabSelected((tab) =>
             this.updateNavigationBarTab(tab)
         );
     }
 
     ngOnInit() {
-        this.loadTabOutlets();
-        this.checkEMAIFrameworkStatus();
-
-        appEvents.on(Application.resumeEvent, APP_EVENTS_KEY, () => {
-            this.logger.debug("Notification handler initialized");
-            this.notificationsHandlerService.resume();
-        });
-        appEvents.on(Application.suspendEvent, APP_EVENTS_KEY, () => {
-            this.logger.debug("Notification handler paused");
-            this.notificationsHandlerService.pause();
-        });
+        this.notificationsHandlerService.setup();
     }
 
     @HostListener("loaded")
     onLoaded() {
+        this.checkEMAIFrameworkStatus();
         this.controlAppLoginStatus();
     }
 
@@ -110,18 +103,6 @@ export class MainComponent implements OnInit {
     private updateNavigationBarTab(tab: NavigationTab) {
         if (!this.navigationBar) return;
         this.navigationBar.selectTab(tab);
-    }
-
-    private loadTabOutlets() {
-        this.navigationService.outletNavigation(
-            {
-                progressTab: ["progress"],
-                placesTab: ["places"],
-                contentTab: ["content"],
-                notificationsTab: ["notifications"],
-            },
-            this.activeRoute
-        );
     }
 
     private controlAppLoginStatus() {

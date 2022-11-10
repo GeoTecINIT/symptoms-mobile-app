@@ -1,8 +1,7 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 
 import { Subject } from "rxjs";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
-import { PlacesService } from "./places.service";
+import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -14,9 +13,9 @@ export class PlacesContainerComponent {
     places: Array<AreaOfInterest>;
     selectedPlace: AreaOfInterest;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
-    constructor(private placesService: PlacesService, private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone) {}
 
     @HostListener("loaded")
     onLoaded() {
@@ -33,7 +32,8 @@ export class PlacesContainerComponent {
     }
 
     private subscribeToPlacesUpdates() {
-        this.placesService.aois$
+        areasOfInterest
+            .list()
             .pipe(takeUntil(this.unloaded$))
             .subscribe((places) => {
                 this.ngZone.run(() => {

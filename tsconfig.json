@@ -29,5 +29,6 @@
   "exclude": [
     "node_modules",
     "platforms"
-  ]
+  ],
+  "files": ["./reference.d.ts", "./src/main.ts", "./src/polyfills.ts"]
 }

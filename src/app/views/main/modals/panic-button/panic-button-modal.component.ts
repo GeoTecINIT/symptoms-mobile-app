@@ -1,22 +1,35 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
 import { ActivatedRoute } from "@angular/router";
+import { ContentViewModalService } from "~/app/views/main/modals/content-view";
 
 @Component({
     selector: "SymPanicButtonModal",
     templateUrl: "./panic-button-modal.component.html",
     styleUrls: ["./panic-button-modal.component.scss"],
 })
-export class PanicButtonModalComponent implements OnInit {
+export class PanicButtonModalComponent {
+    hasSeenGuide = false;
+
     constructor(
+        private contentViewModalService: ContentViewModalService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute
     ) {}
 
-    ngOnInit(): void {
-        this.navigationService.outletNavigation(
-            { panicButtonModal: ["panic-button"] },
-            this.activeRoute
-        );
+    onClose() {
+        this.navigationService.goBack();
+    }
+
+    onOpenGuide() {
+        this.contentViewModalService
+            .showContent("cg02")
+            .then(() => (this.hasSeenGuide = true));
+    }
+
+    onMakeContact() {
+        this.navigationService.navigate(["./make-contact"], {
+            source: this.activeRoute,
+        });
     }
 }

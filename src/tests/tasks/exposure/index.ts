@@ -7,24 +7,24 @@ import {
     AoIProximityChange,
     AreaOfInterest,
     GeofencingProximity,
-} from "@geotecinit/emai-framework/entities/aois";
-import { Change } from "@geotecinit/emai-framework/entities";
+} from "@awarns/geofencing";
+import { Change } from "@awarns/core/entities";
 
 export function createExposuresStoreMock(): ExposuresStore {
     return {
-        insert(exposure: Exposure): Promise<string> {
+        insert(_exposure: Exposure): Promise<string> {
             return Promise.resolve("");
         },
-        getLastUnfinished(andStarted?: boolean): Promise<Exposure> {
+        getLastUnfinished(_andStarted?: boolean): Promise<Exposure> {
             return Promise.resolve(undefined);
         },
-        update(exposure: Exposure): Promise<void> {
+        update(_exposure: Exposure): Promise<void> {
             return Promise.resolve(undefined);
         },
         getAll(): Promise<Array<Exposure>> {
             return Promise.resolve(undefined);
         },
-        remove(id: string): Promise<void> {
+        remove(_id: string): Promise<void> {
             return Promise.resolve();
         },
         clear(): Promise<void> {

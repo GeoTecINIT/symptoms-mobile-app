@@ -1,9 +1,9 @@
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
+} from "@awarns/core/tasks";
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import {
     evaluateLastEmotionValue,
@@ -14,7 +14,7 @@ const RESULT_SUCCESSFUL = "exposureEvaluationResultedSuccessful";
 const RESULT_NEUTRAL = "exposureEvaluationResultedNeutral";
 const RESULT_UNSUCCESSFUL = "exposureEvaluationResultedUnsuccessful";
 
-export class EvaluateExposureTask extends TraceableTask {
+export class EvaluateExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super("evaluateExposure", {
             outputEventNames: [
@@ -25,7 +25,7 @@ export class EvaluateExposureTask extends TraceableTask {
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

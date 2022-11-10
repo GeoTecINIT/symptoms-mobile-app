@@ -1,6 +1,6 @@
-import { Change, Record } from "@geotecinit/emai-framework/entities";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
-import { RecordType } from "~/app/core/record-type";
+import { Change, Record } from "@awarns/core/entities";
+import { AreaOfInterest } from "@awarns/geofencing";
+import { AppRecordType } from "~/app/core/app-record-type";
 
 export class ExposureAreaLeftRecord extends Record {
     constructor(
@@ -8,6 +8,6 @@ export class ExposureAreaLeftRecord extends Record {
         change: Change,
         timestamp: Date = new Date()
     ) {
-        super(RecordType.ExposureAreaLeft, timestamp, change);
+        super(AppRecordType.ExposureAreaLeft, timestamp, change);
     }
 }

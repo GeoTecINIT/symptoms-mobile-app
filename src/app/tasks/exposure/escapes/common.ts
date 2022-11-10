@@ -1,4 +1,4 @@
-import { AoIProximityChange } from "@geotecinit/emai-framework/entities/aois";
+import { AoIProximityChange } from "@awarns/geofencing";
 import { Exposure } from "~/app/core/persistence/exposures";
 
 export function checkIfProximityChangesInvolveOngoingExposure(

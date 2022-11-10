@@ -1,6 +1,6 @@
-import { Record } from "@geotecinit/emai-framework/entities";
+import { Record } from "@awarns/core/entities";
 import { ChartDescription } from "~/app/core/charts/chart-description";
-import { RecordType } from "~/app/core/record-type";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { ExposureChange } from "~/app/tasks/exposure";
 import { formatAsDate } from "~/app/core/utils/time";
 import {
@@ -16,11 +16,11 @@ export function transformIntoChartDescription(
     record: Record
 ): ChartDescription {
     switch (record.type) {
-        case RecordType.ExposureChange:
+        case AppRecordType.ExposureChange:
             return transformExposureChange(record as ExposureChange);
-        case RecordType.ExposureAggregate:
+        case AppRecordType.ExposureAggregate:
             return transformExposureAggregate(record as ExposureAggregate);
-        case RecordType.ExposurePlaceAggregate:
+        case AppRecordType.ExposurePlaceAggregate:
             return transformExposurePlaceAggregate(
                 record as ExposurePlaceAggregate
             );

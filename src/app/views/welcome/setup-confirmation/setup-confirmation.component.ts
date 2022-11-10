@@ -10,6 +10,6 @@ export class SetupConfirmationComponent {
     constructor(private navigationService: NavigationService) {}
 
     onLetsGoTap() {
-        this.navigationService.navigate(["/main"], null, true);
+        this.navigationService.navigate(["/main"], { clearHistory: true });
     }
 }

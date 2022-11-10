@@ -1,7 +1,7 @@
-import { Change, Record } from "@geotecinit/emai-framework/entities";
+import { Change, Record } from "@awarns/core/entities";
 import { EmotionValue } from "~/app/core/persistence/exposures";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
-import { RecordType } from "~/app/core/record-type";
+import { AreaOfInterest } from "@awarns/geofencing";
+import { AppRecordType } from "~/app/core/app-record-type";
 
 export class ExposureChange extends Record {
     constructor(
@@ -11,6 +11,6 @@ export class ExposureChange extends Record {
         public emotionValues: Array<EmotionValue>,
         public successful: boolean = false
     ) {
-        super(RecordType.ExposureChange, timestamp, change);
+        super(AppRecordType.ExposureChange, timestamp, change);
     }
 }

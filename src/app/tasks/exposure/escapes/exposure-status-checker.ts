@@ -1,11 +1,11 @@
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
 import {
     DispatchableEvent,
+    Task,
     TaskOutcome,
     TaskParams,
-    TraceableTask,
-} from "@geotecinit/emai-framework/tasks";
-import { AoIProximityChange } from "@geotecinit/emai-framework/entities/aois";
+} from "@awarns/core/tasks";
+import { AoIProximityChange } from "@awarns/geofencing";
 import { checkIfProximityChangesInvolveOngoingExposure } from "~/app/tasks/exposure/escapes/common";
 
 const TASK_NAME = "checkExposureAreaStatus";
@@ -13,7 +13,7 @@ const ENTERED_WITH_NO_ONGOING_EXPOSURE = "enteredAreaWithNoOngoingExposure";
 const ENTERED_WITH_PRE_STARTED_EXPOSURE = "enteredAreaWithPreStartedExposure";
 const ENTERED_WITH_ONGOING_EXPOSURE = "enteredAreaWithOngoingExposure";
 
-export class ExposureStatusChecker extends TraceableTask {
+export class ExposureStatusChecker extends Task {
     constructor(private store: ExposuresStore = exposures) {
         super(TASK_NAME, {
             outputEventNames: [
@@ -25,7 +25,7 @@ export class ExposureStatusChecker extends TraceableTask {
         });
     }
 
-    protected async onTracedRun(
+    protected async onRun(
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {

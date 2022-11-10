@@ -1,5 +1,5 @@
 import { exposures, ExposuresStore } from "~/app/core/persistence/exposures";
-import { Change } from "@geotecinit/emai-framework/internal/providers";
+import { Change } from "@awarns/core/entities";
 import { ExposurePresenceChecker } from "~/app/tasks/exposure/escapes/exposure-presence-checker";
 
 const TASK_NAME = "checkExposureAreaLeft";

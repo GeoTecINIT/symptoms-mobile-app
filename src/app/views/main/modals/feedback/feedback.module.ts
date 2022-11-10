@@ -4,7 +4,7 @@ import { FeedbackRoutingModule } from "./feedback-routing.module";
 import { NativeScriptCommonModule } from "@nativescript/angular";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 
-import { FeedbackContainerComponent } from "./feedback-container/feedback-container.component";
+import { FeedbackModalComponent } from "./feedback-modal.component";
 import { CommonModalsModule } from "../common/common-modals.module";
 import { FeedbackButtonOptionComponent } from "./options/feedback-button-option/feedback-button-option.component";
 import { FeedbackTextOptionComponent } from "./options/feedback-text-option/feedback-text-option.component";
@@ -17,7 +17,7 @@ import { FeedbackTextOptionComponent } from "./options/feedback-text-option/feed
         CommonModalsModule,
     ],
     declarations: [
-        FeedbackContainerComponent,
+        FeedbackModalComponent,
         FeedbackButtonOptionComponent,
         FeedbackTextOptionComponent,
     ],

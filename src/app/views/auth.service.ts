@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { AccountService, AdvancedSettingsService } from "~/app/core/account";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { FirebaseAuthService } from "~/app/core/auth/firebase/firebase-auth.service.ts";
+import { FirebaseAuthService } from "~/app/core/auth/firebase/firebase-auth.service";
 
 @Injectable({
     providedIn: "root",

@@ -51,11 +51,10 @@ export class TutorialComponent implements OnInit {
             if (done) {
                 emitTreatmentStartEvent();
                 this.appSettingsService.markSetupAsComplete();
-                this.navigationService.navigate(
-                    ["../setup-confirmation"],
-                    this.activeRoute,
-                    true
-                );
+                this.navigationService.navigate(["../setup-confirmation"], {
+                    source: this.activeRoute,
+                    clearHistory: true,
+                });
             } else {
                 this.dialogsService.showInfo(infoOnPermissionsNeed);
             }

@@ -4,8 +4,8 @@ import {
     EventListenerGenerator,
     RunnableTaskDescriptor,
     TaskGraph,
-} from "@geotecinit/emai-framework/tasks/graph";
-import { TapActionType } from "@geotecinit/emai-framework/notifications";
+} from "@awarns/core/tasks/graph";
+import { TapActionType } from "@awarns/notifications";
 import { AdvancedSetting, advancedSettings } from "~/app/core/account";
 
 const exposureTimes = getConfig().exposureTimes;
@@ -267,15 +267,15 @@ class DemoTaskGraph implements TaskGraph {
             "patientCouldGetSomeReward",
             run("sendRandomNotification", {
                 options: [
-                    { title: "Lo estás haciendo muy bien" },
-                    { title: "Estás tolerando muy bien el malestar" },
+                    { title: "¡Lo estás haciendo genial! 💪" },
+                    { title: "Estás tolerando el malestar 🙂" },
                 ],
             })
         );
         on(
             "patientCouldGetABooster",
             run("sendNotification", {
-                title: "Lo estás haciendo muy bien",
+                title: "Lo estás haciendo muy bien 🙂",
             })
         );
         // -> Leaving exposure area
@@ -474,6 +474,14 @@ class DemoTaskGraph implements TaskGraph {
         on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
         // END: Patient feedback events
 
+        // START: Patient confirmation events
+        on("patientConfirmationAcquired", run("writeRecords"));
+        // END: Patient confirmation events
+
+        // START: Patient read content events
+        on("patientReadContentAcquired", run("writeRecords"));
+        // END: Patient read content read events
+
         // START: App usage events
         // -> Notification tap
         on("notificationTapped", run("writeRecords"));
@@ -483,4 +491,4 @@ class DemoTaskGraph implements TaskGraph {
     }
 }
 
-export const demoTaskGraph = new DemoTaskGraph();
+export const appTaskGraph = new DemoTaskGraph();

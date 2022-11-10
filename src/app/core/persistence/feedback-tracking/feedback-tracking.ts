@@ -1,4 +1,4 @@
-import { EMAIStore } from "@geotecinit/emai-framework/storage";
+import { AwarnsStore } from "@awarns/persistence";
 import { TrackedFeedback } from "~/app/core/persistence/feedback-tracking/tracked-feedback";
 
 export interface FeedbackTracking {
@@ -10,10 +10,10 @@ export interface FeedbackTracking {
 const DOC_TYPE = "tracked-feedback";
 
 class FeedbackTrackingDB implements FeedbackTracking {
-    private readonly store: EMAIStore<TrackedFeedback>;
+    private readonly store: AwarnsStore<TrackedFeedback>;
 
     constructor() {
-        this.store = new EMAIStore<TrackedFeedback>(
+        this.store = new AwarnsStore<TrackedFeedback>(
             DOC_TYPE,
             docFrom,
             trackedFeedbackFrom

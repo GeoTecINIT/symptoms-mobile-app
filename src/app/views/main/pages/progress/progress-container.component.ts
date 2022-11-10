@@ -2,11 +2,11 @@ import { Component, HostListener, NgZone } from "@angular/core";
 import { Subject } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
 
-import { PatientDataService } from "~/app/views/patient-data.service";
 import { ExposureChange } from "~/app/tasks/exposure";
-import { RecordType } from "~/app/core/record-type";
-import { Change } from "@geotecinit/emai-framework/entities";
+import { AppRecordType } from "~/app/core/app-record-type";
+import { Change } from "@awarns/core/entities";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { recordsStore } from "@awarns/persistence";
 
 @Component({
     selector: "SymProgressContainer",
@@ -16,14 +16,11 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
 export class ProgressContainerComponent {
     idle: boolean;
 
-    private unloaded$ = new Subject();
+    private unloaded$ = new Subject<void>();
 
     private logger: Logger;
 
-    constructor(
-        private patientDataService: PatientDataService,
-        private ngZone: NgZone
-    ) {
+    constructor(private ngZone: NgZone) {
         this.logger = getLogger("ProgressContainer");
     }
 
@@ -38,12 +35,12 @@ export class ProgressContainerComponent {
     }
 
     private subscribeToExposureChanges() {
-        this.patientDataService
-            .observeLastByRecordType<ExposureChange>(RecordType.ExposureChange)
+        recordsStore
+            .listLast(AppRecordType.ExposureChange)
             .pipe(
                 takeUntil(this.unloaded$),
                 map(
-                    (exposureChange) =>
+                    (exposureChange: ExposureChange) =>
                         !exposureChange || exposureChange.change === Change.END
                 )
             )

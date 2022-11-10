@@ -1,25 +1,16 @@
 import { Injectable } from "@angular/core";
-import { getLogger, Logger } from "~/app/core/utils/logger";
-import { MainViewService } from "~/app/views/main/main-view.service";
-import { PanicButtonModalComponent } from "~/app/views/main/modals/panic-button/panic-button-modal.component.ts";
+import { NavigationService } from "~/app/views/navigation.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class PanicButtonModalService {
-    private logger: Logger;
-
-    constructor(private mainViewService: MainViewService) {
-        this.logger = getLogger("PanicButtonService");
-    }
+    constructor(private navigationService: NavigationService) {}
 
     show() {
-        this.mainViewService
-            .showFullScreenAnimatedModal(PanicButtonModalComponent)
-            .catch((e) =>
-                this.logger.error(
-                    `Error while opening panic button modal: ${e}`
-                )
-            );
+        this.navigationService.navigate(["/main/panic-button"], {
+            transition: "fade",
+            duration: 200,
+        });
     }
 }

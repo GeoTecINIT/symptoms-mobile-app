@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { AreaOfInterest } from "@geotecinit/emai-framework/entities/aois";
+import { AreaOfInterest } from "@awarns/geofencing";
 
 @Component({
     selector: "SymPlacesList",

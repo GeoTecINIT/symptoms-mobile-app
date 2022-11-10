@@ -1,5 +1,5 @@
-import { Record } from "@geotecinit/emai-framework/entities";
-import { RecordType } from "~/app/core/record-type";
+import { Record } from "@awarns/core/entities";
+import { AppRecordType } from "~/app/core/app-record-type";
 import { EmotionValue } from "~/app/core/persistence/exposures";
 
 export class ExposurePlaceAggregate extends Record {
@@ -9,6 +9,6 @@ export class ExposurePlaceAggregate extends Record {
         public emotionValues: Array<EmotionValue>,
         timestamp: Date = new Date()
     ) {
-        super(RecordType.ExposurePlaceAggregate, timestamp);
+        super(AppRecordType.ExposurePlaceAggregate, timestamp);
     }
 }
