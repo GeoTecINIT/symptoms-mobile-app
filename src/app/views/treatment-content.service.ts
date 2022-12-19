@@ -144,7 +144,7 @@ Recuerda que es importante mantenerte en la situación y tolerar el malestar con
         id: "cg03",
         index: 3,
         type: TreatmentContentType.Guidelines,
-        title: "Consecuencias de evitar ",
+        title: "Consecuencias de evitar",
         body: `Has salido de la zona de exposición.
 
 Te recordamos lo importante que es volver al lugar para continuar con la exposición y trabajar la tolerancia al malestar, hasta que tus niveles de ansiedad sean moderados.
@@ -195,7 +195,7 @@ Te animamos  a permanecer algo más de tiempo en este lugar para poder aumentar 
         id: "cg06",
         index: 6,
         type: TreatmentContentType.Guidelines,
-        title: "La clave del éxito: exposicion frecuente",
+        title: "La clave del éxito: exposición frecuente",
         body: `Has conseguido mantenerte en el lugar y tolerar la ansiedad que has experimentado durante la exposición, es un gran logro.
 
 La clave para lograr tolerar la ansiedad es repetir de forma frecuente la exposición a lugares temidos como este.
@@ -345,7 +345,7 @@ Recuerda, cuando te permites experimentar tus emociones de forma completa sin ev
         id: "cp05",
         index: 5,
         type: TreatmentContentType.Psychoeducation,
-        title: "Curva de ansiedad y evitación",
+        title: "Curva de ansiedad y habituación",
         body: `Es fundamental que conozcas curva de ansiedad que se producirá durante las exposiciones, es decir, cómo aumenta la ansiedad al exponerse a la situación temida (esto es normal y es señal de que el proceso va bien) y después va descendiendo si permanecemos en la situación el tiempo suficiente sin realizar conductas de evitación.
 
 Por otra parte, a medida que nos exponemos repetidamente a la misma situación, la ansiedad sube menos y tarda menos tiempo en bajar.
