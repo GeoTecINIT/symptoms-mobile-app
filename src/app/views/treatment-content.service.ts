@@ -265,7 +265,7 @@ Una función fundamental de las emociones es alertarnos, avisarnos de que algo i
 Para tener una idea mejor de qué ocurre cuando se desencadena la emoción, es importante saber que tiene tres componentes principales. A continuación, describiremos esos tres componentes y te haremos reflexionar sobre ellos:
 
 
-    1)  Componente cognitivo (Lo que pienso): Cuando sentimos emociones a menudo aparecen pensamientos.
+    1)  Componente cognitivo (lo que pienso): Cuando sentimos emociones a menudo aparecen pensamientos.
 
     2)  Componente comportamental (lo que hago): Son las acciones, las conductas que la persona hace o tiene el impulso de hacer cuando siente una emoción.
 
@@ -274,7 +274,7 @@ Para tener una idea mejor de qué ocurre cuando se desencadena la emoción, es i
 
 El miedo es una de las emociones básica que es tremendamente adaptativa y ha servido a los seres humanos a lo largo de todos nuestros años de historia.
 
-Experimentar cierto temor a determinadas situaciones que ocurren a tu alrededor puede ser una reacción no problemática, el problema está en que tu experiencia no termine ahí sino que ese conjunto de reacciones (pensamientos, conductas y sensaciones físicas) interaccionen entre ellas, impidan que veamos la situación a la que nos enfrentamos de forma objetiva a la experiencia tal y como está sucediendo y se centre más bien en el pasado o en los que podría ocurrir en el futuro, convirtiéndose así en realmente amenazante o catastrófica. Es ahí cuando estas reacciones se convierten en extremadamente desadaptativas y podemos hablar de una emoción más compleja como la ansiedad y que se caracteriza por un miedo intenso.`,
+Experimentar cierto temor a determinadas situaciones que ocurren a tu alrededor puede ser una reacción no problemática, el problema está en que tu experiencia no termine ahí sino que ese conjunto de reacciones (pensamientos, conductas y sensaciones físicas) interaccionen entre ellas, impidan que veamos la situación a la que nos enfrentamos de forma objetiva a la experiencia tal y como está sucediendo y se centre más bien en el pasado o en lo que podría ocurrir en el futuro, convirtiéndose así en realmente amenazante o catastrófica. Es ahí cuando estas reacciones se convierten en extremadamente desadaptativas y podemos hablar de una emoción más compleja como la ansiedad, que se caracteriza por un miedo intenso.`,
     },
     {
         id: "cp02",
@@ -287,7 +287,7 @@ Este proceso tiene una razón muy clara, aumentar la eficiencia y la velocidad d
 
 La mayor parte de las veces, este proceso se produce de forma tan rápida que no nos llegamos a dar cuenta de lo que estamos pensando. Estas interpretaciones son automáticas, se producen de forma no consciente. Ahora bien, estas interpretaciones no surgen de la nada, en gran medida, se deben a nuestras experiencias pasadas. Además, en ocasiones, utilizamos estas interpretaciones automáticas para imaginar lo que podría ocurrir en el futuro.
 
-Nuestras interpretaciones influyen en lo que esperamos que ocurra en una determinada situación. Cuando sentimos emociones también aparecen pensamientos. Por ejemplo, alguien que sienta ansiedad en espacios cerrados puede tener pensamientos negativos relacionados con “se va a acabar el aire y me voy a ahogar”. Pues bien, este proceso de interpretaciones tiene importantes consecuencias en cómo nos sentimos y dependiendo de cada una de las interpretaciones la persona experimentará una determinada emoción u otra, a su vez cómo nos sintamos influye en las futuras valoraciones que hagamos.`,
+Nuestras interpretaciones influyen en lo que esperamos que ocurra en una determinada situación. Cuando sentimos emociones también aparecen pensamientos. Por ejemplo, alguien que sienta ansiedad en espacios cerrados puede tener pensamientos negativos relacionados con “se va a acabar el aire y me voy a ahogar”. Pues bien, este proceso de interpretaciones tiene importantes consecuencias en cómo nos sentimos y dependiendo de cada una de las interpretaciones la persona experimentará una determinada emoción u otra. A su vez cómo nos sintamos influye en las futuras valoraciones que hagamos.`,
     },
     {
         id: "cp03",
@@ -307,7 +307,7 @@ La evitación puede servir a corto plazo para eliminar la ansiedad (p.ej., una p
 
     -  Poco a poco, se llega a desear evitar cada vez más cosas. De esta manera, la evitación se generalizará cada vez a más situaciones interfiriendo en distintas áreas de la vida de la persona y limitándole cada vez más.
 
-    -  Se van perdiendo las habilidades necesarias para enfrentarse a la situación temida o actuar adecuadamente, como ocurre cuando una persona ha estado mucho tiempo sin escribir a máquina y nos impide desarrollar un sentimiento de autoeficacia.
+    -  Se van perdiendo las habilidades necesarias para enfrentarse a la situación temida o actuar adecuadamente, como ocurre cuando una persona ha estado mucho tiempo sin montar en bici y nos impide desarrollar un sentimiento de autoeficacia.
 
     -  La evitación impide realizar actividades que se desean hacer (p.ej., en el caso de la claustrofobia evitar subir en ascensor nos obliga a tener que subir siempre por las escaleras… ¡aunque se trate del piso 14!)
 
@@ -329,7 +329,7 @@ Es importante saber además que la evitación puede ser muy sutil y en ocasiones
         index: 4,
         type: TreatmentContentType.Psychoeducation,
         title: "La importancia de exponerse",
-        body: `Por todo lo que hemos comentado en la sección anterior, es importante exponerse. Esta técnica consiste en mantenerse en las situaciones ansiógenas, experimentando ansiedad el tiempo necesario hasta que la ansiedad disminuya, produciéndose lo que se denomina habituación. Es decir, consiste en enfrentarse a una situación temida hasta familiarizarse con ella, comprobar que no es peligrosa y adquirir las habilidades necesarias para actuar de forma eficaz. No te pedimos que te enfrentes a una situación peligrosa, de verdad para ti, sino que te expongas a situaciones que se entienden como amenazantes, pero realmente no entrañan un peligro real para tu vida. Esta exposición se hará de forma gradual y se establecerán distintos objetivos de exposición en función de la ansiedad que la persona experimente y el grado de evitación que tengan en las distintas situaciones que tema. De este modo, se empezará la exposición con objetivos más fáciles, para ir consiguiendo todos los objetivos uno a uno y avanzando a los más difíciles.
+        body: `Por todo lo que hemos comentado en la sección anterior, es importante exponerse. Esta técnica consiste en mantenerse en las situaciones ansiógenas, experimentando ansiedad el tiempo necesario hasta que la ansiedad disminuya, produciéndose lo que se denomina habituación. La habituación, consiste en enfrentarse a una situación temida hasta familiarizarse con ella, comprobar que no es peligrosa y adquirir las habilidades necesarias para actuar de forma eficaz. No te pedimos que te enfrentes a una situación peligrosa de verdad para ti, sino que te expongas a situaciones que se entienden como amenazantes, pero realmente no entrañan un peligro real para tu vida. Esta exposición se hará de forma gradual y se establecerán distintos objetivos de exposición en función de la ansiedad que la persona experimente y el grado de evitación que tengan en las distintas situaciones que tema. De este modo, se empezará la exposición con objetivos más fáciles, para ir consiguiendo todos los objetivos uno a uno y avanzando a los más difíciles.
 
 En las exposiciones es esencial que experimentes tus emociones de forma completa, es decir, sin tratar de evitarlas, aplicando nuevas formas de afrontamiento más adaptativas que las usadas hasta ahora ya que han hecho que se mantenga el problema. Es importante que sepas que el principal objetivo de las exposiciones a la emoción no es la reducción inmediata de la respuesta emocional, sino que aprendas algo nuevo como resultado de la experiencia. Es fundamental que durante todas las exposiciones intentes experimentar las emociones de forma completa, es decir, sin tratar de evitarlas, aplicando nuevas formas de afrontamiento más adaptativas. Este procedimiento te ayudará a incrementar la tolerancia a las emociones, esta es la meta de aprendizaje central de las exposiciones que queremos que realices. También es importante que se creen nuevas asociaciones, es decir, conforme te expongas, incorpores nuevas experiencias, comprobando cómo esas consecuencias más catastróficas que siempre has anticipado no ocurren realmente.
 
@@ -346,7 +346,7 @@ Recuerda, cuando te permites experimentar tus emociones de forma completa sin ev
         index: 5,
         type: TreatmentContentType.Psychoeducation,
         title: "Curva de ansiedad y habituación",
-        body: `Es fundamental que conozcas curva de ansiedad que se producirá durante las exposiciones, es decir, cómo aumenta la ansiedad al exponerse a la situación temida (esto es normal y es señal de que el proceso va bien) y después va descendiendo si permanecemos en la situación el tiempo suficiente sin realizar conductas de evitación.
+        body: `Es fundamental que conozcas la curva de ansiedad que se producirá durante las exposiciones, es decir, cómo aumenta la ansiedad al exponerse a la situación temida (esto es normal y es señal de que el proceso va bien) y después va descendiendo si permanecemos en la situación el tiempo suficiente sin realizar conductas de evitación.
 
 Por otra parte, a medida que nos exponemos repetidamente a la misma situación, la ansiedad sube menos y tarda menos tiempo en bajar.
 
@@ -377,8 +377,8 @@ Ten en cuenta estas características del momento de exposición por el que puede
         id: "cp07",
         index: 7,
         type: TreatmentContentType.Psychoeducation,
-        title: "Tácticas de manejo de la ansiedad",
-        body: `Puedes apoyarte en algunas tácticas de control de la ansiedad durante el periodo de tiempo en el que estarás haciendo exposición. Algunas de estas tácticas son:
+        title: "Técnicas de manejo de la ansiedad",
+        body: `Puedes apoyarte en algunas tácticas de manejo de la ansiedad vistas previamente con tu terapeuta (o que han sido practicadas previamente en terapia) durante el periodo de tiempo en el que estarás haciendo exposición. Algunas de estas tácticas son:
 
 
     1)  Respiración lenta.
@@ -403,7 +403,7 @@ Ten en cuenta estas características del momento de exposición por el que puede
 
         g)  Recuerda que el objetivo de exponerse es aprender a afrontar el miedo (sin evitarlo). Por tanto, esta es una oportunidad de progresar.
 
-        h)  Piensa en el avance que has conseguido hasta ahora, a pesar de todas las dificultades. Piensa en lo satisfecho que estarás cuando lo consigas esta vez.
+        h)  Piensa en el avance que has conseguido hasta ahora, a pesar de todas las dificultades. Piensa en lo satisfecho/a que estarás cuando lo consigas esta vez.
 
         i)  Cuando comiences a sentirte mejor, mira a tu alrededor y empieza a planear qué vas a hacer después.
 
@@ -425,7 +425,7 @@ Todo esto forma parte de lo esperable, ya sabes que las emociones fluctúan y qu
 
     2)  Saber qué habilidades tienes para hacerles frente y asegurarse de haberlas practicado.
 
-    3)  Que aprendas a pedir ayuda (si esta ayuda es necesaria, sin ningún temor). No esperes a sentirte mal.
+    3)  Que aprendas a pedir ayuda (si esta ayuda es necesaria, pídela sin ningún temor). No esperes a sentirte mal.
 
 
 Una vez hayas reflexionado sobre estos aspectos trata de realizar un listado de esas situaciones y plantearte dos cuestiones 1º) ¿qué puedo hacer para afrontarlas?, y 2º) ¿con quién podría contar para apoyarme? De esta manera estarás más preparado/a para afrontarlas.`,
@@ -462,6 +462,6 @@ Finalmente, conviene que recuerdes una serie de consejos respecto a posibles for
 
     -  Prevé las situaciones de alto riesgo. No las ignores, trata de identificarlas y busca la mejor manera de afrontarlas.
 
-    -  Sí lo necesitas, acude de nuevo a un especialista. Recuerda que una recaída no es un fracaso, aunque puede que lo veas así cuando te sientas mal. ¡Es un obstáculo que puedes superar!`,
+    -  Si lo necesitas, acude de nuevo a un especialista. Recuerda que una recaída no es un fracaso, aunque puede que lo veas así cuando te sientas mal. ¡Es un obstáculo que puedes superar!`,
     },
 ];
