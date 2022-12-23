@@ -1,42 +1,35 @@
 {
   "project_info": {
-    "project_number": "",
-    "firebase_url": "",
-    "project_id": "s",
-    "storage_bucket": ""
+    "project_number": "REPLACE THE WHOLE FILE",
+    "firebase_url": "REPLACE THE WHOLE FILE",
+    "project_id": "REPLACE THE WHOLE FILE",
+    "storage_bucket": "REPLACE THE WHOLE FILE"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "REPLACE THE WHOLE FILE",
         "android_client_info": {
-          "package_name": ""
+          "package_name": "es.uji.geotec.alert.symptomsapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "",
+          "client_id": "REPLACE THE WHOLE FILE",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": ""
+          "current_key": "REPLACE THE WHOLE FILE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "",
+              "client_id": "REPLACE THE WHOLE FILE",
               "client_type": 3
-            },
-            {
-              "client_id": "",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": ""
-              }
             }
           ]
         }
