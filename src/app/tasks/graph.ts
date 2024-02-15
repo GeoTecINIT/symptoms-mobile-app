@@ -214,6 +214,8 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on("exposureStarted", run("writeRecords"));
+        on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
+        on("watchHeartRateSamplesAcquired", run("writeRecords"));
         // END: Pre-exposure events
 
         // START: Exposure events
@@ -445,6 +447,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("exposureForcedToFinish")
         );
         // -> Finalization event
+        on("exposureFinished", run("stopDetectingWatchHeartRateChanges"));
         on("exposureFinished", run("writeRecords"));
         // END: Exposure events
 

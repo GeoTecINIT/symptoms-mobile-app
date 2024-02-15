@@ -6,7 +6,7 @@ import { NavigationService } from "~/app/views/navigation.service";
 import { AppSettingsService } from "~/app/views/app-settings.service";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 
-import { preparePlugin } from "~/app/core/framework";
+import { preparePlugin, setupWatchToUse } from "~/app/core/framework";
 import { emitTreatmentStartEvent } from "~/app/core/framework/events";
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
@@ -46,7 +46,9 @@ export class TutorialComponent implements OnInit {
         this.inAppBrowserService.openPrivacyPolicy();
     }
 
-    onConfigureTap() {
+    async onConfigureTap() {
+        await setupWatchToUse();
+        
         preparePlugin().then((done) => {
             if (done) {
                 emitTreatmentStartEvent();

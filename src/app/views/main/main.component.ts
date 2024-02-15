@@ -17,7 +17,7 @@ import {
 } from "@nativescript-community/ui-material-bottomnavigationbar";
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
-import { preparePlugin } from "~/app/core/framework";
+import { preparePlugin, setupWatchToUse } from "~/app/core/framework";
 import { setupAreasOfInterest } from "~/app/core/framework/aois";
 import { takeUntil } from "rxjs/operators";
 
@@ -137,24 +137,30 @@ export class MainComponent implements OnInit {
     }
 
     private checkEMAIFrameworkStatus() {
-        preparePlugin()
-            .then((ready) => {
-                setupAreasOfInterest().catch((e) =>
-                    this.logger.error(
-                        `Could not setup areas of interest. Reason: ${e}`
-                    )
-                );
-                if (!ready) {
-                    this.informAboutPermissionsNeed().then(() => {
-                        this.checkEMAIFrameworkStatus();
-                    });
-                }
-            })
-            .catch((e) => {
-                this.logger.error(
-                    `Could not prepare EMA/I framework tasks. Reason: ${e}`
-                );
-            });
+        setupWatchToUse()
+            .then(() =>
+                preparePlugin()
+                    .then((ready) => {
+                        setupAreasOfInterest().catch((e) =>
+                            this.logger.error(
+                                `Could not setup areas of interest. Reason: ${e}`
+                            )
+                        );
+                        if (!ready) {
+                            this.informAboutPermissionsNeed().then(() => {
+                                this.checkEMAIFrameworkStatus();
+                            });
+                        }
+                    })
+                    .catch((e) => {
+                        this.logger.error(
+                            `Could not prepare EMA/I framework tasks. Reason: ${e}`
+                        );
+                    })
+            )
+            .catch((e) =>
+                this.logger.error(`Could not setup watch. Reason: ${e}`)
+            );
     }
 
     private informAboutPermissionsNeed(): Promise<void> {

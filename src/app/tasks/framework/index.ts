@@ -1,5 +1,5 @@
 import { Task } from "@awarns/core/tasks";
-import { makeTraceable } from "@awarns/tracing";
+import { makeTraceable, trackEventTask } from "@awarns/tracing";
 import {
     startDetectingCoarseHumanActivityChangesTask,
     stopDetectingCoarseHumanActivityChangesTask,
@@ -11,6 +11,14 @@ import {
     sendRandomNotificationTask,
 } from "@awarns/notifications";
 import { writeRecordsTask } from "@awarns/persistence";
+import {
+    WatchSensor,
+    WatchSensorDelay,
+    sendPlainMessageToWatchAndAwaitResponseTask,
+    sendPlainMessageToWatchTask,
+    startDetectingWatchSensorChangesTask,
+    stopDetectingWatchSensorChangesTask,
+} from "@awarns/wear-os";
 
 export const awarnsTasks: Array<Task> = [
     ...makeTraceable([
@@ -26,5 +34,15 @@ export const awarnsTasks: Array<Task> = [
         ],
         { outputsSensitiveData: true }
     ),
+    ...makeTraceable([
+        startDetectingWatchSensorChangesTask(WatchSensor.HEART_RATE, {
+            sensorDelay: WatchSensorDelay.NORMAL,
+            batchSize: 10,
+        }),
+        stopDetectingWatchSensorChangesTask(WatchSensor.HEART_RATE),
+        sendPlainMessageToWatchTask(),
+        sendPlainMessageToWatchAndAwaitResponseTask(),
+    ]),
     writeRecordsTask(),
+    // trackEventTask(),
 ];
