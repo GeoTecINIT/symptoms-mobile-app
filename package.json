@@ -38,6 +38,7 @@
     "@nativescript/theme": "~3.0.0",
     "@nativescript/unit-test-runner": "~3.0.0",
     "@nativescript/zip": "^5.0.0",
+    "@nstudio/nativescript-exoplayer": "^6.2.0",
     "@symptoms/api-client": "file:vendor/symptoms-api-client-1.0.1.tgz",
     "@turf/bbox": "^6.5.0",
     "@turf/buffer": "^6.5.0",
