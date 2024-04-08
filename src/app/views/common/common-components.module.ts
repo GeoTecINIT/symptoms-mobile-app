@@ -23,6 +23,7 @@ import { CircleIconComponent } from "./circle-icon/circle-icon.component";
 import { ActivityIndicatorComponent } from "./activity-indicator/activity-indicator.component";
 import { TextInputComponent } from "./text-input/text-input.component";
 import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
+import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-player-recorder.component"
 
 @NgModule({
     imports: [
@@ -47,6 +48,7 @@ import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
         ActivityIndicatorComponent,
         TextInputComponent,
         BinaryChoiceComponent,
+        AudioPlayerRecorderComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -65,6 +67,7 @@ import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
         ActivityIndicatorComponent,
         TextInputComponent,
         BinaryChoiceComponent,
+        AudioPlayerRecorderComponent,
     ],
 })
 export class CommonComponentsModule {}

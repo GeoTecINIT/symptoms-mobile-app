@@ -1,0 +1,13 @@
+<!-- CUANDO EL COMPONENTE ESTÉ COMPLETO Y FUNCIONAL, MIRAR PARA AÑADIRLO EN MODALS.TS Y OPTIONS.TS-->
+<StackLayout class="container">
+    <GridLayout columns="auto, auto, auto, *" rows="auto">
+        <Label col="0" text="&#xe029;" [class]="isRecording? 'mdi-ro mdi-24 icon-record-blink' : 'mdi-ro mdi-24 icon-record'" verticalAlignment="center" (tap)="manageRecording()">
+        </Label>
+        <Label *ngIf="!recordedAudioFile" col="1" class="text timer-label" textWrap="true" text="Pulsa el icono para grabar una nota de voz"></Label>
+        <Label *ngIf="isRecording" col="1" class="text timer-label-blink" textWrap="true" text="Grabando nota de voz..."></Label>
+        <Label *ngIf="!isRecording && recordedAudioFile" col="1" [text]="isPlaying ? '&#xe034;' : '&#xe037;'" class="mdi-ro mdi-24 icon-playback" verticalAlignment="center" (tap)="managePlayback()">
+        </Label>
+        <Label *ngIf="!isRecording && recordedAudioFile" col="2" [text]="timerDisplay" class="timer-label"></Label>
+        <Slider *ngIf="!isRecording && recordedAudioFile" col="3" [value]="currentPlaybackPosition" minValue="0" maxValue="100" (valueChange)="onSliderValueChange($event)"></Slider>
+    </GridLayout>
+</StackLayout>

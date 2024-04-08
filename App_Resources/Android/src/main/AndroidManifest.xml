@@ -20,6 +20,8 @@
 
 	<uses-permission android:name="android.permission.CALL_PHONE"/>
 
+	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
 	<application
 		android:name="com.tns.NativeScriptApplication"
 		android:allowBackup="true"

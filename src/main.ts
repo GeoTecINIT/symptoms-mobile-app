@@ -20,6 +20,7 @@ import { remoteRecords, remoteTraces } from "./app/core/persistence/remote";
 import { getLogger } from "./app/core/utils/logger";
 
 import { install } from "@nativescript-community/ui-chart";
+import { WatchSensor, registerWearOSPlugin } from "@awarns/wear-os";
 
 firebaseManager
     .init()
@@ -48,6 +49,11 @@ awarns
             registerTracingPlugin({
                 externalTracesStore: remoteTraces,
                 oldTracesMaxAgeHours: 24 * 7 /* one week */,
+            }),
+            registerWearOSPlugin({
+                sensors: [WatchSensor.HEART_RATE],
+                enablePlainMessaging: true,
+                enableWearCommands: true,
             }),
         ],
         {
