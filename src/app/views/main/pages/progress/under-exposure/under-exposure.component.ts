@@ -12,6 +12,8 @@ import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
 import { BarSegment } from "./exposure-progress-bar";
 import { takeUntil } from "rxjs/operators";
+import { awarns } from "@awarns/core";
+import { PlainMessage } from "@awarns/wear-os";
 
 const exposureTimes = getConfig().exposureTimes;
 const REGULAR_EXPOSURE_TIME = exposureTimes.regular;
@@ -111,8 +113,18 @@ export class UnderExposureComponent {
             .subscribe((exposureProgress) => {
                 this.ngZone.run(() => {
                     this.exposureProgress = exposureProgress;
+                    this.sendExposureProgress();
                 });
             });
+    }
+
+    // TODO: check this, because it might not work properly
+    sendExposureProgress() {
+        awarns.emitEvent("sendExposureProgress", {
+            plainMessage: "asd",
+            message: "Exposure progress: ",
+            data: this.exposureProgress,
+        });
     }
 
     private subscribeToInDangerChanges() {

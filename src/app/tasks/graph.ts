@@ -215,6 +215,18 @@ class DemoTaskGraph implements TaskGraph {
         );
         on("exposureStarted", run("writeRecords"));
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
+
+        // necessary in order to change smartwatch interface
+        on(
+            "exposureStarted",
+            run("sendPlainMessageToWatch", {
+                message: "Exposure started",
+            })
+        );
+        on("plainMessageSent", run("writeRecords"));
+        on("sendExposureProgress", run("sendPlainMessageToWatch"));
+        on("plainMessageSent", run("writeRecords"));
+
         on("watchHeartRateSamplesAcquired", run("writeRecords"));
         // END: Pre-exposure events
 
@@ -448,6 +460,13 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Finalization event
         on("exposureFinished", run("stopDetectingWatchHeartRateChanges"));
+        on(
+            "exposureFinished",
+            run("sendPlainMessageToWatch", {
+                message: "Exposure finished",
+            })
+        );
+        on("plainMessageSent", run("writeRecords"));
         on("exposureFinished", run("writeRecords"));
         // END: Exposure events
 
