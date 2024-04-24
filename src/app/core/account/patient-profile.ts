@@ -2,19 +2,14 @@ import { ServerApiClient } from "~/app/core/server";
 import { DeviceProfileController } from "./device-profile";
 import { ApplicationSettings } from "@nativescript/core";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { Therapist } from "../server/therapists";
 
 const PROFILE_INFO_KEY = "PATIENT_PROFILE_INFO";
 const DATA_SHARING_KEY = "PATIENT_PROFILE_DATA_SHARING_CONSENT";
 
 export interface PatientProfile {
     id: string;
-    fileId: string;
-    therapist: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        workPhone: string;
-    };
+    therapist: Therapist;
     study: {
         id: string;
     };
@@ -64,15 +59,17 @@ export class PatientProfileControllerImpl implements PatientProfileController {
     }
 
     async reloadInfo(): Promise<void> {
-        const { patientId } = this.deviceController;
-        const patient = await this.serverClient.patients.get(patientId);
+        const { patientId, studyId } = this.deviceController;
+        
+        const patient = await this.serverClient.patients.get(patientId, studyId);
+
         const therapist = await this.serverClient.therapists.get(
             patient.therapistId
         );
 
-        const { id, fileId, studyId } = patient;
+        const { id } = patient;
         const study = { id: studyId };
-        this._profileInfo = { id, fileId, therapist, study };
+        this._profileInfo = { id, therapist, study };
 
         const serializedProfile = JSON.stringify(this._profileInfo);
         ApplicationSettings.setString(PROFILE_INFO_KEY, serializedProfile);
