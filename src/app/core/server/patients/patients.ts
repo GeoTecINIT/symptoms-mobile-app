@@ -9,9 +9,9 @@ import { GRPCServiceOptions } from "../common";
 
 export interface Patient {
     id: string;
-    fileId: string;
+    centerId: string;
     therapistId: string;
-    studyId: string;
+    startDate: Date;
 }
 export type UpdateConsentRequest = UCRequest.AsObject;
 export type GetConsentResponse = GCResponse.AsObject;
@@ -23,14 +23,21 @@ export class PatientsApiAdapter {
         this.client = new PatientsPromiseClient(url, null, options);
     }
 
-    async get(patientId: string): Promise<Patient> {
+    async get(patientId: string, studyIdReq: string): Promise<Patient> {
         const request = new GetPatientRequest();
         request.setId(patientId);
+        request.setStudyId(studyIdReq);
 
         const resp = await this.client.get(request);
-        const { id, fileId, therapistId, studyId } = resp.toObject();
+        const { id, centreId, therapistId, startDate } = resp.toObject();
+        const milliseconds = startDate.seconds * 1000 + Math.floor(startDate.nanos / 1e6);
 
-        return { id, fileId, therapistId, studyId };
+        return {
+            id,
+            centerId: centreId,
+            therapistId,
+            startDate: new Date(milliseconds)
+        } as Patient;
     }
 
     async updateConsent(req: UpdateConsentRequest): Promise<void> {

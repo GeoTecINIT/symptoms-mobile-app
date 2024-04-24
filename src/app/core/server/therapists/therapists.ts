@@ -6,9 +6,9 @@ import { GRPCServiceOptions } from "../common";
 
 export interface Therapist {
     id: string;
-    firstName: string;
-    lastName: string;
-    workPhone: string;
+    fullname: string;
+    email: string;
+    workPhone?: string;
 }
 
 export class TherapistsApiAdapter {
@@ -23,8 +23,8 @@ export class TherapistsApiAdapter {
         request.setId(therapistId);
 
         const resp = await this.client.get(request);
-        const { id, firstName, lastName, workPhone } = resp.toObject();
+        const { id, fullname, email, workPhone } = resp.toObject();
 
-        return { id, firstName, lastName, workPhone };
+        return { id, fullname, email, workPhone };
     }
 }
