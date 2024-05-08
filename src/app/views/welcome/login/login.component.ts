@@ -12,7 +12,7 @@ import { ActivatedRoute } from "@angular/router";
 export class LoginComponent {
     canContinue = false;
     waitingForResponse = false;
-    authFailed = false;
+    errorMessage = "";
 
     private code: string;
 
@@ -21,10 +21,10 @@ export class LoginComponent {
         private navigationService: NavigationService,
         private inAppBrowserService: InAppBrowserService,
         private activeRoute: ActivatedRoute
-    ) {}
+    ) { }
 
     onCodeInputChange(code: string) {
-        this.authFailed = false;
+        this.errorMessage = "";
         this.code = code.trim();
         this.canContinue = this.code !== "";
     }
@@ -34,7 +34,7 @@ export class LoginComponent {
 
         this.waitingForResponse = true;
 
-        this.authService.login(this.code).then((success) => {
+        this.authService.login(this.code).then(([success, error]) => {
             if (success) {
                 this.navigationService.navigate(["../tutorial"], {
                     source: this.activeRoute,
@@ -42,7 +42,10 @@ export class LoginComponent {
                 });
             } else {
                 this.waitingForResponse = false;
-                this.authFailed = true;
+                this.errorMessage =
+                    error.includes("network error")
+                        ? "No estás conectado a internet."
+                        : "Código incorrecto";
             }
         });
     }
