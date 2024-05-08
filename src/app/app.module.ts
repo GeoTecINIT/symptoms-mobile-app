@@ -1,3 +1,4 @@
+import { HttpClientModule } from "@angular/common/http";
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import {
     NativeScriptAnimationsModule,
@@ -15,6 +16,7 @@ import { AppComponent } from "./app.component";
         NativeScriptAnimationsModule,
         NativeScriptLocalizeModule,
         AppRoutingModule,
+        HttpClientModule,
     ],
     declarations: [AppComponent],
     schemas: [NO_ERRORS_SCHEMA],
