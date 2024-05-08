@@ -23,6 +23,7 @@ export interface AppConfig {
 
 const APP_CONFIG_COLLECTION = "app-configs"; 
 const APP_CONFIG_KEY = "PATIENT_APP_CONFIG";
+const PATIENT_MESSAGES_KEY = "PATIENT_MESSAGES";
 
 export interface AppConfigController {
     aois: AreasOfInterest[];
@@ -73,8 +74,14 @@ export class AppConfigControllerImpl implements AppConfigController {
             }
 
             this._appConfig = doc.data() as AppConfig;
-            const serializedAppConfig = JSON.stringify(doc.data());
+
+            // Serialize and save app-config document
+            const serializedAppConfig = JSON.stringify(this._appConfig);
             ApplicationSettings.setString(APP_CONFIG_KEY, serializedAppConfig);
+
+            // Serialize and save messages separately
+            const serializedMessages = JSON.stringify(this._appConfig.messages);
+            ApplicationSettings.setString(PATIENT_MESSAGES_KEY, serializedMessages);
 
             this.getLogger().info("AppConfig loaded on device!")
 
