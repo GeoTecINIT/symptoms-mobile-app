@@ -18,8 +18,9 @@ import {
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { preparePlugin, setupWatchToUse } from "~/app/core/framework";
-import { setupAreasOfInterest } from "~/app/core/framework/aois";
 import { takeUntil } from "rxjs/operators";
+
+import { appConfigController } from "~/app/core/account";
 
 @Component({
     selector: "SymMain",
@@ -77,6 +78,7 @@ export class MainComponent implements OnInit {
 
     @HostListener("loaded")
     onLoaded() {
+        this.setupAppConfig()
         this.checkEMAIFrameworkStatus();
         this.controlAppLoginStatus();
     }
@@ -136,16 +138,19 @@ export class MainComponent implements OnInit {
             });
     }
 
+    private setupAppConfig() {
+        try {
+            appConfigController.setupAppConfig();
+        } catch (e) {
+            this.logger.error(`Error while setting up AppConfig. Reason: ${e}`);
+        }
+    }
+
     private checkEMAIFrameworkStatus() {
         setupWatchToUse()
             .then(() =>
                 preparePlugin()
                     .then((ready) => {
-                        setupAreasOfInterest().catch((e) =>
-                            this.logger.error(
-                                `Could not setup areas of interest. Reason: ${e}`
-                            )
-                        );
                         if (!ready) {
                             this.informAboutPermissionsNeed().then(() => {
                                 this.checkEMAIFrameworkStatus();

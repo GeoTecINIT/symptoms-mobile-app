@@ -11,7 +11,7 @@
     "messaging": true,
     "in_app_messaging": false,
     "crashlytics": true,
-    "storage": false,
+    "storage": true,
     "functions": false,
     "facebook_auth": false,
     "google_auth": false,

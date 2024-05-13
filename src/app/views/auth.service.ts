@@ -25,17 +25,17 @@ export class AuthService {
         this.logger = getLogger("AuthService");
     }
 
-    async login(accessCode: string): Promise<boolean> {
+    async login(accessCode: string): Promise<[boolean, string]> {
         try {
             await this.accountService.deviceProfile.linkApp(accessCode);
             await this.firebaseAuthService.refreshToken();
             this.authSubject.next(true);
 
-            return true;
+            return [true, ""];
         } catch (e) {
             this.logger.warn(`Login error: ${JSON.stringify(e)}`);
 
-            return false;
+            return [false, JSON.stringify(e)];
         }
     }
 

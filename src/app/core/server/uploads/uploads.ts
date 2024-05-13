@@ -90,10 +90,10 @@ function pbRecordChangeFrom(change: Change): PBRecord.Change {
 
 function pbTracesFrom(traces: Array<ApiTrace>): Array<PBTrace> {
     return traces.map((trace) => {
-        const { deviceId, timestamp, chainId, name, type, result, content } =
-            trace;
+        const { deviceId, timestamp, chainId, name, type, result, content, id } = trace;
 
         const apiTrace = new PBTrace();
+        apiTrace.setId(id)
         apiTrace.setDeviceId(deviceId);
         apiTrace.setTimestamp(pbTimestampFrom(timestamp));
         apiTrace.setTzOffset(timestamp.getTimezoneOffset());

@@ -22,7 +22,7 @@ export async function getUploadMetadata(
 
     return {
         deviceId: deviceProfile.deviceId,
-        patientId: patientProfile.id,
+        patientId: `${patientProfile.centerId}-${patientProfile.id}`,
         studyId: patientProfile.study.id,
     };
 }

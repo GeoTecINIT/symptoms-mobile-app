@@ -1,6 +1,7 @@
 import AwaitLock from "await-lock";
 import { ApplicationSettings } from "@nativescript/core";
-import { firebase } from "@nativescript/firebase";
+import { firebase, firestore } from "@nativescript/firebase";
+
 import { crashlytics } from "@nativescript/firebase/crashlytics";
 import { analytics } from "@nativescript/firebase/analytics";
 
@@ -10,6 +11,10 @@ export class FirebaseManager {
     private initialized = false;
     private initPromise: Promise<any>;
     private initLock = new AwaitLock();
+
+    get firestore() {
+        return firestore;
+    }
 
     get dataCollectionEnabled() {
         return ApplicationSettings.getBoolean(DATA_COLLECTION_ENABLED, false);

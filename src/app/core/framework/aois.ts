@@ -1,13 +1,16 @@
 import { getLogger } from "~/app/core/utils/logger";
 import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
+import { ApplicationSettings } from "@nativescript/core";
+
+const APP_CONFIG_KEY = "PATIENT_APP_CONFIG";
 
 export async function setupAreasOfInterest() {
     const logger = getLogger("AreasOfInterestManager");
 
     const currentAoIs = await areasOfInterest.getAll();
-    const newAoIs: Array<AreaOfInterest> = [
-        // Add your areas of interest here
-    ];
+    const appConfig = ApplicationSettings.getString(APP_CONFIG_KEY)
+
+    const newAoIs = JSON.parse(appConfig).places
 
     if (!aoisDidChange(currentAoIs, newAoIs)) {
         return;
@@ -25,27 +28,23 @@ function aoisDidChange(
         return true;
     }
 
-    const currentSorted = sort(currentAoIs);
-    const newSorted = sort(newAoIs);
+    const currentAoisHash = JSON.stringify(
+        currentAoIs.map(aoi => ({
+            name: aoi.name,
+            latitude: aoi.latitude,
+            longitude: aoi.longitude,
+            radius: aoi.radius
+        }))
+    )
 
-    for (let i = 0; i < currentSorted.length; i++) {
-        if (currentSorted[i].id !== newSorted[i].id) {
-            return true;
-        }
-    }
+    const newAoisHash = JSON.stringify(
+        newAoIs.map(aoi => ({
+            name: aoi.name,
+            latitude: aoi.latitude,
+            longitude: aoi.longitude,
+            radius: aoi.radius
+        }))
+    )
 
-    return false;
-}
-
-function sort(aois: Array<AreaOfInterest>): Array<AreaOfInterest> {
-    return [...aois].sort((aoi1, aoi2) => {
-        if (aoi1.id < aoi2.id) {
-            return -1;
-        }
-        if (aoi1.id > aoi2.id) {
-            return 1;
-        }
-
-        return 0;
-    });
+    return currentAoisHash !== newAoisHash; 
 }

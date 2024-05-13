@@ -1,0 +1,107 @@
+import { ApplicationSettings } from "@nativescript/core";
+
+import { AreasOfInterest } from "@awarns/geofencing";
+import { ContextualConditions } from "~/app/core/weather";
+import { firebaseManager } from "../utils/firebase";
+import { getLogger, Logger } from "../utils/logger";
+import { setupAreasOfInterest } from "../framework/aois";
+import { getUploadMetadata } from "../persistence/remote/common";
+import { account, Account } from "~/app/core/account";
+
+export type Message = {
+    event: string;
+    name: string;
+    title: string;
+    body: string;
+};
+
+export interface AppConfig {
+    places: AreasOfInterest[];
+    messages: Message[];
+    contextualConditions: ContextualConditions;
+}
+
+const APP_CONFIG_COLLECTION = "app-configs"; 
+const APP_CONFIG_KEY = "PATIENT_APP_CONFIG";
+const PATIENT_MESSAGES_KEY = "PATIENT_MESSAGES";
+
+export interface AppConfigController {
+    aois: AreasOfInterest[];
+    messages: Message[];
+    contextualConditions: ContextualConditions;
+    setupAppConfig();
+}
+
+export class AppConfigControllerImpl implements AppConfigController {
+    private _appConfig: AppConfig;
+    private logger: Logger;
+    private isInitialized: boolean;
+
+    constructor(
+        private accountInfo: Account
+    ) {
+        this._appConfig = ApplicationSettings.hasKey(APP_CONFIG_KEY)
+            ? JSON.parse(ApplicationSettings.getString(APP_CONFIG_KEY))
+            : null;
+        this.isInitialized = false;
+    }
+
+    get aois(): AreasOfInterest[] {
+        return this._appConfig.places
+    }
+
+    get messages(): Message[] {
+        return this._appConfig.messages
+    }
+
+    get contextualConditions(): ContextualConditions {
+        return this._appConfig.contextualConditions
+    }
+
+    // Fetch firestore document and keep AppConfig updated while the app is running
+    async setupAppConfig() {
+        if (this.isInitialized) return;
+
+        const { patientId, studyId } = await getUploadMetadata(this.accountInfo);
+
+        if (!patientId || !studyId) throw Error("AccountInfo not currently initialized");
+
+        const configDoc = firebaseManager.firestore.collection(APP_CONFIG_COLLECTION).doc(`${studyId}-${patientId}`);
+        configDoc.onSnapshot(doc => {
+            if (!doc.exists) {
+                this.getLogger().error(`The config document for patient ${patientId} does not exists in app-configs collection`);
+                return;
+            }
+
+            this._appConfig = doc.data() as AppConfig;
+
+            // Serialize and save app-config document
+            const serializedAppConfig = JSON.stringify(this._appConfig);
+            ApplicationSettings.setString(APP_CONFIG_KEY, serializedAppConfig);
+
+            // Serialize and save messages separately
+            const serializedMessages = JSON.stringify(this._appConfig.messages);
+            ApplicationSettings.setString(PATIENT_MESSAGES_KEY, serializedMessages);
+
+            this.getLogger().info("AppConfig loaded on device!")
+
+            setupAreasOfInterest().catch((e) =>
+                this.getLogger().error(
+                    `Could not setup areas of interest. Reason: ${e}`
+                )
+            );
+        })
+
+        this.isInitialized = true;
+    }
+
+    private getLogger() {
+        if (!this.logger) {
+            this.logger = getLogger("PatientProfileController");
+        }
+
+        return this.logger;
+    }
+}
+
+export const appConfigController = new AppConfigControllerImpl(account);
