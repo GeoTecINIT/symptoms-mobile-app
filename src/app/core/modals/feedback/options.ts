@@ -14,7 +14,7 @@ export interface FeedbackModalOptions {
     completionScreen?: CompletionScreenOptions;
 }
 
-type AnswerOption = PredefinedAnswer | FreeTextAnswer;
+type AnswerOption = PredefinedAnswer | FreeTextAnswer | FreeTextWithAudioAnswer;
 
 interface PredefinedAnswer {
     type: "predefined";
@@ -24,5 +24,12 @@ interface PredefinedAnswer {
 interface FreeTextAnswer {
     type: "free-text";
     hint: string;
+    helpText?: string;
+}
+
+interface FreeTextWithAudioAnswer {
+    type: "free-text-with-audio";
+    // answer: string;
+    hint?: string;
     helpText?: string;
 }

@@ -5,8 +5,7 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
     feedbackScreen: {
         body: {
             emoji: "👋",
-            text:
-                "Te esperamos en otro momento. Recuerda la importancia de exponerse",
+            text: "Te esperamos en otro momento. Recuerda la importancia de exponerse",
         },
         question: "¿Podrías indicar por qué no harás una exposición?",
         options: [
@@ -23,6 +22,11 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
                 hint: "Otro",
                 helpText: "Tu terapeuta podrá leer este mensaje",
             },
+            {
+                type: "free-text-with-audio",
+                hint: "Otro",
+                helpText: "Tu terapeuta podrá leer este mensaje",
+            },
         ],
     },
 };
@@ -32,8 +36,7 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
     feedbackScreen: {
         body: {
             emoji: "👋",
-            text:
-                "Recuerda la importancia de exponerte de forma regular. Te esperamos pronto",
+            text: "Recuerda la importancia de exponerte de forma regular. Te esperamos pronto",
         },
         question: "¿Podrías indicarme el motivo de tu salida?",
         options: [
@@ -47,6 +50,11 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
             },
             {
                 type: "free-text",
+                hint: "Otro",
+                helpText: "Tu terapeuta podrá leer este mensaje",
+            },
+            {
+                type: "free-text-with-audio",
                 hint: "Otro",
                 helpText: "Tu terapeuta podrá leer este mensaje",
             },

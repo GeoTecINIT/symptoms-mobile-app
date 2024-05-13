@@ -21,7 +21,7 @@ export const askPreExposureQuestions: QuestionsModalOptions = {
         },
         {
             title: "¿Qué piensas que ocurrirá cuando llegues al lugar de exposición?",
-            type: "free-text",
+            type: "free-text-with-audio",
             hint: "Pienso que...",
         },
     ],
