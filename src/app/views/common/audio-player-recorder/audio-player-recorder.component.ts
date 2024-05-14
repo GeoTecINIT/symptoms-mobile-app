@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from "@angular/core";
+import { Component, Input, Output, NgZone, OnInit } from "@angular/core";
 import {
     AudioPlayerOptions,
     AudioRecorderOptions,
@@ -6,7 +6,15 @@ import {
     TNSRecorder,
 } from "nativescript-audio";
 
-import { Folder, knownFolders } from "@nativescript/core/file-system";
+import {
+    Folder,
+    knownFolders,
+    File,
+    path,
+} from "@nativescript/core/file-system";
+
+import { storage } from "@nativescript/firebase/storage";
+
 import { Slider } from "@nativescript/core";
 
 @Component({
@@ -15,6 +23,8 @@ import { Slider } from "@nativescript/core";
     styleUrls: ["./audio-player-recorder.component.scss"],
 })
 export class AudioPlayerRecorderComponent implements OnInit {
+    @Input() public isStoredLocally: boolean;
+    @Output() public audioUrl: string;
     public audioRecorder: TNSRecorder;
     public audioPlayer: TNSPlayer;
     public recordedAudioFile: string;
@@ -64,6 +74,9 @@ export class AudioPlayerRecorderComponent implements OnInit {
             // 3: https://developer.android.com/reference/android/media/MediaRecorder.AudioEncoder#AAC, most stable and commonly used
             encoder: 3,
             metering: true,
+            channels: 1,
+            sampleRate: 44100,
+            bitRate: 128000,
             infoCallback: (infoObject) => {
                 console.log(JSON.stringify(infoObject));
             },
@@ -82,15 +95,85 @@ export class AudioPlayerRecorderComponent implements OnInit {
         }
     }
 
-    stopRecording(): void {
-        this.audioRecorder.stop().then(() => {
-            this.isRecording = false;
-            this.timerDisplay = "00:00";
-        });
+    async stopRecording() {
+        await this.audioRecorder.stop();
+        this.isRecording = false;
+        this.timerDisplay = "00:00";
+        this.uploadAudioRecording(this.recordedAudioFile);
+    }
+
+    async uploadAudioRecording(audioFilePath: string) {
+        console.log("\n\nEntered upload audio recording \n\n");
+        const remoteFullPath = `audios/${audioFilePath.split("/").pop()}`;
+        storage
+            .uploadFile({
+                bucket: "", // optional
+                remoteFullPath: remoteFullPath,
+                // localFile: audioFilePath,
+                localFullPath: audioFilePath,
+                onProgress: function (status) {
+                    console.log(
+                        "Uploaded fraction: " + status.fractionCompleted
+                    );
+                    console.log(
+                        "Percentage complete: " + status.percentageCompleted
+                    );
+                },
+                metadata: {
+                    contentType: "demo/test/audios",
+                    contentLanguage: "es",
+                    customMetadata: {},
+                },
+            })
+            .then(
+                function (uploadedFile) {
+                    console.log("asoidmasoida");
+                    this.obtainAudioUrl(remoteFullPath);
+                    console.log(
+                        "File uploaded: " + JSON.stringify(uploadedFile)
+                    );
+                }.bind(this),
+                function (error) {
+                    console.log("File upload error: " + error);
+                }
+            );
+    }
+
+    async obtainAudioUrl(remoteFullPath: string): Promise<string> {
+        console.log("\n\nEntered obtain audio url \n\n");
+        try {
+            const url = await storage.getDownloadUrl({
+                remoteFullPath: remoteFullPath,
+            });
+            console.log("Remote URL: " + url);
+            return url;
+        } catch (error) {
+            console.log("Error: " + error);
+            throw new Error("Failed to obtain audio URL");
+        }
+    }
+
+    async storeLocally(audioFilePath: string) {
+        const localFolder = knownFolders.documents().getFolder("recordings");
+        const file = File.fromPath(audioFilePath);
+
+        try {
+            const destinationPath = path.join(localFolder.path, file.name);
+            const binaryContent = file.readSync((error) => {
+                console.error("Error reading file: ", error);
+            });
+            const destinationFile = File.fromPath(destinationPath);
+            destinationFile.writeSync(binaryContent, (error) => {
+                console.error("Error writing file: ", error);
+            });
+        } catch (error) {
+            console.error("Error copying file: ", error);
+        }
     }
 
     playRecording(): void {
         if (this.recordedAudioFile) {
+            console.log("Recorded audio file info: " + this.recordedAudioFile);
             const playerOptions: AudioPlayerOptions = {
                 audioFile: this.recordedAudioFile,
                 loop: false,
@@ -103,7 +186,6 @@ export class AudioPlayerRecorderComponent implements OnInit {
                 },
             };
 
-            // TODO: might need to update if firebase logistic is added
             this.audioPlayer.playFromFile(playerOptions).then(
                 () => {
                     this.zone.run(() => {

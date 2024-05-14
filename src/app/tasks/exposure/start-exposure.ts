@@ -41,6 +41,8 @@ export class StartExposureTask extends Task {
                 startTime: new Date(),
                 place,
                 emotionValues: [],
+                startAudioUrl: "",
+                endAudioUrl: "",
                 successful: false,
             };
             await this.store.insert(exposure);
@@ -54,7 +56,9 @@ export class StartExposureTask extends Task {
                 Change.START,
                 exposure.startTime,
                 exposure.place,
-                exposure.emotionValues
+                exposure.emotionValues,
+                exposure.startAudioUrl,
+                exposure.endAudioUrl
             ),
         };
     }

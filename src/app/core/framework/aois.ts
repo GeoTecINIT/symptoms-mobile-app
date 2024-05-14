@@ -8,9 +8,9 @@ export async function setupAreasOfInterest() {
     const logger = getLogger("AreasOfInterestManager");
 
     const currentAoIs = await areasOfInterest.getAll();
-    const appConfig = ApplicationSettings.getString(APP_CONFIG_KEY)
+    const appConfig = ApplicationSettings.getString(APP_CONFIG_KEY);
 
-    const newAoIs = JSON.parse(appConfig).places
+    const newAoIs = JSON.parse(appConfig).places;
 
     if (!aoisDidChange(currentAoIs, newAoIs)) {
         return;
@@ -29,22 +29,22 @@ function aoisDidChange(
     }
 
     const currentAoisHash = JSON.stringify(
-        currentAoIs.map(aoi => ({
+        currentAoIs.map((aoi) => ({
             name: aoi.name,
             latitude: aoi.latitude,
             longitude: aoi.longitude,
-            radius: aoi.radius
+            radius: aoi.radius,
         }))
-    )
+    );
 
     const newAoisHash = JSON.stringify(
-        newAoIs.map(aoi => ({
+        newAoIs.map((aoi) => ({
             name: aoi.name,
             latitude: aoi.latitude,
             longitude: aoi.longitude,
-            radius: aoi.radius
+            radius: aoi.radius,
         }))
-    )
+    );
 
-    return currentAoisHash !== newAoisHash; 
+    return currentAoisHash !== newAoisHash;
 }

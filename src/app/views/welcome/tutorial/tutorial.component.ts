@@ -48,7 +48,7 @@ export class TutorialComponent implements OnInit {
 
     async onConfigureTap() {
         await setupWatchToUse();
-        
+
         preparePlugin().then((done) => {
             if (done) {
                 emitTreatmentStartEvent();

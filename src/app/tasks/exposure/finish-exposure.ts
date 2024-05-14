@@ -36,6 +36,8 @@ export class FinishExposureTask extends Task {
                 ongoingExposure.endTime,
                 ongoingExposure.place,
                 ongoingExposure.emotionValues,
+                ongoingExposure.startAudioUrl,
+                ongoingExposure.endAudioUrl,
                 successful
             ),
         };

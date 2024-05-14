@@ -51,10 +51,7 @@ export class DeviceProfileControllerImpl implements DeviceProfileController {
             PATIENT_ID_KEY,
             undefined
         );
-        this._studyId = ApplicationSettings.getString(
-            STUDY_ID_KEY,
-            undefined
-        );
+        this._studyId = ApplicationSettings.getString(STUDY_ID_KEY, undefined);
     }
 
     async linkApp(accessCode: string): Promise<void> {
@@ -86,7 +83,7 @@ export class DeviceProfileControllerImpl implements DeviceProfileController {
         this._deviceId = id;
         this._patientId = patientId;
         this._studyId = studyId;
-        
+
         ApplicationSettings.setString(DEVICE_ID_KEY, id);
         ApplicationSettings.setString(PATIENT_ID_KEY, patientId);
         ApplicationSettings.setString(STUDY_ID_KEY, studyId);

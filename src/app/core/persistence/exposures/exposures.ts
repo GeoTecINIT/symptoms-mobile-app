@@ -33,12 +33,20 @@ class ExposuresStoreDB implements ExposuresStore {
                 "Cannot update an exposure not previously inserted! (missing id)"
             );
         }
-        const { startTime, endTime, emotionValues, successful } =
-            docFrom(exposure);
+        const {
+            startTime,
+            endTime,
+            emotionValues,
+            startAudioUrl,
+            endAudioUrl,
+            successful,
+        } = docFrom(exposure);
         await this.store.update(exposure.id, {
             startTime,
             endTime,
             emotionValues,
+            startAudioUrl,
+            endAudioUrl,
             successful,
         });
     }
@@ -85,7 +93,15 @@ class ExposuresStoreDB implements ExposuresStore {
 export const exposures = new ExposuresStoreDB();
 
 function docFrom(exposure: Exposure): any {
-    const { startTime, endTime, place, emotionValues, successful } = exposure;
+    const {
+        startTime,
+        endTime,
+        place,
+        emotionValues,
+        startAudioUrl,
+        endAudioUrl,
+        successful,
+    } = exposure;
 
     return {
         startTime: startTime ? startTime.getTime() : -1,
@@ -97,12 +113,23 @@ function docFrom(exposure: Exposure): any {
                 value: value.value,
             })),
         ],
+        startAudioUrl,
+        endAudioUrl,
         successful,
     };
 }
 
 function exposureFrom(doc: any): Exposure {
-    const { id, startTime, endTime, place, emotionValues, successful } = doc;
+    const {
+        id,
+        startTime,
+        endTime,
+        place,
+        emotionValues,
+        startAudioUrl,
+        endAudioUrl,
+        successful,
+    } = doc;
 
     return {
         id,
@@ -115,6 +142,8 @@ function exposureFrom(doc: any): Exposure {
                 value: value.value,
             })),
         ],
+        startAudioUrl,
+        endAudioUrl,
         successful,
     };
 }

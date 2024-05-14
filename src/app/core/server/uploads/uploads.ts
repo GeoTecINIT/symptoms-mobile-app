@@ -69,6 +69,10 @@ function pbRecordsFrom(records: Array<ApiRecord>): Array<PBRecord> {
         pbRecord.setTzOffset(timestamp.getTimezoneOffset());
         pbRecord.setDeviceId(deviceId);
         pbRecord.setChange(pbRecordChangeFrom(change));
+        // add audioUrl here
+        console.log(
+            `\nA\nA\nA pbRecordsFrom \n${JSON.stringify(extraProperties)}\n\n\n`
+        );
         pbRecord.setPayload(JSON.stringify(extraProperties, jsonDateReplacer));
 
         return pbRecord;
@@ -90,10 +94,19 @@ function pbRecordChangeFrom(change: Change): PBRecord.Change {
 
 function pbTracesFrom(traces: Array<ApiTrace>): Array<PBTrace> {
     return traces.map((trace) => {
-        const { deviceId, timestamp, chainId, name, type, result, content, id } = trace;
+        const {
+            deviceId,
+            timestamp,
+            chainId,
+            name,
+            type,
+            result,
+            content,
+            id,
+        } = trace;
 
         const apiTrace = new PBTrace();
-        apiTrace.setId(id)
+        apiTrace.setId(id);
         apiTrace.setDeviceId(deviceId);
         apiTrace.setTimestamp(pbTimestampFrom(timestamp));
         apiTrace.setTzOffset(timestamp.getTimezoneOffset());

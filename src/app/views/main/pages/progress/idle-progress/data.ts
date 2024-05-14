@@ -20,7 +20,7 @@ export function createFakeDataGenerator(): DataGenerator {
         );
         const placeName = elem.title.split("En ")[1];
 
-        return new ExposureChange(
+        const exposureChange = new ExposureChange(
             Change.END,
             timestamp,
             {
@@ -34,8 +34,15 @@ export function createFakeDataGenerator(): DataGenerator {
                 timestamp: value.x as Date,
                 value: value.y,
             })),
+            // add these to extraProperties
+            "fake_start_audio_url",
+            "fake_end_audio_url",
             true
         );
+
+        console.log(JSON.stringify(`Fake exposure change: ${exposureChange}`));
+
+        return exposureChange;
     };
 }
 

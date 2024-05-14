@@ -6,6 +6,8 @@ export interface Exposure {
     endTime?: Date;
     place: AreaOfInterest;
     emotionValues: Array<EmotionValue>;
+    startAudioUrl?: string;
+    endAudioUrl?: string;
     successful: boolean;
 }
 

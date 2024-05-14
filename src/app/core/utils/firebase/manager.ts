@@ -1,7 +1,6 @@
 import AwaitLock from "await-lock";
 import { ApplicationSettings } from "@nativescript/core";
 import { firebase, firestore } from "@nativescript/firebase";
-
 import { crashlytics } from "@nativescript/firebase/crashlytics";
 import { analytics } from "@nativescript/firebase/analytics";
 

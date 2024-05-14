@@ -40,6 +40,8 @@ export class EvaluateExposureAnswers extends Task {
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
         const ongoingExposure = invocationEvent.data as Exposure;
+        console.log("entered evaluate-answers");
+        console.log(JSON.stringify(ongoingExposure));
         if (!ongoingExposure.startTime) {
             throw new Error(
                 "Cannot evaluate the answers of a non-started exposure!"

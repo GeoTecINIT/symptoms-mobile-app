@@ -9,6 +9,8 @@ export class ExposureChange extends Record {
         timestamp: Date,
         public place: AreaOfInterest,
         public emotionValues: Array<EmotionValue>,
+        public startAudioUrl: string,
+        public endAudioUrl: string,
         public successful: boolean = false
     ) {
         super(AppRecordType.ExposureChange, timestamp, change);
