@@ -19,8 +19,9 @@ class DemoTaskGraph implements TaskGraph {
         run: RunnableTaskDescriptor
     ): Promise<void> {
         // START: Human activity recognition
-        on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
-        on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
+        // Using Intermediate because detection was to elongated with Coarse 
+        on("startEvent", run("startDetectingIntermediateHumanActivityChanges"));
+        on("stopEvent", run("stopDetectingIntermediateHumanActivityChanges"));
         // END: Human activity recognition
 
         // START: Low resolution geolocation data collection
@@ -44,7 +45,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "lowFrequencyGeolocationAcquisitionCanStart",
             run("acquirePhoneGeolocation")
-                .every(15, "minutes")
+                .every(3, "minutes")  // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
         // -> High frequency
@@ -59,7 +60,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "userFinishedBeingStill",
             run("acquirePhoneGeolocation")
-                .every(1, "minutes")
+                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation 
                 .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
         );
         // -> All frequencies & modes
@@ -124,7 +125,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
         );*/
         // END: High resolution geolocation data collection
-
+        
         // START: Pre-exposure events
         // -> Watch exposure area outer radius proximity changes
         on(
@@ -143,7 +144,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Estás cerca de un lugar de exposición",
                 body: "¿Vas a hacer una?",
                 tapAction: {
-                    type: "ask-confirmation",
+                    type: TapActionType.ASK_CONFIRMATION,
                     id: "exposure-intention",
                 },
             })
@@ -195,7 +196,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Has llegado a un lugar de exposición",
                 body: "¿Te animas a hacer una?",
                 tapAction: {
-                    type: "ask-confirmation",
+                    type: TapActionType.ASK_CONFIRMATION,
                     id: "start-exposure",
                 },
             })
@@ -214,6 +215,7 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on("exposureStarted", run("writeRecords"));
+        // -> Detect heart rate with watch 
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
         // necessary in order to change smartwatch interface
@@ -300,7 +302,7 @@ class DemoTaskGraph implements TaskGraph {
                 title: "Parece que has salido del lugar de exposición",
                 body: "Pulsa sobre la notificación, por favor",
                 tapAction: {
-                    type: "ask-confirmation",
+                    type: TapActionType.ASK_CONFIRMATION,
                     id: "escape-intention",
                 },
             })
@@ -441,7 +443,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
-            run("finishExposure", { successful: true })
+            run("finishExposure", { successful: true }) // Possible bug. Why successful: true when listening to event exposureExtensionEvaluationResultedUnsuccessful
                 .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
