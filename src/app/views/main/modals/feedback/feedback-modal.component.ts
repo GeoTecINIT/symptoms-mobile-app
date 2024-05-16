@@ -18,6 +18,9 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
     answer: string;
     showConfirmScreen = false;
 
+    private isAudioIsRecorded: boolean = false; 
+    private MAXIMUM_FREE_TEXT_LENGTH = 500;
+
     private readonly instanceId: number;
     private readonly backCallback: () => void;
 
@@ -60,12 +63,21 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
     }
 
     onAnswer(answer: string) {
+        const answerIsFreeText = answer.length <= this.MAXIMUM_FREE_TEXT_LENGTH;
+        // If audio was recorded and answer is free text, don't update the answer
+        if (this.isAudioIsRecorded && answerIsFreeText) return;
+
         this.answer = answer;
         if (this.hasCompletionScreen) {
             this.showConfirmScreen = true;
         } else {
             this.onClose();
         }
+    }
+
+    onBase64AudioRecorded(base64Audio: string) {
+        this.isAudioIsRecorded = true;
+        this.onAnswer(base64Audio);
     }
 
     emitFeedback() {

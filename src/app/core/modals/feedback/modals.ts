@@ -18,11 +18,6 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
                 answer: "Estoy de paso",
             },
             {
-                type: "free-text",
-                hint: "Otro",
-                helpText: "Tu terapeuta podrá leer este mensaje",
-            },
-            {
                 type: "free-text-with-audio",
                 hint: "Otro",
                 helpText: "Tu terapeuta podrá leer este mensaje",
@@ -47,11 +42,6 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
             {
                 type: "predefined",
                 answer: "No dispongo de más tiempo",
-            },
-            {
-                type: "free-text",
-                hint: "Otro",
-                helpText: "Tu terapeuta podrá leer este mensaje",
             },
             {
                 type: "free-text-with-audio",

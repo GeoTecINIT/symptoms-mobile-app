@@ -1,4 +1,4 @@
-import { Component, Input, Output, NgZone, OnInit } from "@angular/core";
+import { Component, Input, Output, NgZone, OnInit, EventEmitter } from "@angular/core";
 import {
     AudioPlayerOptions,
     AudioRecorderOptions,
@@ -17,14 +17,15 @@ import { storage } from "@nativescript/firebase/storage";
 
 import { Slider } from "@nativescript/core";
 
+import { Buffer } from "buffer";
+
 @Component({
     selector: "SymAudioPlayerRecorder",
     templateUrl: "./audio-player-recorder.component.html",
     styleUrls: ["./audio-player-recorder.component.scss"],
 })
 export class AudioPlayerRecorderComponent implements OnInit {
-    @Input() public isStoredLocally: boolean;
-    @Output() public audioUrl: string;
+    @Output() public base64AudioRecorded = new EventEmitter<string>();
     public audioRecorder: TNSRecorder;
     public audioPlayer: TNSPlayer;
     public recordedAudioFile: string;
@@ -99,8 +100,32 @@ export class AudioPlayerRecorderComponent implements OnInit {
         await this.audioRecorder.stop();
         this.isRecording = false;
         this.timerDisplay = "00:00";
-        this.uploadAudioRecording(this.recordedAudioFile);
+        const base64Audio = await this.convertRecordedAudioToBase64();
+        this.base64AudioRecorded.emit(base64Audio);
     }
+
+    async convertRecordedAudioToBase64() {
+        if (!this.recordedAudioFile) {
+          console.error("No recorded audio file found");
+          return;
+        }
+    
+        try {
+          const audioFile = File.fromPath(this.recordedAudioFile);
+    
+          const audioData = await audioFile.readSync(error => {
+            if (error) {
+              throw new Error("Error reading file: " + error);
+            }
+          });
+    
+          const base64String = Buffer.from(audioData).toString('base64');
+    
+          return base64String;
+        } catch (err) {
+          console.error("Error converting audio file to base64:", err);
+        }
+      }
 
     async uploadAudioRecording(audioFilePath: string) {
         console.log("\n\nEntered upload audio recording \n\n");

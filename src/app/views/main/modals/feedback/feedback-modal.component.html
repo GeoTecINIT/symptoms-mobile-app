@@ -22,15 +22,22 @@
       [text]="option.answer"
       (optionTap)="onAnswer($event)"
     ></SymFeedbackButtonOption>
-    <!-- <SymFeedbackTextOption *ngSwitchCase="'free-text'" [hint]="option.hint" [helpText]="option.helpText" (answerProvided)="onAnswer($event)"></SymFeedbackTextOption> -->
+    <SymFeedbackTextOption
+      *ngSwitchCase="'free-text'"
+      [hint]="option.hint"
+      [helpText]="option.helpText"
+      (answerProvided)="onAnswer($event)"
+    ></SymFeedbackTextOption>
     <SymFeedbackTextOption
       *ngSwitchCase="'free-text-with-audio'"
       [hint]="option.hint"
       [helpText]="option.helpText"
       (answerProvided)="onAnswer($event)"
     ></SymFeedbackTextOption>
-    <!-- This is a placeholder for the audioStart -->
-    <SymAudioPlayerRecorder *ngSwitchCase="'free-text-with-audio'">
+    <SymAudioPlayerRecorder
+      *ngSwitchCase="'free-text-with-audio'"
+      (base64AudioRecorded)="onBase64AudioRecorded($event)"
+    >
     </SymAudioPlayerRecorder>
   </ng-container>
 </SymModalBody>

@@ -22,6 +22,8 @@
       (textChanged)="onValueSelected($event)"
     >
     </SymTextInput>
+
+    <!-- TODO: Encapsulate SymTextInput and SymAudioPlayerRecorder in a new component for free-text-with-audio option --> 
     <SymTextInput
       *ngSwitchCase="'free-text-with-audio'"
       [text]="savedAnswer?.answer"
@@ -34,7 +36,7 @@
     </SymTextInput>
     <SymAudioPlayerRecorder
       *ngSwitchCase="'free-text-with-audio'"
-      [text]="savedAnswer?.answer"
+      (base64AudioRecorded)="onBase64AudioRecorded($event)"
     >
     </SymAudioPlayerRecorder>
     <SymBinaryChoice

@@ -38,6 +38,9 @@ export class QuestionStepComponent {
     btnMargin = 6;
     btnSize: any = "md";
 
+    isAudioIsRecorded: boolean = false; 
+    MAXIMUM_FREE_TEXT_LENGTH = 500;
+
     get gotAnswer(): boolean {
         if (this.answer === undefined || this.answer === null) {
             return false;
@@ -63,7 +66,17 @@ export class QuestionStepComponent {
         return "middle";
     }
 
+    onBase64AudioRecorded(base64Audio: string) {
+        this.isAudioIsRecorded = true;
+        this.onValueSelected(base64Audio)    
+    }
+
+
     onValueSelected(value: number | string | boolean) {
+        const valueIsFreeText = typeof value === "string" && value.length <= this.MAXIMUM_FREE_TEXT_LENGTH;
+        // If audio was recorded and value is free text, don't update the answer
+        if (this.isAudioIsRecorded && valueIsFreeText) return;
+
         this.answer = typeof value === "string" ? value.trim() : value;
         this.answerTime =
             this.savedAnswer && this.savedAnswer.answer === value
