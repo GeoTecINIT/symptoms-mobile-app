@@ -25,10 +25,10 @@ import { Buffer } from "buffer";
     styleUrls: ["./audio-player-recorder.component.scss"],
 })
 export class AudioPlayerRecorderComponent implements OnInit {
-    @Output() public base64AudioRecorded = new EventEmitter<string>();
+    @Output() public audioRecorded = new EventEmitter<string>();
     public audioRecorder: TNSRecorder;
     public audioPlayer: TNSPlayer;
-    public recordedAudioFile: string;
+    public recordedAudioFilePath: string;
     public isRecording: boolean = false;
     public isPlaying: boolean = false;
     public wasPaused: boolean = false;
@@ -37,7 +37,8 @@ export class AudioPlayerRecorderComponent implements OnInit {
     public playbackInterval: any;
     public timerDisplay: string = "00:00:00";
 
-    constructor(private zone: NgZone) {
+    constructor(
+        private zone: NgZone) {
         this.audioRecorder = new TNSRecorder();
         this.audioRecorder.debug = true;
         this.audioPlayer = new TNSPlayer();
@@ -64,9 +65,8 @@ export class AudioPlayerRecorderComponent implements OnInit {
             .getFolder("audio");
 
         const audioRecorderOptions: AudioRecorderOptions = {
-            filename: `${
-                audioFolder.path
-            }/recording_${new Date().getTime()}.m4a`,
+            filename: `${audioFolder.path
+                }/recording_EXPOSURE_ID_${new Date().getTime()}.mp3`,
             // working formats: 0, 1, *2, *6, 8
             // 2: https://developer.android.com/reference/android/media/AudioFormat#ENCODING_PCM_16BIT, most stable/guaranteed to work
             // 6: https://developer.android.com/reference/android/media/AudioFormat#ENCODING_E_AC3, best quality and quite stable as well
@@ -77,7 +77,8 @@ export class AudioPlayerRecorderComponent implements OnInit {
             metering: true,
             channels: 1,
             sampleRate: 44100,
-            bitRate: 128000,
+            bitRate: 32000,
+            maxDuration: 120000,
             infoCallback: (infoObject) => {
                 console.log(JSON.stringify(infoObject));
             },
@@ -88,7 +89,7 @@ export class AudioPlayerRecorderComponent implements OnInit {
 
         try {
             await this.audioRecorder.start(audioRecorderOptions);
-            this.recordedAudioFile = audioRecorderOptions.filename;
+            this.recordedAudioFilePath = audioRecorderOptions.filename;
             this.isRecording = true;
             this.wasPaused = false;
         } catch (err) {
@@ -100,32 +101,32 @@ export class AudioPlayerRecorderComponent implements OnInit {
         await this.audioRecorder.stop();
         this.isRecording = false;
         this.timerDisplay = "00:00";
-        const base64Audio = await this.convertRecordedAudioToBase64();
-        this.base64AudioRecorded.emit(base64Audio);
+        this.audioRecorded.emit(this.recordedAudioFilePath);
+        console.log("(stopRecording): Emitted without problems")
     }
 
-    async convertRecordedAudioToBase64() {
-        if (!this.recordedAudioFile) {
-          console.error("No recorded audio file found");
-          return;
+    convertRecordedAudioToBase64() {
+        if (!this.recordedAudioFilePath) {
+            console.error("No recorded audio file found");
+            return;
         }
-    
+
         try {
-          const audioFile = File.fromPath(this.recordedAudioFile);
-    
-          const audioData = await audioFile.readSync(error => {
-            if (error) {
-              throw new Error("Error reading file: " + error);
-            }
-          });
-    
-          const base64String = Buffer.from(audioData).toString('base64');
-    
-          return base64String;
+            const audioFile = File.fromPath(this.recordedAudioFilePath);
+
+            const audioData = audioFile.readSync(error => {
+                if (error) {
+                    throw new Error("Error reading file: " + error);
+                }
+            });
+
+            const base64String = Buffer.from(audioData).toString('base64');
+
+            return base64String;
         } catch (err) {
-          console.error("Error converting audio file to base64:", err);
+            console.error("Error converting audio file to base64:", err);
         }
-      }
+    }
 
     async uploadAudioRecording(audioFilePath: string) {
         console.log("\n\nEntered upload audio recording \n\n");
@@ -197,10 +198,10 @@ export class AudioPlayerRecorderComponent implements OnInit {
     }
 
     playRecording(): void {
-        if (this.recordedAudioFile) {
-            console.log("Recorded audio file info: " + this.recordedAudioFile);
+        if (this.recordedAudioFilePath) {
+            console.log("Recorded audio file info: " + this.recordedAudioFilePath);
             const playerOptions: AudioPlayerOptions = {
-                audioFile: this.recordedAudioFile,
+                audioFile: this.recordedAudioFilePath,
                 loop: false,
                 completeCallback: () => {
                     this.zone.run(() => {
@@ -252,7 +253,7 @@ export class AudioPlayerRecorderComponent implements OnInit {
     }
 
     resumePlayback(): void {
-        if (!this.isPlaying && this.recordedAudioFile && this.wasPaused) {
+        if (!this.isPlaying && this.recordedAudioFilePath && this.wasPaused) {
             this.audioPlayer.resume();
             this.isPlaying = true;
             this.wasPaused = false;
@@ -262,7 +263,7 @@ export class AudioPlayerRecorderComponent implements OnInit {
     }
 
     managePlayback(): void {
-        if (this.recordedAudioFile) {
+        if (this.recordedAudioFilePath) {
             if (!this.isPlaying && !this.wasPaused) {
                 this.playRecording();
             } else if (this.isPlaying) {
@@ -310,7 +311,7 @@ export class AudioPlayerRecorderComponent implements OnInit {
     }
 
     onSliderValueChange(event: any): void {
-        if (!this.isRecording && this.recordedAudioFile) {
+        if (!this.isRecording && this.recordedAudioFilePath) {
             const slider = event.object as Slider;
             const newValue = slider.value;
 

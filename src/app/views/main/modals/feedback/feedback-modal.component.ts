@@ -63,7 +63,7 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
     }
 
     onAnswer(answer: string) {
-        const answerIsFreeText = answer.length <= this.MAXIMUM_FREE_TEXT_LENGTH;
+        const answerIsFreeText = !answer.includes('/data/data/');
         // If audio was recorded and answer is free text, don't update the answer
         if (this.isAudioIsRecorded && answerIsFreeText) return;
 
@@ -75,9 +75,9 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
         }
     }
 
-    onBase64AudioRecorded(base64Audio: string) {
+    onAudioRecorded(audioRecordedFilePath: string) {
         this.isAudioIsRecorded = true;
-        this.onAnswer(base64Audio);
+        this.onAnswer(audioRecordedFilePath);
     }
 
     emitFeedback() {

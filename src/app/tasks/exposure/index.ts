@@ -4,6 +4,7 @@ import { CancelPreExposureTask } from "~/app/tasks/exposure/cancel-pre-exposure"
 import { StartExposureTask } from "./start-exposure";
 import { ProcessExposureAnswers } from "./process-answers";
 import { EvaluateExposureAnswers } from "~/app/tasks/exposure/evaluate-answers";
+import { EncodeAudioTask } from "~/app/tasks/exposure/encode-audio"
 import { EvaluateExposureTask } from "./evaluate-exposure";
 import { EvaluateExposureExtensionTask } from "./evaluate-exposure-ext";
 import { FinishExposureTask } from "./finish-exposure";
@@ -29,6 +30,7 @@ export const exposureTasks: Array<Task> = [
         new EvaluateExposureExtensionTask(),
         new FinishExposureTask(),
         new ExposureFinalizationDropoutChecker(),
+        new EncodeAudioTask(),
     ]),
     // --> Escapes
     ...makeTraceable([

@@ -14,7 +14,7 @@
     >
     </Label>
     <Label
-      *ngIf="!recordedAudioFile"
+      *ngIf="!recordedAudioFilePath"
       col="1"
       class="text timer-label"
       textWrap="true"
@@ -28,7 +28,7 @@
       text="Grabando nota de voz..."
     ></Label>
     <Label
-      *ngIf="!isRecording && recordedAudioFile"
+      *ngIf="!isRecording && recordedAudioFilePath"
       col="1"
       [text]="isPlaying ? '&#xe034;' : '&#xe037;'"
       class="mdi-ro mdi-24 icon-playback"
@@ -37,13 +37,13 @@
     >
     </Label>
     <Label
-      *ngIf="!isRecording && recordedAudioFile"
+      *ngIf="!isRecording && recordedAudioFilePath"
       col="2"
       [text]="timerDisplay"
       class="timer-label"
     ></Label>
     <Slider
-      *ngIf="!isRecording && recordedAudioFile"
+      *ngIf="!isRecording && recordedAudioFilePath"
       col="3"
       [value]="currentPlaybackPosition"
       minValue="0"

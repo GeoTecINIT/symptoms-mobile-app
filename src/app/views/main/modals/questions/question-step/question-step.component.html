@@ -36,7 +36,7 @@
     </SymTextInput>
     <SymAudioPlayerRecorder
       *ngSwitchCase="'free-text-with-audio'"
-      (base64AudioRecorded)="onBase64AudioRecorded($event)"
+      (audioRecorded)="onAudioRecorded($event)"
     >
     </SymAudioPlayerRecorder>
     <SymBinaryChoice
