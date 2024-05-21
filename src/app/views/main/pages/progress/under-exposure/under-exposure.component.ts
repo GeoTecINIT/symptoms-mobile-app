@@ -11,7 +11,7 @@ import { UnderExposureService } from "~/app/views/main/pages/progress/under-expo
 import { Subject } from "rxjs";
 import { Exposure } from "~/app/core/persistence/exposures";
 import { BarSegment } from "./exposure-progress-bar";
-import { takeUntil } from "rxjs/operators";
+import { filter, takeUntil } from "rxjs/operators";
 import { awarns } from "@awarns/core";
 import { PlainMessage } from "@awarns/wear-os";
 
@@ -109,7 +109,10 @@ export class UnderExposureComponent {
 
     private subscribeToExposureProgressChanges() {
         this.underExposureService.exposureProgress$
-            .pipe(takeUntil(this.unloaded$))
+            .pipe(
+                takeUntil(this.unloaded$),
+                filter(exposureProgress => exposureProgress !== undefined)
+            )
             .subscribe((exposureProgress) => {
                 this.ngZone.run(() => {
                     this.exposureProgress = exposureProgress;
