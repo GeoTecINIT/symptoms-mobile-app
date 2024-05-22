@@ -12,11 +12,14 @@ import {
 import buffer from "@turf/buffer";
 import bbox from "@turf/bbox";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { AdvancedSetting, advancedSettings } from "~/app/core/account/advanced-settings";
 
 const PLACES_LAYER_ID = "places";
-const FILL_COLOR = "#1F525E";
-const FILL_OPACITY = 0.6;
-const MAP_VIEWPORT_PADDING = 50;
+const PLACES_BORDER_LAYER_ID = "places-border";
+const PLACES_FILL_COLOR = "#1F525E";
+const PLACES_FILL_OPACITY = 0.6;
+const PLACES_BORDERS_FILL_COLOR = "#F5D854";
+const PLACES_BORDERS_FILL_OPACITY = 0.3;
 
 @Component({
     selector: "SymPlacesMap",
@@ -76,7 +79,10 @@ export class PlacesMapComponent {
         if (!this.map) throw new Error("No map reference!");
         if (this.initialized) {
             await this.map.removeLayer(PLACES_LAYER_ID);
+            await this.map.removeLayer(PLACES_BORDER_LAYER_ID);
+            
             await this.map.removeSource(PLACES_LAYER_ID);
+            await this.map.removeSource(PLACES_BORDER_LAYER_ID);
         }
         await this.initMap();
     }
@@ -86,22 +92,31 @@ export class PlacesMapComponent {
         if (!this._places || this._places.length === 0)
             throw new Error("Places list is undefined or empty!");
 
-        const placesFeatureCollection = this.getPlacesFeatureCollection();
-        await this.addPlacesSource(placesFeatureCollection);
+        const { placesFeatureCollection, bordersFeatureCollection } = this.getPlacesFeatureCollections();
 
+        await this.addPlacesSource(placesFeatureCollection);
+        await this.addPlacesBorderSource(bordersFeatureCollection);
+
+        await this.addPlacesBorderLayer();
         await this.addPlacesLayer();
 
         this.updatePlacesBBox(placesFeatureCollection);
         await this.centerViewport();
     }
 
-    private getPlacesFeatureCollection(): FeatureCollection {
+    private getPlacesFeatureCollections(): { placesFeatureCollection: FeatureCollection, bordersFeatureCollection: FeatureCollection } {
         const placesFeatures: Array<Feature> = [];
+        const borderFeatures: Array<Feature> = [];
         for (const place of this._places) {
-            placesFeatures.push(placeToFeature(place));
+            const { areaFeature, borderFeature} = placeToFeature(place);
+            placesFeatures.push(areaFeature);
+            borderFeatures.push(borderFeature);
         }
 
-        return featureCollection(placesFeatures);
+        return {
+            placesFeatureCollection: featureCollection(placesFeatures),
+            bordersFeatureCollection: featureCollection(borderFeatures)
+        };
     }
 
     private async addPlacesSource(places: FeatureCollection) {
@@ -111,16 +126,37 @@ export class PlacesMapComponent {
         });
     }
 
+    private async addPlacesBorderSource(borders: FeatureCollection) {
+        await this.map.addSource(PLACES_BORDER_LAYER_ID, {
+            type: "geojson",
+            data: borders,
+        });
+    }
+
     private async addPlacesLayer() {
         await this.map.addLayer({
             id: PLACES_LAYER_ID,
             type: "fill",
             source: PLACES_LAYER_ID,
             layout: {
-                "fill-opacity": FILL_OPACITY,
+                "fill-opacity": PLACES_FILL_OPACITY,
             },
             paint: {
-                "fill-color": FILL_COLOR,
+                "fill-color": PLACES_FILL_COLOR,
+            },
+        });
+    }
+
+    private async addPlacesBorderLayer() {
+        await this.map.addLayer({
+            id: PLACES_BORDER_LAYER_ID,
+            type: "fill",
+            source: PLACES_BORDER_LAYER_ID,
+            layout: {
+                "fill-opacity": PLACES_BORDERS_FILL_OPACITY,
+            },
+            paint: {
+                "fill-color": PLACES_BORDERS_FILL_COLOR,
             },
         });
     }
@@ -131,20 +167,27 @@ export class PlacesMapComponent {
 
     private async centerViewport(animated = false, place?: AreaOfInterest) {
         const bounds = place
-            ? getBoundsForGeoJSON(placeToFeature(place))
+            ? getBoundsForGeoJSON((placeToFeature(place)).borderFeature)
             : this.placesBounds;
+        const outerRadius = advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius);
         await this.map.setViewport({
             bounds,
-            padding: MAP_VIEWPORT_PADDING,
+            padding: outerRadius,
             animated,
         });
     }
 }
 
-function placeToFeature(place: AreaOfInterest): Feature {
+function placeToFeature(place: AreaOfInterest): { areaFeature: Feature, borderFeature: Feature } {
     const placeCenter = point([place.longitude, place.latitude]);
+    const areaFeature = buffer(placeCenter, place.radius / 1000);
+    const outerRadius = advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius);
+    const borderFeature = buffer(placeCenter, (place.radius + outerRadius) / 1000)
 
-    return buffer(placeCenter, place.radius / 1000);
+    return {
+        areaFeature,
+        borderFeature
+    };
 }
 
 function getBoundsForGeoJSON(geojson: any): Bounds {
@@ -152,8 +195,8 @@ function getBoundsForGeoJSON(geojson: any): Bounds {
 
     return {
         north: maxY,
-        east: maxX,
+        east:  maxX,
         south: minY,
-        west: minX,
+        west:  minX,
     };
 }
