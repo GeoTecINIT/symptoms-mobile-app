@@ -60,8 +60,7 @@ export class UploadsApiAdapter {
 
 function pbRecordsFrom(records: Array<ApiRecord>): Array<PBRecord> {
     return records.map((record) => {
-        const { timestamp, type, change, deviceId, ...extraProperties } =
-            record;
+        const { timestamp, type, change, deviceId, ...extraProperties } = record;
 
         const pbRecord = new PBRecord();
         pbRecord.setType(type);
@@ -69,10 +68,6 @@ function pbRecordsFrom(records: Array<ApiRecord>): Array<PBRecord> {
         pbRecord.setTzOffset(timestamp.getTimezoneOffset());
         pbRecord.setDeviceId(deviceId);
         pbRecord.setChange(pbRecordChangeFrom(change));
-        // add audioUrl here
-        console.log(
-            `\nA\nA\nA pbRecordsFrom \n${JSON.stringify(extraProperties)}\n\n\n`
-        );
         pbRecord.setPayload(JSON.stringify(extraProperties, jsonDateReplacer));
 
         return pbRecord;
