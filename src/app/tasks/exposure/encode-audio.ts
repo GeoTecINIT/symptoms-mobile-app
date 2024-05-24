@@ -52,15 +52,21 @@ export class EncodeAudioTask extends Task {
 
     private encodeAudioFromFilePath(audioFilePath: string): string {
         try {
+            // Getting audio file
             const audioFile = File.fromPath(audioFilePath);
 
+            // Encoding audio
             const audioData = audioFile.readSync(error => {
                 if (error) {
                     throw new Error("Error reading file: " + error);
                 }
             });
+            const base64Audio = Buffer.from(audioData).toString('base64'); 
+            
+            // Removing audio
+            audioFile.removeSync()
 
-            return Buffer.from(audioData).toString('base64');
+            return base64Audio;
         } catch (err) {
             console.error("Error converting audio file to base64:", err);
             return '';
