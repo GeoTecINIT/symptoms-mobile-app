@@ -295,7 +295,7 @@ export class NotificationsHandlerService {
     }
 }
 
-const PAUSE_TIME = 500;
+const PAUSE_TIME = 1000;
 function pause(): Promise<void> {
     return new Promise<void>((resolve) => setTimeout(resolve, PAUSE_TIME));
 }
