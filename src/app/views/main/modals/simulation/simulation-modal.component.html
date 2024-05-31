@@ -16,5 +16,16 @@
             <SymPrimaryButton [margin]="btnMargin" text="Salir del área" (tap)="emitAwarnsFrameworkEvent('movedOutsideAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
             <SymPrimaryButton [margin]="btnMargin" text="Alejarse del área" (tap)="emitAwarnsFrameworkEvent('movedAwayFromAreaOfInterest', [{ aoi: { id: 'fake-place1', name: 'Lugar falso', latitude: 0, longitude: 0, radius: 100}}])"></SymPrimaryButton>
         </SymSimulationSection>
+        <SymSimulationSection title="Geolocation">
+            <SymPrimaryButton [margin]="btnMargin" text="Acercarse a 'facultad'" (tap)="emitAwarnsFrameworkEvent('geolocationAcquired', {'type': 'geolocation', 'timestamp': '2024-05-23T11:23:17.386Z', 'change': 'none', 'id': 'afe35b68-5010-4e02-aa75-75ee010dda40', 'latitude': 39.993216, 'longitude': -0.071090, 'altitude': 117.20000457763672, 'horizontalAccuracy': 100, 'verticalAccuracy': 100, 'speed': 0, 'direction': 0})"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Entrar en 'facultad'" (tap)="emitAwarnsFrameworkEvent('geolocationAcquired', {'type': 'geolocation', 'timestamp': '2024-05-23T11:23:17.386Z', 'change': 'none', 'id': 'afe35b68-5010-4e02-aa75-75ee010dda40', 'latitude': 39.992268, 'longitude': -0.069972, 'altitude': 117.20000457763672, 'horizontalAccuracy': 100, 'verticalAccuracy': 100, 'speed': 0, 'direction': 0})"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Salir de 'facultad'" (tap)="emitAwarnsFrameworkEvent('geolocationAcquired', {'type': 'geolocation', 'timestamp': '2024-05-23T11:23:17.386Z', 'change': 'none', 'id': 'afe35b68-5010-4e02-aa75-75ee010dda40', 'latitude': 39.993216, 'longitude': -0.071090, 'altitude': 117.20000457763672, 'horizontalAccuracy': 100, 'verticalAccuracy': 100, 'speed': 0, 'direction': 0})"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Alejarse de 'facultad'" (tap)="emitAwarnsFrameworkEvent('geolocationAcquired', {'type': 'geolocation', 'timestamp': '2024-05-23T11:23:17.386Z', 'change': 'none', 'id': 'afe35b68-5010-4e02-aa75-75ee010dda40', 'latitude': 39.993164, 'longitude': -0.071400, 'altitude': 117.20000457763672, 'horizontalAccuracy': 100, 'verticalAccuracy': 100, 'speed': 0, 'direction': 0})"></SymPrimaryButton>
+        </SymSimulationSection>
+        <SymSimulationSection title="Otros">
+            <SymPrimaryButton [margin]="btnMargin" text="StartEvent" (tap)="emitAwarnsFrameworkEvent('startEvent')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="approachedAreaWithNoOngoingExposure" (tap)="emitAwarnsFrameworkEvent('approachedAreaWithNoOngoingExposure')"></SymPrimaryButton>
+            <SymPrimaryButton [margin]="btnMargin" text="Acquire Geolocation" (tap)="emitAwarnsFrameworkEvent('acquireGeolocationManually')"></SymPrimaryButton>
+        </SymSimulationSection>
     </StackLayout>
 </ScrollView>
