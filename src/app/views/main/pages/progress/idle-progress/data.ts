@@ -34,9 +34,6 @@ export function createFakeDataGenerator(): DataGenerator {
                 timestamp: value.x as Date,
                 value: value.y,
             })),
-            // add these to extraProperties
-            "fake_start_audio_url",
-            "fake_end_audio_url",
             true
         );
 

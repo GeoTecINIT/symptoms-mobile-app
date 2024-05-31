@@ -10,12 +10,17 @@ const TASK_NAME = "evaluateExposureAnswers";
 const EXPOSURE_ANSWERS_EVALUATED = "exposureAnswersEvaluated";
 const PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL =
     "patientShowsAnInitialSustainedLowAnxietyLevel";
+const PATIENT_SHOWS_ANXIETY_POSITIVE_EVOLUTION = 
+    "patientShowsAnxietyPositiveEvolution";
+const PATIENT_NOT_SHOWS_ANXIETY_POSITIVE_EVOLUTION = 
+    "patientNotShowsAnxietyPositiveEvolution";
 const PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL = "patientShowsAHighAnxietyLevel";
 const PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE =
     "patientUnderAHighAnxietyLevelStrike";
 const PATIENT_COULD_GET_SOME_REWARD = "patientCouldGetSomeReward";
 const PATIENT_COULD_GET_A_BOOSTER = "patientCouldGetABooster";
 
+const POSITIVE_EVOLUTION_THRESHOLD = 2;
 const LOW_ANXIETY_THRESHOLD = 3;
 const HIGH_ANXIETY_THRESHOLD = 8;
 const VERY_HIGH_ANXIETY_THRESHOLD = 9;
@@ -27,6 +32,8 @@ export class EvaluateExposureAnswers extends Task {
             outputEventNames: [
                 EXPOSURE_ANSWERS_EVALUATED,
                 PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
+                PATIENT_SHOWS_ANXIETY_POSITIVE_EVOLUTION,
+                PATIENT_NOT_SHOWS_ANXIETY_POSITIVE_EVOLUTION,
                 PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
                 PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
                 PATIENT_COULD_GET_SOME_REWARD,
@@ -58,24 +65,21 @@ export class EvaluateExposureAnswers extends Task {
             throw new Error("Cannot evaluate answers when there are none!");
         }
 
-        if (
-            containsExactlyThreeValuesAndNoneIsAboveTheLowAnxietyThreshold(
-                emotionValues
-            )
-        ) {
-            return {
-                eventName: PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
-            };
-        }
-
-        if (lastValuesShowSignsOfHighAnxiety(emotionValues)) {
-            if (previousValuesShowSignsOfHighAnxiety(emotionValues)) {
+        // Evaluation after first 30 min / 3 USAS questions
+        if (emotionValues.length === 3) {
+            if (noneEmotionValueIsAboveTheLowAnxietyThreshold(emotionValues)) {
                 return {
-                    eventName: PATIENT_UNDER_A_HIGH_ANXIETY_LEVEL_STRIKE,
+                    eventName: PATIENT_SHOWS_AN_INITIAL_SUSTAINED_LOW_ANXIETY_LEVEL,
+                };
+            }
+
+            if (anxietyValuesContainsPositiveEvolution(emotionValues)) {
+                return {
+                    eventName: PATIENT_SHOWS_ANXIETY_POSITIVE_EVOLUTION
                 };
             } else {
                 return {
-                    eventName: PATIENT_SHOWS_A_HIGH_ANXIETY_LEVEL,
+                    eventName: PATIENT_NOT_SHOWS_ANXIETY_POSITIVE_EVOLUTION
                 };
             }
         }
@@ -92,13 +96,23 @@ export class EvaluateExposureAnswers extends Task {
     }
 }
 
-function containsExactlyThreeValuesAndNoneIsAboveTheLowAnxietyThreshold(
+function noneEmotionValueIsAboveTheLowAnxietyThreshold(emotionValues: Array<EmotionValue>) {
+    return emotionValues.every((item) => item.value <= LOW_ANXIETY_THRESHOLD); 
+}
+
+// A positive evolution is when emotion values are in descent order and the last one is two levels below the initial
+function anxietyValuesContainsPositiveEvolution(
     emotionValues: Array<EmotionValue>
-): boolean {
-    return (
-        emotionValues.length === 3 &&
-        emotionValues.every((item) => item.value <= LOW_ANXIETY_THRESHOLD)
-    );
+) {
+    // Check if emotion values are decreasing
+    emotionValues.forEach((currentValue, index) => {
+        if (index > 0 && currentValue.value > emotionValues[index - 1].value) {
+            return false;
+        }
+    });
+
+    // Check if the difference between the first and last emotion value is higher than POSITIVE_EVOLUTION_THRESHOLD 
+    return emotionValues[0].value - emotionValues[emotionValues.length - 1].value > POSITIVE_EVOLUTION_THRESHOLD;
 }
 
 function previousValuesShowSignsOfHighAnxiety(

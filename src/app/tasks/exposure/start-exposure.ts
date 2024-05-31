@@ -57,8 +57,6 @@ export class StartExposureTask extends Task {
                 exposure.startTime,
                 exposure.place,
                 exposure.emotionValues,
-                exposure.startAudioUrl,
-                exposure.endAudioUrl
             ),
         };
     }

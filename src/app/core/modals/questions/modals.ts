@@ -76,6 +76,10 @@ export const askPostExposureQuestions: QuestionsModalOptions = {
             left: "Sí",
             right: "No",
         },
+        {
+            title: "Respecto a tus creencias iniciales, ¿ha ocurrido lo que temías?",
+            type: "free-text-with-audio",
+        },
     ],
     completionScreen: {
         body: {

@@ -1,8 +1,8 @@
 import { Task } from "@awarns/core/tasks";
 import { makeTraceable, trackEventTask } from "@awarns/tracing";
 import {
-    startDetectingIntermediateHumanActivityChangesTask,
-    stopDetectingIntermediateHumanActivityChangesTask
+    startDetectingCoarseHumanActivityChangesTask,
+    stopDetectingCoarseHumanActivityChangesTask
 } from "@awarns/human-activity";
 import { acquirePhoneGeolocationTask } from "@awarns/geolocation";
 import { checkAreaOfInterestProximityTask } from "@awarns/geofencing";
@@ -22,8 +22,8 @@ import {
 
 export const awarnsTasks: Array<Task> = [
     ...makeTraceable([
-        startDetectingIntermediateHumanActivityChangesTask(),
-        stopDetectingIntermediateHumanActivityChangesTask()
+        startDetectingCoarseHumanActivityChangesTask(),
+        stopDetectingCoarseHumanActivityChangesTask()
     ]),
     ...makeTraceable(
         [

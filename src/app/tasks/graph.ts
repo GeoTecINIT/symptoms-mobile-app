@@ -18,14 +18,14 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
-        // START: Human activity recognition
-        // Using Intermediate because detection was to elongated with Coarse
-        on("startEvent", run("startDetectingIntermediateHumanActivityChanges"));
-        on("stopEvent", run("stopDetectingIntermediateHumanActivityChanges"));
+        // START: Human activity recognition 
+        on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
+        on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
 
         // START: Low resolution geolocation data collection
         // -> Low frequency
+        // Low frequency Geolocation is active by default in case of Human Activity plugin does not work
         on(
             "startEvent",
             run("emitLowFrequencyGeolocationAcquisitionCanStartEvent")
@@ -45,7 +45,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "lowFrequencyGeolocationAcquisitionCanStart",
             run("acquirePhoneGeolocation")
-                .every(3, "minutes") // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
+                .every(3, "minutes")  // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
         // -> High frequency
@@ -60,7 +60,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "userFinishedBeingStill",
             run("acquirePhoneGeolocation")
-                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation
+                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation 
                 .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
         );
         // -> All frequencies & modes
@@ -117,15 +117,8 @@ class DemoTaskGraph implements TaskGraph {
                 // nearbyAoIGeolocationAcquisitionCanStop
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
         );
-        // FIXME: Make this work with notification taps
-        /*on(
-            "highFrequencyMultipleGeolocationAcquisitionCanStart",
-            run("acquireMultiplePhoneGeolocation", { maxInterval: 10000 })
-                .every(1, "minutes")
-                .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
-        );*/
         // END: High resolution geolocation data collection
-
+        
         // START: Pre-exposure events
         // -> Watch exposure area outer radius proximity changes
         on(
@@ -151,6 +144,35 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms intends to carry on an exposure
         on("preExposureStartConfirmed", run("preStartExposure"));
+        // Reinforcement message notification when preExposureStartConfirmed
+        on(
+            "preExposureStartConfirmed",
+            run("sendRandomNotification", {
+                options: [
+                    { 
+                        title: "Empezar una exposición es un gran paso",
+                        body: "Entra en el área para empezar la exposición"
+                    },
+                    { 
+                        title: "¡Muy bien! Estás cerca de empezar una exposición",
+                        body: "Entra en el área para empezar la exposición"
+                    },
+                    { 
+                        title: "¡Fantástico! Estás dispuesto a exponerte",
+                        body: "Entra en el área para empezar la exposición"
+                    },
+                    { 
+                        title: "¡A por todas!",
+                        body: "Entra en el área para empezar la exposición"
+                    },
+                    { 
+                        title: "¡Vamos! Inicia con confianza",
+                        body: "Entra en el área para empezar la exposición"
+                    },
+                ],
+            })
+        );
+        // Ask patient for USAS and feedback before starting an exposure
         on(
             "preExposureStartConfirmed",
             run("sendNotification", {
@@ -203,28 +225,26 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
-        on(
-            "exposureStarted",
-            run("sendNotification", {
-                title: "Acabas de iniciar una exposición",
-                body: "Pulsa aquí si tienes dudas sobre como proceder",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "cg01",
-                },
-            })
-        );
+        // on(
+        //     "exposureStarted",
+        //     run("sendNotification", {
+        //         title: "Acabas de iniciar una exposición",
+        //         body: "Pulsa aquí si tienes dudas sobre como proceder",
+        //         tapAction: {
+        //             type: TapActionType.OPEN_CONTENT,
+        //             id: "cg01",
+        //         },
+        //     })
+        // );
         on("exposureStarted", run("writeRecords"));
-        // -> Detect heart rate with watch
+        // // -> Detect heart rate with watch 
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
-        // necessary in order to change smartwatch interface
+        // // necessary in order to change smartwatch interface
         on(
             "exposureStarted",
             run("sendPlainMessageToWatch", {
-                plainMessage: {
-                    message: "Exposure started",
-                },
+                message: "Exposure started",
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -238,7 +258,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Possible exposure finalization causes
         on("exposureFinished", run("emitExposureForcedToFinishEvent"));
         on("stopEvent", run("emitExposureForcedToFinishEvent"));
-        // -> Deliver questions every 8 minutes as long as the exposure lasts
+        // -> Deliver questions every 10 minutes as long as the exposure lasts
         on(
             "exposureStarted",
             run("sendNotification", {
@@ -252,8 +272,10 @@ class DemoTaskGraph implements TaskGraph {
                 .every(BETWEEN_QUESTIONS_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")
         );
-        on("questionnaireAnswersAcquired", run("writeRecords"));
-        on("questionnaireAnswersAcquired", run("processExposureAnswers"));
+        // Need to execute encodeAudios task as could be audios in the questionnaire answers
+        on("questionnaireAnswersAcquired", run("encodeAudio"));
+        on("audiosEncoded", run("writeRecords"));
+        on("audiosEncoded", run("processExposureAnswers"));
         // -> Evaluate exposure answers at runtime
         on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
         // -> Determines that the exposure is not needed due to low sustained anxiety level
@@ -265,19 +287,23 @@ class DemoTaskGraph implements TaskGraph {
             "patientShowsAnInitialSustainedLowAnxietyLevel",
             run("sendNotification", {
                 title: "Enhorabuena, toleras bien esta situación",
-                body: "Puedes terminar aquí o continuar un poco más",
+                body: "Contacta con tu psicólogo para comentar tus avances",
             })
         );
-        // -> Determines that the patient requires some reinforcement due to high anxiety values
+        // Send notification for reinforcement due to not positive evolving
         on(
-            "patientShowsAHighAnxietyLevel",
-            run("sendNotification", {
-                title: "Tu ansiedad actual parece muy intensa",
-                body: "Pulsa aquí, quizás esto te ayude",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "cg02",
-                },
+            "patientNotShowsAnxietyPositiveEvolution",
+            run("sendCustomNotification", {
+                title: "Tu ansiedad no está bajando lo esperado",
+                body: "No pasa nada, sigue con tu exposición 💪",
+            })
+        );
+        // Send notification for reinforcement due to positive evolving
+        on(
+            "patientShowsAnxietyPositiveEvolution",
+            run("sendCustomNotification", {
+                title: "Estás haciendo grandes progresos",
+                body: "Sigue así 😊",
             })
         );
         // -> Determines that the patient could get some reward (or booster)
@@ -292,8 +318,11 @@ class DemoTaskGraph implements TaskGraph {
         );
         on(
             "patientCouldGetABooster",
-            run("sendNotification", {
-                title: "Lo estás haciendo muy bien 🙂",
+            run("sendRandomNotification", {
+                options: [
+                    { title: "¡Vamos! Sigue con la exposición 🙂" },
+                ],
+                
             })
         );
         // -> Leaving exposure area
@@ -439,37 +468,20 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí, quizás estas pautas te ayuden",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "cg07",
-                },
-            })
-        );
-        on(
-            "exposureExtensionEvaluationResultedUnsuccessful",
-            run("finishExposure", { successful: true }) // Possible bug. Why successful: true when listening to event exposureExtensionEvaluationResultedUnsuccessful
-                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
-                .cancelOn("exposureForcedToFinish")
-        );
-        on(
-            "exposureExtensionEvaluationResultedUnsuccessful",
-            run("sendNotification", {
-                title: "Sabemos que no es fácil. Te has esforzado mucho",
-                body: "Podemos finalizar la exposición por hoy. Pulsa aquí",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
                     id: "cg08",
                 },
             })
-                .in(EXPOSURE_EXTENSION_MINUTES, "minutes")
-                .cancelOn("exposureForcedToFinish")
         );
-        // -> Finalization event
+        on(
+            "exposureExtensionEvaluationResultedUnsuccessful",
+            run("finishExposure", { successful: true }) // Although the evaluation result was unsuccessful, the variable "successful" is true as the patient completed the exposure without dropping out.
+        );
+        // // -> Finalization event
         on("exposureFinished", run("stopDetectingWatchHeartRateChanges"));
         on(
             "exposureFinished",
             run("sendPlainMessageToWatch", {
-                plainMessage: {
-                    message: "Exposure finished",
-                },
+                message: "Exposure finished",
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -498,7 +510,9 @@ class DemoTaskGraph implements TaskGraph {
         // END: Post-exposure events
 
         // START: Patient feedback events
-        on("patientFeedbackAcquired", run("writeRecords"));
+        // Need to execute encodeAudios task as could be audios in the patient feedback
+        on("patientFeedbackAcquired", run("encodeAudio"));
+        on("audiosEncoded", run("writeRecords"));
         on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
         // END: Patient feedback events
 

@@ -13,28 +13,6 @@ export async function extractEmotionValuesFromOngoingExposure(
     );
 }
 
-export async function extractStartAudioFromOngoingExposure(
-    store: ExposuresStore
-): Promise<string> {
-    const ongoingExposure = await store.getLastUnfinished();
-    if (!ongoingExposure) {
-        throw new Error("There is no exposure ongoing!");
-    }
-
-    return ongoingExposure.startAudioUrl;
-}
-
-export async function extractEndAudioFromOngoingExposure(
-    store: ExposuresStore
-): Promise<string> {
-    const ongoingExposure = await store.getLastUnfinished();
-    if (!ongoingExposure) {
-        throw new Error("There is no exposure ongoing!");
-    }
-
-    return ongoingExposure.endAudioUrl;
-}
-
 export function evaluateLastEmotionValue(
     values: Array<number>,
     threshold: number
