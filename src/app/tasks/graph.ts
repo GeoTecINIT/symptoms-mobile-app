@@ -19,7 +19,7 @@ class DemoTaskGraph implements TaskGraph {
         run: RunnableTaskDescriptor
     ): Promise<void> {
         // START: Human activity recognition
-        // Using Intermediate because detection was to elongated with Coarse 
+        // Using Intermediate because detection was to elongated with Coarse
         on("startEvent", run("startDetectingIntermediateHumanActivityChanges"));
         on("stopEvent", run("stopDetectingIntermediateHumanActivityChanges"));
         // END: Human activity recognition
@@ -45,7 +45,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "lowFrequencyGeolocationAcquisitionCanStart",
             run("acquirePhoneGeolocation")
-                .every(3, "minutes")  // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
+                .every(3, "minutes") // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
         // -> High frequency
@@ -60,7 +60,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "userFinishedBeingStill",
             run("acquirePhoneGeolocation")
-                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation 
+                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation
                 .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
         );
         // -> All frequencies & modes
@@ -125,7 +125,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
         );*/
         // END: High resolution geolocation data collection
-        
+
         // START: Pre-exposure events
         // -> Watch exposure area outer radius proximity changes
         on(
@@ -215,19 +215,21 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
         on("exposureStarted", run("writeRecords"));
-        // -> Detect heart rate with watch 
+        // -> Detect heart rate with watch
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
         // necessary in order to change smartwatch interface
         on(
             "exposureStarted",
             run("sendPlainMessageToWatch", {
-                message: "Exposure started",
+                plainMessage: {
+                    message: "Exposure started",
+                },
             })
         );
         on("plainMessageSent", run("writeRecords"));
-        on("sendExposureProgress", run("sendPlainMessageToWatch"));
-        on("plainMessageSent", run("writeRecords"));
+        // on("sendExposureProgress", run("sendPlainMessageToWatch"));
+        // on("plainMessageSent", run("writeRecords"));
 
         on("watchHeartRateSamplesAcquired", run("writeRecords"));
         // END: Pre-exposure events
@@ -465,7 +467,9 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureFinished",
             run("sendPlainMessageToWatch", {
-                message: "Exposure finished",
+                plainMessage: {
+                    message: "Exposure finished",
+                },
             })
         );
         on("plainMessageSent", run("writeRecords"));

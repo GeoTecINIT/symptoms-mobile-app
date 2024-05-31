@@ -116,19 +116,19 @@ export class UnderExposureComponent {
             .subscribe((exposureProgress) => {
                 this.ngZone.run(() => {
                     this.exposureProgress = exposureProgress;
-                    this.sendExposureProgress();
+                    // this.sendExposureProgress();
                 });
             });
     }
 
     // TODO: check this, because it might not work properly
-    sendExposureProgress() {
-        awarns.emitEvent("sendExposureProgress", {
-            plainMessage: "asd",
-            message: "Exposure progress: ",
-            data: this.exposureProgress,
-        });
-    }
+    // sendExposureProgress() {
+    //     awarns.emitEvent("sendExposureProgress", {
+    //         plainMessage: "asd",
+    //         message: "Exposure progress: ",
+    //         data: this.exposureProgress,
+    //     });
+    // }
 
     private subscribeToInDangerChanges() {
         this.underExposureService.inDanger$
