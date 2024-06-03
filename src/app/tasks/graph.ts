@@ -237,14 +237,14 @@ class DemoTaskGraph implements TaskGraph {
         //     })
         // );
         on("exposureStarted", run("writeRecords"));
-        // // -> Detect heart rate with watch 
+        // -> Detect heart rate with watch 
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
-        // // necessary in order to change smartwatch interface
+        // necessary in order to change smartwatch interface
         on(
             "exposureStarted",
             run("sendPlainMessageToWatch", {
-                message: "Exposure started",
+                plainMessage: "Exposure started",
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -476,12 +476,12 @@ class DemoTaskGraph implements TaskGraph {
             "exposureExtensionEvaluationResultedUnsuccessful",
             run("finishExposure", { successful: true }) // Although the evaluation result was unsuccessful, the variable "successful" is true as the patient completed the exposure without dropping out.
         );
-        // // -> Finalization event
+        // -> Finalization event
         on("exposureFinished", run("stopDetectingWatchHeartRateChanges"));
         on(
             "exposureFinished",
             run("sendPlainMessageToWatch", {
-                message: "Exposure finished",
+                plainMessage: "Exposure finished",
             })
         );
         on("plainMessageSent", run("writeRecords"));
