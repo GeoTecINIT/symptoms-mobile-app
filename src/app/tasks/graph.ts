@@ -244,7 +244,9 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureStarted",
             run("sendPlainMessageToWatch", {
-                plainMessage: "Exposure started",
+                plainMessage: {
+                    message: "Exposure started"
+                }
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -481,7 +483,9 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureFinished",
             run("sendPlainMessageToWatch", {
-                plainMessage: "Exposure finished",
+                plainMessage: {
+                    message: "Exposure finished",                    
+                },
             })
         );
         on("plainMessageSent", run("writeRecords"));
