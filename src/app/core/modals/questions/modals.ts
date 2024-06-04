@@ -29,7 +29,7 @@ export const askPreExposureQuestions: QuestionsModalOptions = {
         body: {
             iconCode: "\ue815",
             header: "¡Adelante!",
-            message: "Dirígete ahora al área de exposición",
+            message: "Es hora de exponerse",
         },
         confirmButton: "Volver a la app",
     },

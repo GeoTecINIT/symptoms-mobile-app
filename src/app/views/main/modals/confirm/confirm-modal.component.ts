@@ -76,7 +76,13 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
     }
 
     done(result: boolean) {
-        this.navigationService.goBack();
         this.confirmModalService.gotConfirmation(this.instanceId, result);
+        this.navigationService.navigate(
+            ["/main"], 
+            { 
+                transition: "fade",
+                duration: 200, 
+                clearHistory: true 
+            })
     }
 }

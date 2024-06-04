@@ -4,7 +4,7 @@ import { AndroidApplication, Application } from "@nativescript/core";
 
 import { QuestionsModalOptions } from "~/app/core/modals/questions";
 import { QuestionAnswer, QuestionStepResult } from "./answers";
-import { NavigationService } from "../../../navigation.service";
+import { NavigationService } from "~/app/views/navigation.service";
 import { QuestionsModalService } from "./questions-modal.service";
 
 export const INSTANCE_ID_KEY = "instanceId";
@@ -88,8 +88,14 @@ export class QuestionsModalComponent implements OnInit, OnDestroy {
     }
 
     onClose() {
-        this.navigationService.goBack();
         this.questionsModalService.gotAnswers(this.instanceId, this.answers);
+        this.navigationService.navigate(
+            ["/main"], 
+            { 
+                transition: "fade",
+                duration: 200, 
+                clearHistory: true 
+            })
     }
 
     private updateAnswer(result: QuestionStepResult) {
