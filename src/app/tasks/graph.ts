@@ -172,18 +172,6 @@ class DemoTaskGraph implements TaskGraph {
                 ],
             })
         );
-        // Ask patient for USAS and feedback before starting an exposure
-        on(
-            "preExposureStartConfirmed",
-            run("sendNotification", {
-                title: "¿Podrías decirnos cómo te encuentras?",
-                body: "Toca la notificación para responder",
-                tapAction: {
-                    type: TapActionType.DELIVER_QUESTIONS,
-                    id: "pre-exposure-questions",
-                },
-            })
-        );
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
         on(
@@ -225,6 +213,21 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
+
+        // Ask patient for USAS and feedback after starting an exposure
+        on(
+            "exposureStartConfirmed",
+            run("sendNotification", {
+                title: "¿Podrías decirnos cómo te encuentras?",
+                body: "Toca la notificación para responder",
+                tapAction: {
+                    type: TapActionType.DELIVER_QUESTIONS,
+                    id: "pre-exposure-questions",
+                },
+            })
+        );
+
+        // TODO: Show this if its the first exposure
         // on(
         //     "exposureStarted",
         //     run("sendNotification", {

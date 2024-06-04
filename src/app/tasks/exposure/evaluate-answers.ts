@@ -47,8 +47,7 @@ export class EvaluateExposureAnswers extends Task {
         invocationEvent: DispatchableEvent
     ): Promise<TaskOutcome> {
         const ongoingExposure = invocationEvent.data as Exposure;
-        console.log("entered evaluate-answers");
-        console.log(JSON.stringify(ongoingExposure));
+        
         if (!ongoingExposure.startTime) {
             throw new Error(
                 "Cannot evaluate the answers of a non-started exposure!"
@@ -104,7 +103,7 @@ function noneEmotionValueIsAboveTheLowAnxietyThreshold(emotionValues: Array<Emot
 function anxietyValuesContainsPositiveEvolution(
     emotionValues: Array<EmotionValue>
 ) {
-    // Check if emotion values are decreasing
+    // Check if emotion values are in decreasing order
     emotionValues.forEach((currentValue, index) => {
         if (index > 0 && currentValue.value > emotionValues[index - 1].value) {
             return false;
