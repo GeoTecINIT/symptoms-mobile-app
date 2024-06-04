@@ -26,6 +26,8 @@ const HIGH_ANXIETY_THRESHOLD = 8;
 const VERY_HIGH_ANXIETY_THRESHOLD = 9;
 const EXTREME_ANXIETY_THRESHOLD = 10;
 
+const PATIENT_REWARD_THRESHOLD = 8;
+
 export class EvaluateExposureAnswers extends Task {
     constructor() {
         super(TASK_NAME, {
@@ -84,7 +86,7 @@ export class EvaluateExposureAnswers extends Task {
         }
 
         if (valuesNumberIsEven(emotionValues)) {
-            if (getLastValue(emotionValues) < 8) {
+            if (getLastValue(emotionValues) < PATIENT_REWARD_THRESHOLD) {
                 return { eventName: PATIENT_COULD_GET_SOME_REWARD };
             } else {
                 return { eventName: PATIENT_COULD_GET_A_BOOSTER };
