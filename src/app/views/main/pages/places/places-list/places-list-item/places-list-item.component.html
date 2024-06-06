@@ -1,9 +1,11 @@
 <GridLayout class="card" rows="*" columns="auto,*,auto">
-    <GridLayout col="0" rows="auto">
-        <Label class="circle"></Label>
-        <Label class="mdi-ro icon" text="&#xe55f;"></Label>
+    <GridLayout col="0" rows="auto" verticalAlignment="center">
+        <Label class="circle" verticalAlignment="center"></Label>
+        <Label class="mdi-ro icon" text="&#xe55f;" verticalAlignment="center"></Label>
     </GridLayout>
-    <Label col="1" class="name" [text]="place.name"></Label>
-    <Label col="2" class="mdi-ro arrow" text="&#xe5cc;"></Label>
+    <GridLayout col="1" rows="auto,auto" verticalAlignment="center" style="margin-left: 5em;">
+        <Label row="0" style="margin: 0; padding: 0; font-weight: 500;" [text]="place.name" verticalAlignment="center"></Label>
+        <Label row="1" [text]="'Nº Exposiciones: ' + numberOfExposures" verticalAlignment="center"></Label>
+    </GridLayout>
+    <Label col="2" class="mdi-ro arrow" text="&#xe5cc;" verticalAlignment="center"></Label>
 </GridLayout>
-
