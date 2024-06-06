@@ -31,7 +31,6 @@ export class PlacesListItemComponent {
     }
 
     private subscribeToRecordChanges() {
-        console.log("Place id 👉👉👉", this.place.id)
         const conditions: Array<FetchCondition> = [
             { property: "change", comparison: "=", value: Change.END },
             { property: "successful", comparison: "=", value: true },
