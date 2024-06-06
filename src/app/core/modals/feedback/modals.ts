@@ -27,7 +27,7 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
 };
 
 export const askWantsToLeaveFeedback: FeedbackModalOptions = {
-    title: "En otro momento entonces",
+    title: "Entendemos que pueda ser difícil exponerte",
     feedbackScreen: {
         body: {
             emoji: "👋",
