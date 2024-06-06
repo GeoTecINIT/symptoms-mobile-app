@@ -503,6 +503,7 @@ class DemoTaskGraph implements TaskGraph {
         // END: Exposure events
 
         // START: Post-exposure events
+        on("exposureFinished", run("clearNotifications"));
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(
             "exposureWasNotDroppedOut",
