@@ -318,6 +318,9 @@ class DemoTaskGraph implements TaskGraph {
                 options: [
                     { title: "¡Lo estás haciendo genial! 💪" },
                     { title: "Estás tolerando el malestar 🙂" },
+                    { title: "Parece que tu ansiedad es controlada 👍" },
+                    { title: "Tu resiliencia es admirable 💖" },
+                    { title: "Estás tomando el control, ¡bien hecho! 🛡️" },
                 ],
             })
         );
@@ -326,6 +329,10 @@ class DemoTaskGraph implements TaskGraph {
             run("sendRandomNotification", {
                 options: [
                     { title: "¡Vamos! Sigue con la exposición 🙂" },
+                    { title: "¡Tu puedes! No te rindas 🙂" },
+                    { title: "¡Lo estás logrando! No pares ahora 🌟" },
+                    { title: "¡Sigue así! Cada paso cuenta 👣" },
+                    { title: "¡Tú puedes! La perseverancia es clave 💫" },
                 ],
                 
             })
