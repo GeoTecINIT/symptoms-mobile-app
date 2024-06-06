@@ -33,7 +33,12 @@ export class CustomNotification extends Task {
             const messages: Message[] = JSON.parse(unparsedMessages);
             const customMessage: Message = messages.find(m => m.event === invocationEvent.name);
             
-            // Send custom message saved in device's storage
+            // Send default message if no custom message was found
+            if (customMessage === undefined) {
+                return sendNotificationTask().run(taskParams, invocationEvent);
+            }
+
+            // Send custom message saved in device's storage (if present)
             return sendNotificationTask().run({
                 title: customMessage.title,
                 body: customMessage.body,
