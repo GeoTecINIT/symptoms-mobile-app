@@ -140,7 +140,7 @@ export class NotificationsHandlerService {
                 if (!wantsToStartExposure) {
                     await pause();
                     await this.showFeedbackModal(
-                        askWantsToLeaveFeedback,
+                        askCannotExposeFeedback,
                         notification
                     );
                 } else {
