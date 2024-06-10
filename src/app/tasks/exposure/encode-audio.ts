@@ -7,13 +7,19 @@ import { Buffer } from "buffer";
 import { DispatchableEvent, Task, TaskOutcome, TaskParams } from "@awarns/core/tasks";
 import { EventData } from "@awarns/core/events";
 
+import { getLogger } from "~/app/core/utils/logger";
+
 // This task takes the records from user-feedback and questionnaire-answers modals
 // and encode the audios in base64 (if present). This task must be done before the 
 // writeRecords task. 
 export class EncodeAudioTask extends Task {
     constructor() {
         super("encodeAudio", {
-            outputEventNames: ["audiosEncoded"]
+            // Different output names are needed because different tasks are executed after the audio encoding for feedback and questionnaires
+            outputEventNames: [
+                "audiosEncodedInFeedback", 
+                "audiosEncodedInQuestionnaire"
+            ]
         })
     }
 
@@ -21,17 +27,20 @@ export class EncodeAudioTask extends Task {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<void | TaskOutcome> {
-        let invocationEventData = invocationEvent.data;
-        
+        let invocationEventData: EventData = invocationEvent.data;
+        let eventName = "";
         switch (invocationEventData.type) {
             case "user-feedback":
                 invocationEventData = this.replaceAudioPathInAnswers(invocationEventData);
+                eventName= "audiosEncodedInFeedback";
                 break;
             case "questionnaire-answers":
                 invocationEventData = this.replaceAudioPathInQuestions(invocationEventData);
+                eventName = "audiosEncodedInQuestionnaire";
                 break;
         }
-        return { result: invocationEventData };
+
+        return { eventName, result: invocationEventData };
     }
 
     private replaceAudioPathInAnswers(invocationEventData: EventData) {
@@ -68,7 +77,7 @@ export class EncodeAudioTask extends Task {
 
             return base64Audio;
         } catch (err) {
-            console.error("Error converting audio file to base64:", err);
+            getLogger("sendCustomNotificationTask").error(`Error converting audio file to base64: ${err}`)
             return '';
         }
     }

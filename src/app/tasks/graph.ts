@@ -23,6 +23,10 @@ class DemoTaskGraph implements TaskGraph {
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
 
+        // START: Acquire phone geolocation when app starts
+        on("startEvent", run("acquirePhoneGeolocation"));
+        // END: Acquire phone geolocation when app starts
+
         // START: Low resolution geolocation data collection
         // -> Low frequency
         // Low frequency Geolocation is active by default in case of Human Activity plugin does not work
@@ -279,8 +283,8 @@ class DemoTaskGraph implements TaskGraph {
         );
         // Need to execute encodeAudios task as could be audios in the questionnaire answers
         on("questionnaireAnswersAcquired", run("encodeAudio"));
-        on("audiosEncoded", run("writeRecords"));
-        on("audiosEncoded", run("processExposureAnswers"));
+        on("audiosEncodedInQuestionnaire", run("writeRecords"));
+        on("audiosEncodedInQuestionnaire", run("processExposureAnswers"));
         // -> Evaluate exposure answers at runtime
         on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
         // -> Determines that the exposure is not needed due to low sustained anxiety level
@@ -527,7 +531,7 @@ class DemoTaskGraph implements TaskGraph {
         // START: Patient feedback events
         // Need to execute encodeAudios task as could be audios in the patient feedback
         on("patientFeedbackAcquired", run("encodeAudio"));
-        on("audiosEncoded", run("writeRecords"));
+        on("audiosEncodedInFeedback", run("writeRecords"));
         on("patientFeedbackAcquired", run("trackFeedbackAcquisition"));
         // END: Patient feedback events
 
