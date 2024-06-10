@@ -1,6 +1,5 @@
 import { DispatchableEvent, Task, TaskParams } from "@awarns/core/tasks";
 import {
-    Notification,
     notificationsManager,
     notifications as notificationsStore,
 } from "@awarns/notifications";
