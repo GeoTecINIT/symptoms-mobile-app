@@ -16,9 +16,12 @@ export class EncodeAudioTask extends Task {
     constructor() {
         super("encodeAudio", {
             // Different output names are needed because different tasks are executed after the audio encoding for feedback and questionnaires
+            // There is a distinction in questionnaires. When an exposure is finished, some post-exposure questions are asked and, unlike exposure 
+            // questions, these don't need to be processed (processExposureAnswers task).    
             outputEventNames: [
                 "audiosEncodedInFeedback", 
-                "audiosEncodedInQuestionnaire"
+                "audiosEncodedInQuestionnaire",
+                "audiosEncodedInQuestionnaireWithoutProcessing"
             ]
         })
     }
@@ -36,10 +39,11 @@ export class EncodeAudioTask extends Task {
                 break;
             case "questionnaire-answers":
                 invocationEventData = this.replaceAudioPathInQuestions(invocationEventData);
-                eventName = "audiosEncodedInQuestionnaire";
+                eventName = invocationEventData.questionnaireId === "post-exposure-questions" 
+                    ? "audiosEncodedInQuestionnaireWithoutProcessing" 
+                    : "audiosEncodedInQuestionnaire";
                 break;
         }
-
         return { eventName, result: invocationEventData };
     }
 

@@ -284,6 +284,7 @@ class DemoTaskGraph implements TaskGraph {
         // Need to execute encodeAudios task as could be audios in the questionnaire answers
         on("questionnaireAnswersAcquired", run("encodeAudio"));
         on("audiosEncodedInQuestionnaire", run("writeRecords"));
+        on("audiosEncodedInQuestionnaireWithoutProcessing", run("writeRecords"));
         on("audiosEncodedInQuestionnaire", run("processExposureAnswers"));
         // -> Evaluate exposure answers at runtime
         on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
