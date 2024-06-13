@@ -95,6 +95,10 @@ export class AppConfigControllerImpl implements AppConfigController {
         this.isInitialized = true;
     }
 
+    reset() {
+        this.isInitialized = false;
+    }
+
     private getLogger() {
         if (!this.logger) {
             this.logger = getLogger("PatientProfileController");
