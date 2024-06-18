@@ -24,7 +24,7 @@ class DemoTaskGraph implements TaskGraph {
         // END: Human activity recognition
 
         // START: Acquire phone geolocation when app starts
-        on("startEvent", run("acquirePhoneGeolocation"));
+        on("startEvent", run("acquirePhoneGeolocation").in(1, "minutes"));
         // END: Acquire phone geolocation when app starts
 
         // START: Low resolution geolocation data collection
@@ -176,6 +176,9 @@ class DemoTaskGraph implements TaskGraph {
                 ],
             })
         );
+        // -> Send a notification to ask initial questions if the patient confirms their intention to proceed with the exposure
+        on("preExposureStartConfirmed", run("emitSendNotificationForInitialQuestionsEvent"))
+
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
         on(
@@ -217,10 +220,11 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
+        on("exposureStartConfirmed", run("emitSendNotificationForInitialQuestionsEvent"));
 
         // Ask patient for USAS and feedback after starting an exposure
         on(
-            "exposureStartConfirmed",
+            "sendNotificationForInitialQuestions",
             run("sendNotification", {
                 title: "¿Podrías decirnos cómo te encuentras?",
                 body: "Toca la notificación para responder",

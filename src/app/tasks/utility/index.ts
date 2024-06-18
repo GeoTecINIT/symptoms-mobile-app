@@ -19,4 +19,6 @@ export const utilityTasks: Array<Task> = [
     new EventConverterTask("movedOutsideAreaOfInterestOuterRadius"),
     // -> Exposure forced to finish
     new EventConverterTask("exposureForcedToFinish"),
+    // -> Send initial exposure questions
+    new EventConverterTask("sendNotificationForInitialQuestions"),
 ];
