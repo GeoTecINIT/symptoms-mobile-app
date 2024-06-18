@@ -122,7 +122,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
         );
         // END: High resolution geolocation data collection
-        
+
         // START: Pre-exposure events
         // -> Watch exposure area outer radius proximity changes
         on(
@@ -153,23 +153,23 @@ class DemoTaskGraph implements TaskGraph {
             "preExposureStartConfirmed",
             run("sendRandomNotification", {
                 options: [
-                    { 
+                    {
                         title: "Empezar una exposición es un gran paso",
                         body: "Entra en el área para empezar la exposición"
                     },
-                    { 
+                    {
                         title: "¡Muy bien! Estás cerca de empezar una exposición",
                         body: "Entra en el área para empezar la exposición"
                     },
-                    { 
+                    {
                         title: "¡Fantástico! Estás dispuesto a exponerte",
                         body: "Entra en el área para empezar la exposición"
                     },
-                    { 
+                    {
                         title: "¡A por todas!",
                         body: "Entra en el área para empezar la exposición"
                     },
-                    { 
+                    {
                         title: "¡Vamos! Inicia con confianza",
                         body: "Entra en el área para empezar la exposición"
                     },
@@ -221,6 +221,18 @@ class DemoTaskGraph implements TaskGraph {
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
         on("exposureStartConfirmed", run("emitSendNotificationForInitialQuestionsEvent"));
+
+        // -> Send info notification only if there are no exposures
+        on("exposureStartConfirmed",
+            run("sendNotificationOnlyFirstTime", {
+                title: "Acabas de iniciar una exposición",
+                body: "Pulsa aquí si tienes dudas sobre como proceder",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg01",
+                },
+            })
+        );
 
         // Ask patient for USAS and feedback after starting an exposure
         on(
@@ -343,7 +355,7 @@ class DemoTaskGraph implements TaskGraph {
                     { title: "¡Sigue así! Cada paso cuenta 👣" },
                     { title: "¡Tú puedes! La perseverancia es clave 💫" },
                 ],
-                
+
             })
         );
         // -> Leaving exposure area
@@ -503,7 +515,7 @@ class DemoTaskGraph implements TaskGraph {
             "exposureFinished",
             run("sendPlainMessageToWatch", {
                 plainMessage: {
-                    message: "Exposure finished",                    
+                    message: "Exposure finished",
                 },
             })
         );
