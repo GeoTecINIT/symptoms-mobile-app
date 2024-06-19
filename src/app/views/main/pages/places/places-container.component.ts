@@ -2,7 +2,7 @@ import { Component, HostListener, NgZone } from "@angular/core";
 
 import { Subject } from "rxjs";
 import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
-import { filter, takeUntil } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "SymPlacesContainer",
@@ -36,7 +36,6 @@ export class PlacesContainerComponent {
             .list()
             .pipe(
                 takeUntil(this.unloaded$),
-                filter((places) => places.length > 0)
             )
             .subscribe((places) => {
                 this.ngZone.run(() => {
