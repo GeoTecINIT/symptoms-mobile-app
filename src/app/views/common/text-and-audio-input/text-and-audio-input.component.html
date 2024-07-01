@@ -1,0 +1,59 @@
+<FlexboxLayout orientation="horizontal" justifyContent="space-between" alignItems="center" height="100">
+    <ng-container *ngIf="isRecording || recordFilePath; else textInputTemplate">
+        <ng-container *ngIf="isRecording; else audioPlayer">
+            <SymAudioWaves flexGrow="1" numBars="30"></SymAudioWaves>
+        </ng-container>
+
+        <ng-template #audioPlayer>
+            <!-- Audio component -->
+            <FlexboxLayout orientation="horizontal" flexGrow="1" alignItems="center">
+                <!-- Audio playback controls -->
+                <SymIconButton [icon]="isPlaying ? pauseIcon : playIcon"
+                               (tap)="managePlayback()">
+                </SymIconButton>
+                <!-- Audio slider and timestamps -->
+                <StackLayout orientation="vertical" flexGrow="1" class="slider" paddingTop="24">
+                    <Slider class="slider"
+                            value="0" minValue="0" maxValue="100"
+                    >
+                    </Slider>
+                    <FlexboxLayout class="time-section"
+                                   justifyContent="space-between">
+                        <Label text="00:00"></Label>
+                        <Label text="01:24"></Label>
+                    </FlexboxLayout>
+                </StackLayout>
+            </FlexboxLayout>
+        </ng-template>
+    </ng-container>
+
+    <ng-template #textInputTemplate>
+        <StackLayout class="input-box" [class.focused]="focus">
+            <TextField
+                    class="text-input"
+                    [text]="text"
+                    [hint]="hint"
+                    [returnKeyType]="returnKeyType"
+                    (focus)="onFieldFocus()"
+                    (blur)="onFieldBlur()"
+                    (textChange)="onFieldTextChange($event)"
+                    (returnPress)="onReturnPressed()"
+            ></TextField>
+        </StackLayout>
+    </ng-template>
+
+    <ng-container *ngIf="!!recordFilePath; else recordAudioButton">
+        <SymIconButton [icon]="deleteIcon"
+                       (tap)="deleteRecording()"
+                       [danger]="true">
+        </SymIconButton>
+    </ng-container>
+
+    <ng-template #recordAudioButton>
+        <!-- Recording control button -->
+        <SymIconButton [icon]="isRecording ? stopIcon : recordIcon"
+                       [recording]="isRecording"
+                       (tap)="manageRecording()">
+        </SymIconButton>
+    </ng-template>
+</FlexboxLayout>
