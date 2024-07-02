@@ -26,7 +26,8 @@ import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
 import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-player-recorder.component";
 import { TextAndAudioInputComponent } from "./text-and-audio-input/text-and-audio-input.component"
 import { IconButtonComponent } from "./icon-button/icon-button.component";
-import { AudioWavesComponent } from "./audio-waves/audio-waves.component"
+import { AudioWavesComponent } from "./audio-waves/audio-waves.component";
+import { FormatTimePipe } from "./text-and-audio-input/format-time.pipe";
 
 @NgModule({
     imports: [
@@ -54,7 +55,8 @@ import { AudioWavesComponent } from "./audio-waves/audio-waves.component"
         AudioPlayerRecorderComponent,
         TextAndAudioInputComponent,
         IconButtonComponent,
-        AudioWavesComponent
+        AudioWavesComponent,
+        FormatTimePipe
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
