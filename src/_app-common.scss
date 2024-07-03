@@ -66,8 +66,12 @@ Label {
 }
 
 .card {
-    border-radius: 4;
-    android-elevation: 2;
+    border-width: 1;
+    border-color: #e0e0e0;
+    border-style: solid;
+    border-radius: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    // android-elevation: 2;
     margin: 4;
-    padding: 16;
+    padding: 24;
 }

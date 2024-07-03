@@ -27,7 +27,7 @@ class DemoTaskGraph implements TaskGraph {
         on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
 
         // START: Acquire phone geolocation when app starts
-        on("startEvent", run("acquirePhoneGeolocation"));
+        on("startEvent", run("acquirePhoneGeolocation").in(1, "minutes"));
         // END: Acquire phone geolocation when app starts
 
         // START: Low resolution geolocation data collection
@@ -179,6 +179,12 @@ class DemoTaskGraph implements TaskGraph {
                 ],
             })
         );
+        // -> Send a notification to ask initial questions if the patient confirms their intention to proceed with the exposure
+        on(
+            "preExposureStartConfirmed",
+            run("emitSendNotificationForInitialQuestionsEvent")
+        );
+
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
         on(
@@ -220,10 +226,27 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
+        on(
+            "exposureStartConfirmed",
+            run("emitSendNotificationForInitialQuestionsEvent")
+        );
+
+        // -> Send info notification only if there are no exposures
+        on(
+            "exposureStartConfirmed",
+            run("sendNotificationOnlyFirstTime", {
+                title: "Acabas de iniciar una exposición",
+                body: "Pulsa aquí si tienes dudas sobre como proceder",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cg01",
+                },
+            })
+        );
 
         // Ask patient for USAS and feedback after starting an exposure
         on(
-            "exposureStartConfirmed",
+            "sendNotificationForInitialQuestions",
             run("sendNotification", {
                 title: "¿Podrías decirnos cómo te encuentras?",
                 body: "Toca la notificación para responder",

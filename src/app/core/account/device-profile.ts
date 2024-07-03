@@ -1,6 +1,7 @@
 import { ServerApiClient } from "~/app/core/server";
 import { getPackageName, getDeviceInfo } from "~/app/core/utils/app-info";
 import { ApplicationSettings } from "@nativescript/core";
+import { appConfigController } from "~/app/core/account";
 
 const DEVICE_ID_KEY = "DEVICE_PROFILE_ID";
 const PATIENT_ID_KEY = "DEVICE_PROFILE_PATIENT_ID";
@@ -75,6 +76,7 @@ export class DeviceProfileControllerImpl implements DeviceProfileController {
         this._deviceId = undefined;
         this._patientId = undefined;
         this._studyId = undefined;
+        appConfigController.reset();
     }
 
     private load(profile: DeviceProfile) {

@@ -23,7 +23,11 @@ import { CircleIconComponent } from "./circle-icon/circle-icon.component";
 import { ActivityIndicatorComponent } from "./activity-indicator/activity-indicator.component";
 import { TextInputComponent } from "./text-input/text-input.component";
 import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
-import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-player-recorder.component"
+import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-player-recorder.component";
+import { TextAndAudioInputComponent } from "./text-and-audio-input/text-and-audio-input.component"
+import { IconButtonComponent } from "./icon-button/icon-button.component";
+import { AudioWavesComponent } from "./audio-waves/audio-waves.component";
+import { FormatTimePipe } from "./text-and-audio-input/format-time.pipe";
 
 @NgModule({
     imports: [
@@ -49,6 +53,10 @@ import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-play
         TextInputComponent,
         BinaryChoiceComponent,
         AudioPlayerRecorderComponent,
+        TextAndAudioInputComponent,
+        IconButtonComponent,
+        AudioWavesComponent,
+        FormatTimePipe
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -68,6 +76,9 @@ import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-play
         TextInputComponent,
         BinaryChoiceComponent,
         AudioPlayerRecorderComponent,
+        TextAndAudioInputComponent,
+        IconButtonComponent,
+        AudioWavesComponent
     ],
 })
 export class CommonComponentsModule {}
