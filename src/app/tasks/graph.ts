@@ -18,10 +18,21 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
-        // START: Human activity recognition 
+        // START: Human activity recognition
         on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
+
+        on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
+        on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
+        on(
+            "watchPermissionsAccepted",
+            run("sendPlainMessageToWatch", {
+                plainMessage: {
+                    message: "Permissions granted",
+                },
+            })
+        );
 
         // START: Acquire phone geolocation when app starts
         on("startEvent", run("acquirePhoneGeolocation"));
@@ -49,7 +60,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "lowFrequencyGeolocationAcquisitionCanStart",
             run("acquirePhoneGeolocation")
-                .every(3, "minutes")  // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
+                .every(3, "minutes") // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
         // -> High frequency
@@ -64,7 +75,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "userFinishedBeingStill",
             run("acquirePhoneGeolocation")
-                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation 
+                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation
                 .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
         );
         // -> All frequencies & modes
@@ -122,7 +133,7 @@ class DemoTaskGraph implements TaskGraph {
                 .cancelOn("highFrequencyMultipleGeolocationAcquisitionCanStop")
         );
         // END: High resolution geolocation data collection
-        
+
         // START: Pre-exposure events
         // -> Watch exposure area outer radius proximity changes
         on(
@@ -153,25 +164,25 @@ class DemoTaskGraph implements TaskGraph {
             "preExposureStartConfirmed",
             run("sendRandomNotification", {
                 options: [
-                    { 
+                    {
                         title: "Empezar una exposición es un gran paso",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
-                    { 
+                    {
                         title: "¡Muy bien! Estás cerca de empezar una exposición",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
-                    { 
+                    {
                         title: "¡Fantástico! Estás dispuesto a exponerte",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
-                    { 
+                    {
                         title: "¡A por todas!",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
-                    { 
+                    {
                         title: "¡Vamos! Inicia con confianza",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                 ],
             })
@@ -244,7 +255,7 @@ class DemoTaskGraph implements TaskGraph {
         //     })
         // );
         on("exposureStarted", run("writeRecords"));
-        // -> Detect heart rate with watch 
+        // -> Detect heart rate with watch
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
         // necessary in order to change smartwatch interface
@@ -252,8 +263,8 @@ class DemoTaskGraph implements TaskGraph {
             "exposureStarted",
             run("sendPlainMessageToWatch", {
                 plainMessage: {
-                    message: "Exposure started"
-                }
+                    message: "Exposure started",
+                },
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -284,7 +295,10 @@ class DemoTaskGraph implements TaskGraph {
         // Need to execute encodeAudios task as could be audios in the questionnaire answers
         on("questionnaireAnswersAcquired", run("encodeAudio"));
         on("audiosEncodedInQuestionnaire", run("writeRecords"));
-        on("audiosEncodedInQuestionnaireWithoutProcessing", run("writeRecords"));
+        on(
+            "audiosEncodedInQuestionnaireWithoutProcessing",
+            run("writeRecords")
+        );
         on("audiosEncodedInQuestionnaire", run("processExposureAnswers"));
         // -> Evaluate exposure answers at runtime
         on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
@@ -339,7 +353,6 @@ class DemoTaskGraph implements TaskGraph {
                     { title: "¡Sigue así! Cada paso cuenta 👣" },
                     { title: "¡Tú puedes! La perseverancia es clave 💫" },
                 ],
-                
             })
         );
         // -> Leaving exposure area
@@ -499,7 +512,7 @@ class DemoTaskGraph implements TaskGraph {
             "exposureFinished",
             run("sendPlainMessageToWatch", {
                 plainMessage: {
-                    message: "Exposure finished",                    
+                    message: "Exposure finished",
                 },
             })
         );
