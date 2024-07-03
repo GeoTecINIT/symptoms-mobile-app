@@ -25,14 +25,6 @@ class DemoTaskGraph implements TaskGraph {
 
         on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
         on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
-        on(
-            "watchPermissionsAccepted",
-            run("sendPlainMessageToWatch", {
-                plainMessage: {
-                    message: "Permissions granted",
-                },
-            })
-        );
 
         // START: Acquire phone geolocation when app starts
         on("startEvent", run("acquirePhoneGeolocation"));

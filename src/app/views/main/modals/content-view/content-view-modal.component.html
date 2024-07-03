@@ -1,14 +1,20 @@
 <ng-container *ngIf="content$ | async as content; else loading">
-    <SymCloseActionBar [title]="content.title" (close)="onClose()"></SymCloseActionBar>
+  <SymCloseActionBar
+    [title]="content.title"
+    (close)="onClose()"
+  ></SymCloseActionBar>
 
-    <ScrollView (scroll)="onScroll($event)">
-        <StackLayout (layoutChanged)="onContentRendered($event)">
-            <Label textWrap="true" [text]="content.body"></Label>
-        </StackLayout>
-    </ScrollView>
+  <ScrollView (scroll)="onScroll($event)">
+    <StackLayout (layoutChanged)="onContentRendered($event)">
+      <Label textWrap="true" [text]="content.body"></Label>
+    </StackLayout>
+  </ScrollView>
 </ng-container>
 
 <ng-template #loading>
-    <SymCloseActionBar title="Cargando..." (close)="onClose()"></SymCloseActionBar>
-    <ActivityIndicator busy="true"></ActivityIndicator>
+  <SymCloseActionBar
+    title="Cargando..."
+    (close)="onClose()"
+  ></SymCloseActionBar>
+  <ActivityIndicator busy="true"></ActivityIndicator>
 </ng-template>

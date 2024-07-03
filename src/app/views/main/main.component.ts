@@ -16,8 +16,11 @@ import {
     TabSelectedEventData,
 } from "@nativescript-community/ui-material-bottomnavigationbar";
 
-import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
-import { preparePlugin, setupWatchToUse } from "~/app/core/framework";
+import {
+    infoOnPermissionsNeed,
+    infoOnWatchPermissionsNeed,
+} from "~/app/core/dialogs/info";
+import { preparePlugin } from "~/app/core/framework";
 import { takeUntil } from "rxjs/operators";
 
 import { appConfigController } from "~/app/core/account";
@@ -78,7 +81,7 @@ export class MainComponent implements OnInit {
 
     @HostListener("loaded")
     onLoaded() {
-        this.setupAppConfig()
+        this.setupAppConfig();
         this.checkEMAIFrameworkStatus();
         this.controlAppLoginStatus();
     }
@@ -147,25 +150,19 @@ export class MainComponent implements OnInit {
     }
 
     private checkEMAIFrameworkStatus() {
-        setupWatchToUse()
-            .then(() =>
-                preparePlugin()
-                    .then((ready) => {
-                        if (!ready) {
-                            this.informAboutPermissionsNeed().then(() => {
-                                this.checkEMAIFrameworkStatus();
-                            });
-                        }
-                    })
-                    .catch((e) => {
-                        this.logger.error(
-                            `Could not prepare EMA/I framework tasks. Reason: ${e}`
-                        );
-                    })
-            )
-            .catch((e) =>
-                this.logger.error(`Could not setup watch. Reason: ${e}`)
-            );
+        preparePlugin()
+            .then((ready) => {
+                if (!ready) {
+                    this.informAboutPermissionsNeed().then(() => {
+                        this.checkEMAIFrameworkStatus();
+                    });
+                }
+            })
+            .catch((e) => {
+                this.logger.error(
+                    `Could not prepare EMA/I framework tasks. Reason: ${e}`
+                );
+            });
     }
 
     private informAboutPermissionsNeed(): Promise<void> {
