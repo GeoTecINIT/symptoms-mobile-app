@@ -22,32 +22,6 @@
       (textChanged)="onValueSelected($event)"
     >
     </SymTextInput>
-
-    <!-- TODO: Encapsulate SymTextInput and SymAudioPlayerRecorder in a new component for free-text-with-audio option -->
-    <!-- <SymTextInput
-      *ngSwitchCase="'free-text-with-audio'"
-      [text]="savedAnswer?.answer"
-      [hint]="question.hint"
-      [helpText]="question.helpText"
-      marginTop="24"
-      marginBottom="24"
-      (textChanged)="onValueSelected($event)"
-    >
-    </SymTextInput>
-    <SymAudioPlayerRecorder
-      *ngSwitchCase="'free-text-with-audio'"
-      (audioRecorded)="onAudioRecorded($event)"
-    >
-    </SymAudioPlayerRecorder> -->
-    <!-- <SymTextAndAudioInput
-      *ngSwitchCase="'free-text-with-audio'"
-      [text]="savedAnswer?.answer"
-      [hint]="question.hint"
-      [helpText]="question.helpText"
-      marginTop="24"
-      marginBottom="24"
-      (textChanged)="onValueSelected($event)"
-    > -->
     <SymTextAndAudioInput
       *ngSwitchCase="'free-text-with-audio'"
       [text]="savedAnswer?.answer"

@@ -18,14 +18,22 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
     answer: string;
     showConfirmScreen = false;
 
-    private isAudioIsRecorded: boolean = false; 
-    private MAXIMUM_FREE_TEXT_LENGTH = 500;
+    private isAudioIsRecorded: boolean = false;
 
     private readonly instanceId: number;
     private readonly backCallback: () => void;
 
     get hasCompletionScreen(): boolean {
         return !!this.options.completionScreen;
+    }
+
+    get hasTextAndAudioInput(): boolean {
+        return this.options.feedbackScreen.options
+            .some(option => option.type === "free-text-with-audio");
+    }
+
+    get gotAnswer() {
+        return !!this.answer && this.answer.length > 0
     }
 
     constructor(
@@ -70,7 +78,7 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
         this.answer = answer;
         if (this.hasCompletionScreen) {
             this.showConfirmScreen = true;
-        } else {
+        } else if (!this.hasTextAndAudioInput) {
             this.onClose();
         }
     }

@@ -28,17 +28,26 @@
       [helpText]="option.helpText"
       (answerProvided)="onAnswer($event)"
     ></SymFeedbackTextOption>
-    <SymFeedbackTextOption
+    <SymTextAndAudioInput
       *ngSwitchCase="'free-text-with-audio'"
+      [text]="answer"
       [hint]="option.hint"
       [helpText]="option.helpText"
-      (answerProvided)="onAnswer($event)"
-    ></SymFeedbackTextOption>
-    <SymAudioPlayerRecorder
-      *ngSwitchCase="'free-text-with-audio'"
+      marginTop="24"
+      marginBottom="24"
+      (textChanged)="onAnswer($event)"
       (audioRecorded)="onAudioRecorded($event)"
     >
-    </SymAudioPlayerRecorder>
+    </SymTextAndAudioInput>
+  </ng-container>
+  <ng-container *ngIf="hasTextAndAudioInput">
+    <SymPrimaryButton
+      horizontalAlignment="center"
+      text="Enviar"
+      [enabled]="gotAnswer"
+      (tap)="onClose()"
+    >
+    </SymPrimaryButton>
   </ng-container>
 </SymModalBody>
 
