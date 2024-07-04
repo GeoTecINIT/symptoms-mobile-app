@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
     AndroidApplication,
     Application,
@@ -17,6 +17,10 @@ import {
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
+// import { registerElement } from '@nativescript/angular';
+// import { Video } from '@nstudio/nativescript-exoplayer';
+// registerElement('Video', () => Video);
+
 export const CONTENT_ID_KEY = "contentId";
 const CONTENT_END_OFFSET = 10;
 
@@ -26,6 +30,8 @@ const CONTENT_END_OFFSET = 10;
     styleUrls: ["./content-view-modal.component.scss"],
 })
 export class ContentViewModalComponent implements OnInit, OnDestroy {
+    @ViewChild("player") player: ElementRef;
+    
     content$: Promise<TreatmentContent>;
 
     private readonly contentId: string;
@@ -69,6 +75,8 @@ export class ContentViewModalComponent implements OnInit, OnDestroy {
     onClose() {
         this.navigationService.goBack();
         this.reportSeenStatus();
+
+        // if (!!this.player) this.player.nativeElement.destroy();
     }
 
     onContentRendered(event: EventData) {
