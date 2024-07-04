@@ -18,10 +18,13 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
-        // START: Human activity recognition 
+        // START: Human activity recognition
         on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
+
+        on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
+        on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
 
         // START: Acquire phone geolocation when app starts
         on("startEvent", run("acquirePhoneGeolocation").in(1, "minutes"));
@@ -49,7 +52,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "lowFrequencyGeolocationAcquisitionCanStart",
             run("acquirePhoneGeolocation")
-                .every(3, "minutes")  // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
+                .every(3, "minutes") // Using 3 minutes instead of 15 so that the patient does not have to wait as long for notifications
                 .cancelOn("lowFrequencyGeolocationAcquisitionCanStop")
         );
         // -> High frequency
@@ -64,7 +67,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "userFinishedBeingStill",
             run("acquirePhoneGeolocation")
-                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation 
+                .every(1, "minutes") // Do not use less than 1 min for acquiring phone geolocation
                 .cancelOn("highFrequencyGeolocationAcquisitionCanStop")
         );
         // -> All frequencies & modes
@@ -155,29 +158,32 @@ class DemoTaskGraph implements TaskGraph {
                 options: [
                     {
                         title: "Empezar una exposición es un gran paso",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                     {
                         title: "¡Muy bien! Estás cerca de empezar una exposición",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                     {
                         title: "¡Fantástico! Estás dispuesto a exponerte",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                     {
                         title: "¡A por todas!",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                     {
                         title: "¡Vamos! Inicia con confianza",
-                        body: "Entra en el área para empezar la exposición"
+                        body: "Entra en el área para empezar la exposición",
                     },
                 ],
             })
         );
         // -> Send a notification to ask initial questions if the patient confirms their intention to proceed with the exposure
-        on("preExposureStartConfirmed", run("emitSendNotificationForInitialQuestionsEvent"))
+        on(
+            "preExposureStartConfirmed",
+            run("emitSendNotificationForInitialQuestionsEvent")
+        );
 
         // -> Watch in case leaves the vicinity of the area without getting closer
         on("movedAwayFromAreaOfInterest", run("cancelPreExposure"));
@@ -220,10 +226,14 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
-        on("exposureStartConfirmed", run("emitSendNotificationForInitialQuestionsEvent"));
+        on(
+            "exposureStartConfirmed",
+            run("emitSendNotificationForInitialQuestionsEvent")
+        );
 
         // -> Send info notification only if there are no exposures
-        on("exposureStartConfirmed",
+        on(
+            "exposureStartConfirmed",
             run("sendNotificationOnlyFirstTime", {
                 title: "Acabas de iniciar una exposición",
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
@@ -260,7 +270,7 @@ class DemoTaskGraph implements TaskGraph {
         //     })
         // );
         on("exposureStarted", run("writeRecords"));
-        // -> Detect heart rate with watch 
+        // -> Detect heart rate with watch
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
         // necessary in order to change smartwatch interface
@@ -268,8 +278,8 @@ class DemoTaskGraph implements TaskGraph {
             "exposureStarted",
             run("sendPlainMessageToWatch", {
                 plainMessage: {
-                    message: "Exposure started"
-                }
+                    message: "Exposure started",
+                },
             })
         );
         on("plainMessageSent", run("writeRecords"));
@@ -300,7 +310,10 @@ class DemoTaskGraph implements TaskGraph {
         // Need to execute encodeAudios task as could be audios in the questionnaire answers
         on("questionnaireAnswersAcquired", run("encodeAudio"));
         on("audiosEncodedInQuestionnaire", run("writeRecords"));
-        on("audiosEncodedInQuestionnaireWithoutProcessing", run("writeRecords"));
+        on(
+            "audiosEncodedInQuestionnaireWithoutProcessing",
+            run("writeRecords")
+        );
         on("audiosEncodedInQuestionnaire", run("processExposureAnswers"));
         // -> Evaluate exposure answers at runtime
         on("exposureAnswersProcessed", run("evaluateExposureAnswers"));
@@ -355,7 +368,6 @@ class DemoTaskGraph implements TaskGraph {
                     { title: "¡Sigue así! Cada paso cuenta 👣" },
                     { title: "¡Tú puedes! La perseverancia es clave 💫" },
                 ],
-
             })
         );
         // -> Leaving exposure area
