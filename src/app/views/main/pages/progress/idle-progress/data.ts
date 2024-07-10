@@ -58,7 +58,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 1",
-        subtitle: "(30/04) Nivel de ansidedad",
+        subtitle: "(30/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -86,7 +86,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 3",
-        subtitle: "(28/04) Nivel de ansidedad",
+        subtitle: "(28/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -114,7 +114,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 3",
-        subtitle: "(27/04) Nivel de ansidedad",
+        subtitle: "(27/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -142,7 +142,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 1",
-        subtitle: "(26/04) Nivel de ansidedad",
+        subtitle: "(26/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -170,7 +170,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 2",
-        subtitle: "(23/04) Nivel de ansidedad",
+        subtitle: "(23/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -198,7 +198,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 2",
-        subtitle: "(22/04) Nivel de ansidedad",
+        subtitle: "(22/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,
@@ -226,7 +226,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
     {
         iconCode: "\ue55e",
         title: "En Lugar 1",
-        subtitle: "(20/04) Nivel de ansidedad",
+        subtitle: "(20/04) Nivel de ansiedad",
         chart: {
             yAxisDataRange: Y_AXIS_DATA_RANGE,
             cuttingLines: CUTTING_LINES,

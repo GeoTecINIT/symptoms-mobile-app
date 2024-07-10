@@ -39,7 +39,7 @@ function transformExposureChange(
         title: `En ${exposureChange.place.name}`,
         subtitle: `(${formatAsDate(
             exposureChange.timestamp
-        )}) Nivel de ansidedad`,
+        )}) Nivel de ansiedad`,
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
@@ -64,7 +64,7 @@ function transformExposureAggregate(
     return {
         iconCode: "\ue26b",
         title: "En todos los lugares",
-        subtitle: "Nivel de ansidedad medio",
+        subtitle: "Nivel de ansiedad medio",
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
@@ -85,7 +85,7 @@ function transformExposurePlaceAggregate(
     return {
         iconCode: "\ue26b",
         title: `En ${exposurePlaceAggregate.placeName}`,
-        subtitle: "Nivel de ansidedad medio",
+        subtitle: "Nivel de ansiedad medio",
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
