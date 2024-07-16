@@ -1,3 +1,6 @@
+# Media folder
+src/media
+
 # NativeScript
 hooks/
 node_modules/
