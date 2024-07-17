@@ -6,6 +6,8 @@ module.exports = (env) => {
   // Learn how to customize:
   // https://docs.nativescript.org/webpack
 
+  webpack.Utils.addCopyRule('media/**')
+
   webpack.chainWebpack((config) => {
     config.plugin("DefinePlugin").tap((args) => {
       const mode = env.production ? "production" : "development";
