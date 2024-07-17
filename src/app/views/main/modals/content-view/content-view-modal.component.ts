@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from "@angular/core";
 import {
     AndroidApplication,
     Application,
@@ -17,9 +23,14 @@ import {
 
 import { getLogger, Logger } from "~/app/core/utils/logger";
 
-// import { registerElement } from '@nativescript/angular';
-// import { Video } from '@nstudio/nativescript-exoplayer';
-// registerElement('Video', () => Video);
+import { registerElement } from "@nativescript/angular";
+import { Video } from "@nstudio/nativescript-exoplayer";
+
+registerElement("Video", () => Video);
+
+// If you have a lot of free time you can try this
+// to format content texts
+// registerElement("MarkdownView", () => MarkdownView);
 
 export const CONTENT_ID_KEY = "contentId";
 const CONTENT_END_OFFSET = 10;
@@ -31,7 +42,7 @@ const CONTENT_END_OFFSET = 10;
 })
 export class ContentViewModalComponent implements OnInit, OnDestroy {
     @ViewChild("player") player: ElementRef;
-    
+
     content$: Promise<TreatmentContent>;
 
     private readonly contentId: string;

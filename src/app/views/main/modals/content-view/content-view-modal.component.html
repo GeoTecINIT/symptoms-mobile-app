@@ -4,16 +4,24 @@
     (close)="onClose()"
   ></SymCloseActionBar>
 
-    <ScrollView (scroll)="onScroll($event)">
-        <StackLayout (layoutChanged)="onContentRendered($event)">
-            <!-- <Video #player
-                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                controls="true"
-                height="300"
-            ></Video> -->
-            <Label textWrap="true" [text]="content.body"></Label>
-        </StackLayout>
-    </ScrollView>
+  <ScrollView (scroll)="onScroll($event)">
+    <StackLayout (layoutChanged)="onContentRendered($event)">
+      <Label textWrap="true" [text]="content.subtitle"></Label>
+      <Label textWrap="true" [text]="content.body"></Label>
+      <Video
+        *ngIf="content.videoPath"
+        #player
+        [src]="content.videoPath"
+        controls="true"
+        height="300"
+      ></Video>
+      <Image
+        *ngIf="content.infographicPath"
+        [src]="content.infographicPath"
+        height="auto"
+      ></Image>
+    </StackLayout>
+  </ScrollView>
 </ng-container>
 
 <ng-template #loading>
