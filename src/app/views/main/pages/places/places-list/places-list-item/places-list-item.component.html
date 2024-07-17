@@ -1,11 +1,67 @@
 <GridLayout class="card" rows="*" columns="auto,*,auto">
-    <GridLayout col="0" rows="auto" verticalAlignment="center">
-        <Label class="circle" verticalAlignment="center"></Label>
-        <Label class="mdi-ro icon" text="&#xe55f;" verticalAlignment="center"></Label>
-    </GridLayout>
-    <GridLayout col="1" rows="auto,auto" verticalAlignment="center" style="margin-left: 5em;">
-        <Label row="0" style="margin: 0; padding: 0; font-weight: 500;" [text]="place.name" verticalAlignment="center"></Label>
-        <Label row="1" [text]="'Nº Exposiciones: ' + numberOfExposures" verticalAlignment="center"></Label>
-    </GridLayout>
-    <Label col="2" class="mdi-ro arrow" text="&#xe5cc;" verticalAlignment="center"></Label>
+  <GridLayout col="0" rows="auto" verticalAlignment="top">
+    <Label class="circle" verticalAlignment="center"></Label>
+    <Label
+      class="mdi-ro icon"
+      text="&#xe55f;"
+      verticalAlignment="center"
+    ></Label>
+  </GridLayout>
+  <GridLayout
+    col="1"
+    rows="auto,auto,auto,auto,auto,auto"
+    verticalAlignment="center"
+    style="margin-left: 20em"
+  >
+    <Label
+      row="0"
+      style="margin: 0; padding: 0; font-weight: 500"
+      [text]="place.name"
+      verticalAlignment="center"
+    ></Label>
+    <Label
+      row="1"
+      [text]="numberOfExposuresText"
+      verticalAlignment="center"
+    ></Label>
+    <ng-container
+      *ngIf="isExpanded"
+      #expandableContainer
+      [ngClass]="{ hidden: !isExpanded }"
+    >
+      <Label
+        row="2"
+        [text]="lightConditionText"
+        verticalAlignment="center"
+      ></Label>
+      <!-- <Label
+        *ngIf="lightConditionText"
+        row="2"
+        [text]="lightConditionText"
+        verticalAlignment="center"
+      ></Label> -->
+      <Label
+        *ngIf="timeRangeText"
+        row="3"
+        [text]="timeRangeText"
+        verticalAlignment="center"
+      ></Label>
+      <Label
+        *ngIf="weatherAndWindText"
+        row="4"
+        [text]="weatherAndWindText"
+        verticalAlignment="center"
+      ></Label>
+    </ng-container>
+  </GridLayout>
+  <GridLayout col="2" rows="auto" verticalAlignment="top">
+    <Label
+      class="mdi-ro arrow"
+      row="0"
+      text="&#xe5cc;"
+      [class.rotated]="isExpanded"
+      verticalAlignment="top"
+    >
+    </Label>
+  </GridLayout>
 </GridLayout>

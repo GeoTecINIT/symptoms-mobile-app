@@ -1,14 +1,30 @@
 <GridLayout rows="auto,*">
-    <StackLayout row="0">
-        <StackLayout class="header">
-            <Label text="Lugares de exposición"></Label>
-        </StackLayout>
-        <Label class="separator"></Label>
-    </StackLayout>
-    <ListView row="1" [items]="places" (itemTap)="onListItemTap($event)">
-        <ng-template let-item="item">
-            <SymPlacesListItem [place]="item"></SymPlacesListItem>
-        </ng-template>
-    </ListView>
+  <StackLayout row="0">
+    <FlexboxLayout
+      justifyContent="space-between"
+      alignItems="center"
+      class="header"
+    >
+      <Label text="Lugares de exposición"></Label>
+      <Label
+        class="mdi-ro info"
+        row="1"
+        text="&#xe88e;"
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        isPassThroughParentEnabled="true"
+        (tap)="showInfoPopup()"
+      >
+      </Label>
+    </FlexboxLayout>
+    <Label class="separator"></Label>
+  </StackLayout>
+  <ListView row="1" [items]="places" (itemTap)="onListItemTap($event)">
+    <ng-template let-item="item">
+      <SymPlacesListItem
+        [place]="item"
+        [isExpanded]="item.id === expandedItemId"
+      ></SymPlacesListItem>
+    </ng-template>
+  </ListView>
 </GridLayout>
-

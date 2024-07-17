@@ -10,6 +10,7 @@ import { CommonComponentsModule } from "~/app/views/common/common-components.mod
 import { NativeScriptMaterialActivityIndicatorModule } from "@nativescript-community/ui-material-activityindicator/angular";
 import { PlacesListComponent } from "./places-list/places-list.component";
 import { PlacesListItemComponent } from "./places-list/places-list-item/places-list-item.component";
+import { PlacesListInfoDialogComponent } from "./places-list/places-list-item/places-list-info-dialog/places-list-info-dialog.component";
 
 registerElement(
     "Mapbox",
@@ -27,7 +28,9 @@ registerElement(
         PlacesMapComponent,
         PlacesListComponent,
         PlacesListItemComponent,
+        PlacesListInfoDialogComponent,
     ],
+    entryComponents: [PlacesListInfoDialogComponent],
     exports: [PlacesContainerComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })

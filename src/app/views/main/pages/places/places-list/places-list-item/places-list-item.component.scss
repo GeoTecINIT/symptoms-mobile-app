@@ -1,16 +1,16 @@
 @import "src/app-variables";
 
 .circle {
-  height: 68;
-  width: 68;
+  height: 46;
+  width: 46;
   background-color: const(grey);
-  border-radius: 34;
+  border-radius: 23;
 }
 
 .icon {
   horizontal-align: center;
   vertical-align: center;
-  font-size: 36;
+  font-size: 28;
   color: $accent;
 }
 
@@ -21,5 +21,16 @@
 
 .arrow {
   color: $dark-grey;
-  font-size: 36;
+  font-size: 32;
+  margin-top: -6em;
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotated {
+  transform: rotate(90deg);
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
 }
