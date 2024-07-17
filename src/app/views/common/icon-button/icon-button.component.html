@@ -1,8 +1,9 @@
-<GridLayout class="icon-wrapper" rows="auto" columns="auto" (tap)="emitTap()">
-    <Label class="circle" [class.danger]="danger"></Label>
-    <Label
-      class="mdi-ro mdi-24 icon"
-      [text]="icon"
-    ></Label>
+<GridLayout
+  class="icon-wrapper"
+  rows="auto"
+  columns="auto"
+  (tap)="emitTap($event)"
+>
+  <Label class="circle" [class.danger]="danger"></Label>
+  <Label class="mdi-ro mdi-24 icon" [text]="icon"></Label>
 </GridLayout>
-

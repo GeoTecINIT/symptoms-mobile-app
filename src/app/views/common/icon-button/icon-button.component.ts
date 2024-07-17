@@ -6,11 +6,11 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
     styleUrls: ["./icon-button.component.scss"],
 })
 export class IconButtonComponent {
-    @Input() icon: string = '';
+    @Input() icon: string = "";
     @Input() danger: boolean = false;
-    @Output() iconButtonTap = new EventEmitter<void>();
+    @Output() iconButtonTap = new EventEmitter<Event>();
 
-    emitTap() {
-        this.iconButtonTap.emit();
+    emitTap(event: Event) {
+        this.iconButtonTap.emit(event);
     }
 }
