@@ -4,74 +4,82 @@
 
 // Font icon class
 .fab {
-    font-family: "Font Awesome 5 Brands", "fa-brands-400";
-    font-weight: 400;
+  font-family: "Font Awesome 5 Brands", "fa-brands-400";
+  font-weight: 400;
 }
 
 .fas {
-    font-family: "Font Awesome 5 Free", "fa-solid-900";
-    font-weight: 900;
+  font-family: "Font Awesome 5 Free", "fa-solid-900";
+  font-weight: 900;
 }
 
 .far {
-    font-family: "Font Awesome 5 Free", "fa-regular-400";
-    font-weight: 400;
+  font-family: "Font Awesome 5 Free", "fa-regular-400";
+  font-weight: 400;
 }
 
 .mdi-ro {
-    font-family: "Material Icons Round", "MaterialIconsRound-Regular";
-    font-style: normal;
-    font-weight: 400;
-    &.mdi-18 { font-size: 18; }
-    &.mdi-24 { font-size: 24; }
-    &.mdi-36 { font-size: 36; }
-    &.mdi-48 { font-size: 48; }
+  font-family: "Material Icons Round", "MaterialIconsRound-Regular";
+  font-style: normal;
+  font-weight: 400;
+  &.mdi-18 {
+    font-size: 18;
+  }
+  &.mdi-24 {
+    font-size: 24;
+  }
+  &.mdi-36 {
+    font-size: 36;
+  }
+  &.mdi-48 {
+    font-size: 48;
+  }
 }
 // Get icon codes from here: https://fonts.google.com/icons
 // Select web option and copy icon "code point" hex code
 
 // Common ActionBar style
 ActionBar Label {
-    font-size: 16;
-    font-weight: bold;
+  font-size: 16;
+  font-weight: bold;
 }
 
 Label {
-    font-size: 16;
-    color: $text-color;
+  font-size: 16;
+  color: $text-color;
 }
 
 // Common page class
 .page {
-    padding: $global-spacing;
+  padding: $global-spacing;
 }
 
 // Common big emoji icon class
 .emoji-icon {
-    font-size: 72;
-    text-align: center;
+  font-size: 72;
+  text-align: center;
 }
 
 // Custom background colors
 .bg-grey {
-    background-color: $grey;
+  background-color: $grey;
 }
 
 .bg-dark-grey {
-    background-color: $dark-grey;
+  background-color: $dark-grey;
 }
 
 .bg-complementary {
-    background-color: $complementary;
+  background-color: $complementary;
 }
 
 .card {
-    border-width: 1;
-    border-color: #e0e0e0;
-    border-style: solid;
-    border-radius: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    // android-elevation: 2;
-    margin: 4;
-    padding: 24;
+  border-width: 1;
+  border-color: #e0e0e0;
+  border-style: solid;
+  border-radius: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  // android-elevation: 2;
+  margin: 4;
+  padding: 24;
 }
