@@ -319,7 +319,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás qué es un escape y en qué se diferencia de la evitación.`,
         videoPath: "~/media/videos/Geovid11.mp4",
-        infographicPath: "src/media/images/infographics/infographic_1.png",
+        infographicPath: "~/media/images/infographics/infographic_1.png",
     },
     {
         id: "cp08",
