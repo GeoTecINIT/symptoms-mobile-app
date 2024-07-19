@@ -28,6 +28,7 @@ import { TextAndAudioInputComponent } from "./text-and-audio-input/text-and-audi
 import { IconButtonComponent } from "./icon-button/icon-button.component";
 import { AudioWavesComponent } from "./audio-waves/audio-waves.component";
 import { FormatTimePipe } from "./text-and-audio-input/format-time.pipe";
+import { VideoPlayerComponent } from "./video-player/video-player.component";
 
 @NgModule({
     imports: [
@@ -56,7 +57,8 @@ import { FormatTimePipe } from "./text-and-audio-input/format-time.pipe";
         TextAndAudioInputComponent,
         IconButtonComponent,
         AudioWavesComponent,
-        FormatTimePipe
+        FormatTimePipe,
+        VideoPlayerComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [
@@ -78,7 +80,8 @@ import { FormatTimePipe } from "./text-and-audio-input/format-time.pipe";
         AudioPlayerRecorderComponent,
         TextAndAudioInputComponent,
         IconButtonComponent,
-        AudioWavesComponent
+        AudioWavesComponent,
+        VideoPlayerComponent,
     ],
 })
 export class CommonComponentsModule {}
