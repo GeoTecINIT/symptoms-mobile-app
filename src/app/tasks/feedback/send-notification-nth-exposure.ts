@@ -12,10 +12,10 @@ import {
 
 // It should be used exactly as default sendNotification task as it will
 // send a notification after receiving the event indicated in the graph
-// ONLY if there are no exposures.
-export class SendNotificationOnlyFirstTime extends Task {
+// ONLY if number of exposures match the taskParams variable.
+export class SendNotificationNthExposure extends Task {
     constructor(private store: ExposuresStore = exposures) {
-        super("sendNotificationOnlyFirstTime");
+        super("sendNotificationNthExposure");
     }
 
     protected async onRun(
@@ -23,15 +23,16 @@ export class SendNotificationOnlyFirstTime extends Task {
         invocationEvent: DispatchableEvent
     ): Promise<void | TaskOutcome> {
         try {
+            const { numberOfExposure, ...notificationContent } = taskParams;
+
             // Get exposures
             const exposuresDone = await this.store.getAll();
 
-            // If no. exposures is not 0 return void, otherwise send a notification,
-            if (exposuresDone.length !== 0) return;
+            if (exposuresDone.length !== numberOfExposure) return;
             
-            return sendNotificationTask().run(taskParams, invocationEvent);
+            return sendNotificationTask().run(notificationContent, invocationEvent);
         } catch (e) {
-            getLogger("sendNotificationOnlyFirstTime").warn(`Was not possible to send a first-time notification. Reason ${e}`)
+            getLogger("SendNotificationNthExposure").warn(`Was not possible to send a first-time notification. Reason ${e}`)
             
             // Default message is sent if there is any error
             return;

@@ -169,10 +169,6 @@ class DemoTaskGraph implements TaskGraph {
                         body: "Entra en el área para empezar la exposición",
                     },
                     {
-                        title: "¡A por todas!",
-                        body: "Entra en el área para empezar la exposición",
-                    },
-                    {
                         title: "Exponerte te acercará a tu recuperación.",
                         body: "Entra en el área para empezar la exposición",
                     },
@@ -181,8 +177,8 @@ class DemoTaskGraph implements TaskGraph {
                         body: "Entra en el área para empezar la exposición",
                     },
                     {
-                        title: "Has comenzado tu exposición.",
-                        body: "¡Has tomado la mejor decisión para empezar a superar tu problema! Adelante,  ¡tú puedes hacerlo!",
+                        title: "¡Has tomado la mejor decisión para empezar a superar tu problema! Adelante, ¡tú puedes hacerlo!",
+                        body: "Entra en el área para empezar la exposición",
                     },
                 ],
             })
@@ -242,12 +238,13 @@ class DemoTaskGraph implements TaskGraph {
         // -> Send info notification only if there are no exposures
         on(
             "exposureStartConfirmed",
-            run("sendNotificationOnlyFirstTime", {
+            run("sendNotificationNthExposure", {
+                numberOfExposure: 1,
                 title: "Acabas de iniciar una exposición",
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "cg01",
+                    id: "cp03",
                 },
             })
         );
@@ -265,18 +262,6 @@ class DemoTaskGraph implements TaskGraph {
             })
         );
 
-        // TODO: Show this if its the first exposure
-        // on(
-        //     "exposureStarted",
-        //     run("sendNotification", {
-        //         title: "Acabas de iniciar una exposición",
-        //         body: "Pulsa aquí si tienes dudas sobre como proceder",
-        //         tapAction: {
-        //             type: TapActionType.OPEN_CONTENT,
-        //             id: "cg01",
-        //         },
-        //     })
-        // );
         on("exposureStarted", run("writeRecords"));
         // -> Detect heart rate with watch
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
@@ -335,17 +320,14 @@ class DemoTaskGraph implements TaskGraph {
             run("sendNotification", {
                 title: "Enhorabuena, toleras bien esta situación",
                 // body: "Contacta con tu psicólogo para comentar tus avances",
-                body: "Sigue como lo has estado haciendo hasta ahora",
+                body: "Sigue como hasta ahora para progresar con tus avances",
             })
         );
         // Send notification for reinforcement due to not positive evolving
         on(
             "patientNotShowsAnxietyPositiveEvolution",
             run("sendCustomNotification", {
-                // title: "Tu ansiedad no está bajando lo esperado",
                 title: "A veces puede ser complicado que la ansiedad baje",
-                // body: "No pasa nada, sigue con tu exposición 💪",
-                // body: "A veces puede resultar complicado que la ansiedad baje y esta se mantiene alta durante más tiempo. Esto es totalmente normal y forma parte del proceso de cambio",
                 body: "En ocasiones la ansiedad se mantiene alta durante más tiempo. Esto es totalmente normal y forma parte del proceso de cambio",
             })
         );
@@ -409,7 +391,7 @@ class DemoTaskGraph implements TaskGraph {
                 body: "Pulsa aquí para recordar el papel de la evitación",
                 tapAction: {
                     type: TapActionType.OPEN_CONTENT,
-                    id: "cg03",
+                    id: "cp07",
                 },
             })
         );
@@ -419,9 +401,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "returnedToExposureArea",
             run("sendNotification", {
-                // title: "Vemos que has vuelto al lugar de exposición",
                 title: "¡Felicidades por regresar!",
-                // body: "Nos alegra que hayas vuelto, adelante",
                 body: "Los escapes pueden ayudarte en momentos difíciles y de intenso malestar, pero regresar es algo fundamental y muy necesario para conseguir los objetivos terapéuticos. Ahora, ¡adelante!",
             })
         );
@@ -551,6 +531,31 @@ class DemoTaskGraph implements TaskGraph {
 
         // START: Post-exposure events
         on("exposureFinished", run("clearNotifications"));
+
+        on(
+            "exposureFinished",
+            run("sendNotificationNthExposure", {
+                numberOfExposure: 1, // Exposure was just finished and there will be 1 exposure in the local DB
+                title: "¡Has terminado tu primera exposición!",
+                body: "Pulsa aquí para saber más sobre los efectos de las exposiciones",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cp04",
+                },
+        }));
+
+        on(
+            "exposureFinished",
+            run("sendNotificationNthExposure", {
+                numberOfExposure: 2, // Exposure was just finished and there will be 2 exposures in the local DB
+                title: "Aprende a controlar tus miedos",
+                body: "Pulsa aquí para aprender herramientas para gestionar tus emociones",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cp08",
+                },
+        }));
+
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(
             "exposureWasNotDroppedOut",

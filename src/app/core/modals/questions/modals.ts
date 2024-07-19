@@ -20,6 +20,12 @@ export const askPreExposureQuestions: QuestionsModalOptions = {
             to: 10,
         },
         {
+            title: "En una escala de 0 (nada) a 10 (completamente), ¿Cómo de cierto crees que es el pensamiento que tienes en este momento?",
+            type: "range",
+            from: 0,
+            to: 10,
+        },
+        {
             title: "¿Qué piensas que ocurrirá durante la exposición?",
             type: "free-text-with-audio",
             hint: "Pienso que...",
@@ -43,7 +49,7 @@ export const askExposureQuestions: QuestionsModalOptions = {
     },
     questions: [
         {
-            title: "De 0 (ninguno) a 10 (máximo), ¿cómo puntuarías tu nivel de ansiedad en este momento?",
+            title: "De 0 (ninguno) a 10 (máximo), ¿cuánta ansiedad estás experimentando en este momento?",
             type: "range",
             from: 0,
             to: 10,
@@ -70,12 +76,12 @@ export const askPostExposureQuestions: QuestionsModalOptions = {
             left: "Sí",
             right: "No",
         },
-        // {
-        //     title: "¿Has conseguido prestar atención a todo lo que estaba sucediendo alrededor de la situación de exposición?",
-        //     type: "binary",
-        //     left: "Sí",
-        //     right: "No",
-        // },
+        {
+            title: "De 0 (ninguna) a 10 (mucha), ¿cómo de cierto crees que es el pensamiento que tienes en este momento?",
+            type: "range",
+            from: 0,
+            to: 10,
+        },
         {
             title: "Respecto a tus creencias iniciales, ¿ha ocurrido lo que temías?",
             type: "free-text-with-audio",
