@@ -23,7 +23,6 @@ import { CircleIconComponent } from "./circle-icon/circle-icon.component";
 import { ActivityIndicatorComponent } from "./activity-indicator/activity-indicator.component";
 import { TextInputComponent } from "./text-input/text-input.component";
 import { BinaryChoiceComponent } from "./binary-choice/binary-choice.component";
-import { AudioPlayerRecorderComponent } from "./audio-player-recorder/audio-player-recorder.component";
 import { TextAndAudioInputComponent } from "./text-and-audio-input/text-and-audio-input.component"
 import { IconButtonComponent } from "./icon-button/icon-button.component";
 import { AudioWavesComponent } from "./audio-waves/audio-waves.component";
@@ -53,7 +52,6 @@ import { VideoPlayerComponent } from "./video-player/video-player.component";
         ActivityIndicatorComponent,
         TextInputComponent,
         BinaryChoiceComponent,
-        AudioPlayerRecorderComponent,
         TextAndAudioInputComponent,
         IconButtonComponent,
         AudioWavesComponent,
@@ -77,7 +75,6 @@ import { VideoPlayerComponent } from "./video-player/video-player.component";
         ActivityIndicatorComponent,
         TextInputComponent,
         BinaryChoiceComponent,
-        AudioPlayerRecorderComponent,
         TextAndAudioInputComponent,
         IconButtonComponent,
         AudioWavesComponent,
