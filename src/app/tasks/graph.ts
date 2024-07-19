@@ -173,8 +173,16 @@ class DemoTaskGraph implements TaskGraph {
                         body: "Entra en el área para empezar la exposición",
                     },
                     {
-                        title: "¡Vamos! Inicia con confianza",
+                        title: "Exponerte te acercará a tu recuperación.",
                         body: "Entra en el área para empezar la exposición",
+                    },
+                    {
+                        title: "Exponerte te acercará a lograr tus objetivos.",
+                        body: "Entra en el área para empezar la exposición",
+                    },
+                    {
+                        title: "Has comenzado tu exposición.",
+                        body: "¡Has tomado la mejor decisión para empezar a superar tu problema! Adelante,  ¡tú puedes hacerlo!",
                     },
                 ],
             })
@@ -326,15 +334,19 @@ class DemoTaskGraph implements TaskGraph {
             "patientShowsAnInitialSustainedLowAnxietyLevel",
             run("sendNotification", {
                 title: "Enhorabuena, toleras bien esta situación",
-                body: "Contacta con tu psicólogo para comentar tus avances",
+                // body: "Contacta con tu psicólogo para comentar tus avances",
+                body: "Sigue como lo has estado haciendo hasta ahora",
             })
         );
         // Send notification for reinforcement due to not positive evolving
         on(
             "patientNotShowsAnxietyPositiveEvolution",
             run("sendCustomNotification", {
-                title: "Tu ansiedad no está bajando lo esperado",
-                body: "No pasa nada, sigue con tu exposición 💪",
+                // title: "Tu ansiedad no está bajando lo esperado",
+                title: "A veces puede ser complicado que la ansiedad baje",
+                // body: "No pasa nada, sigue con tu exposición 💪",
+                // body: "A veces puede resultar complicado que la ansiedad baje y esta se mantiene alta durante más tiempo. Esto es totalmente normal y forma parte del proceso de cambio",
+                body: "En ocasiones la ansiedad se mantiene alta durante más tiempo. Esto es totalmente normal y forma parte del proceso de cambio",
             })
         );
         // Send notification for reinforcement due to positive evolving
@@ -407,8 +419,10 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "returnedToExposureArea",
             run("sendNotification", {
-                title: "Vemos que has vuelto al lugar de exposición",
-                body: "Nos alegra que hayas vuelto, adelante",
+                // title: "Vemos que has vuelto al lugar de exposición",
+                title: "¡Felicidades por regresar!",
+                // body: "Nos alegra que hayas vuelto, adelante",
+                body: "Los escapes pueden ayudarte en momentos difíciles y de intenso malestar, pero regresar es algo fundamental y muy necesario para conseguir los objetivos terapéuticos. Ahora, ¡adelante!",
             })
         );
         on("returnedToExposureArea", run("writeRecords"));
@@ -436,7 +450,7 @@ class DemoTaskGraph implements TaskGraph {
             "exposureStarted",
             run("evaluateExposure", {
                 emotionThreshold: 5,
-                peakToLastThreshold: 3,
+                peakToLastThreshold: 2,
             })
                 .in(EXPOSURE_MINUTES, "minutes")
                 .cancelOn("exposureForcedToFinish")

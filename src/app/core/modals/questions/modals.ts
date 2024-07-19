@@ -70,12 +70,12 @@ export const askPostExposureQuestions: QuestionsModalOptions = {
             left: "Sí",
             right: "No",
         },
-        {
-            title: "¿Has conseguido prestar atención a todo lo que estaba sucediendo alrededor de la situación de exposición?",
-            type: "binary",
-            left: "Sí",
-            right: "No",
-        },
+        // {
+        //     title: "¿Has conseguido prestar atención a todo lo que estaba sucediendo alrededor de la situación de exposición?",
+        //     type: "binary",
+        //     left: "Sí",
+        //     right: "No",
+        // },
         {
             title: "Respecto a tus creencias iniciales, ¿ha ocurrido lo que temías?",
             type: "free-text-with-audio",

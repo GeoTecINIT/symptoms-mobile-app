@@ -8,13 +8,20 @@
     <StackLayout (layoutChanged)="onContentRendered($event)">
       <Label textWrap="true" [text]="content.subtitle"></Label>
       <Label textWrap="true" [text]="content.body"></Label>
-      <Video
+      <SymVideoPlayer
         *ngIf="content.videoPath"
         #player
         [src]="content.videoPath"
         controls="true"
         height="300"
-      ></Video>
+      ></SymVideoPlayer>
+      <!-- <Video
+        *ngIf="content.videoPath"
+        #player
+        [src]="content.videoPath"
+        controls="true"
+        height="300"
+      ></Video> -->
       <Image
         *ngIf="content.infographicPath"
         [src]="content.infographicPath"

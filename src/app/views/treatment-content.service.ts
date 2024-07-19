@@ -264,7 +264,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         type: TreatmentContentType.Psychoeducation,
         title: "Presentación",
         body: `In development`,
-        videoPath: "~/media/videos/GEOvid01.mp4",
+        videoPath: "~/media/videos/Geovid01.mp4",
     },
     {
         id: "cp02",
@@ -273,7 +273,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "La respuesta de ansiedad",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás que cuando hablamos de ansiedad es necesario tener en cuenta la triple respuesta ya que son tres los sistemas: físico, cognitivo y de comportamiento o motor.`,
-        videoPath: "~/media/videos/GEOvid10.mp4",
+        videoPath: "~/media/videos/Geovid10.mp4",
     },
     {
         id: "cp03",
@@ -282,7 +282,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "¿Qué es la exposición?",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás en qué consiste la exposición y el papel de la ansiedad durante esta.`,
-        videoPath: "~/media/videos/GEOvid02.mp4",
+        videoPath: "~/media/videos/Geovid02.mp4",
     },
     {
         id: "cp04",
@@ -291,7 +291,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "Los efectos de la exposición",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás que es normal y parte del proceso de cambio experimentar ciertas sensaciones tras las sesiones de exposición, ya sean pesadillas, picos de ansiedad o tristeza.`,
-        videoPath: "~/media/videos/GEOvid03.mp4",
+        videoPath: "~/media/videos/Geovid03.mp4",
     },
     {
         id: "cp05",
@@ -300,7 +300,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "El papel de las cogniciones",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás que los pensamientos juegan un papel central en las respuestas de ansiedad y que pueden influir en el modo en que reaccionamos y nos comportamos en cualquier situación. También descubrirás que hay pensamientos desadaptativos y catastróficos y su papel en el mantenimiento de la ansiedad.`,
-        videoPath: "~/media/videos/GEOvid07.mp4",
+        videoPath: "~/media/videos/Geovid07.mp4",
     },
     {
         id: "cp06",
@@ -309,7 +309,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "Las ventajas del cambio",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Te plantearás cuáles son las ventajas y las desventajas de seguir igual y de cambiar y aprenderás que es normal tener altibajos en la motivación.`,
-        videoPath: "~/media/videos/GEOvid08.mp4",
+        videoPath: "~/media/videos/Geovid08.mp4",
     },
     {
         id: "cp07",
@@ -318,7 +318,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "¿Qué es un escape?",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Aprenderás qué es un escape y en qué se diferencia de la evitación.`,
-        videoPath: "~/media/videos/GEOvid11.mp4",
+        videoPath: "~/media/videos/Geovid11.mp4",
         infographicPath: "src/media/images/infographics/infographic_1.png",
     },
     {
@@ -328,7 +328,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "Situaciones difíciles",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Escucharás un mensaje de una terapeuta del equipo animándote a seguir en tu camino del cambio y recordándote las herramientas a las que podrás recurrir en los momentos difíciles.`,
-        videoPath: "~/media/videos/GEOvid04.mp4",
+        videoPath: "~/media/videos/Geovid04.mp4",
     },
     {
         id: "cp09",
@@ -337,7 +337,7 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         title: "Los beneficios de la exposición",
         subtitle: "¿Qué veré en este vídeo?",
         body: `Conocerás a Lucía y su historia con la ansiedad. Te contará cómo la exposición la ayudó a lograr sus objetivos y a gestionar la ansiedad.`,
-        videoPath: "~/media/videos/GEOvid05.mp4",
+        videoPath: "~/media/videos/Geovid05.mp4",
     },
     {
         id: "cp10",
