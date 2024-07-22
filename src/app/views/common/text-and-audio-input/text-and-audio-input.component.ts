@@ -163,7 +163,8 @@ export class TextAndAudioInputComponent {
 
         await this.audioRecorder.dispose();
         this.recordedAudioFilePath = '';
-        this.currentTime = 0;
+        this.currentTime = 0; 
+        this.audioRecorded.emit('');   
     }
 
     // -> Playback related functions

@@ -70,11 +70,7 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
         this.emitFeedback();
     }
 
-    onAnswer(answer: string) {
-        const answerIsFreeText = !answer.includes('/data/data/');
-        // If audio was recorded and answer is free text, don't update the answer
-        if (this.isAudioIsRecorded && answerIsFreeText) return;
-
+    onAnswer(answer: string) {        
         this.answer = answer;
         if (this.hasCompletionScreen) {
             this.showConfirmScreen = true;
