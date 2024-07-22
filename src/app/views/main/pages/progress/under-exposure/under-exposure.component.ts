@@ -89,7 +89,7 @@ export class UnderExposureComponent {
 
     onWantsToLeaveTap() {
         this.contentViewModalService
-            .showContent("cg09")
+            .showContent("cp07")
             .catch((err) =>
                 this.logger.error(
                     `Could not show content! Reason: ${JSON.stringify(err)}`

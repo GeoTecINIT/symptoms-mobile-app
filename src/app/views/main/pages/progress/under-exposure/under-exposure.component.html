@@ -1,4 +1,4 @@
-<GridLayout class="page" rows="*, auto" *ngIf="ongoingExposure">
+<GridLayout class="page" rows="*, auto, auto" *ngIf="ongoingExposure">
     <StackLayout row="0" verticalAlignment="center">
         <Label class="body-text body-title" textWrap="true" [text]="'Tiempo de exposición en:\n' + ongoingExposure.place.name"></Label>
         <Label class="minutes-counter" [text]="exposureProgress === 0 ? '< 1' : exposureProgress"></Label>
@@ -8,6 +8,6 @@
             <Label class="body-text" textWrap="true" [text]="'Permanece en este lugar, limita el uso del teléfono y evita las distracciones.\n\nLa app te acompañará durante todo el proceso a través de notificaciones puntuales.'"></Label>
         </StackLayout>
     </StackLayout>
-    <SymButtonLink row="1" *ngIf="!inDanger" margin="0" text="¿Necesitas irte?" (tap)="onWantsToEndExposureTap()"></SymButtonLink>
-    <SymButtonLink row="1" *ngIf="inDanger" margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
+    <SymButtonLink row="1" margin="0" text="¿Necesitas irte?" (tap)="onWantsToEndExposureTap()"></SymButtonLink>
+    <SymButtonLink row="2" *ngIf="inDanger" margin="0" text="¿Por qué no deberías irte ahora?" (tap)="onWantsToLeaveTap()"></SymButtonLink>
 </GridLayout>
