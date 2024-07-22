@@ -16,6 +16,11 @@ export class ClearNotifications extends Task {
         invocationEvent: DispatchableEvent
     ): Promise<void> {
         const notifications = await firstValueFrom(notificationsStore.list())
-        notifications.forEach(n => notificationsManager.markAsSeen(n.id))
+
+        const now = new Date().getTime();
+        const oneMinInMilliseconds = 1 * 60 * 1000;
+        
+        // Mark as seen notifications that are older than 1 min from current timestamp (now)
+        notifications.filter(n => (now - n.timestamp.getTime()) > oneMinInMilliseconds ).forEach(n => notificationsManager.markAsSeen(n.id))
     }
 }
