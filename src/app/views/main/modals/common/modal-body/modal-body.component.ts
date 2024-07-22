@@ -12,4 +12,10 @@ export class ModalBodyComponent {
 
     @Input() currentStep: number;
     @Input() stepAmount: number;
+
+    showingImage: boolean = false;
+
+    showImage() {
+        this.showingImage = !this.showingImage;
+    }
 }

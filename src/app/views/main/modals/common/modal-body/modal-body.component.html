@@ -1,11 +1,36 @@
 <GridLayout class="body" rows="*, auto, auto">
-    <StackLayout row="0" verticalAlignment="center" horizontalAlignment="center">
-        <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
-        <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode"></SymCircleIcon>
-        <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
+  <GridLayout rows="*, auto" row="0" justifyContent="space-between">
+    <StackLayout
+      *ngIf="!showingImage"
+      row="0"
+      verticalAlignment="center"
+      horizontalAlignment="center"
+    >
+      <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
+      <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode"></SymCircleIcon>
+      <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
     </StackLayout>
-    <SymStepProgressBar row="1" *ngIf="stepAmount" [current]="currentStep" [total]="stepAmount"></SymStepProgressBar>
-    <StackLayout row="2" class="card">
-        <ng-content></ng-content>
-    </StackLayout>
+    <Image
+      *ngIf="showingImage"
+      row="0"
+      src="~/media/images/infographics/infographic_2.png"
+      height="auto"
+    ></Image>
+    <SymButtonLink
+      *ngIf="currentStep === stepAmount - 1"
+      row="1"
+      margin="0"
+      [text]="showingImage ? 'Cerrar' : 'Ver ayuda'"
+      (tap)="showImage()"
+    ></SymButtonLink>
+  </GridLayout>
+  <SymStepProgressBar
+    row="1"
+    *ngIf="stepAmount"
+    [current]="currentStep"
+    [total]="stepAmount"
+  ></SymStepProgressBar>
+  <StackLayout row="2" class="card">
+    <ng-content></ng-content>
+  </StackLayout>
 </GridLayout>
