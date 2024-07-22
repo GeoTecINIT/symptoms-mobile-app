@@ -239,7 +239,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureStartConfirmed",
             run("sendNotificationNthExposure", {
-                numberOfExposure: 1,
+                numberOfExposure: 0,
                 title: "Acabas de iniciar una exposición",
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
