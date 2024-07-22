@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ModalDialogParams } from "@nativescript/angular";
 import { FeedbackModalOptions } from "~/app/core/modals/feedback";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavigationService } from "../../../navigation.service";
@@ -17,8 +16,6 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
     options: FeedbackModalOptions;
     answer: string;
     showConfirmScreen = false;
-
-    private isAudioIsRecorded: boolean = false;
 
     private readonly instanceId: number;
     private readonly backCallback: () => void;
@@ -70,18 +67,13 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
         this.emitFeedback();
     }
 
-    onAnswer(answer: string) {        
+    onAnswer(answer: string) {
         this.answer = answer;
         if (this.hasCompletionScreen) {
             this.showConfirmScreen = true;
         } else if (!this.hasTextAndAudioInput) {
             this.onClose();
         }
-    }
-
-    onAudioRecorded(audioRecordedFilePath: string) {
-        this.isAudioIsRecorded = true;
-        this.onAnswer(audioRecordedFilePath);
     }
 
     emitFeedback() {

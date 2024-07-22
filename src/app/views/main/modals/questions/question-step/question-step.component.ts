@@ -65,17 +65,7 @@ export class QuestionStepComponent {
         return "middle";
     }
 
-    onAudioRecorded(audioFilePath: string) {
-        this.isAudioIsRecorded = true;
-        this.onValueSelected(audioFilePath)    
-    }
-
-
     onValueSelected(value: number | string | boolean) {
-        const valueIsFreeText = typeof value === "string" && !value.includes('/data/data/');
-        // If audio was recorded and value is free text, don't update the answer
-        if (this.isAudioIsRecorded && valueIsFreeText) return;
-
         this.answer = typeof value === "string" ? value.trim() : value;
         this.answerTime =
             this.savedAnswer && this.savedAnswer.answer === value
