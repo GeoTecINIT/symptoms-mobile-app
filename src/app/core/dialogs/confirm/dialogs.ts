@@ -21,7 +21,7 @@ export const confirmWantsToLeave: ConfirmDialogOptions = {
     body:
         "Recuerda el papel negativo de la evitación. Es importante mantenerte en la situación hasta que consigas reducir tu nivel de ansiedad.",
     positiveText: "Me quedo",
-    negativeText: "Salir",
+    negativeText: "Abandonar exposición",
 };
 
 export const confirmWantsToUnlink: ConfirmDialogOptions = {
