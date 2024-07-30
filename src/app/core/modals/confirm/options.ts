@@ -1,4 +1,5 @@
 import { ConfirmDialogOptions } from "~/app/core/dialogs/confirm";
+import { ContextualConditions, WeatherSummary } from "~/app/core/weather";
 
 export interface ConfirmModalOptions {
     title: string;
@@ -14,4 +15,6 @@ export interface ConfirmModalOptions {
     };
     negative: boolean;
     cancelConfirmOptions?: ConfirmDialogOptions;
+    contextualConditions?: ContextualConditions;
+    weatherSummary?: WeatherSummary;
 }

@@ -12,7 +12,11 @@ import {
 import buffer from "@turf/buffer";
 import bbox from "@turf/bbox";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { AdvancedSetting, advancedSettings } from "~/app/core/account/advanced-settings";
+import {
+    AdvancedSetting,
+    advancedSettings,
+} from "~/app/core/account/advanced-settings";
+import { ExtendedAreaOfInterest } from "~/app/core/account";
 
 const PLACES_LAYER_ID = "places";
 const PLACES_BORDER_LAYER_ID = "places-border";
@@ -28,7 +32,7 @@ const PLACES_BORDERS_FILL_OPACITY = 0.3;
 })
 export class PlacesMapComponent {
     @Input()
-    set places(places: Array<AreaOfInterest>) {
+    set places(places: Array<ExtendedAreaOfInterest>) {
         this._places = places;
         if (!this.map) return;
         this.reInitMap()
@@ -80,7 +84,7 @@ export class PlacesMapComponent {
         if (this.initialized) {
             await this.map.removeLayer(PLACES_LAYER_ID);
             await this.map.removeLayer(PLACES_BORDER_LAYER_ID);
-            
+
             await this.map.removeSource(PLACES_LAYER_ID);
             await this.map.removeSource(PLACES_BORDER_LAYER_ID);
         }
@@ -92,7 +96,8 @@ export class PlacesMapComponent {
         if (!this._places || this._places.length === 0)
             throw new Error("Places list is undefined or empty!");
 
-        const { placesFeatureCollection, bordersFeatureCollection } = this.getPlacesFeatureCollections();
+        const { placesFeatureCollection, bordersFeatureCollection } =
+            this.getPlacesFeatureCollections();
 
         await this.addPlacesSource(placesFeatureCollection);
         await this.addPlacesBorderSource(bordersFeatureCollection);
@@ -104,18 +109,21 @@ export class PlacesMapComponent {
         await this.centerViewport();
     }
 
-    private getPlacesFeatureCollections(): { placesFeatureCollection: FeatureCollection, bordersFeatureCollection: FeatureCollection } {
+    private getPlacesFeatureCollections(): {
+        placesFeatureCollection: FeatureCollection;
+        bordersFeatureCollection: FeatureCollection;
+    } {
         const placesFeatures: Array<Feature> = [];
         const borderFeatures: Array<Feature> = [];
         for (const place of this._places) {
-            const { areaFeature, borderFeature} = placeToFeature(place);
+            const { areaFeature, borderFeature } = placeToFeature(place);
             placesFeatures.push(areaFeature);
             borderFeatures.push(borderFeature);
         }
 
         return {
             placesFeatureCollection: featureCollection(placesFeatures),
-            bordersFeatureCollection: featureCollection(borderFeatures)
+            bordersFeatureCollection: featureCollection(borderFeatures),
         };
     }
 
@@ -167,9 +175,11 @@ export class PlacesMapComponent {
 
     private async centerViewport(animated = false, place?: AreaOfInterest) {
         const bounds = place
-            ? getBoundsForGeoJSON((placeToFeature(place)).borderFeature)
+            ? getBoundsForGeoJSON(placeToFeature(place).borderFeature)
             : this.placesBounds;
-        const outerRadius = advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius);
+        const outerRadius = advancedSettings.getNumber(
+            AdvancedSetting.NearbyExposureRadius
+        );
         await this.map.setViewport({
             bounds,
             padding: outerRadius,
@@ -178,15 +188,23 @@ export class PlacesMapComponent {
     }
 }
 
-function placeToFeature(place: AreaOfInterest): { areaFeature: Feature, borderFeature: Feature } {
+function placeToFeature(place: AreaOfInterest): {
+    areaFeature: Feature;
+    borderFeature: Feature;
+} {
     const placeCenter = point([place.longitude, place.latitude]);
     const areaFeature = buffer(placeCenter, place.radius / 1000);
-    const outerRadius = advancedSettings.getNumber(AdvancedSetting.NearbyExposureRadius);
-    const borderFeature = buffer(placeCenter, (place.radius + outerRadius) / 1000)
+    const outerRadius = advancedSettings.getNumber(
+        AdvancedSetting.NearbyExposureRadius
+    );
+    const borderFeature = buffer(
+        placeCenter,
+        (place.radius + outerRadius) / 1000
+    );
 
     return {
         areaFeature,
-        borderFeature
+        borderFeature,
     };
 }
 
@@ -195,8 +213,8 @@ function getBoundsForGeoJSON(geojson: any): Bounds {
 
     return {
         north: maxY,
-        east:  maxX,
+        east: maxX,
         south: minY,
-        west:  minX,
+        west: minX,
     };
 }

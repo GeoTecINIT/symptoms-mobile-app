@@ -36,6 +36,16 @@ import {
     emitPatientLeftExposureAreaOnPurposeEvent,
     emitPreExposureStartConfirmedEvent,
 } from "~/app/core/framework/events";
+import {
+    ContextualConditions,
+    WeatherService,
+    WeatherSummary,
+} from "~/app/core/weather";
+import { AreaOfInterest } from "@awarns/geofencing";
+import {
+    appConfigController,
+    ExtendedAreaOfInterest,
+} from "~/app/core/account/app-config";
 
 @Injectable({
     providedIn: "root",
@@ -48,7 +58,8 @@ export class NotificationsHandlerService {
         private confirmModalService: ConfirmModalService,
         private feedbackModalService: FeedbackModalService,
         private questionsModalService: QuestionsModalService,
-        private contentViewModalService: ContentViewModalService
+        private contentViewModalService: ContentViewModalService,
+        private weatherService: WeatherService
     ) {
         this.logger = getLogger("NotificationsHandlerService");
     }
@@ -107,7 +118,8 @@ export class NotificationsHandlerService {
 
     private async handleConfirmAction(notification: Notification) {
         const tapActionId = notification.tapAction.id;
-        const { metadata } = notification.tapAction;
+        const { metadata }: any = notification.tapAction;
+        let weatherSummary: WeatherSummary;
         switch (tapActionId) {
             case "exposure-intention":
                 const pretendsToStartExposure = await this.showConfirmModal(
@@ -129,11 +141,24 @@ export class NotificationsHandlerService {
                 }
                 break;
             case "start-exposure":
+                const aoi = metadata[0].aoi as AreaOfInterest;
+                weatherSummary = aoi
+                    ? await this.weatherService.getContextualInformation(
+                          aoi.latitude,
+                          aoi.longitude
+                      )
+                    : undefined;
+
+                const contextualConditions =
+                    appConfigController.getContextualConditionsFromAoi(aoi.id);
+
                 const wantsToStartExposure = await this.showConfirmModal(
                     tapActionId,
-                    new ConfirmModalOptionsDataEmbedder(
-                        confirmWantsToStartAnExposure
-                    ).embed(metadata),
+                    new ConfirmModalOptionsDataEmbedder({
+                        ...confirmWantsToStartAnExposure,
+                        contextualConditions,
+                        weatherSummary,
+                    }).embed(metadata),
                     notification
                 );
                 if (wantsToStartExposure === undefined) return;
@@ -213,6 +238,7 @@ export class NotificationsHandlerService {
         notification: Notification
     ): Promise<boolean | void> {
         try {
+            console.log("Options 👉👉👉👉", options);
             const result = await this.confirmModalService.show(
                 confirmationId,
                 options,

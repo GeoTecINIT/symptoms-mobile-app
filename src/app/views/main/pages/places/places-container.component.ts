@@ -1,8 +1,10 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 
-import { Subject } from "rxjs";
-import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
-import { takeUntil } from "rxjs/operators";
+import { Subject, takeUntil } from "rxjs";
+import {
+    appConfigController,
+    ExtendedAreaOfInterest,
+} from "~/app/core/account/app-config";
 
 @Component({
     selector: "SymPlacesContainer",
@@ -10,8 +12,8 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ["./places-container.component.scss"],
 })
 export class PlacesContainerComponent {
-    places: Array<AreaOfInterest>;
-    selectedPlace: AreaOfInterest;
+    places: Array<ExtendedAreaOfInterest>;
+    selectedPlace: ExtendedAreaOfInterest;
 
     private unloaded$ = new Subject<void>();
 
@@ -27,19 +29,16 @@ export class PlacesContainerComponent {
         this.unloaded$.next();
     }
 
-    onPlaceSelected(place: AreaOfInterest) {
+    onPlaceSelected(place: ExtendedAreaOfInterest) {
         this.selectedPlace = place;
     }
 
     private subscribeToPlacesUpdates() {
-        areasOfInterest
-            .list()
-            .pipe(
-                takeUntil(this.unloaded$),
-            )
-            .subscribe((places) => {
+        appConfigController.aois$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((aois) => {
                 this.ngZone.run(() => {
-                    this.places = places;
+                    this.places = aois;
                 });
             });
     }

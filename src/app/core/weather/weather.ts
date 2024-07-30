@@ -1,11 +1,53 @@
-export type LightCondition = "day" | "night" | "sunrise" | "sunset";
-
-export interface ContextualConditions {
-    weather: string,
-    isWindy: true,
-    lightCondition: LightCondition 
+export enum LightCondition {
+    DAY = "day",
+    NIGHT = "night",
+    SUNRISE = "sunrise",
+    SUNSET = "sunset",
 }
 
+export const enum Weather {
+    THUNDERSTORM = "Thunderstorm",
+    DRIZZLE = "Drizzle",
+    RAIN = "Rain",
+    SNOW = "Snow",
+    MIST = "Mist",
+    SMOKE = "Smoke",
+    DUST = "Dust",
+    SAND = "Sand",
+    ASH = "Ash",
+    SQUALL = "Squall",
+    TORNADO = "Tornado",
+    CLEAR = "Clear",
+    CLOUDS = "Clouds",
+}
+
+// Contextual conditions set by the therapist
+export type ContextualConditions = {
+    isWindy?: boolean;
+    timeRange?: {
+        startTime: {
+            hours: number;
+            minutes: number;
+        };
+        endTime: {
+            hours: number;
+            minutes: number;
+        };
+        isMandatory: true;
+    };
+    lightCondition?: {
+        value: string;
+        isMandatory: boolean;
+    };
+    weather?: Weather;
+};
+
+// Weather details got from service
+export interface WeatherSummary {
+    weather: Weather;
+    isWindy: boolean;
+    lightCondition: LightCondition;
+}
 
 // Interface for typing the OpenWeather response
 export interface OpenWeatherResponse {
@@ -39,8 +81,8 @@ export interface OpenWeatherResponse {
         gust: number;
     };
     rain?: {
-        '1h'?: number;
-        '3h'?: number;
+        "1h"?: number;
+        "3h"?: number;
     };
     clouds: {
         all: number;

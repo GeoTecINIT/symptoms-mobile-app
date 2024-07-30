@@ -1,2 +1,2 @@
-export * from "./weather.service"
-export { ContextualConditions } from "./weather"
+export * from "./weather.service";
+export * from "./weather";

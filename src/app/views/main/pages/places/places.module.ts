@@ -11,6 +11,7 @@ import { NativeScriptMaterialActivityIndicatorModule } from "@nativescript-commu
 import { PlacesListComponent } from "./places-list/places-list.component";
 import { PlacesListItemComponent } from "./places-list/places-list-item/places-list-item.component";
 import { PlacesListInfoDialogComponent } from "./places-list/places-list-item/places-list-info-dialog/places-list-info-dialog.component";
+import { PlacesListItemConditionComponent } from "./places-list/places-list-item/places-list-item-condition/places-list-item-condition.component";
 
 registerElement(
     "Mapbox",
@@ -29,6 +30,7 @@ registerElement(
         PlacesListComponent,
         PlacesListItemComponent,
         PlacesListInfoDialogComponent,
+        PlacesListItemConditionComponent,
     ],
     entryComponents: [PlacesListInfoDialogComponent],
     exports: [PlacesContainerComponent],

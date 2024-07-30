@@ -1,12 +1,13 @@
 import { ApplicationSettings } from "@nativescript/core";
 
-import { AreasOfInterest } from "@awarns/geofencing";
+import { AreaOfInterest } from "@awarns/geofencing";
 import { ContextualConditions } from "~/app/core/weather";
 import { firebaseManager } from "../utils/firebase";
 import { getLogger, Logger } from "../utils/logger";
 import { setupAreasOfInterest } from "../framework/aois";
 import { getUploadMetadata } from "../persistence/remote/common";
 import { account, Account } from "~/app/core/account";
+import { BehaviorSubject, Subject } from "rxjs";
 
 export type Message = {
     event: string;
@@ -15,20 +16,22 @@ export type Message = {
     body: string;
 };
 
-export interface AppConfig {
-    places: AreasOfInterest[];
-    messages: Message[];
+export interface ExtendedAreaOfInterest extends AreaOfInterest {
     contextualConditions: ContextualConditions;
 }
 
-const APP_CONFIG_COLLECTION = "app-configs"; 
+export interface AppConfig {
+    places: ExtendedAreaOfInterest[];
+    messages: Message[];
+}
+
+const APP_CONFIG_COLLECTION = "app-configs";
 const APP_CONFIG_KEY = "PATIENT_APP_CONFIG";
 const PATIENT_MESSAGES_KEY = "PATIENT_MESSAGES";
 
 export interface AppConfigController {
-    aois: AreasOfInterest[];
+    aois: ExtendedAreaOfInterest[];
     messages: Message[];
-    contextualConditions: ContextualConditions;
     setupAppConfig();
 }
 
@@ -37,43 +40,54 @@ export class AppConfigControllerImpl implements AppConfigController {
     private logger: Logger;
     private isInitialized: boolean;
 
-    constructor(
-        private accountInfo: Account
-    ) {
+    constructor(private accountInfo: Account) {
         this._appConfig = ApplicationSettings.hasKey(APP_CONFIG_KEY)
             ? JSON.parse(ApplicationSettings.getString(APP_CONFIG_KEY))
             : null;
         this.isInitialized = false;
     }
 
-    get aois(): AreasOfInterest[] {
-        return this._appConfig.places
+    private aoisSubject: BehaviorSubject<ExtendedAreaOfInterest[]> =
+        new BehaviorSubject([]);
+    public aois$ = this.aoisSubject.asObservable();
+
+    get aois(): ExtendedAreaOfInterest[] {
+        return this._appConfig.places;
     }
 
     get messages(): Message[] {
-        return this._appConfig.messages
+        return this._appConfig.messages;
     }
 
-    get contextualConditions(): ContextualConditions {
-        return this._appConfig.contextualConditions
+    getContextualConditionsFromAoi(id: string): ContextualConditions {
+        const aoi = this.aois.find((aoi) => aoi.id === id);
+        return aoi.contextualConditions;
     }
 
     // Fetch firestore document and keep AppConfig updated while the app is running
     async setupAppConfig() {
         if (this.isInitialized) return;
 
-        const { patientId, studyId } = await getUploadMetadata(this.accountInfo);
+        const { patientId, studyId } = await getUploadMetadata(
+            this.accountInfo
+        );
 
-        if (!patientId || !studyId) throw Error("AccountInfo not currently initialized");
+        if (!patientId || !studyId)
+            throw Error("AccountInfo not currently initialized");
 
-        const configDoc = firebaseManager.firestore.collection(APP_CONFIG_COLLECTION).doc(`${studyId}-${patientId}`);
-        configDoc.onSnapshot(doc => {
+        const configDoc = firebaseManager.firestore
+            .collection(APP_CONFIG_COLLECTION)
+            .doc(`${studyId}-${patientId}`);
+        configDoc.onSnapshot((doc) => {
             if (!doc.exists) {
-                this.getLogger().error(`The config document for patient ${patientId} does not exists in app-configs collection`);
+                this.getLogger().error(
+                    `The config document for patient ${patientId} does not exists in app-configs collection`
+                );
                 return;
             }
-
-            this._appConfig = doc.data() as AppConfig;
+            const appConfig = doc.data() as AppConfig;
+            this._appConfig = appConfig;
+            this.aoisSubject.next(appConfig.places);
 
             // Serialize and save app-config document
             const serializedAppConfig = JSON.stringify(this._appConfig);
@@ -81,16 +95,19 @@ export class AppConfigControllerImpl implements AppConfigController {
 
             // Serialize and save messages separately
             const serializedMessages = JSON.stringify(this._appConfig.messages);
-            ApplicationSettings.setString(PATIENT_MESSAGES_KEY, serializedMessages);
+            ApplicationSettings.setString(
+                PATIENT_MESSAGES_KEY,
+                serializedMessages
+            );
 
-            this.getLogger().info("AppConfig loaded on device!")
+            this.getLogger().info("AppConfig loaded on device!");
 
             setupAreasOfInterest().catch((e) =>
                 this.getLogger().error(
                     `Could not setup areas of interest. Reason: ${e}`
                 )
             );
-        })
+        });
 
         this.isInitialized = true;
     }
