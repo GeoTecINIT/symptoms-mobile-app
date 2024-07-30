@@ -1,0 +1,15 @@
+<GridLayout *ngIf="condition" columns="auto,*" class="condition">
+  <Label
+    *ngIf="condition.isMandatory"
+    class="badge mdi-ro mdi-14"
+    col="0"
+    text="&#xe645;"
+    verticalAlignment="center"
+  ></Label>
+  <Label
+    col="1"
+    [text]="condition.text"
+    [textWrap]="true"
+    verticalAlignment="center"
+  ></Label>
+</GridLayout>
