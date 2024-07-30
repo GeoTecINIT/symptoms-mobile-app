@@ -1,0 +1,23 @@
+@import "src/app-variables";
+
+.popup-content {
+  background-color: white;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+}
+
+.label {
+  color: $text-color;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.button {
+  width: 240px;
+  height: 120px;
+  background-color: $complementary;
+  color: $white;
+  border-radius: 10;
+  padding: 10px;
+  text-align: center;
+}
