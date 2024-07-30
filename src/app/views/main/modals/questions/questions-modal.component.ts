@@ -89,13 +89,11 @@ export class QuestionsModalComponent implements OnInit, OnDestroy {
 
     onClose() {
         this.questionsModalService.gotAnswers(this.instanceId, this.answers);
-        this.navigationService.navigate(
-            ["/main"], 
-            { 
-                transition: "fade",
-                duration: 200, 
-                clearHistory: true 
-            })
+        this.navigationService.navigate(["/main"], {
+            transition: "fade",
+            duration: 200,
+            clearHistory: true,
+        });
     }
 
     private updateAnswer(result: QuestionStepResult) {
