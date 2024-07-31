@@ -440,7 +440,7 @@ class DemoTaskGraph implements TaskGraph {
             "exposureEvaluationResultedSuccessful",
             run("sendNotification", {
                 title: "¡Has tolerado muy bien la ansiedad!",
-                body: "Puedes terminar aquí o continuar un poco más",
+                body: "Puedes terminar aquí o ir a otro lugar",
             })
         );
         on(
@@ -542,7 +542,8 @@ class DemoTaskGraph implements TaskGraph {
                     type: TapActionType.OPEN_CONTENT,
                     id: "cp04",
                 },
-        }));
+            })
+        );
 
         on(
             "exposureFinished",
@@ -554,7 +555,8 @@ class DemoTaskGraph implements TaskGraph {
                     type: TapActionType.OPEN_CONTENT,
                     id: "cp08",
                 },
-        }));
+            })
+        );
 
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
         on(

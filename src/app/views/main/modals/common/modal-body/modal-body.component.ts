@@ -17,6 +17,7 @@ export class ModalBodyComponent {
     @Input() emoji: string;
     @Input() iconCode: string;
     @Input() bodyText = "";
+    @Input() helpImageURI = "";
 
     @Input() currentStep: number;
     @Input() stepAmount: number;

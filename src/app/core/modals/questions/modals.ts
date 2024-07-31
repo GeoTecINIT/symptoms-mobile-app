@@ -68,6 +68,7 @@ export const askPostExposureQuestions: QuestionsModalOptions = {
     body: {
         iconCode: "\ue94c",
         text: "Responde con sinceridad a las preguntas que te planteamos",
+        helpImageURI: "~/media/images/infographics/infographic_2.png",
     },
     questions: [
         {

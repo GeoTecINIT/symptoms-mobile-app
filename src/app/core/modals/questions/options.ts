@@ -6,6 +6,7 @@ export interface QuestionsModalOptions {
         emoji?: string;
         iconCode?: string;
         text: string;
+        helpImageURI?: string;
     };
     questions: Array<QuestionType>;
     completionScreen?: CompletionScreenOptions;
