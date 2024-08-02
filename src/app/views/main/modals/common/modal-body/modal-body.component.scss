@@ -4,8 +4,56 @@
   padding: $global-spacing;
 }
 
+.header {
+  padding: 8 $global-spacing;
+  & Label {
+    font-weight: bold;
+    color: $text-color;
+  }
+}
+
 .body-text {
   text-align: center;
   font-weight: 500;
   margin: $global-spacing 24 0 24;
+}
+
+.flat-card {
+  border-color: $grey;
+  border-width: 1;
+  border-radius: 10;
+  margin: 10 2 20 2;
+  padding: 8;
+}
+
+.flat-card-text {
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+// check styles from here
+
+.header {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.flat-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.condition-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 6em;
+  margin-bottom: 0px;
+  color: $accent;
+}
+
+.condition-value {
+  font-size: 14px;
+  margin: 4px 20px 40px 20px;
 }

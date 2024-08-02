@@ -10,14 +10,91 @@
       <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode"></SymCircleIcon>
       <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
     </StackLayout>
+
+    <StackLayout
+      *ngIf="isContextualConditionsNotEmpty"
+      class="flat-card"
+      row="1"
+    >
+      <FlexboxLayout
+        justifyContent="space-around"
+        alignItems="center"
+        class="header"
+      >
+        <Label
+          class="flat-card-text flat-card-title"
+          text="Modificadores contextuales"
+        ></Label>
+        <!-- <SymButtonLink
+          margin="0"
+          [text]="'Imprimir condiciones contextuales'"
+          (tap)="printContextualConditions()"
+        ></SymButtonLink> -->
+        <Label
+          class="mdi-ro info"
+          row="1"
+          text="&#xe88e;"
+          verticalAlignment="bottom"
+          horizontalAlignment="center"
+          isPassThroughParentEnabled="true"
+          (tap)="showCompliancePopup()"
+        >
+        </Label>
+      </FlexboxLayout>
+
+      <ng-container class="contextual-conditions-body">
+        <StackLayout class="condition-item">
+          <Label class="condition-title" text="Condición lumínica"></Label>
+          <Label
+            class="condition-value"
+            [text]="
+              'Esperada/actual: ' +
+              lightConditionFromContextualConditions +
+              '/' +
+              lightConditionFromWeatherSummary
+            "
+            [textWrap]="true"
+          ></Label>
+        </StackLayout>
+
+        <StackLayout class="condition-item">
+          <Label class="condition-title" text="Condición meteorológica"></Label>
+          <Label
+            class="condition-value"
+            [text]="
+              'Esperada/actual: ' +
+              weatherAndWindFromContextualConditions +
+              '/' +
+              weatherAndWindFromWeatherSummary
+            "
+            [textWrap]="true"
+          ></Label>
+        </StackLayout>
+
+        <StackLayout class="condition-item">
+          <Label class="condition-title" text="Horario"></Label>
+          <Label
+            class="condition-value"
+            [text]="
+              'Esperado/actual: ' +
+              timeRangeFromContextualConditions +
+              '/' +
+              currentHour
+            "
+            [textWrap]="true"
+          ></Label>
+        </StackLayout>
+      </ng-container>
+    </StackLayout>
+
     <Image
       *ngIf="showingImage"
       row="0"
-      src="~/media/images/infographics/infographic_2.png"
+      [src]="helpImageURI"
       height="auto"
     ></Image>
     <SymButtonLink
-      *ngIf="currentStep === stepAmount - 1"
+      *ngIf="helpImageURI && currentStep === stepAmount - 1"
       row="1"
       margin="0"
       [text]="showingImage ? 'Cerrar' : 'Ver ayuda'"
