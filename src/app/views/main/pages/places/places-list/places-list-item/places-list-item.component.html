@@ -1,67 +1,52 @@
-<GridLayout class="card" rows="*" columns="auto,*,auto">
-  <GridLayout col="0" rows="auto" verticalAlignment="top">
-    <Label class="circle" verticalAlignment="center"></Label>
-    <Label
-      class="mdi-ro icon"
-      text="&#xe55f;"
-      verticalAlignment="center"
-    ></Label>
-  </GridLayout>
-  <GridLayout
-    col="1"
-    rows="auto,auto,auto,auto,auto,auto"
-    verticalAlignment="center"
-    style="margin-left: 20em"
-  >
-    <Label
-      row="0"
-      style="margin: 0; padding: 0; font-weight: 500"
-      [text]="place.name"
-      verticalAlignment="center"
-    ></Label>
-    <Label
-      row="1"
-      [text]="numberOfExposuresText"
-      verticalAlignment="center"
-    ></Label>
-    <ng-container
-      *ngIf="isExpanded"
-      #expandableContainer
-      [ngClass]="{ hidden: !isExpanded }"
-    >
+<GridLayout class="card" rows="*,*">
+  <GridLayout row="0" columns="auto,*,auto">
+    <GridLayout col="0" rows="auto" verticalAlignment="center">
+      <Label class="circle" verticalAlignment="center"></Label>
       <Label
-        row="2"
-        [text]="lightConditionText"
+        class="mdi-ro icon"
+        text="&#xe55f;"
         verticalAlignment="center"
       ></Label>
-      <!-- <Label
-        *ngIf="lightConditionText"
-        row="2"
-        [text]="lightConditionText"
-        verticalAlignment="center"
-      ></Label> -->
+    </GridLayout>
+
+    <StackLayout col="1" style="margin-left: 8em" verticalAlignment="top">
       <Label
-        *ngIf="timeRangeText"
-        row="3"
-        [text]="timeRangeText"
+        style="margin: 0; padding: 0; font-weight: 500"
+        [text]="place.name"
         verticalAlignment="center"
       ></Label>
       <Label
-        *ngIf="weatherAndWindText"
-        row="4"
-        [text]="weatherAndWindText"
+        [text]="'Nº exposiciones: ' + numberOfExposures"
         verticalAlignment="center"
       ></Label>
-    </ng-container>
-  </GridLayout>
-  <GridLayout col="2" rows="auto" verticalAlignment="top">
+    </StackLayout>
+
     <Label
+      *ngIf="anyContextualConditions"
       class="mdi-ro arrow"
-      row="0"
+      col="2"
       text="&#xe5cc;"
       [class.rotated]="isExpanded"
-      verticalAlignment="top"
+      verticalAlignment="center"
     >
     </Label>
   </GridLayout>
+
+  <StackLayout
+    *ngIf="isExpanded && anyContextualConditions"
+    #expandableContainer
+    row="1"
+    verticalAlignment="center"
+    style="padding: 12 0 4; margin-left: -2em"
+  >
+    <SymPlacesListItemCondition
+      [condition]="lightCondition"
+    ></SymPlacesListItemCondition>
+    <SymPlacesListItemCondition
+      [condition]="timeRange"
+    ></SymPlacesListItemCondition>
+    <SymPlacesListItemCondition
+      [condition]="weatherAndWind"
+    ></SymPlacesListItemCondition>
+  </StackLayout>
 </GridLayout>
