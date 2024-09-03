@@ -169,7 +169,7 @@ export class NotificationsHandlerService {
                         notification
                     );
                 } else {
-                    emitExposureStartConfirmedEvent(metadata);
+                    emitExposureStartConfirmedEvent(metadata, contextualConditions, weatherSummary);
                 }
                 break;
             case "escape-intention":
@@ -238,7 +238,6 @@ export class NotificationsHandlerService {
         notification: Notification
     ): Promise<boolean | void> {
         try {
-            console.log("Options 👉👉👉👉", options);
             const result = await this.confirmModalService.show(
                 confirmationId,
                 options,

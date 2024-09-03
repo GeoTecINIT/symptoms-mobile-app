@@ -17,7 +17,7 @@
       row="1"
     >
       <FlexboxLayout
-        justifyContent="space-around"
+        justifyContent="space-between"
         alignItems="center"
         class="header"
       >
@@ -44,45 +44,77 @@
 
       <ng-container class="contextual-conditions-body">
         <StackLayout class="condition-item">
-          <Label class="condition-title" text="Condición lumínica"></Label>
-          <Label
-            class="condition-value"
-            [text]="
-              'Esperada/actual: ' +
-              lightConditionFromContextualConditions +
-              '/' +
-              lightConditionFromWeatherSummary
-            "
-            [textWrap]="true"
-          ></Label>
+          <StackLayout orientation="horizontal">
+            <Label class="condition-title" text="Condición lumínica "></Label>
+            <Label
+              [class]="isLightConditionMatching? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
+              [text]="isLightConditionMatching? '&#xe5ca;' : '&#xe5cd;'"
+              verticalAlignment="center"
+            >
+            </Label>
+          </StackLayout>
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Esperada: " fontWeight="bold"> </Span>
+              <Span [text]="lightConditionFromContextualConditions"> </Span>
+            </FormattedString>
+          </Label>
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Actual: " fontWeight="bold"> </Span>
+              <Span [text]="lightConditionFromWeatherSummary"> </Span>
+            </FormattedString>
+          </Label>
         </StackLayout>
 
         <StackLayout class="condition-item">
-          <Label class="condition-title" text="Condición meteorológica"></Label>
-          <Label
-            class="condition-value"
-            [text]="
-              'Esperada/actual: ' +
-              weatherAndWindFromContextualConditions +
-              '/' +
-              weatherAndWindFromWeatherSummary
-            "
-            [textWrap]="true"
-          ></Label>
+          <StackLayout orientation="horizontal">
+            <Label class="condition-title" text="Condición meteorológica "></Label>
+            <Label
+              [class]="isWeatherAndWindMatching? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
+              [text]="isWeatherAndWindMatching? '&#xe5ca;' : '&#xe5cd;'"
+              verticalAlignment="center"
+            >
+            </Label>
+          </StackLayout>
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Esperada: " fontWeight="bold"> </Span>
+              <Span [text]="weatherAndWindFromContextualConditions"> </Span>
+            </FormattedString>
+          </Label>
+
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Actual: " fontWeight="bold"> </Span>
+              <Span [text]="weatherAndWindFromWeatherSummary"> </Span>
+            </FormattedString>
+          </Label>
         </StackLayout>
 
         <StackLayout class="condition-item">
-          <Label class="condition-title" text="Horario"></Label>
-          <Label
-            class="condition-value"
-            [text]="
-              'Esperado/actual: ' +
-              timeRangeFromContextualConditions +
-              '/' +
-              currentHour
-            "
-            [textWrap]="true"
-          ></Label>
+          <StackLayout orientation="horizontal">
+            <Label class="condition-title" text="Horario "></Label>
+            <Label
+              [class]="isCurrentTimeWithinRange? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
+              [text]="isCurrentTimeWithinRange? '&#xe5ca;' : '&#xe5cd;'"
+              verticalAlignment="center"
+            >
+            </Label>
+          </StackLayout>
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Esperada: " fontWeight="bold"> </Span>
+              <Span [text]="timeRangeFromContextualConditions"> </Span>
+            </FormattedString>
+          </Label>
+
+          <Label class="condition-value" [textWrap]="true">
+            <FormattedString>
+              <Span text="Actual: " fontWeight="bold"> </Span>
+              <Span [text]="currentTimeFormatted"> </Span>
+            </FormattedString>
+          </Label>
         </StackLayout>
       </ng-container>
     </StackLayout>

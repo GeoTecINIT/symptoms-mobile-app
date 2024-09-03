@@ -32,10 +32,8 @@
   font-weight: 500;
 }
 
-// check styles from here
-
 .header {
-  padding: 10px 0;
+  padding: 10px 20px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -45,15 +43,27 @@
   margin-bottom: 10px;
 }
 
+.condition-item {
+  margin-bottom: 30px;
+}
+
 .condition-title {
   font-size: 16px;
   font-weight: bold;
-  margin-left: 6em;
-  margin-bottom: 0px;
+  margin-left: 20px;
   color: $accent;
 }
 
+
 .condition-value {
   font-size: 14px;
-  margin: 4px 20px 40px 20px;
+  margin-left: 20px;
+}
+
+.check-icon {
+  color: green;
+}
+
+.cross-icon {
+  color: red;
 }

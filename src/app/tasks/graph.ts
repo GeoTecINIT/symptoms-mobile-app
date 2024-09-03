@@ -18,6 +18,10 @@ class DemoTaskGraph implements TaskGraph {
         on: EventListenerGenerator,
         run: RunnableTaskDescriptor
     ): Promise<void> {
+        // START: Developer actions
+        on("acquireGeolocationManually", run("acquirePhoneGeolocation"));
+        // END: Developer actions
+
         // START: Human activity recognition
         on("startEvent", run("startDetectingCoarseHumanActivityChanges"));
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
@@ -25,6 +29,7 @@ class DemoTaskGraph implements TaskGraph {
 
         on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
         on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
+
 
         // START: Acquire phone geolocation when app starts
         on("startEvent", run("acquirePhoneGeolocation").in(1, "minutes"));

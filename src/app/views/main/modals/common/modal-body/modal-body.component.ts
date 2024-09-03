@@ -8,6 +8,7 @@ import { ContextualConditions, WeatherSummary } from "~/app/core/weather";
 import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular";
 import { ContextualConditionsComplianceDialogComponent } from "./contextual-conditions-compliance-dialog/contextual-conditions-compliance-dialog.component";
 import { Weather, LightCondition } from "~/app/core/weather";
+import { formatAsHour } from "~/app/core/utils/time"
 
 @Component({
     selector: "SymModalBody",
@@ -27,16 +28,13 @@ export class ModalBodyComponent {
 
     showingImage: boolean = false;
     vcRef: ViewContainerRef;
-    currentHour: string;
+    currentTime: Date;
 
     constructor(
         private cd: ChangeDetectorRef,
         private modalService: ModalDialogService
-    ) {}
-
-    ngOnChanges() {
-        // this.isCurrentHourWithinRange;
-        this.cd.detectChanges();
+    ) {
+        this.currentTime = new Date()
     }
 
     get isContextualConditionsNotEmpty() {
@@ -58,13 +56,13 @@ export class ModalBodyComponent {
         return `${startHours}:${startMinutes} a ${endHours}:${endMinutes}`;
     }
 
-    get isCurrentHourWithinRange(): boolean {
-        const now = new Date();
+    get currentTimeFormatted(): string {
+        return formatAsHour(this.currentTime);
+    }
 
-        const currentHours = now.getHours();
-        const currentMinutes = now.getMinutes();
-
-        this.currentHour = `${currentHours}:${currentMinutes}`;
+    get isCurrentTimeWithinRange(): boolean {
+        const currentHours = this.currentTime.getHours();
+        const currentMinutes = this.currentTime.getMinutes();
 
         const startHours = this.contextualConditions.timeRange.startTime.hours;
         const startMinutes =
@@ -122,6 +120,10 @@ export class ModalBodyComponent {
         }
     }
 
+    get isLightConditionMatching(): boolean {
+        return this.lightConditionFromContextualConditions === this.lightConditionFromWeatherSummary;
+    }
+
     get weatherAndWindFromContextualConditions(): string {
         const weather = this.getWeatherFromContextualConditions();
         const wind = this.getWindFromContextualConditions();
@@ -148,6 +150,10 @@ export class ModalBodyComponent {
             text += `${this.getWeatherFromWeatherSummary()} ${this.getWindFromWeatherSummary()}`;
 
         return text;
+    }
+
+    get isWeatherAndWindMatching(): boolean {
+        return this.weatherAndWindFromContextualConditions === this.weatherAndWindFromWeatherSummary;
     }
 
     private getWeatherFromContextualConditions(): string {
@@ -183,8 +189,8 @@ export class ModalBodyComponent {
     }
 
     private getWeatherFromWeatherSummary(): string {
-        if (this.contextualConditions.weather === undefined) return "";
-        switch (this.contextualConditions.weather) {
+        if (this.weatherSummary.weather === undefined) return "";
+        switch (this.weatherSummary.weather) {
             case Weather.THUNDERSTORM:
                 return "Tormenta eléctrica";
             case Weather.DRIZZLE:
