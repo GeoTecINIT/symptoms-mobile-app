@@ -40,7 +40,7 @@ export class ModalBodyComponent {
     }
 
     get isContextualConditionsNotEmpty() {
-        return Object.keys(this.contextualConditions).length !== 0;
+        return this.contextualConditions && Object.keys(this.contextualConditions).length !== 0;
     }
 
     get timeRangeFromContextualConditions(): string {
@@ -64,7 +64,7 @@ export class ModalBodyComponent {
         const currentHours = now.getHours();
         const currentMinutes = now.getMinutes();
 
-        this.currentHour = currentHours + ":" + currentMinutes;
+        this.currentHour = `${currentHours}:${currentMinutes}`;
 
         const startHours = this.contextualConditions.timeRange.startTime.hours;
         const startMinutes =

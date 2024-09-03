@@ -8,7 +8,7 @@
   [currentStep]="currentStep"
   [stepAmount]="questionsAmount"
 >
-  <ng-container *ngFor="let question of options.questions; index as i">
+   <ng-container *ngFor="let question of options.questions; index as i">
     <SymQuestionStep
       *ngIf="currentStep === i"
       [question]="question"
@@ -19,7 +19,7 @@
       (backTap)="onBackTap()"
     >
     </SymQuestionStep>
-  </ng-container>
+  </ng-container> 
 </SymModalBody>
 
 <StackLayout *ngIf="showCompletionScreen">
