@@ -35,6 +35,9 @@ export class StartExposureTask extends Task {
             }
         }
 
+        const contextualConditions = invocationEvent.data[0].contextualConditions;
+        const weatherSummary = invocationEvent.data[0].weatherSummary;
+
         let exposure: Exposure;
         if (!ongoingExposure) {
             exposure = {
@@ -55,6 +58,9 @@ export class StartExposureTask extends Task {
                 exposure.startTime,
                 exposure.place,
                 exposure.emotionValues,
+                false,
+                contextualConditions,
+                weatherSummary
             ),
         };
     }
