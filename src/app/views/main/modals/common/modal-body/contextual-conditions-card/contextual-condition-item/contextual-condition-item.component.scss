@@ -1,0 +1,23 @@
+@import "src/app-variables";
+
+.check-icon {
+  color: green;
+}
+
+.cross-icon {
+  color: red;
+}
+
+.condition-item {
+  margin-bottom: 30px;
+}
+
+.condition-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: $accent;
+}
+
+.condition-value {
+  font-size: 14px;
+}

@@ -33,7 +33,7 @@ export type ContextualConditions = {
             hours: number;
             minutes: number;
         };
-        isMandatory: true;
+        isMandatory: boolean;
     };
     lightCondition?: {
         value: string;

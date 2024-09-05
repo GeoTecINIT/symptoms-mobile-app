@@ -1,0 +1,23 @@
+<StackLayout *ngIf="showConditionItem" class="condition-item">
+  <StackLayout orientation="horizontal">
+    <Label class="condition-title" [text]="title"></Label>
+    <Label
+      [class]="isConditionMatching ? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
+      [text]="isConditionMatching ? '&#xe5ca;' : '&#xe5cd;'"
+      verticalAlignment="center"
+    >
+    </Label>
+  </StackLayout>
+  <Label class="condition-value" [textWrap]="true">
+    <FormattedString>
+      <Span text="Esperada: " fontWeight="bold"> </Span>
+      <Span [text]="configuredCondition"> </Span>
+    </FormattedString>
+  </Label>
+  <Label class="condition-value" [textWrap]="true">
+    <FormattedString>
+      <Span text="Actual: " fontWeight="bold"> </Span>
+      <Span [text]="receivedCondition"> </Span>
+    </FormattedString>
+  </Label>
+</StackLayout>

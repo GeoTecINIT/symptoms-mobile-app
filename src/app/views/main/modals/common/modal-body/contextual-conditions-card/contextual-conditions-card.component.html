@@ -1,0 +1,46 @@
+<StackLayout
+  *ngIf="showContextualConditionsCard"
+  class="card"
+>
+  <FlexboxLayout
+    justifyContent="space-between"
+    alignItems="center"
+    class="header"
+  >
+    <Label
+      class="flat-card-text flat-card-title"
+      text="Modificadores contextuales"
+    ></Label>
+
+    <Label
+      class="mdi-ro info"
+      row="1"
+      text="&#xe88e;"
+      verticalAlignment="bottom"
+      horizontalAlignment="center"
+      isPassThroughParentEnabled="true"
+      (tap)="showCompliancePopup()"
+    >
+    </Label>
+  </FlexboxLayout>
+
+  <ng-container class="contextual-conditions-body">
+    <SymContextualConditionItem 
+        [title]="'Condición lumínica '"
+        [configuredCondition]="lightConditionFromContextualConditions"
+        [receivedCondition]="lightConditionFromWeatherSummary">
+    </SymContextualConditionItem>
+
+    <SymContextualConditionItem 
+        [title]="'Condición meteorológica '"
+        [configuredCondition]="weatherAndWindFromContextualConditions"
+        [receivedCondition]="weatherAndWindFromWeatherSummary">
+    </SymContextualConditionItem>
+
+    <SymContextualConditionItem 
+        [title]="'Horario '"
+        [configuredCondition]="timeRangeFromContextualConditions"
+        [receivedCondition]="currentTimeFormatted">
+    </SymContextualConditionItem>
+  </ng-container>
+</StackLayout>

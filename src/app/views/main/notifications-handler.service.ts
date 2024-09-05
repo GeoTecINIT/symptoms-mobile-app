@@ -1,51 +1,49 @@
 import { Injectable } from "@angular/core";
-import { ConfirmModalOptions, ConfirmModalService } from "./modals/confirm";
-import {
-    QuestionAnswer,
-    QuestionsModalOptions,
-    QuestionsModalService,
-} from "./modals/questions";
-import { FeedbackModalOptions, FeedbackModalService } from "./modals/feedback";
-import { ContentViewModalService } from "./modals/content-view";
-
-import { getLogger, Logger } from "~/app/core/utils/logger";
+import { AreaOfInterest } from "@awarns/geofencing";
 import {
     Notification,
     notificationsManager,
-    TapActionType,
+    TapActionType
 } from "@awarns/notifications";
-
 import {
-    confirmDidNotLeaveAreaOnPurpose,
-    ConfirmModalOptionsDataEmbedder,
-    confirmPretendsToStartAnExposure,
-    confirmWantsToStartAnExposure,
-} from "~/app/core/modals/confirm";
-import {
-    askCannotExposeFeedback,
-    askWantsToLeaveFeedback,
-} from "~/app/core/modals/feedback";
-import {
-    askExposureQuestions,
-    askPostExposureQuestions,
-    askPreExposureQuestions,
-} from "~/app/core/modals/questions";
+    appConfigController
+} from "~/app/core/account/app-config";
 import {
     emitExposureStartConfirmedEvent,
     emitPatientDidNotLeaveExposureAreaOnPurposeEvent,
     emitPatientLeftExposureAreaOnPurposeEvent,
-    emitPreExposureStartConfirmedEvent,
+    emitPreExposureStartConfirmedEvent
 } from "~/app/core/framework/events";
 import {
-    ContextualConditions,
-    WeatherService,
-    WeatherSummary,
-} from "~/app/core/weather";
-import { AreaOfInterest } from "@awarns/geofencing";
+    confirmDidNotLeaveAreaOnPurpose,
+    ConfirmModalOptionsDataEmbedder,
+    confirmPretendsToStartAnExposure,
+    confirmWantsToStartAnExposure
+} from "~/app/core/modals/confirm";
 import {
-    appConfigController,
-    ExtendedAreaOfInterest,
-} from "~/app/core/account/app-config";
+    askCannotExposeFeedback,
+    askWantsToLeaveFeedback
+} from "~/app/core/modals/feedback";
+import {
+    askExposureQuestions,
+    askPostExposureQuestions,
+    askPreExposureQuestions
+} from "~/app/core/modals/questions";
+import { getLogger, Logger } from "~/app/core/utils/logger";
+import {
+    WeatherService,
+    WeatherSummary
+} from "~/app/core/weather";
+import { ConfirmModalOptions, ConfirmModalService } from "./modals/confirm";
+import { ContentViewModalService } from "./modals/content-view";
+import { FeedbackModalOptions, FeedbackModalService } from "./modals/feedback";
+import {
+    QuestionAnswer,
+    QuestionsModalOptions,
+    QuestionsModalService
+} from "./modals/questions";
+
+
 
 @Injectable({
     providedIn: "root",
@@ -144,9 +142,9 @@ export class NotificationsHandlerService {
                 const aoi = metadata[0].aoi as AreaOfInterest;
                 weatherSummary = aoi
                     ? await this.weatherService.getContextualInformation(
-                          aoi.latitude,
-                          aoi.longitude
-                      )
+                        aoi.latitude,
+                        aoi.longitude
+                    )
                     : undefined;
 
                 const contextualConditions =

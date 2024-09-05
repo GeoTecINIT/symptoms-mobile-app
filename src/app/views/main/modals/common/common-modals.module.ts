@@ -5,6 +5,8 @@ import { ModalBodyComponent } from "./modal-body/modal-body.component";
 import { CommonComponentsModule } from "~/app/views/common/common-components.module";
 import { CompletionScreenComponent } from "./completion-screen/completion-screen.component";
 import { ContextualConditionsComplianceDialogComponent } from "./modal-body/contextual-conditions-compliance-dialog/contextual-conditions-compliance-dialog.component";
+import { ContextualConditionsCard } from "./modal-body/contextual-conditions-card/contextual-conditions-card.component";
+import { ContextualConditionItem } from "./modal-body/contextual-conditions-card/contextual-condition-item/contextual-condition-item.component";
 
 @NgModule({
     imports: [NativeScriptCommonModule, CommonComponentsModule],
@@ -12,6 +14,8 @@ import { ContextualConditionsComplianceDialogComponent } from "./modal-body/cont
         ModalBodyComponent,
         CompletionScreenComponent,
         ContextualConditionsComplianceDialogComponent,
+        ContextualConditionsCard,
+        ContextualConditionItem
     ],
     entryComponents: [ContextualConditionsComplianceDialogComponent],
     schemas: [NO_ERRORS_SCHEMA],

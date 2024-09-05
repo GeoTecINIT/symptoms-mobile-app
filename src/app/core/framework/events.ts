@@ -20,8 +20,7 @@ export function emitPreExposureStartConfirmedEvent(data: any) {
 }
 
 export function emitExposureStartConfirmedEvent(data: any, contextualConditions: ContextualConditions, weatherSummary: WeatherSummary) {
-    const emittedData: any = [{...data[0], contextualConditions, weatherSummary}];
-    console.log("EmittedData 👉👉👉", emittedData);
+    const emittedData: any = [{...data[0], contextualConditions, weatherSummary: weatherSummary ?? {}}];
     awarns.emitEvent("exposureStartConfirmed", emittedData);
 }
 

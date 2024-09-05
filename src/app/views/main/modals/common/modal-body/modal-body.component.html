@@ -1,122 +1,20 @@
 <GridLayout class="body" rows="*, auto, auto">
-  <GridLayout rows="*, auto" row="0" justifyContent="space-between">
+  <GridLayout rows="*,auto" row="0">
     <StackLayout
       *ngIf="!showingImage"
       row="0"
-      verticalAlignment="center"
-      horizontalAlignment="center"
     >
-      <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
-      <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode"></SymCircleIcon>
-      <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
-    </StackLayout>
-
-    <StackLayout
-      *ngIf="isContextualConditionsNotEmpty"
-      class="flat-card"
-      row="1"
-    >
-      <FlexboxLayout
-        justifyContent="space-between"
-        alignItems="center"
-        class="header"
-      >
-        <Label
-          class="flat-card-text flat-card-title"
-          text="Modificadores contextuales"
-        ></Label>
-        <!-- <SymButtonLink
-          margin="0"
-          [text]="'Imprimir condiciones contextuales'"
-          (tap)="printContextualConditions()"
-        ></SymButtonLink> -->
-        <Label
-          class="mdi-ro info"
-          row="1"
-          text="&#xe88e;"
-          verticalAlignment="bottom"
-          horizontalAlignment="center"
-          isPassThroughParentEnabled="true"
-          (tap)="showCompliancePopup()"
-        >
-        </Label>
-      </FlexboxLayout>
-
-      <ng-container class="contextual-conditions-body">
-        <StackLayout class="condition-item">
-          <StackLayout orientation="horizontal">
-            <Label class="condition-title" text="Condición lumínica "></Label>
-            <Label
-              [class]="isLightConditionMatching? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
-              [text]="isLightConditionMatching? '&#xe5ca;' : '&#xe5cd;'"
-              verticalAlignment="center"
-            >
-            </Label>
-          </StackLayout>
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Esperada: " fontWeight="bold"> </Span>
-              <Span [text]="lightConditionFromContextualConditions"> </Span>
-            </FormattedString>
-          </Label>
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Actual: " fontWeight="bold"> </Span>
-              <Span [text]="lightConditionFromWeatherSummary"> </Span>
-            </FormattedString>
-          </Label>
-        </StackLayout>
-
-        <StackLayout class="condition-item">
-          <StackLayout orientation="horizontal">
-            <Label class="condition-title" text="Condición meteorológica "></Label>
-            <Label
-              [class]="isWeatherAndWindMatching? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
-              [text]="isWeatherAndWindMatching? '&#xe5ca;' : '&#xe5cd;'"
-              verticalAlignment="center"
-            >
-            </Label>
-          </StackLayout>
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Esperada: " fontWeight="bold"> </Span>
-              <Span [text]="weatherAndWindFromContextualConditions"> </Span>
-            </FormattedString>
-          </Label>
-
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Actual: " fontWeight="bold"> </Span>
-              <Span [text]="weatherAndWindFromWeatherSummary"> </Span>
-            </FormattedString>
-          </Label>
-        </StackLayout>
-
-        <StackLayout class="condition-item">
-          <StackLayout orientation="horizontal">
-            <Label class="condition-title" text="Horario "></Label>
-            <Label
-              [class]="isCurrentTimeWithinRange? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
-              [text]="isCurrentTimeWithinRange? '&#xe5ca;' : '&#xe5cd;'"
-              verticalAlignment="center"
-            >
-            </Label>
-          </StackLayout>
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Esperada: " fontWeight="bold"> </Span>
-              <Span [text]="timeRangeFromContextualConditions"> </Span>
-            </FormattedString>
-          </Label>
-
-          <Label class="condition-value" [textWrap]="true">
-            <FormattedString>
-              <Span text="Actual: " fontWeight="bold"> </Span>
-              <Span [text]="currentTimeFormatted"> </Span>
-            </FormattedString>
-          </Label>
-        </StackLayout>
-      </ng-container>
+      <StackLayout marginTop="15" marginBottom="25">
+        <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
+        <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode" backgroundColor="blue"></SymCircleIcon>
+        <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
+      </StackLayout>
+      
+      <SymContextualConditionsCard
+        [contextualConditions]="contextualConditions"
+        [weatherSummary]="weatherSummary"
+        backgroundColor="red"
+      ></SymContextualConditionsCard>
     </StackLayout>
 
     <Image
@@ -139,6 +37,7 @@
     [current]="currentStep"
     [total]="stepAmount"
   ></SymStepProgressBar>
+
   <StackLayout row="2" class="card">
     <ng-content></ng-content>
   </StackLayout>
