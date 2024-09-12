@@ -15,6 +15,7 @@ import { ExposureLeaveChecker } from "./escapes/exposure-leave-checker";
 import { ExposureReturnChecker } from "./escapes/exposure-return-checker";
 import { ExposureDropoutChecker } from "./escapes/exposure-dropout-checker";
 import { makeTraceable } from "@awarns/tracing";
+import { WriteGeolocationRecordsTask } from "~/app/tasks/exposure/write-geolocation-records"
 
 export { ExposureChange } from "./change-record";
 
@@ -31,6 +32,7 @@ export const exposureTasks: Array<Task> = [
         new FinishExposureTask(),
         new ExposureFinalizationDropoutChecker(),
         new EncodeAudioTask(),
+        new WriteGeolocationRecordsTask(),
     ]),
     // --> Escapes
     ...makeTraceable([
