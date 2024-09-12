@@ -1,7 +1,4 @@
-<StackLayout
-  *ngIf="showContextualConditionsCard"
-  class="card"
->
+<StackLayout *ngIf="showContextualConditionsCard" class="card">
   <FlexboxLayout
     justifyContent="space-between"
     alignItems="center"
@@ -20,27 +17,32 @@
       horizontalAlignment="center"
       isPassThroughParentEnabled="true"
       (tap)="showCompliancePopup()"
+      style="margin-top: 2px"
     >
     </Label>
   </FlexboxLayout>
 
   <ng-container class="contextual-conditions-body">
-    <SymContextualConditionItem 
-        [title]="'Condición lumínica '"
-        [configuredCondition]="lightConditionFromContextualConditions"
-        [receivedCondition]="lightConditionFromWeatherSummary">
+    <SymContextualConditionItem
+      [title]="'Condición lumínica '"
+      [configuredCondition]="lightConditionFromContextualConditions"
+      [receivedCondition]="lightConditionFromWeatherSummary"
+    >
     </SymContextualConditionItem>
 
-    <SymContextualConditionItem 
-        [title]="'Condición meteorológica '"
-        [configuredCondition]="weatherAndWindFromContextualConditions"
-        [receivedCondition]="weatherAndWindFromWeatherSummary">
+    <SymContextualConditionItem
+      [title]="'Condición meteorológica '"
+      [configuredCondition]="weatherAndWindFromContextualConditions"
+      [receivedCondition]="weatherAndWindFromWeatherSummary"
+    >
     </SymContextualConditionItem>
 
-    <SymContextualConditionItem 
-        [title]="'Horario '"
-        [configuredCondition]="timeRangeFromContextualConditions"
-        [receivedCondition]="currentTimeFormatted">
+    <SymContextualConditionItem
+      [title]="'Horario '"
+      [configuredCondition]="timeRangeFromContextualConditions"
+      [receivedCondition]="currentTimeFormatted"
+      [timeIsWithinRange]="isCurrentTimeWithinRange"
+    >
     </SymContextualConditionItem>
   </ng-container>
 </StackLayout>

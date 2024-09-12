@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
     selector: "SymContextualConditionItem",
@@ -9,9 +9,15 @@ export class ContextualConditionItem {
     @Input() title: string = "";
     @Input() configuredCondition: string = "";
     @Input() receivedCondition: string = "";
+    @Input() timeIsWithinRange: boolean;
 
     get isConditionMatching() {
-        return this.configuredCondition === this.receivedCondition || this.receivedCondition.includes(this.configuredCondition);
+        if (this.timeIsWithinRange !== undefined) return this.timeIsWithinRange;
+
+        return (
+            this.configuredCondition === this.receivedCondition ||
+            this.receivedCondition.includes(this.configuredCondition)
+        );
     }
 
     get showConditionItem() {
