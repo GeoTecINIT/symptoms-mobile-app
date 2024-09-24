@@ -4,10 +4,7 @@
     alignItems="center"
     class="header"
   >
-    <Label
-      class="flat-card-text flat-card-title"
-      text="Modificadores contextuales"
-    ></Label>
+    <Label class="flat-card-text flat-card-title" text="Condiciones"></Label>
 
     <Label
       class="mdi-ro info"
@@ -24,14 +21,14 @@
 
   <ng-container class="contextual-conditions-body">
     <SymContextualConditionItem
-      [title]="'Condición lumínica '"
+      [title]="'Cond. lumínica '"
       [configuredCondition]="lightConditionFromContextualConditions"
       [receivedCondition]="lightConditionFromWeatherSummary"
     >
     </SymContextualConditionItem>
 
     <SymContextualConditionItem
-      [title]="'Condición meteorológica '"
+      [title]="'Cond. meteorológica '"
       [configuredCondition]="weatherAndWindFromContextualConditions"
       [receivedCondition]="weatherAndWindFromWeatherSummary"
     >
