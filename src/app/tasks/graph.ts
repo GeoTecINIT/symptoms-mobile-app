@@ -77,6 +77,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> All frequencies & modes
         on("geolocationAcquired", run("writeGeolocationRecords"));
+        on("geolocationAcquired", run("sendNotificationWithGeolocation"))
         // END: Low resolution data collection
 
         // START: Geofence detection

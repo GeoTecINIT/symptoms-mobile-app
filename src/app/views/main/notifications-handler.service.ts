@@ -34,6 +34,7 @@ import {
     WeatherService,
     WeatherSummary
 } from "~/app/core/weather";
+import { NavigationService } from "../navigation.service";
 import { ConfirmModalOptions, ConfirmModalService } from "./modals/confirm";
 import { ContentViewModalService } from "./modals/content-view";
 import { FeedbackModalOptions, FeedbackModalService } from "./modals/feedback";
@@ -42,7 +43,7 @@ import {
     QuestionsModalOptions,
     QuestionsModalService
 } from "./modals/questions";
-
+import { Utils } from '@nativescript/core';
 
 
 @Injectable({
@@ -57,7 +58,8 @@ export class NotificationsHandlerService {
         private feedbackModalService: FeedbackModalService,
         private questionsModalService: QuestionsModalService,
         private contentViewModalService: ContentViewModalService,
-        private weatherService: WeatherService
+        private weatherService: WeatherService,
+        private navigationService: NavigationService
     ) {
         this.logger = getLogger("NotificationsHandlerService");
     }
@@ -185,6 +187,9 @@ export class NotificationsHandlerService {
                     emitPatientLeftExposureAreaOnPurposeEvent();
                 }
                 break;
+            case "show-geolocation":
+                const url = `https://www.google.com/maps/search/?api=1&query=${metadata.latitude},${metadata.longitude}`
+                Utils.openUrl(url);
             default:
                 throw new Error(`Unsupported confirm action: ${tapActionId}`);
         }
