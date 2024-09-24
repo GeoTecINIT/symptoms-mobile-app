@@ -30,7 +30,6 @@ class DemoTaskGraph implements TaskGraph {
         on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
         on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
 
-
         // START: Acquire phone geolocation when app starts
         on("startEvent", run("acquirePhoneGeolocation").in(1, "minutes"));
         // END: Acquire phone geolocation when app starts
