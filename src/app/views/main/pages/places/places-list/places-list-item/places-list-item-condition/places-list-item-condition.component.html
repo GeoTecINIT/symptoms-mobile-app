@@ -5,13 +5,22 @@
     col="0"
     text="&#xe645;"
     verticalAlignment="center"
-    [style]="{ 'margin-left': condition.isMandatory ? '-4em' : '0' }"
+    [style]="{
+      'margin-left': condition.isMandatory ? '-4em' : '0'
+    }"
   ></Label>
   <Label
     col="1"
     [text]="condition.text"
     [textWrap]="true"
     verticalAlignment="center"
-    [style]="{ 'margin-left': condition.isMandatory ? '0' : '10em' }"
+    [style]="{
+      'margin-left': condition.isMandatory ? '0' : '10em',
+      height: '60px',
+      'font-size': '15px',
+      padding: '0',
+      'margin-top': '0',
+      'margin-bottom': '0'
+    }"
   ></Label>
 </GridLayout>

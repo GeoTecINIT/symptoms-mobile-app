@@ -5,7 +5,11 @@ import { SimulationModalService } from "../../modals/simulation/simulation-modal
 import { getConfig } from "~/app/core/config";
 import { AdvancedSetting, AdvancedSettingsService } from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
-import { preparePlugin, handleWatchToUse } from "~/app/core/framework";
+import {
+    preparePlugin,
+    handleWatchToUse,
+    isWatchConnectedInUse,
+} from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import {
     infoOnPermissionsNeed,
@@ -14,7 +18,12 @@ import {
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { areWatchFeaturesEnabled } from "@awarns/wear-os/internal/setup";
 import { awarns } from "@awarns/core";
-import { PlainMessage } from "@awarns/wear-os";
+import { Dialogs } from "@nativescript/core";
+import {
+    PlainMessage,
+    WatchSensorsProvider,
+    getConnectedWatches,
+} from "@awarns/wear-os";
 
 @Component({
     selector: "SymMainActionBar",
@@ -23,9 +32,9 @@ import { PlainMessage } from "@awarns/wear-os";
 })
 export class MainActionBarComponent {
     @Input() title: string;
-    // TODO: make this an @Input property
-    hasOngoingExposure: boolean;
     development: boolean;
+    hasOngoingExposure: boolean;
+    hasWatchAvailable: boolean;
     hasWatchConnected: boolean;
     private logger: Logger;
 
@@ -46,8 +55,61 @@ export class MainActionBarComponent {
         this.hasWatchConnected = areWatchFeaturesEnabled();
     }
 
+    ngOnInit(): void {
+        this.checkWatchAvailability();
+    }
+
+    private async checkWatchAvailability(): Promise<void> {
+        const watches = await getConnectedWatches();
+        this.hasWatchAvailable = watches.length > 0;
+    }
+
     onSimulationTap() {
         this.simulationModalService.show();
+    }
+
+    onWatchDialogTap() {
+        if (!this.hasWatchConnected) {
+            Dialogs.confirm({
+                title: "Conectar reloj",
+                message: "¿Permitir la recogida de datos desde el reloj?",
+                okButtonText: "Sí",
+                cancelButtonText: "No",
+            })
+                .then((result) => {
+                    if (result) {
+                        this.logger.info(
+                            "hasWatchConnected: " + this.hasWatchConnected
+                        );
+                        this.onHandleWatchTap();
+                    }
+                })
+                .catch((error) => {
+                    this.logger.error(
+                        "Error al mostrar el diálogo de confirmación " + error
+                    );
+                });
+        } else {
+            Dialogs.confirm({
+                title: "Desconectar reloj",
+                message: "¿Denegar la recogida de datos desde el reloj?",
+                okButtonText: "Sí",
+                cancelButtonText: "No",
+            })
+                .then((result) => {
+                    if (result) {
+                        this.logger.info(
+                            "hasWatchConnected: " + this.hasWatchConnected
+                        );
+                        this.onHandleWatchTap();
+                    }
+                })
+                .catch((error) => {
+                    this.logger.error(
+                        "Error al mostrar el diálogo de confirmación " + error
+                    );
+                });
+        }
     }
 
     // TODO: consider tapping the button mid-exposure --> either do nothing or hide it
@@ -90,22 +152,31 @@ export class MainActionBarComponent {
             );
     }
 
-    //
-    // onHandleWatchTap() {
-    //     handleWatchToUse()
-    //         .then(() => preparePlugin())
-    //         .then((ready) => {
-    //             if (ready) {
-    //                 this.hasWatchConnected = areWatchFeaturesEnabled();
-    //             } else {
-    //                 this.informAboutWatchPermissionsNeed().then(() => {});
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             this.logger.error(
-    //                 `Error preparing or setting up watch. Reason: ${e}`
-    //             );
-    //         });
+    // async onHandleWatchTap() {
+    //     try {
+    //         await handleWatchToUse();
+    //         const ready = await preparePlugin();
+    //         if (!ready) {
+    //             await this.informAboutWatchPermissionsNeed();
+    //             return this.onHandleWatchTap(); // Solo volver a intentar si es necesario
+    //         }
+    //         this.hasWatchConnected = areWatchFeaturesEnabled();
+    //         if (this.hasWatchConnected) {
+    //             awarns.emitEvent("sendWatchConnectedMessage", {
+    //                 plainMessage: {
+    //                     message: "Permissions granted",
+    //                 },
+    //             });
+    //         } else {
+    //             awarns.emitEvent("sendWatchNotConnectedMessage", {
+    //                 plainMessage: {
+    //                     message: "Permissions denied",
+    //                 },
+    //             });
+    //         }
+    //     } catch (error) {
+    //         this.logger.error(`Could not setup watch. Reason: ${error}`);
+    //     }
     // }
 
     onSettingsTap() {

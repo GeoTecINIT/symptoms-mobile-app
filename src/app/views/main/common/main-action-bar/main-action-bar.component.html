@@ -1,7 +1,6 @@
 <ActionBar>
   <ActionItem
     text="Ajustes"
-    icon="res://round_app_settings_alt_white_24"
     android.position="popup"
     ios.position="left"
     (tap)="onSettingsTap()"
@@ -10,34 +9,22 @@
 
   <Label [text]="title"></Label>
 
-  <!-- It can be done like this, which is easier and
-    doesn't require tns resources generate icons <path>,
-	but it doesn't let you resize -->
-  <!-- <ActionItem
-    text="Conectar/desconectar"
-    icon="font://&#xe334;"
-    android.position="actionBar"
-    ios.position="right"
-    class="mdi-ro mdi-24"
-    (tap)="onHandleWatchTap()"
-  >
-  </ActionItem> -->
-
   <ActionItem
+    *ngIf="hasWatchAvailable"
     [text]="!hasWatchConnected ? 'Conectar reloj' : 'Desconectar reloj'"
     [icon]="
       !hasWatchConnected
-        ? 'res://round_watch_on_white_24'
-        : 'res://round_watch_off_white_24'
+        ? 'res://round_watch_off_white_24'
+        : 'res://round_watch_on_white_24'
     "
     android.position="actionBar"
     ios.position="right"
-    (tap)="onHandleWatchTap()"
+    (tap)="onWatchDialogTap()"
   >
   </ActionItem>
 
   <ActionItem
-    *ngIf="development"
+    *ngIf="false"
     text="Simulación"
     icon="res://round_bolt_white_24"
     android.position="actionBar"

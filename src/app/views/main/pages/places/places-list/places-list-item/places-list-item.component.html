@@ -32,21 +32,33 @@
     </Label>
   </GridLayout>
 
-  <StackLayout
+  <GridLayout
     *ngIf="isExpanded && anyContextualConditions"
-    #expandableContainer
     row="1"
     verticalAlignment="center"
-    style="padding: 12 0 4; margin-left: -2em"
+    style="margin-top: 50px"
+    rows="auto, *"
+    columns="*"
   >
-    <SymPlacesListItemCondition
-      [condition]="lightCondition"
-    ></SymPlacesListItemCondition>
-    <SymPlacesListItemCondition
-      [condition]="timeRange"
-    ></SymPlacesListItemCondition>
-    <SymPlacesListItemCondition
-      [condition]="weatherAndWind"
-    ></SymPlacesListItemCondition>
-  </StackLayout>
+    <StackLayout
+      row="1"
+      col="0"
+      style="
+        border-left-width: 1.5em;
+        border-left-color: #e0e0e0;
+        border-radius: 25px;
+        padding-top: 30px;
+      "
+    >
+      <SymPlacesListItemCondition
+        [condition]="lightCondition"
+      ></SymPlacesListItemCondition>
+      <SymPlacesListItemCondition
+        [condition]="timeRange"
+      ></SymPlacesListItemCondition>
+      <SymPlacesListItemCondition
+        [condition]="weatherAndWind"
+      ></SymPlacesListItemCondition>
+    </StackLayout>
+  </GridLayout>
 </GridLayout>

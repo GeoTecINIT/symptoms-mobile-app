@@ -1,13 +1,15 @@
 <StackLayout *ngIf="showConditionItem" class="condition-item">
-  <StackLayout orientation="horizontal">
+  <FlexboxLayout justifyContent="flex-start" alignItems="flex-end">
     <Label class="condition-title" [text]="title"></Label>
     <Label
       [class]="isConditionMatching ? 'mdi-ro check-icon' : 'mdi-ro cross-icon'"
       [text]="isConditionMatching ? '&#xe5ca;' : '&#xe5cd;'"
-      verticalAlignment="center"
+      style="margin-bottom: 3px"
     >
     </Label>
-  </StackLayout>
+  </FlexboxLayout>
+  <!-- <StackLayout orientation="horizontal">
+  </StackLayout> -->
   <Label class="condition-value" [textWrap]="true">
     <FormattedString>
       <Span text="Esperada: " fontWeight="bold"> </Span>

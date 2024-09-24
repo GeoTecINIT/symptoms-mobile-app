@@ -1,7 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { ModalDialogOptions, ModalDialogService } from '@nativescript/angular';
-import { formatAsHour } from '~/app/core/utils/time';
-import { ContextualConditions, LightCondition, Weather, WeatherSummary } from "~/app/core/weather";
+import { Component, Input } from "@angular/core";
+import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular";
+import { formatAsHour } from "~/app/core/utils/time";
+import {
+    ContextualConditions,
+    LightCondition,
+    Weather,
+    WeatherSummary,
+} from "~/app/core/weather";
 import { ContextualConditionsComplianceDialogComponent } from "../contextual-conditions-compliance-dialog/contextual-conditions-compliance-dialog.component";
 
 @Component({
@@ -15,12 +20,14 @@ export class ContextualConditionsCard {
 
     currentDate: Date = new Date();
 
-    constructor(
-        private modalService: ModalDialogService
-    ) {}
+    constructor(private modalService: ModalDialogService) {}
 
     get showContextualConditionsCard() {
-        return this.contextualConditions && Object.keys(this.contextualConditions).length !== 0 && this.weatherSummary; 
+        return (
+            this.contextualConditions &&
+            Object.keys(this.contextualConditions).length !== 0 &&
+            this.weatherSummary
+        );
     }
 
     showCompliancePopup() {
@@ -34,7 +41,7 @@ export class ContextualConditionsCard {
             options
         );
     }
-    
+
     get timeRangeFromContextualConditions(): string {
         const timeRange = this.contextualConditions.timeRange;
         if (timeRange === undefined) return "";
@@ -99,7 +106,11 @@ export class ContextualConditionsCard {
     }
 
     get lightConditionFromWeatherSummary(): string {
-        if (!this.weatherSummary || this.weatherSummary.lightCondition === undefined) return undefined;
+        if (
+            !this.weatherSummary ||
+            this.weatherSummary.lightCondition === undefined
+        )
+            return undefined;
 
         switch (this.weatherSummary.lightCondition) {
             case LightCondition.SUNRISE:
@@ -114,7 +125,10 @@ export class ContextualConditionsCard {
     }
 
     get isLightConditionMatching(): boolean {
-        return this.lightConditionFromContextualConditions === this.lightConditionFromWeatherSummary;
+        return (
+            this.lightConditionFromContextualConditions ===
+            this.lightConditionFromWeatherSummary
+        );
     }
 
     get weatherAndWindFromContextualConditions(): string {
@@ -146,7 +160,10 @@ export class ContextualConditionsCard {
     }
 
     get isWeatherAndWindMatching(): boolean {
-        return this.weatherAndWindFromContextualConditions === this.weatherAndWindFromWeatherSummary;
+        return (
+            this.weatherAndWindFromContextualConditions ===
+            this.weatherAndWindFromWeatherSummary
+        );
     }
 
     private getWeatherFromContextualConditions(): string {
@@ -182,7 +199,8 @@ export class ContextualConditionsCard {
     }
 
     private getWeatherFromWeatherSummary(): string {
-        if (!this.weatherSummary || this.weatherSummary.weather === undefined) return "";
+        if (!this.weatherSummary || this.weatherSummary.weather === undefined)
+            return "";
         switch (this.weatherSummary.weather) {
             case Weather.THUNDERSTORM:
                 return "Tormenta eléctrica";
@@ -223,7 +241,8 @@ export class ContextualConditionsCard {
     }
 
     private getWindFromWeatherSummary(): string {
-        if (!this.weatherSummary || this.weatherSummary.isWindy === undefined) return "";
+        if (!this.weatherSummary || this.weatherSummary.isWindy === undefined)
+            return "";
         if (this.weatherSummary.isWindy) {
             return "con viento";
         } else {
