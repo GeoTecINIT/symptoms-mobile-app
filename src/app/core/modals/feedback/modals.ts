@@ -5,7 +5,7 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
     feedbackScreen: {
         body: {
             emoji: "👋",
-            text: "Te esperamos en otro momento. Recuerda la importancia de exponerse",
+            text: "Te esperamos en otro momento. Recuerda la importancia de exponerse.",
         },
         question: "¿Podrías indicar por qué no harás una exposición?",
         options: [
@@ -38,7 +38,7 @@ export const askWantsToLeaveFeedback: FeedbackModalOptions = {
     feedbackScreen: {
         body: {
             emoji: "👋",
-            text: "Recuerda la importancia de exponerte de forma regular. Te esperamos pronto",
+            text: "Recuerda la importancia de exponerte de forma regular. Te esperamos pronto.",
         },
         question: "¿Podrías indicarme el motivo de tu salida?",
         options: [
