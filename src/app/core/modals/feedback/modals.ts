@@ -11,19 +11,19 @@ export const askCannotExposeFeedback: FeedbackModalOptions = {
         options: [
             {
                 type: "predefined",
-                // answer: "No dispongo de tiempo",
-                answer: "He finalizado la exposición",
+                answer: "No dispongo de tiempo",
+                // answer: "He finalizado la exposición",
             },
             {
                 type: "predefined",
-                // answer: "Estoy de paso",
-                answer: "Tengo demasiado malestar y necesito tomar un respiro, pero después volveré a exponerme",
+                answer: "Estoy de paso",
+                // answer: "Tengo demasiado malestar y necesito tomar un respiro, pero después volveré a exponerme",
             },
-            {
-                type: "predefined",
-                // answer: "Estoy de paso",
-                answer: "Quiero dejar la situación, en estos momentos es muy difícil para mí",
-            },
+            // {
+            //     type: "predefined",
+            //     // answer: "Estoy de paso",
+            //     answer: "Quiero dejar la situación, en estos momentos es muy difícil para mí",
+            // },
             {
                 type: "free-text-with-audio",
                 hint: "Otros motivos",
