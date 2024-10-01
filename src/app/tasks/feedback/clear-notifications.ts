@@ -18,7 +18,7 @@ export class ClearNotifications extends Task {
         const notifications = await firstValueFrom(notificationsStore.list())
 
         // If thresholdToRemoveInSeconds is not passed in the task params, 60 seconds is the default value
-        const { thresholdToRemoveInSeconds } = taskParams ?? { thresholdToRemoveInSeconds: 60 };
+        const thresholdToRemoveInSeconds = taskParams?.thresholdToRemoveInSeconds ?? 30;
 
         const now = new Date().getTime();
         
