@@ -25,8 +25,6 @@ export class SendNotificationWithGeolocation extends Task {
         try {
             const { data: { latitude, longitude } } = invocationEvent;
 
-            const coordinates = { latitude, longitude };
-
             const notificationContent = {
                 title: "📍 Ubicación adquirida",
                 body: `Latitud: ${latitude} Longitude: ${longitude}`,
@@ -36,15 +34,6 @@ export class SendNotificationWithGeolocation extends Task {
                 },
             }
 
-            console.log("coordinates 👉👉👉", coordinates)
-
-            // const { numberOfExposure, ...notificationContent } = taskParams;
-
-            // // Get exposures
-            // const exposuresDone = await this.store.getAll();
-
-            // if (exposuresDone.length !== numberOfExposure) return;
-            
             return sendNotificationTask().run(notificationContent, invocationEvent);
         } catch (e) {
             getLogger("SendNotificationWithGeolocation").warn(`Was not possible to send a notification containing geolocation. Reason ${e}`)
