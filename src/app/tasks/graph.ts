@@ -27,6 +27,13 @@ class DemoTaskGraph implements TaskGraph {
         on("stopEvent", run("stopDetectingCoarseHumanActivityChanges"));
         // END: Human activity recognition
 
+        // Every 5 minutes check if there are notifications older than 2 hours and remove it
+        on("startEvent",
+            run("clearNotifications", {
+                "thresholdToRemoveInSeconds": 120 * 60 // 120 min expressed in seconds
+            }).every(5, "minutes")
+        );
+
         on("sendWatchConnectedMessage", run("sendPlainMessageToWatch"));
         on("sendWatchNotConnectedMessage", run("sendPlainMessageToWatch"));
 
@@ -268,6 +275,8 @@ class DemoTaskGraph implements TaskGraph {
         );
 
         on("exposureStarted", run("writeRecords"));
+        on("exposureStarted", run("clearNotifications"));
+
         // -> Detect heart rate with watch
         on("exposureStarted", run("startDetectingWatchHeartRateChanges"));
 
