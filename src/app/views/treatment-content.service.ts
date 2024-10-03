@@ -263,7 +263,8 @@ Algunas de estas pautas te pueden ayudar a manejar la ansiedad:
         index: 1,
         type: TreatmentContentType.Psychoeducation,
         title: "Presentación",
-        body: `In development`,
+        subtitle: "¿Qué veré en este vídeo?",
+        body: `En este vídeo introductorio, se explica cómo la aplicación SyMptOMS está diseñada para acompañar a los usuarios en su proceso de terapia, brindando apoyo durante las exposiciones. También se detallan las políticas de privacidad de datos.`,
         videoPath: "~/media/videos/Geovid01.mp4",
     },
     {
