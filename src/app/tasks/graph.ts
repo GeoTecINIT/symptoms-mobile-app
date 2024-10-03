@@ -28,9 +28,10 @@ class DemoTaskGraph implements TaskGraph {
         // END: Human activity recognition
 
         // Every 5 minutes check if there are notifications older than 2 hours and remove it
-        on("startEvent",
+        on(
+            "startEvent",
             run("clearNotifications", {
-                "thresholdToRemoveInSeconds": 120 * 60 // 120 min expressed in seconds
+                thresholdToRemoveInSeconds: 120 * 60, // 120 min expressed in seconds
             }).every(5, "minutes")
         );
 
@@ -83,7 +84,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> All frequencies & modes
         on("geolocationAcquired", run("writeGeolocationRecords"));
-        on("geolocationAcquired", run("sendNotificationWithGeolocation"))
+        // on("geolocationAcquired", run("sendNotificationWithGeolocation"))
         // END: Low resolution data collection
 
         // START: Geofence detection
