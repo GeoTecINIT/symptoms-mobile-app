@@ -13,8 +13,6 @@ import {
     NavigationTab,
 } from "~/app/views/main/main-view.service";
 import { takeUntil } from "rxjs/operators";
-import { Dialogs } from '@nativescript/core'
-import { Notification, TapActionType } from "@awarns/notifications";
 
 @Component({
     selector: "SymNotificationsList",
@@ -47,19 +45,8 @@ export class NotificationsListComponent {
         this.unloaded$.next();
     }
 
-    async onListItemTap(args: any) {
+    onListItemTap(args: any) {
         const notificationVM = this.notifications[args.index];
-
-        const okButtonText = this.getOkButtonText(notificationVM.notification)
-
-        const wantsToProceed = await Dialogs.confirm({
-            title: notificationVM.title,
-            message: notificationVM.body,
-            okButtonText,
-            cancelButtonText: 'Cerrar',
-        })
-
-        if (!wantsToProceed) return;
 
         return this.notificationsHandlerService
             .handle(notificationVM.notification)
@@ -68,23 +55,6 @@ export class NotificationsListComponent {
                     `Could not handle notification tap. Reason: ${e}`
                 );
             });
-    }
-
-    private getOkButtonText(notification: Notification): string {
-        const tapAction = notification.tapAction;
-        
-        switch(tapAction.type) {
-            case TapActionType.ASK_CONFIRMATION:
-                return "Ir";
-            case TapActionType.ASK_FEEDBACK:
-                return "Ir";
-            case TapActionType.DELIVER_QUESTIONS:
-                return "Ir";
-            case TapActionType.OPEN_CONTENT:
-                return "Ir";
-            default:
-                return "Marcar como leído";
-        }
     }
 
     onSeeProgressTap() {
