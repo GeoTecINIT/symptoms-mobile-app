@@ -17,12 +17,12 @@ export class ClearNotifications extends Task {
     ): Promise<void> {
         const notifications = await firstValueFrom(notificationsStore.list())
 
-        // If thresholdToRemoveInSeconds is not passed in the task params, 60 seconds is the default value
+        // If thresholdToRemoveInSeconds is not passed in the task params, 30 seconds is the default value
         const thresholdToRemoveInSeconds = taskParams?.thresholdToRemoveInSeconds ?? 30;
 
         const now = new Date().getTime();
         
-        // Mark as seen notifications that are older than 1 min from current timestamp (now)
+        // Mark as seen notifications that are older than thresholdToRemoveInSeconds from current timestamp (now)
         notifications.filter(n => (now - n.timestamp.getTime()) / 1000 > thresholdToRemoveInSeconds ).forEach(n => notificationsManager.markAsSeen(n.id))
     }
 }
