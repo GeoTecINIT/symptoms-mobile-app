@@ -1,8 +1,10 @@
 <GridLayout class="body" rows="*, auto, auto">
   <GridLayout rows="*,auto" row="0">
-    <StackLayout
+    <FlexboxLayout
       *ngIf="!showingImage"
       row="0"
+      flexDirection="column"
+      justifyContent="space-around"
     >
       <StackLayout marginTop="15" marginBottom="25">
         <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
@@ -15,7 +17,7 @@
         [weatherSummary]="weatherSummary"
         backgroundColor="red"
       ></SymContextualConditionsCard>
-    </StackLayout>
+    </FlexboxLayout>
 
     <Image
       *ngIf="showingImage"
