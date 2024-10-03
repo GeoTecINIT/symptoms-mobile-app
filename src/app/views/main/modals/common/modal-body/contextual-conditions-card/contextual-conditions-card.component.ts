@@ -65,6 +65,9 @@ export class ContextualConditionsCard {
         const currentHours = this.currentDate.getHours();
         const currentMinutes = this.currentDate.getMinutes();
 
+        const timeRange = this.contextualConditions.timeRange;
+        if (timeRange === undefined) return false;
+
         const startHours = this.contextualConditions.timeRange.startTime.hours;
         const startMinutes =
             this.contextualConditions.timeRange.startTime.minutes;
