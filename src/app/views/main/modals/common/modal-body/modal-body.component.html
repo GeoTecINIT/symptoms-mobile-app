@@ -6,12 +6,16 @@
       flexDirection="column"
       justifyContent="space-around"
     >
-      <StackLayout marginTop="15" marginBottom="25">
+      <StackLayout>
         <Label *ngIf="emoji" class="emoji-icon" [text]="emoji"></Label>
-        <SymCircleIcon *ngIf="iconCode" [iconCode]="iconCode" backgroundColor="blue"></SymCircleIcon>
+        <SymCircleIcon
+          *ngIf="iconCode"
+          [iconCode]="iconCode"
+          backgroundColor="blue"
+        ></SymCircleIcon>
         <Label class="body-text" textWrap="true" [text]="bodyText"></Label>
       </StackLayout>
-      
+
       <SymContextualConditionsCard
         [contextualConditions]="contextualConditions"
         [weatherSummary]="weatherSummary"
