@@ -11,12 +11,6 @@ import { Logger, getLogger } from "../utils/logger";
 import { getCollectorManager } from "nativescript-wearos-sensors/collection";
 import { toSensorType } from "@awarns/wear-os/internal/watch-sensor";
 
-export function isWatchConnectedInUse() {
-    const watch = getWatchInUse();
-    console.log("!!watch 👉👉👉", !!watch);
-    console.log("watch 👉👉👉", watch);
-}
-
 export async function handleWatchToUse(): Promise<void> {
     const logger: Logger = getLogger("WatchSetup");
 
@@ -25,6 +19,7 @@ export async function handleWatchToUse(): Promise<void> {
 
     if (watches.length === 0) {
         logger.info("No watch is connected");
+        setWatchFeaturesState(false);
         return;
     }
 
@@ -42,4 +37,9 @@ export async function handleWatchToUse(): Promise<void> {
             toSensorType(WatchSensor.HEART_RATE)
         );
     }
+}
+
+export async function isAnyWatchConnected(): Promise<boolean> {
+    const watches = await getConnectedWatches();
+    return watches.length > 0;
 }

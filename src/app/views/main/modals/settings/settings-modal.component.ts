@@ -8,6 +8,8 @@ import {
     confirmWantsToExport,
     confirmWantsToUnlink,
 } from "~/app/core/dialogs/confirm";
+import { isAnyWatchConnected } from "~/app/core/framework/smartwatch-setup";
+import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
 
 const TAPS_TO_ENTER_ADVANCED_SETTINGS = 5;
 
@@ -23,12 +25,14 @@ export class SettingsModalComponent {
 
     private logger: Logger;
     private versionTapCount = 0;
+    waitingForResponse = false;
 
     constructor(
         private dialogsService: DialogsService,
         private appSettingsService: AppSettingsService,
         private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute
+        private activeRoute: ActivatedRoute,
+        private watchDisplayService: WatchDisplayService
     ) {
         this.logger = getLogger("SettingsModalComponent");
     }
@@ -71,6 +75,14 @@ export class SettingsModalComponent {
                         );
                 }
             });
+    }
+
+    onScanWatchTap() {
+        this.waitingForResponse = true;
+        isAnyWatchConnected().then((connected) => {
+            this.watchDisplayService.setWatchConnected(connected);
+            this.waitingForResponse = false;
+        });
     }
 
     onVersionTap() {

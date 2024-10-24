@@ -15,6 +15,13 @@
       (tap)="onExportTap()"
     ></Button>
   </SymSettingsSection>
+  <SymSettingsSection title="Reloj">
+    <Button
+      text="Escanear reloj"
+      class="bg-primary"
+      (tap)="onScanWatchTap()"
+    ></Button>
+  </SymSettingsSection>
   <SymSettingsSection
     title="Información sobre la aplicación"
     [withSeparator]="false"
@@ -27,3 +34,5 @@
     ></Label>
   </SymSettingsSection>
 </StackLayout>
+
+<SymActivityIndicator *ngIf="waitingForResponse"></SymActivityIndicator>

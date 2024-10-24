@@ -5,11 +5,7 @@ import { SimulationModalService } from "../../modals/simulation/simulation-modal
 import { getConfig } from "~/app/core/config";
 import { AdvancedSetting, AdvancedSettingsService } from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
-import {
-    preparePlugin,
-    handleWatchToUse,
-    isWatchConnectedInUse,
-} from "~/app/core/framework";
+import { preparePlugin, handleWatchToUse } from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import {
     infoOnPermissionsNeed,
@@ -24,6 +20,7 @@ import {
     WatchSensorsProvider,
     getConnectedWatches,
 } from "@awarns/wear-os";
+import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
 
 @Component({
     selector: "SymMainActionBar",
@@ -45,18 +42,22 @@ export class MainActionBarComponent {
         private simulationModalService: SimulationModalService,
         private advancedSettingsService: AdvancedSettingsService,
         private panicButtonModalService: PanicButtonModalService,
-        private dialogsService: DialogsService
+        private dialogsService: DialogsService,
+        private watchDisplayService: WatchDisplayService
     ) {
         this.logger = getLogger("MainActionBarComponent");
         this.development = !getConfig().production;
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
             AdvancedSetting.PanicButton
         );
-        this.hasWatchConnected = areWatchFeaturesEnabled();
+        // this.hasWatchConnected = areWatchFeaturesEnabled();
     }
 
     ngOnInit(): void {
         this.checkWatchAvailability();
+        this.watchDisplayService.watchConnected$.subscribe((connected) => {
+            this.hasWatchAvailable = connected;
+        });
     }
 
     private async checkWatchAvailability(): Promise<void> {
@@ -78,10 +79,9 @@ export class MainActionBarComponent {
             })
                 .then((result) => {
                     if (result) {
-                        this.logger.info(
-                            "hasWatchConnected: " + this.hasWatchConnected
-                        );
                         this.onHandleWatchTap();
+                    } else {
+                        this.hasWatchConnected = false;
                     }
                 })
                 .catch((error) => {
@@ -98,9 +98,12 @@ export class MainActionBarComponent {
             })
                 .then((result) => {
                     if (result) {
+                        this.hasWatchConnected = false;
                         this.logger.info(
-                            "hasWatchConnected: " + this.hasWatchConnected
+                            "👉👉👉 onWatchDialogTap Desconectar hasWatchConnected: " +
+                                this.hasWatchConnected
                         );
+                    } else {
                         this.onHandleWatchTap();
                     }
                 })
@@ -114,70 +117,41 @@ export class MainActionBarComponent {
 
     // TODO: consider tapping the button mid-exposure --> either do nothing or hide it
     // recursive version
-    onHandleWatchTap() {
-        handleWatchToUse()
-            .then(() =>
-                preparePlugin()
-                    .then((ready) => {
-                        if (!ready) {
-                            this.informAboutWatchPermissionsNeed().then(() => {
-                                this.onHandleWatchTap();
-                            });
-                        }
-                        this.hasWatchConnected = areWatchFeaturesEnabled();
-                        // TODO: fix this
-                        // it sends "Permissions granted" even if they are not granted
-                        if (this.hasWatchConnected) {
-                            awarns.emitEvent("sendWatchConnectedMessage", {
-                                plainMessage: {
-                                    message: "Permissions granted",
-                                },
-                            });
-                        } else {
-                            awarns.emitEvent("sendWatchNotConnectedMessage", {
-                                plainMessage: {
-                                    message: "Permissions denied",
-                                },
-                            });
-                        }
-                    })
-                    .catch((e) => {
-                        this.logger.error(
-                            `Could not prepare EMA/I framework tasks. Reason: ${e}`
-                        );
-                    })
-            )
-            .catch((e) =>
-                this.logger.error(`Could not setup watch. Reason: ${e}`)
-            );
-    }
+    async onHandleWatchTap() {
+        try {
+            await handleWatchToUse();
+            const isReady = await preparePlugin();
 
-    // async onHandleWatchTap() {
-    //     try {
-    //         await handleWatchToUse();
-    //         const ready = await preparePlugin();
-    //         if (!ready) {
-    //             await this.informAboutWatchPermissionsNeed();
-    //             return this.onHandleWatchTap(); // Solo volver a intentar si es necesario
-    //         }
-    //         this.hasWatchConnected = areWatchFeaturesEnabled();
-    //         if (this.hasWatchConnected) {
-    //             awarns.emitEvent("sendWatchConnectedMessage", {
-    //                 plainMessage: {
-    //                     message: "Permissions granted",
-    //                 },
-    //             });
-    //         } else {
-    //             awarns.emitEvent("sendWatchNotConnectedMessage", {
-    //                 plainMessage: {
-    //                     message: "Permissions denied",
-    //                 },
-    //             });
-    //         }
-    //     } catch (error) {
-    //         this.logger.error(`Could not setup watch. Reason: ${error}`);
-    //     }
-    // }
+            if (isReady !== true) {
+                console.log(
+                    "👉👉👉 onHandleWatchTap notReady hasWatchConnected",
+                    this.hasWatchConnected
+                );
+                this.hasWatchConnected = false;
+                await this.informAboutWatchPermissionsNeed();
+                this.onHandleWatchTap();
+                awarns.emitEvent("sendWatchNotConnectedMessage", {
+                    plainMessage: {
+                        message: "Permissions denied",
+                    },
+                });
+                return;
+            }
+            console.log("👉👉👉 READY", isReady);
+            this.hasWatchConnected = true;
+            console.log(
+                "👉👉👉 onHandleWatchTap isReady hasWatchConnected",
+                this.hasWatchConnected
+            );
+            awarns.emitEvent("sendWatchConnectedMessage", {
+                plainMessage: {
+                    message: "Permissions granted",
+                },
+            });
+        } catch (e) {
+            this.logger.error(`Could not setup watch. Reason: ${e}`);
+        }
+    }
 
     onSettingsTap() {
         this.settingsModalService.show();
