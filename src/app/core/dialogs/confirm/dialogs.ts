@@ -23,7 +23,7 @@ export const confirmWantsToLeave: ConfirmDialogOptions = {
 
 export const confirmWantsToUnlink: ConfirmDialogOptions = {
     question: "¿Desvincular dispositivo?",
-    body: "Si desvinculas este dispositivo perderás todo el progreso almacenado localmente (p. ej. contenido psicoeducativo visto, etc.) y tendrás que volver a configurar la app en caso de reinstalación",
+    body: "Si desvinculas este dispositivo perderás todo el progreso almacenado localmente como las exposiciones realizadas (aunque seguirán disponibles en la herramienta web) y tendrás que volver a configurar la app en caso de reinstalación",
     positiveText: "Salir",
     negativeText: "Volver",
 };
