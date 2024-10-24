@@ -252,7 +252,7 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureStartConfirmed",
             run("sendNotificationNthExposure", {
-                numberOfExposure: 0,
+                numberOfExposure: 0, // When there are no exposures stored in the local DB, 0 is used
                 title: "Acabas de iniciar una exposición",
                 body: "Pulsa aquí si tienes dudas sobre como proceder",
                 tapAction: {
@@ -552,19 +552,6 @@ class DemoTaskGraph implements TaskGraph {
         on(
             "exposureFinished",
             run("sendNotificationNthExposure", {
-                numberOfExposure: 1, // Exposure was just finished and there will be 1 exposure in the local DB
-                title: "¡Has terminado tu primera exposición!",
-                body: "Pulsa aquí para saber más sobre los efectos de las exposiciones",
-                tapAction: {
-                    type: TapActionType.OPEN_CONTENT,
-                    id: "cp04",
-                },
-            })
-        );
-
-        on(
-            "exposureFinished",
-            run("sendNotificationNthExposure", {
                 numberOfExposure: 2, // Exposure was just finished and there will be 2 exposures in the local DB
                 title: "Aprende a controlar tus miedos",
                 body: "Pulsa aquí para aprender herramientas para gestionar tus emociones",
@@ -576,6 +563,18 @@ class DemoTaskGraph implements TaskGraph {
         );
 
         on("exposureFinished", run("checkIfExposureWasDroppedOut"));
+        on(
+            "exposureWasNotDroppedOut",
+            run("sendNotificationNthExposure", {
+                numberOfExposure: 1, // Exposure was just finished and there will be 1 exposure in the local DB
+                title: "¡Has terminado tu primera exposición!",
+                body: "Pulsa aquí para saber más sobre los efectos de las exposiciones",
+                tapAction: {
+                    type: TapActionType.OPEN_CONTENT,
+                    id: "cp04",
+                },
+            })
+        );
         on(
             "exposureWasNotDroppedOut",
             run("sendNotification", {
