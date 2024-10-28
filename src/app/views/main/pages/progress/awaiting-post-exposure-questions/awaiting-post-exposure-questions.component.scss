@@ -1,0 +1,37 @@
+@import "src/app-variables";
+
+.highlighted-text {
+  text-align: center;
+  font-weight: bold;
+}
+
+.body-text {
+  text-align: center;
+}
+
+.body-title {
+  font-weight: 500;
+  margin-top: $global-spacing;
+}
+
+.minutes-counter {
+  margin-top: $global-spacing;
+  color: $complementary;
+  font-size: 36;
+  text-align: center;
+}
+
+.minutes-text {
+  color: $complementary;
+  text-align: center;
+  margin-bottom: 16;
+}
+
+.flat-card {
+  border-color: $dark-grey;
+  border-width: 1;
+  border-radius: 4;
+  margin: 4;
+  padding: 8;
+  margin-top: 48;
+}

@@ -1,5 +1,12 @@
-<SymIdleProgress *ngIf="idle; else underExposure"></SymIdleProgress>
+<!-- <SymIdleProgress *ngIf="idle; else underExposure"></SymIdleProgress>
 <ng-template #underExposure>
     <SymUnderExposure></SymUnderExposure>
-</ng-template>
+</ng-template> -->
 
+<div [ngSwitch]="progressStatus">
+    <SymIdleProgress *ngSwitchCase="ProgressStatus.IDLE"></SymIdleProgress>
+    <SymUnderExposure *ngSwitchCase="ProgressStatus.IN_PROGRESS"></SymUnderExposure>
+    <SymAwaitingPostExposureQuestions *ngSwitchCase="ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS"></SymAwaitingPostExposureQuestions>
+    <SymIdleProgress *ngSwitchDefault></SymIdleProgress>
+  </div>
+  

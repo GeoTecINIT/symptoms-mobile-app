@@ -251,4 +251,88 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
             ],
         },
     },
+    {
+        iconCode: "\ue55e",
+        title: "En Lugar 1",
+        subtitle: "(20/04) Nivel de ansiedad",
+        chart: {
+            yAxisDataRange: Y_AXIS_DATA_RANGE,
+            cuttingLines: CUTTING_LINES,
+            data: [
+                {
+                    label: "Nivel de ansiedad",
+                    values: [
+                        { x: new Date(2023, 4, 23, 10, 56), y: 5 },
+                        { x: new Date(2023, 4, 23, 11, 1), y: 4 },
+                        { x: new Date(2023, 4, 23, 11, 6), y: 3 },
+                        { x: new Date(2023, 4, 23, 11, 11), y: 3 },
+                        { x: new Date(2023, 4, 23, 11, 16), y: 4 },
+                        { x: new Date(2023, 4, 23, 11, 21), y: 6 },
+                        { x: new Date(2023, 4, 23, 11, 26), y: 5 },
+                        { x: new Date(2023, 4, 23, 11, 31), y: 6 },
+                        { x: new Date(2023, 4, 23, 11, 36), y: 7 },
+                        { x: new Date(2023, 4, 23, 11, 41), y: 6 },
+                        { x: new Date(2023, 4, 23, 11, 46), y: 4 },
+                        { x: new Date(2023, 4, 23, 11, 51), y: 3 },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        iconCode: "\ue55e",
+        title: "En Lugar 1",
+        subtitle: "(20/04) Nivel de ansiedad",
+        chart: {
+            yAxisDataRange: Y_AXIS_DATA_RANGE,
+            cuttingLines: CUTTING_LINES,
+            data: [
+                {
+                    label: "Nivel de ansiedad",
+                    values: [
+                        { x: new Date(2023, 8, 4, 9, 56), y: 2 },
+                        { x: new Date(2023, 8, 4, 10, 1), y: 3 },
+                        { x: new Date(2023, 8, 4, 10, 6), y: 5 },
+                        { x: new Date(2023, 8, 4, 10, 11), y: 4 },
+                        { x: new Date(2023, 8, 4, 10, 16), y: 4 },
+                        { x: new Date(2023, 8, 4, 10, 21), y: 3 },
+                        { x: new Date(2023, 8, 4, 10, 26), y: 2 },
+                        { x: new Date(2023, 8, 4, 10, 31), y: 2 },
+                        { x: new Date(2023, 8, 4, 10, 36), y: 1 },
+                        { x: new Date(2023, 8, 4, 10, 41), y: 1 },
+                        { x: new Date(2023, 8, 4, 10, 46), y: 0 },
+                        { x: new Date(2023, 8, 4, 10, 51), y: 1 },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        iconCode: "\ue55e",
+        title: "En Lugar 1",
+        subtitle: "(20/04) Nivel de ansiedad",
+        chart: {
+            yAxisDataRange: Y_AXIS_DATA_RANGE,
+            cuttingLines: CUTTING_LINES,
+            data: [
+                {
+                    label: "Nivel de ansiedad",
+                    values: [
+                        { x: new Date(2023, 6, 12, 14, 56), y: 7 },
+                        { x: new Date(2023, 6, 12, 15, 1), y: 8 },
+                        { x: new Date(2023, 6, 12, 15, 6), y: 9 },
+                        { x: new Date(2023, 6, 12, 15, 11), y: 9 },
+                        { x: new Date(2023, 6, 12, 15, 16), y: 7 },
+                        { x: new Date(2023, 6, 12, 15, 21), y: 5 },
+                        { x: new Date(2023, 6, 12, 15, 26), y: 6 },
+                        { x: new Date(2023, 6, 12, 15, 31), y: 5 },
+                        { x: new Date(2023, 6, 12, 15, 36), y: 4 },
+                        { x: new Date(2023, 6, 12, 15, 41), y: 3 },
+                        { x: new Date(2023, 6, 12, 15, 46), y: 2 },
+                        { x: new Date(2023, 6, 12, 15, 51), y: 1 },
+                    ],
+                },
+            ],
+        },
+    },
 ];

@@ -10,6 +10,7 @@ import { ProgressContainerComponent } from "./progress-container.component";
 import { IdleProgressComponent } from "./idle-progress/idle-progress.component";
 import { UnderExposureComponent } from "./under-exposure/under-exposure.component";
 import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress-bar/exposure-progress-bar.component";
+import { AwaitingPostExposureQuestionsComponent } from "./awaiting-post-exposure-questions/awaiting-post-exposure-questions.component"
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import { ExposureProgressBarComponent } from "./under-exposure/exposure-progress
         ProgressContainerComponent,
         IdleProgressComponent,
         UnderExposureComponent,
+        AwaitingPostExposureQuestionsComponent,
         ExposureProgressBarComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA],
