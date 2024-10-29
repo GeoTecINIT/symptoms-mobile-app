@@ -55,81 +55,12 @@ export class ProgressContainerComponent {
         this.unloaded$.next();
     }
 
-    // private subscribeToExposureChanges() {
-    //     recordsStore
-    //         .listLast(AppRecordType.ExposureChange)
-    //         .pipe(
-    //             takeUntil(this.unloaded$),
-    //             map((exposureChange: ExposureChange) => {
-    //                 console.log("exposureChange 👉👉👉", exposureChange);
-    //                 console.log(
-    //                     "this.progressStatus 👉👉👉",
-    //                     this.progressStatus
-    //                 );
-    //                 console.log(
-    //                     "this.previousProgressStatus 👉👉👉",
-    //                     this.previousProgressStatus
-    //                 );
-
-    //                 if (!exposureChange) return ProgressStatus.IDLE;
-    //                 if (exposureChange.change === Change.START)
-    //                     return ProgressStatus.IN_PROGRESS;
-    //                 if (
-    //                     exposureChange.change === Change.END &&
-    //                     (this.progressStatus !== ProgressStatus.IDLE ||
-    //                         this.previousProgressStatus === null)
-    //                 ) {
-    //                     return ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS;
-    //                 }
-    //             }),
-    //             tap((status: ProgressStatus) => {
-    //                 if (
-    //                     status ===
-    //                     ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS
-    //                 ) {
-    //                     setTimeout(() => {
-    //                         this.ngZone.run(() => {
-    //                             this.previousProgressStatus =
-    //                                 this.progressStatus;
-    //                             this.progressStatus = ProgressStatus.IDLE;
-    //                         });
-    //                     }, 60 * 1000);
-    //                 }
-    //             })
-    //         )
-    //         .subscribe((status: ProgressStatus) => {
-    //             this.ngZone.run(() => {
-    //                 this.previousProgressStatus = this.progressStatus;
-    //                 this.progressStatus = status;
-
-    //                 console.log(
-    //                     "this.progressStatus 👉👉👉",
-    //                     this.progressStatus
-    //                 );
-    //                 console.log(
-    //                     "this.previousProgressStatus 👉👉👉",
-    //                     this.previousProgressStatus
-    //                 );
-    //             });
-    //         });
-    // }
-
     private subscribeToExposureChanges() {
         recordsStore
             .listLast(AppRecordType.ExposureChange)
             .pipe(
                 takeUntil(this.unloaded$),
                 map((exposureChange: ExposureChange) => {
-                    console.log("exposureChange 👉👉👉", exposureChange);
-                    console.log(
-                        "this.progressStatus 👉👉👉",
-                        this.progressStatus
-                    );
-                    console.log(
-                        "this.previousProgressStatus 👉👉👉",
-                        this.previousProgressStatus
-                    );
-
                     if (!exposureChange) return ProgressStatus.IDLE;
                     if (exposureChange.change === Change.START)
                         return ProgressStatus.IN_PROGRESS;
@@ -167,7 +98,6 @@ export class ProgressContainerComponent {
                             }, 60 * 1000);
                         }
                     } else {
-                        // If the status is not AWAITING_POST_EXPOSURE_QUESTIONS, ensure timer is reset
                         this.progressContainerService.setTimerInitialized(
                             false
                         );
@@ -183,15 +113,6 @@ export class ProgressContainerComponent {
                         this.progressStatus
                     );
                     this.progressContainerService.setPreviousProgressStatus(
-                        this.previousProgressStatus
-                    );
-
-                    console.log(
-                        "this.progressStatus 👉👉👉",
-                        this.progressStatus
-                    );
-                    console.log(
-                        "this.previousProgressStatus 👉👉👉",
                         this.previousProgressStatus
                     );
                 });
