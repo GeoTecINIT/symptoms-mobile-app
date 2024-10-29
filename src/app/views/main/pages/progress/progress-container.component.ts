@@ -8,6 +8,8 @@ import { Change } from "@awarns/core/entities";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import { recordsStore } from "@awarns/persistence";
 
+import { ProgressContainerService } from "./progress-container.service";
+
 export enum ProgressStatus {
     IDLE = 0,
     IN_PROGRESS = 1,
@@ -20,9 +22,8 @@ export enum ProgressStatus {
     styleUrls: ["./progress-container.component.scss"],
 })
 export class ProgressContainerComponent {
-    // Make the enum accessible in the template
     public ProgressStatus = ProgressStatus;
-    
+
     progressStatus: ProgressStatus = ProgressStatus.IDLE;
     previousProgressStatus: ProgressStatus = null;
 
@@ -30,19 +31,88 @@ export class ProgressContainerComponent {
 
     private logger: Logger;
 
-    constructor(private ngZone: NgZone) {
+    constructor(
+        private ngZone: NgZone,
+        private progressContainerService: ProgressContainerService
+    ) {
         this.logger = getLogger("ProgressContainer");
     }
 
     @HostListener("loaded")
     onLoaded() {
+        this.progressStatus = this.progressContainerService.getProgressStatus();
+        this.previousProgressStatus =
+            this.progressContainerService.getPreviousProgressStatus();
         this.subscribeToExposureChanges();
     }
 
     @HostListener("unloaded")
     onUnloaded() {
+        this.progressContainerService.setProgressStatus(this.progressStatus);
+        this.progressContainerService.setPreviousProgressStatus(
+            this.previousProgressStatus
+        );
         this.unloaded$.next();
     }
+
+    // private subscribeToExposureChanges() {
+    //     recordsStore
+    //         .listLast(AppRecordType.ExposureChange)
+    //         .pipe(
+    //             takeUntil(this.unloaded$),
+    //             map((exposureChange: ExposureChange) => {
+    //                 console.log("exposureChange 👉👉👉", exposureChange);
+    //                 console.log(
+    //                     "this.progressStatus 👉👉👉",
+    //                     this.progressStatus
+    //                 );
+    //                 console.log(
+    //                     "this.previousProgressStatus 👉👉👉",
+    //                     this.previousProgressStatus
+    //                 );
+
+    //                 if (!exposureChange) return ProgressStatus.IDLE;
+    //                 if (exposureChange.change === Change.START)
+    //                     return ProgressStatus.IN_PROGRESS;
+    //                 if (
+    //                     exposureChange.change === Change.END &&
+    //                     (this.progressStatus !== ProgressStatus.IDLE ||
+    //                         this.previousProgressStatus === null)
+    //                 ) {
+    //                     return ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS;
+    //                 }
+    //             }),
+    //             tap((status: ProgressStatus) => {
+    //                 if (
+    //                     status ===
+    //                     ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS
+    //                 ) {
+    //                     setTimeout(() => {
+    //                         this.ngZone.run(() => {
+    //                             this.previousProgressStatus =
+    //                                 this.progressStatus;
+    //                             this.progressStatus = ProgressStatus.IDLE;
+    //                         });
+    //                     }, 60 * 1000);
+    //                 }
+    //             })
+    //         )
+    //         .subscribe((status: ProgressStatus) => {
+    //             this.ngZone.run(() => {
+    //                 this.previousProgressStatus = this.progressStatus;
+    //                 this.progressStatus = status;
+
+    //                 console.log(
+    //                     "this.progressStatus 👉👉👉",
+    //                     this.progressStatus
+    //                 );
+    //                 console.log(
+    //                     "this.previousProgressStatus 👉👉👉",
+    //                     this.previousProgressStatus
+    //                 );
+    //             });
+    //         });
+    // }
 
     private subscribeToExposureChanges() {
         recordsStore
@@ -50,25 +120,57 @@ export class ProgressContainerComponent {
             .pipe(
                 takeUntil(this.unloaded$),
                 map((exposureChange: ExposureChange) => {
-                    console.log('exposureChange 👉👉👉', exposureChange);
-                    console.log('this.progressStatus 👉👉👉', this.progressStatus);
-                    console.log('this.previousProgressStatus 👉👉👉', this.previousProgressStatus);
+                    console.log("exposureChange 👉👉👉", exposureChange);
+                    console.log(
+                        "this.progressStatus 👉👉👉",
+                        this.progressStatus
+                    );
+                    console.log(
+                        "this.previousProgressStatus 👉👉👉",
+                        this.previousProgressStatus
+                    );
 
                     if (!exposureChange) return ProgressStatus.IDLE;
-                    if (exposureChange.change === Change.START) return ProgressStatus.IN_PROGRESS;
-                    if (exposureChange.change === Change.END && this.progressStatus === ProgressStatus.IN_PROGRESS) {
+                    if (exposureChange.change === Change.START)
+                        return ProgressStatus.IN_PROGRESS;
+                    if (
+                        exposureChange.change === Change.END &&
+                        (this.progressStatus !== ProgressStatus.IDLE ||
+                            this.previousProgressStatus === null)
+                    ) {
                         return ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS;
                     }
-                    // if (this.progressStatus !== ProgressStatus.IDLE) return ProgressStatus.IN_PROGRESS;
                 }),
                 tap((status: ProgressStatus) => {
-                    if (status === ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS) {
-                        setTimeout(() => {
-                            this.ngZone.run(() => {
-                                this.previousProgressStatus = this.progressStatus;
-                                this.progressStatus = ProgressStatus.IDLE;
-                            });
-                        }, 60 * 1000);
+                    if (
+                        status ===
+                        ProgressStatus.AWAITING_POST_EXPOSURE_QUESTIONS
+                    ) {
+                        if (
+                            !this.progressContainerService.isTimerInitialized()
+                        ) {
+                            setTimeout(() => {
+                                this.ngZone.run(() => {
+                                    this.previousProgressStatus =
+                                        this.progressStatus;
+                                    this.progressStatus = ProgressStatus.IDLE;
+                                    this.progressContainerService.setTimerInitialized(
+                                        true
+                                    );
+                                    this.progressContainerService.setProgressStatus(
+                                        this.progressStatus
+                                    );
+                                    this.progressContainerService.setPreviousProgressStatus(
+                                        this.previousProgressStatus
+                                    );
+                                });
+                            }, 60 * 1000);
+                        }
+                    } else {
+                        // If the status is not AWAITING_POST_EXPOSURE_QUESTIONS, ensure timer is reset
+                        this.progressContainerService.setTimerInitialized(
+                            false
+                        );
                     }
                 })
             )
@@ -77,8 +179,21 @@ export class ProgressContainerComponent {
                     this.previousProgressStatus = this.progressStatus;
                     this.progressStatus = status;
 
-                    console.log('this.progressStatus 👉👉👉', this.progressStatus);
-                    console.log('this.previousProgressStatus 👉👉👉', this.previousProgressStatus);
+                    this.progressContainerService.setProgressStatus(
+                        this.progressStatus
+                    );
+                    this.progressContainerService.setPreviousProgressStatus(
+                        this.previousProgressStatus
+                    );
+
+                    console.log(
+                        "this.progressStatus 👉👉👉",
+                        this.progressStatus
+                    );
+                    console.log(
+                        "this.previousProgressStatus 👉👉👉",
+                        this.previousProgressStatus
+                    );
                 });
             });
     }
