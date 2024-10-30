@@ -61,7 +61,13 @@ export class ProgressContainerComponent {
             .pipe(
                 takeUntil(this.unloaded$),
                 map((exposureChange: ExposureChange) => {
-                    if (!exposureChange) return ProgressStatus.IDLE;
+                    console.log("exposureChange 👉👉👉", exposureChange);
+                    if (
+                        !exposureChange ||
+                        (exposureChange.change === Change.END &&
+                            exposureChange?.successful === false)
+                    )
+                        return ProgressStatus.IDLE;
                     if (exposureChange.change === Change.START)
                         return ProgressStatus.IN_PROGRESS;
                     if (
