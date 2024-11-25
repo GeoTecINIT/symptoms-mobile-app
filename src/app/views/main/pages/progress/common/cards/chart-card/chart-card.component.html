@@ -1,15 +1,20 @@
 <SymTitleContentCard
-        [iconCode]="chartDescription.iconCode"
-        [title]="chartDescription.title"
-        [subtitle]="chartDescription.subtitle">
-    <ng-container [ngSwitch]="chartType">
-        <SymLineChart *ngSwitchCase="'line'"
-                [yAxisDataRange]="chartDescription.chart.yAxisDataRange"
-                [cuttingLines]="chartDescription.chart.cuttingLines"
-                [data]="chartDescription.chart.data"></SymLineChart>
-        <SymBarChart *ngSwitchCase="'bar'"
-                      [yAxisDataRange]="chartDescription.chart.yAxisDataRange"
-                      [cuttingLines]="chartDescription.chart.cuttingLines"
-                      [data]="chartDescription.chart.data"></SymBarChart>
-    </ng-container>
+  [iconCode]="chartDescription.iconCode"
+  [title]="chartDescription.title"
+  [subtitle]="chartDescription.subtitle"
+>
+  <ng-container [ngSwitch]="chartType">
+    <SymLineChart
+      *ngSwitchCase="'line'"
+      [yAxisDataRange]="chartDescription.chart.yAxisDataRange"
+      [cuttingLines]="chartDescription.chart.cuttingLines"
+      [data]="chartDescription.chart.data"
+    ></SymLineChart>
+    <SymBarChart
+      *ngSwitchCase="'bar'"
+      [yAxisDataRange]="chartDescription.chart.yAxisDataRange"
+      [cuttingLines]="chartDescription.chart.cuttingLines"
+      [data]="chartDescription.chart.data"
+    ></SymBarChart>
+  </ng-container>
 </SymTitleContentCard>

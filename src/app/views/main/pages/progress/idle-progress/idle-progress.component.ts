@@ -1,6 +1,5 @@
 import { Component, HostListener, NgZone } from "@angular/core";
 import { NavigationService } from "~/app/views/navigation.service";
-import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 
 import { MainViewService } from "~/app/views/main/main-view.service";
@@ -12,6 +11,7 @@ import { awarns } from "@awarns/core";
 import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
 import { takeUntil } from "rxjs/operators";
+import { ExposureAggregate } from "~/app/tasks/visualizations/exposure-aggregate";
 
 const GENERATE_DATA_TIMEOUT = 2000;
 
@@ -35,7 +35,6 @@ export class IdleProgressComponent {
     constructor(
         private mainViewService: MainViewService,
         private navigationService: NavigationService,
-        private activeRoute: ActivatedRoute,
         private ngZone: NgZone
     ) {
         this.development = !getConfig().production;
@@ -92,7 +91,10 @@ export class IdleProgressComponent {
             .pipe(takeUntil(this.unloaded$))
             .subscribe((summary) => {
                 this.ngZone.run(() => {
-                    this.summaryData = summary;
+                    this.summaryData = this.getMostRecentExposures(
+                        summary as ExposureAggregate,
+                        30
+                    );
                     this.hasSummaryData = !!summary;
                 });
             });
@@ -100,5 +102,51 @@ export class IdleProgressComponent {
 
     private navigate(route: string) {
         this.navigationService.navigate([route]);
+    }
+
+    private getMostRecentExposures(summary, numberOfExposures: number = 30) {
+        // Get all emotions flattened
+        const allEmotionValues = summary.data.flatMap((item) =>
+            item.emotionValues.map((emotion) => ({
+                placeId: item.placeId,
+                placeName: item.placeName,
+                timestamp: new Date(emotion.timestamp), // Convert to Date object for sorting
+                value: emotion.value,
+            }))
+        );
+
+        // Sort by timestamp (ascending order)
+        const mostRecentExposures = allEmotionValues
+            .sort((a, b) => a.timestamp - b.timestamp)
+            .slice(-numberOfExposures);
+
+        // Re-group the data by placeId and placeName
+        const groupedData = mostRecentExposures.reduce((result, exposure) => {
+            const { placeId, placeName, timestamp, value } = exposure;
+
+            // Find or create the group for this place
+            let group = result.find((item) => item.placeId === placeId);
+            if (!group) {
+                group = {
+                    placeId,
+                    placeName,
+                    emotionValues: [],
+                };
+                result.push(group);
+            }
+
+            // Add the emotion value to the group's emotionValues
+            group.emotionValues.push({
+                timestamp: timestamp,
+                value,
+            });
+
+            return result;
+        }, []);
+
+        return {
+            ...summary,
+            data: groupedData,
+        };
     }
 }

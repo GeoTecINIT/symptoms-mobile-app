@@ -63,18 +63,23 @@ function transformExposureAggregate(
 ): ChartDescription {
     return {
         iconCode: "\ue26b",
-        title: "En todos los lugares",
+        title: `Últimas exposiciones`,
         subtitle: "Nivel de ansiedad medio",
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
-            data: exposureAggregate.data.map((placeAggregate) => ({
-                label: placeAggregate.placeName,
-                values: placeAggregate.emotionValues.map((emotionValue) => ({
-                    x: emotionValue.timestamp,
-                    y: emotionValue.value,
-                })),
-            })),
+            data: exposureAggregate.data?.map((placeAggregate) => {
+                const obj = {
+                    label: placeAggregate.placeName,
+                    values: placeAggregate.emotionValues.map(
+                        (emotionValue) => ({
+                            x: emotionValue.timestamp,
+                            y: emotionValue.value,
+                        })
+                    ),
+                };
+                return obj;
+            }),
         },
     };
 }

@@ -44,6 +44,12 @@ const COLOR_SCHEME = [
     "#B1AF50",
     "#79979E",
     "#AEBEB2",
+    "#53AD94",
+    "#6DC09E",
+    "#D5BD57",
+    "#6FB96D",
+    "#95A377",
+    "#8BA568",
 ];
 
 const DATASET_COLOR_ALPHA = 0.7;
@@ -150,6 +156,7 @@ export abstract class BaseChart<
 
     private configureXAxis() {
         const xAxis = this.chart.getXAxis();
+        xAxis.setDrawLabels(false);
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setAxisLineColor(AXIS_LINE_COLOR);
