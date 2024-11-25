@@ -17,6 +17,7 @@ export class GRPCAuthInterceptor implements grpc.UnaryInterceptor<any, any> {
         return this.authManager.authToken().then((token) => {
             const metadata = request.getMetadata();
             metadata.authorization = `Bearer ${token}`;
+            metadata["X-Endpoint-API-UserInfo"] = token.split(".")[1];
 
             return invoker(request);
         });

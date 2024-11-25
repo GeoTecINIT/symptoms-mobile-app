@@ -1,9 +1,10 @@
 import * as grpc from "grpc-web";
 
-const DEFAULT_DEADLINE = 10 * 1000;
+const DEFAULT_DEADLINE = 20 * 1000;
 
-export class GRPCDeadlineInterceptor implements grpc.UnaryInterceptor<any, any> {
-
+export class GRPCDeadlineInterceptor
+    implements grpc.UnaryInterceptor<any, any>
+{
     intercept(
         request: grpc.Request<any, any>,
         invoker: (

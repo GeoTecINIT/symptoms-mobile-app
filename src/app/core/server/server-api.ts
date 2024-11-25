@@ -5,6 +5,7 @@ import { DevicesApiAdapter } from "./devices";
 import { PatientsApiAdapter } from "./patients";
 import { TherapistsApiAdapter } from "./therapists";
 import { UploadsApiAdapter } from "./uploads";
+import { QueriesApiAdapter } from "./queries";
 import { GRPCDeadlineInterceptor } from "~/app/core/server/grpc-deadline-interceptor";
 
 export interface ServerApiClient {
@@ -12,6 +13,7 @@ export interface ServerApiClient {
     patients: PatientsApiAdapter;
     therapists: TherapistsApiAdapter;
     uploads: UploadsApiAdapter;
+    queries: QueriesApiAdapter;
 }
 
 class ServerApiAdapter implements ServerApiClient {
@@ -31,16 +33,22 @@ class ServerApiAdapter implements ServerApiClient {
         return this.uploadsAdapter;
     }
 
+    get queries() {
+        return this.queriesAdapter;
+    }
+
     private readonly devicesAdapter: DevicesApiAdapter;
     private readonly patientsAdapter: PatientsApiAdapter;
     private readonly therapistsAdapter: TherapistsApiAdapter;
     private readonly uploadsAdapter: UploadsApiAdapter;
+    private readonly queriesAdapter: QueriesApiAdapter;
 
     constructor(url: string, options: GRPCServiceOptions) {
         this.devicesAdapter = new DevicesApiAdapter(url, options);
         this.patientsAdapter = new PatientsApiAdapter(url, options);
         this.therapistsAdapter = new TherapistsApiAdapter(url, options);
         this.uploadsAdapter = new UploadsApiAdapter(url, options);
+        this.queriesAdapter = new QueriesApiAdapter(url, options);
     }
 }
 

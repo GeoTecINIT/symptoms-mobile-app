@@ -4,6 +4,7 @@ import { DevicesApiAdapter } from "./devices";
 import { PatientsApiAdapter } from "./patients";
 import { TherapistsApiAdapter } from "./therapists";
 import { UploadsApiAdapter } from "./uploads";
+import { QueriesApiAdapter } from "./queries";
 
 @Injectable({
     providedIn: "root",
@@ -23,5 +24,9 @@ export class ServerApiService implements ServerApiClient {
 
     get uploads(): UploadsApiAdapter {
         return serverApi.uploads;
+    }
+
+    get queries(): QueriesApiAdapter {
+        return serverApi.queries;
     }
 }
