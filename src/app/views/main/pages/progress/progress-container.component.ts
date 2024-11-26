@@ -31,6 +31,8 @@ export class ProgressContainerComponent {
 
     private logger: Logger;
 
+    private RECENT_EXPOSURE_THRESHOLD_SECONDS = 2 * 60; // 2 minutes in seconds
+
     constructor(
         private ngZone: NgZone,
         private progressContainerService: ProgressContainerService
@@ -61,11 +63,12 @@ export class ProgressContainerComponent {
             .pipe(
                 takeUntil(this.unloaded$),
                 map((exposureChange: ExposureChange) => {
-                    console.log("exposureChange 👉👉👉", exposureChange);
                     if (
                         !exposureChange ||
                         (exposureChange.change === Change.END &&
-                            exposureChange?.successful === false)
+                            exposureChange?.successful === false) ||
+                        (exposureChange.change === Change.END &&
+                            this.isExposureNotRecent(exposureChange))
                     )
                         return ProgressStatus.IDLE;
                     if (exposureChange.change === Change.START)
@@ -123,5 +126,14 @@ export class ProgressContainerComponent {
                     );
                 });
             });
+    }
+
+    // A recent exposure is an exposure whose timestamp
+    private isExposureNotRecent(exposureChange: ExposureChange): boolean {
+        const differenceInSeconds = Math.floor(
+            (new Date().getTime() - exposureChange.timestamp.getTime()) / 1000
+        );
+
+        return differenceInSeconds > this.RECENT_EXPOSURE_THRESHOLD_SECONDS;
     }
 }
