@@ -36,7 +36,9 @@ export class FinishExposureTask extends Task {
                 ongoingExposure.endTime,
                 ongoingExposure.place,
                 ongoingExposure.emotionValues,
-                successful
+                successful,
+                ongoingExposure.contextualConditions,
+                ongoingExposure.weatherSummary
             ),
         };
     }

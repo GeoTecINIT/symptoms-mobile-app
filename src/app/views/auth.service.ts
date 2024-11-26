@@ -76,6 +76,8 @@ export class AuthService {
 
         let i = 0;
         for (const cer of records) {
+            localRecordsStore.insert(cer, true);
+
             const exposureAggregate = await this.calculateAggregate(cer);
 
             if (i === records.length - 1)

@@ -12,6 +12,7 @@ import {
 import { ExposureChange } from "./change-record";
 import { Change } from "@awarns/core/entities";
 import { AreaOfInterest } from "@awarns/geofencing";
+import { ContextualConditions, WeatherSummary } from "~/app/core/weather";
 
 export class StartExposureTask extends Task {
     constructor(private store: ExposuresStore = exposures) {
@@ -35,8 +36,10 @@ export class StartExposureTask extends Task {
             }
         }
 
-        const contextualConditions = invocationEvent.data[0].contextualConditions;
-        const weatherSummary = invocationEvent.data[0].weatherSummary;
+        const contextualConditions: ContextualConditions =
+            invocationEvent.data[0].contextualConditions;
+        const weatherSummary: WeatherSummary =
+            invocationEvent.data[0].weatherSummary;
 
         let exposure: Exposure;
         if (!ongoingExposure) {
@@ -45,6 +48,8 @@ export class StartExposureTask extends Task {
                 place,
                 emotionValues: [],
                 successful: false,
+                ...(contextualConditions && { contextualConditions }), // short-circuit object construction
+                ...(weatherSummary && { weatherSummary }),
             };
             await this.store.insert(exposure);
         } else {

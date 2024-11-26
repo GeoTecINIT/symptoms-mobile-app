@@ -1,4 +1,5 @@
 import { AreaOfInterest } from "@awarns/geofencing";
+import { ContextualConditions, WeatherSummary } from "../../weather";
 
 export interface Exposure {
     id?: string;
@@ -7,6 +8,8 @@ export interface Exposure {
     place: AreaOfInterest;
     emotionValues: Array<EmotionValue>;
     successful: boolean;
+    weatherSummary?: WeatherSummary;
+    contextualConditions?: ContextualConditions;
 }
 
 export interface EmotionValue {

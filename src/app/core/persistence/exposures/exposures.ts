@@ -38,12 +38,16 @@ class ExposuresStoreDB implements ExposuresStore {
             endTime,
             emotionValues,
             successful,
+            contextualConditions,
+            weatherSummary,
         } = docFrom(exposure);
         await this.store.update(exposure.id, {
             startTime,
             endTime,
             emotionValues,
             successful,
+            contextualConditions,
+            weatherSummary,
         });
     }
 
@@ -95,6 +99,8 @@ function docFrom(exposure: Exposure): any {
         place,
         emotionValues,
         successful,
+        contextualConditions,
+        weatherSummary,
     } = exposure;
 
     return {
@@ -108,6 +114,10 @@ function docFrom(exposure: Exposure): any {
             })),
         ],
         successful,
+        contextualConditions: contextualConditions
+            ? contextualConditions
+            : null,
+        weatherSummary: weatherSummary ? weatherSummary : null,
     };
 }
 
@@ -119,6 +129,8 @@ function exposureFrom(doc: any): Exposure {
         place,
         emotionValues,
         successful,
+        contextualConditions,
+        weatherSummary,
     } = doc;
 
     return {
@@ -133,5 +145,8 @@ function exposureFrom(doc: any): Exposure {
             })),
         ],
         successful,
+        contextualConditions:
+            contextualConditions !== null ? contextualConditions : undefined,
+        weatherSummary: weatherSummary !== null ? weatherSummary : undefined,
     };
 }
