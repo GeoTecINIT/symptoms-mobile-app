@@ -27,7 +27,7 @@ export class CalculateExposureAggregate extends Task {
     ): Promise<TaskOutcome> {
         const exposureChange = invocationEvent.data as ExposureChange;
 
-        const { timestamp, emotionValues } = exposureChange;
+        const { timestamp, emotionValues, successful } = exposureChange;
         const { id, name } = exposureChange.place;
 
         const newEmotionValue = {
@@ -38,6 +38,7 @@ export class CalculateExposureAggregate extends Task {
             placeId: id,
             placeName: name,
             emotionValues: [newEmotionValue],
+            successful,
         };
 
         const prevAggregate = (await firstValueFrom(

@@ -1,7 +1,7 @@
 <ScrollView height="100%">
   <StackLayout>
     <Button
-      *ngIf="development"
+      *ngIf="false"
       marginTop="0"
       marginLeft="0"
       marginRight="0"
@@ -13,6 +13,7 @@
         *ngIf="hasLatestData; else noRecords"
         chartType="line"
         [record]="latestData"
+        [showPlaceName]="true"
       ></SymChartCard>
       <ng-template #noRecords>
         <SymIconTextCard

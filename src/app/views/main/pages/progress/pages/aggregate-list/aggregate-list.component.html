@@ -1,9 +1,13 @@
 <SymBackActionBar title="Tu evolución detallada"></SymBackActionBar>
 
 <ListView [items]="aggregates" separatorColor="White">
-    <ng-template let-item="item">
-        <SymProgressSection [title]="item.placeName" btnText="Exposiciones" (btnTap)="onSeeMoreTap(item.placeId)">
-            <SymChartCard chartType="bar" [record]="item"></SymChartCard>
-        </SymProgressSection>
-    </ng-template>
+  <ng-template let-item="item">
+    <SymProgressSection
+      [title]="item.placeName"
+      btnText="Ver más"
+      (btnTap)="onSeeMoreTap(item.placeId)"
+    >
+      <SymChartCard chartType="bar" [record]="item"></SymChartCard>
+    </SymProgressSection>
+  </ng-template>
 </ListView>

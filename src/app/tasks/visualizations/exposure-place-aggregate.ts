@@ -7,6 +7,7 @@ export class ExposurePlaceAggregate extends Record {
         public placeId: string,
         public placeName: string,
         public emotionValues: Array<EmotionValue>,
+        public successful: boolean,
         timestamp: Date = new Date()
     ) {
         super(AppRecordType.ExposurePlaceAggregate, timestamp);

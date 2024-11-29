@@ -5,6 +5,27 @@ export function formatAsDate(date: Date): string {
     return `${day}/${month}`;
 }
 
+export function formatAsDateText(date: Date): string {
+    const day = date.getDate();
+    const months = [
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre",
+    ];
+    const month = months[date.getMonth()];
+
+    return `${day} de ${month}, ${date.getFullYear()}`;
+}
+
 export function formatAsHour(date: Date): string {
     const hour = twoDigit(date.getHours());
     const minute = twoDigit(date.getMinutes());

@@ -36,8 +36,7 @@ export class QueriesApiAdapter {
         try {
             resp = await this.client.getAll(request);
         } catch (e) {
-            console.log(e);
-            console.log(e.message);
+            console.error(`${e}: ${e.message}`);
             return [];
         }
 
@@ -143,13 +142,6 @@ export class QueriesApiAdapter {
                     ),
                 };
             });
-
-        console.log(
-            `records length ${records.length}👉👉👉👉 ${JSON.stringify(
-                records
-            )}`
-        );
-        console.log("for request:", request);
 
         return records;
     }

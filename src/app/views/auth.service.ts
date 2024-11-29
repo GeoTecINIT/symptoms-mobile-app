@@ -66,43 +66,32 @@ export class AuthService {
                 this.accountService.deviceProfile.studyId
             );
 
-        const unwantedPlacesIds = ["lugar 1", "lugar 2", "lugar 3"];
+        const unwantedPlacesIds = [
+            "lugar 1",
+            "lugar 2",
+            "lugar 3",
+            "fake-place1",
+        ];
         const unwantedRecordsFilter = (ec: ExposureChange) =>
-            ec.successful && !unwantedPlacesIds.includes(ec.place.id);
+            !unwantedPlacesIds.includes(ec.place.id);
 
         const records = changeEndRecords.filter(unwantedRecordsFilter);
 
-        console.log("records length 👉👉👉👉", records.length);
-
-        let i = 0;
         for (const cer of records) {
             localRecordsStore.insert(cer, true);
 
             const exposureAggregate = await this.calculateAggregate(cer);
-
-            if (i === records.length - 1)
-                console.log(
-                    "final exposureAggregate 👉👉👉",
-                    exposureAggregate
-                );
-
             localRecordsStore.insert(exposureAggregate, true);
 
             const exposurePlaceAggregate = await this.calculatePlaceAggregate(
                 cer
             );
             localRecordsStore.insert(exposurePlaceAggregate, true);
-            i += 1;
         }
-
-        console.log(
-            "localRecordsStore.list 👉👉👉👉👉👉",
-            localRecordsStore.list()[0]
-        );
     }
 
     private async calculateAggregate(exposureChange: ExposureChange) {
-        const { timestamp, emotionValues } = exposureChange;
+        const { timestamp, emotionValues, successful } = exposureChange;
         const { id, name } = exposureChange.place;
 
         const newEmotionValue = {
@@ -113,6 +102,7 @@ export class AuthService {
             placeId: id,
             placeName: name,
             emotionValues: [newEmotionValue],
+            successful,
         };
 
         const prevAggregate = (await firstValueFrom(
@@ -145,7 +135,7 @@ export class AuthService {
     private async calculatePlaceAggregate(
         exposureChange: ExposureChange
     ): Promise<ExposurePlaceAggregate> {
-        const { timestamp, emotionValues } = exposureChange;
+        const { timestamp, emotionValues, successful } = exposureChange;
         const { id, name } = exposureChange.place;
 
         const newEntry: EmotionValue = {
@@ -163,7 +153,12 @@ export class AuthService {
             ? [...prevAggregate.emotionValues, newEntry]
             : [newEntry];
 
-        return new ExposurePlaceAggregate(id, name, updatedEmotionValues);
+        return new ExposurePlaceAggregate(
+            id,
+            name,
+            updatedEmotionValues,
+            successful
+        );
     }
 
     async logout(): Promise<void> {

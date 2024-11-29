@@ -15,4 +15,5 @@ export interface ExposureAggregatePoint {
     placeId: string;
     placeName: string;
     emotionValues: Array<EmotionValue>;
+    successful: boolean;
 }

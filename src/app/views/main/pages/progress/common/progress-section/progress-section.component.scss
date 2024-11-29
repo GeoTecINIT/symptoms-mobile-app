@@ -5,6 +5,10 @@ Label {
   margin-left: 4em;
 }
 
-StackLayout {
+StackLayout[row="0"] {
+  margin-right: 5em;
+}
+
+StackLayout[row="1"] {
   margin: 8 0 16 0;
 }

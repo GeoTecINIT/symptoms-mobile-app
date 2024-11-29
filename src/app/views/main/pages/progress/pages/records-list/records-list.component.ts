@@ -56,7 +56,8 @@ export class RecordsListComponent implements OnInit {
     private subscribeToRecordChanges() {
         const conditions: Array<FetchCondition> = [
             { property: "change", comparison: "=", value: Change.END },
-            { property: "successful", comparison: "=", value: true },
+            // now we don't filter out unsuccessful exposures
+            // { property: "successful", comparison: "=", value: true },
         ];
         if (this.placeId) {
             conditions.push({

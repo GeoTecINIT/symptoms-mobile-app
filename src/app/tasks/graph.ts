@@ -243,6 +243,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         // -> Confirms to start an exposure
         on("exposureStartConfirmed", run("startExposure"));
+        on("exposureStartConfirmed", run("clearNotifications"));
         on(
             "exposureStartConfirmed",
             run("emitSendNotificationForInitialQuestionsEvent")
@@ -584,9 +585,7 @@ class DemoTaskGraph implements TaskGraph {
                     type: TapActionType.DELIVER_QUESTIONS,
                     id: "post-exposure-questions",
                 },
-            })
-                .in(1, "minutes")
-                .cancelOn("stopEvent")
+            }).now()
         );
         on("exposureWasNotDroppedOut", run("calculateExposureAggregate"));
         on("exposureAggregateCalculated", run("writeRecords"));

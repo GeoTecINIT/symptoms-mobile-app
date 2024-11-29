@@ -52,6 +52,8 @@ const COLOR_SCHEME = [
     "#8BA568",
 ];
 
+const ERROR_COLOR = "#C43D32";
+
 const DATASET_COLOR_ALPHA = 0.7;
 
 export abstract class BaseChart<
@@ -64,6 +66,7 @@ export abstract class BaseChart<
     protected chart: BarLineChartBase<Entry, S, D>;
     protected dataStream$ = new ReplaySubject<Array<ChartData2D>>(1);
     protected readonly colorScheme: Array<Color>;
+    protected readonly errorColor: Color;
     protected internalData: Array<InternalChartData2D> = [];
 
     private xAxisFormatter?: AxisValueFormatter;
@@ -81,12 +84,31 @@ export abstract class BaseChart<
                 nsColor.b
             );
         });
+        const errorNsColor = new Color(ERROR_COLOR);
+        this.errorColor = new Color(
+            Math.round(DATASET_COLOR_ALPHA * 255),
+            errorNsColor.r,
+            errorNsColor.g,
+            errorNsColor.b
+        );
+    }
+
+    get isDataEmpty(): boolean {
+        return this.internalData.length === 0;
     }
 
     load(chart: BarLineChartBase<Entry, S, D>) {
         this.chart = chart;
         this.dataStream$.pipe(takeUntil(this.unloaded$)).subscribe((data) => {
-            if (data.length === 0 || data[0].values.length === 0) return;
+            if (data.length === 0 || data[0].values.length === 0) {
+                data = [
+                    {
+                        values: [{ x: new Date(), y: 0 }],
+                        label: "No Data",
+                        successful: false,
+                    },
+                ];
+            }
             this.plot(data);
         });
     }
@@ -125,7 +147,6 @@ export abstract class BaseChart<
     private parseData(data: Array<ChartData2D>) {
         if (this.xAxisFormatter) {
             this.internalData = this.xAxisFormatter.getProcessedData();
-
             return;
         }
         this.internalData = data as Array<InternalChartData2D>;
@@ -156,7 +177,6 @@ export abstract class BaseChart<
 
     private configureXAxis() {
         const xAxis = this.chart.getXAxis();
-        xAxis.setDrawLabels(false);
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setAxisLineColor(AXIS_LINE_COLOR);

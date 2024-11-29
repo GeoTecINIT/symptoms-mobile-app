@@ -11,11 +11,29 @@ export type ChartType = "line" | "bar";
     styleUrls: ["./chart-card.component.scss"],
 })
 export class ChartCardComponent {
-    @Input()
-    set record(record: Record) {
-        this.chartDescription = transformIntoChartDescription(record);
+    private _record: Record;
+    private _showPlaceName: boolean = false; // Default to false, adjust as needed
+
+    @Input() set record(value: Record) {
+        this._record = value;
+        this.updateChartDescription();
     }
+
+    @Input() set showPlaceName(value: boolean) {
+        this._showPlaceName = value;
+        this.updateChartDescription();
+    }
+
     @Input() chartType: ChartType;
 
     chartDescription: ChartDescription;
+
+    private updateChartDescription() {
+        if (this._record && this._showPlaceName !== undefined) {
+            this.chartDescription = transformIntoChartDescription(
+                this._record,
+                this._showPlaceName
+            );
+        }
+    }
 }

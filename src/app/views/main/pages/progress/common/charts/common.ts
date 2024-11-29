@@ -1,6 +1,7 @@
 export interface ChartData2D {
     label: string;
     values: Array<ChartEntry2D>;
+    successful: boolean;
 }
 
 export interface ChartEntry2D {
@@ -11,6 +12,7 @@ export interface ChartEntry2D {
 export interface InternalChartData2D {
     label: string;
     values: Array<InternalChartEntry2D>;
+    successful: boolean;
 }
 
 export interface InternalChartEntry2D {

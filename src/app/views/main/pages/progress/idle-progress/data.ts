@@ -37,8 +37,6 @@ export function createFakeDataGenerator(): DataGenerator {
             true
         );
 
-        console.log(JSON.stringify(`Fake exposure change: ${exposureChange}`));
-
         return exposureChange;
     };
 }
@@ -79,6 +77,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 30, 14, 25), y: 5 },
                         { x: new Date(2021, 3, 30, 14, 30), y: 3 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -107,6 +106,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 28, 12, 44), y: 5 },
                         { x: new Date(2021, 3, 28, 12, 49), y: 5 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -135,6 +135,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 27, 15, 25), y: 7 },
                         { x: new Date(2021, 3, 27, 15, 30), y: 7 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -163,6 +164,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 26, 19, 53), y: 3 },
                         { x: new Date(2021, 3, 26, 19, 58), y: 3 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -191,6 +193,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 23, 13, 52), y: 4 },
                         { x: new Date(2021, 3, 23, 13, 57), y: 3 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -219,6 +222,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 22, 13, 26), y: 5 },
                         { x: new Date(2021, 3, 22, 13, 31), y: 4 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -247,6 +251,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2021, 3, 20, 13, 46), y: 7 },
                         { x: new Date(2021, 3, 20, 13, 51), y: 6 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -275,6 +280,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2023, 4, 23, 11, 46), y: 4 },
                         { x: new Date(2023, 4, 23, 11, 51), y: 3 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -303,6 +309,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2023, 8, 4, 10, 46), y: 0 },
                         { x: new Date(2023, 8, 4, 10, 51), y: 1 },
                     ],
+                    successful: true,
                 },
             ],
         },
@@ -331,6 +338,7 @@ const FAKE_RECORDS_LIST: Array<ChartDescription> = [
                         { x: new Date(2023, 6, 12, 15, 46), y: 2 },
                         { x: new Date(2023, 6, 12, 15, 51), y: 1 },
                     ],
+                    successful: true,
                 },
             ],
         },

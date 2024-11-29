@@ -27,10 +27,13 @@ export class AxisDateFormatter implements AxisValueFormatter {
     getAxisLabel(value: any, axis: AxisBase): string {
         const date = this.getClosestDate(value);
         switch (this.resolution) {
+            // TODO: clean this up
             case Resolution.Date:
-                return formatAsDate(date);
+                // return formatAsDate(date);
+                return "";
             case Resolution.DateHour:
-                return formatAsDateHour(date);
+                return "";
+            // return formatAsDateHour(date);
             case Resolution.Hour:
                 return formatAsHour(date);
         }
@@ -124,6 +127,7 @@ export class AxisDateFormatter implements AxisValueFormatter {
         return {
             label: dataSet.label,
             values,
+            successful: dataSet.successful,
         };
     }
 

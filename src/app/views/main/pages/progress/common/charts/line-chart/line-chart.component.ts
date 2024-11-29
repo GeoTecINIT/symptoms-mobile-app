@@ -18,7 +18,8 @@ import { ChartData2D, CuttingLines, YAxisDataRange } from "../common";
 })
 export class LineChartComponent
     extends BaseChart<LineDataSet, LineData>
-    implements OnDestroy {
+    implements OnDestroy
+{
     @Input()
     set data(data: Array<ChartData2D>) {
         this.dataStream$.next(data);
@@ -49,7 +50,9 @@ export class LineChartComponent
 
     private generateDataSet(index: number, dataSet: ChartData2D): LineDataSet {
         const set = new LineDataSet(dataSet.values, dataSet.label, "x", "y");
-        set.setColor(this.colorScheme[index]);
+        set.setColor(
+            dataSet.successful ? this.colorScheme[index] : this.errorColor
+        );
         set.setLineWidth(3);
         set.setMode(Mode.CUBIC_BEZIER);
 

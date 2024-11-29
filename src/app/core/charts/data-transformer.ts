@@ -2,7 +2,7 @@ import { Record } from "@awarns/core/entities";
 import { ChartDescription } from "~/app/core/charts/chart-description";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { ExposureChange } from "~/app/tasks/exposure";
-import { formatAsDate } from "~/app/core/utils/time";
+import { formatAsDate, formatAsDateText } from "~/app/core/utils/time";
 import {
     CuttingLines,
     YAxisDataRange,
@@ -13,11 +13,15 @@ import {
 } from "~/app/tasks/visualizations";
 
 export function transformIntoChartDescription(
-    record: Record
+    record: Record,
+    showPlaceName?: boolean // This is a variable that only affects to ExposureChange line charts in order to change the title and subtitle content
 ): ChartDescription {
     switch (record.type) {
         case AppRecordType.ExposureChange:
-            return transformExposureChange(record as ExposureChange);
+            return transformExposureChange(
+                record as ExposureChange,
+                showPlaceName
+            );
         case AppRecordType.ExposureAggregate:
             return transformExposureAggregate(record as ExposureAggregate);
         case AppRecordType.ExposurePlaceAggregate:
@@ -32,26 +36,29 @@ export function transformIntoChartDescription(
 }
 
 function transformExposureChange(
-    exposureChange: ExposureChange
+    exposureChange: ExposureChange,
+    showPlaceName: boolean
 ): ChartDescription {
     return {
         iconCode: "\ue55e",
-        title: `En ${exposureChange.place.name}`,
-        subtitle: `(${formatAsDate(
-            exposureChange.timestamp
-        )}) Nivel de ansiedad`,
+        title: showPlaceName
+            ? `En ${exposureChange.place.name}`
+            : `${formatAsDateText(exposureChange.timestamp)}`,
+        subtitle: getSubtitle(exposureChange, showPlaceName),
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
             data: [
                 {
-                    label: "Nivel de ansiedad",
+                    // label: `Nivel de ansiedad`,
+                    label: `${exposureChange.timestamp}`,
                     values: exposureChange.emotionValues.map(
                         (emotionValue) => ({
                             x: emotionValue.timestamp,
                             y: emotionValue.value,
                         })
                     ),
+                    successful: exposureChange.successful,
                 },
             ],
         },
@@ -77,6 +84,7 @@ function transformExposureAggregate(
                             y: emotionValue.value,
                         })
                     ),
+                    successful: placeAggregate.successful,
                 };
                 return obj;
             }),
@@ -96,13 +104,14 @@ function transformExposurePlaceAggregate(
             cuttingLines: ANXIETY_THRESHOLDS,
             data: [
                 {
-                    label: "Nivel de ansiedad medio",
+                    label: `Nivel de ansiedad medio`,
                     values: exposurePlaceAggregate.emotionValues.map(
                         (emotionValue) => ({
                             x: emotionValue.timestamp,
                             y: emotionValue.value,
                         })
                     ),
+                    successful: exposurePlaceAggregate.successful,
                 },
             ],
         },
@@ -119,3 +128,20 @@ const ANXIETY_THRESHOLDS: CuttingLines = [
     { label: "Moderada", value: 5 },
     { label: "Alta", value: 8 },
 ];
+
+function getSubtitle(
+    exposureChange: ExposureChange,
+    showPlaceName: boolean
+): string {
+    const subtitle = `${
+        exposureChange.emotionValues.length > 1
+            ? `Exposición ${
+                  exposureChange.successful ? "completada" : "interrumpida"
+              }`
+            : "No se recogieron suficientes datos"
+    }`;
+
+    return showPlaceName
+        ? formatAsDateText(exposureChange.timestamp)
+        : subtitle;
+}
