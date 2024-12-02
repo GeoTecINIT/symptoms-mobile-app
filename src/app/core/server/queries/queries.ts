@@ -15,46 +15,14 @@ import { ExposureChange } from "~/app/tasks/exposure";
 import { AreaOfInterest } from "@awarns/geofencing";
 import { ContextualConditions, WeatherSummary } from "../../weather";
 import { EmotionValue } from "../../persistence/exposures";
+import { getLogger, Logger } from "../../utils/logger";
 
 export class QueriesApiAdapter {
     private readonly client: RecordQueriesPromiseClient;
+    private logger: Logger;
 
     constructor(url: string, options: GRPCServiceOptions) {
         this.client = new RecordQueriesPromiseClient(url, null, options);
-    }
-
-    async getAllExposureAggregate(
-        patientId: string,
-        studyId: string
-    ): Promise<Record[]> {
-        const request = new GetAllRequest();
-        request.setPatientId(patientId);
-        request.setStudyId(studyId);
-        request.setRecordType("exposure-aggregate");
-
-        let resp;
-        try {
-            resp = await this.client.getAll(request);
-        } catch (e) {
-            console.error(`${e}: ${e.message}`);
-            return [];
-        }
-
-        const records: Record[] = resp.getRecordsList().map((record) => ({
-            id: record.getId(),
-            type: record.getType(),
-            timestamp: record.getTimestamp()!.toDate(),
-            change: this.recordChangeFrom(record.getChange()),
-            data: JSON.parse(record.getPayload()).data.map((dataPoint) => ({
-                ...dataPoint,
-                emotionValues: dataPoint.emotionValues.map((emotionValue) => ({
-                    value: emotionValue.value,
-                    timestamp: this.transformTimestamp(emotionValue.timestamp),
-                })),
-            })),
-        }));
-
-        return records;
     }
 
     private transformEmotionValues(
@@ -118,8 +86,9 @@ export class QueriesApiAdapter {
         try {
             resp = await this.client.getAll(request);
         } catch (e) {
-            console.log(e);
-            console.log(e.message);
+            this.getLogger().error(
+                `Something went wrong in getAll exposures-change request for patient ${patientId} and study ${studyId}`
+            );
             return [];
         }
 
@@ -156,5 +125,13 @@ export class QueriesApiAdapter {
             this.getAllChangeEnd(patientId, studyId),
         ]);
         return [exposureAggregateRecords, changeEndRecords];
+    }
+
+    private getLogger() {
+        if (!this.logger) {
+            this.logger = getLogger("QueriesController");
+        }
+
+        return this.logger;
     }
 }

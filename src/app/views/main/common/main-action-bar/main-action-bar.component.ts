@@ -122,6 +122,7 @@ export class MainActionBarComponent {
             await handleWatchToUse();
             const isReady = await preparePlugin();
 
+            // TODO: remove this function's logs
             if (isReady !== true) {
                 console.log(
                     "👉👉👉 onHandleWatchTap notReady hasWatchConnected",

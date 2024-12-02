@@ -1,5 +1,6 @@
 import { awarns } from "@awarns/core";
 import { Task } from "@awarns/core/tasks";
+import { getLogger } from "../utils/logger";
 
 export async function preparePlugin(): Promise<boolean | Task[]> {
     // nuevo tipo que tenga success y array de tareas
@@ -11,7 +12,7 @@ export async function preparePlugin(): Promise<boolean | Task[]> {
         await awarns.prepare();
         return true;
     } catch (e) {
-        console.log(e);
+        getLogger("Error: ").error(`Tasks are not ready. Reason: ${e}`);
         return tasksNotReady;
     }
 }

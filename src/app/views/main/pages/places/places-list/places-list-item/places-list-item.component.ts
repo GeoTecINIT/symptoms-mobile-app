@@ -16,6 +16,7 @@ import { Subject, takeUntil } from "rxjs";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { FetchCondition, recordsStore } from "@awarns/persistence";
 import { ExtendedAreaOfInterest } from "~/app/core/account/app-config";
+import { Logger, getLogger } from "~/app/core/utils/logger";
 
 // To standarize contextual condition from any interface to text and boolean
 export interface FormatedContextualCondition {
@@ -38,6 +39,8 @@ export class PlacesListItemComponent {
     records: Array<Record> = [];
 
     private unloaded$ = new Subject<void>();
+
+    private logger: Logger;
 
     constructor(private ngZone: NgZone) {}
 
@@ -159,7 +162,9 @@ export class PlacesListItemComponent {
             const animation = new Animation(animationDefs);
 
             animation.play().catch((e) => {
-                console.log("Error during animation:", e);
+                this.getLogger().error(
+                    `Error during animation in places list item: ${e}`
+                );
             });
         }
     }
@@ -203,5 +208,13 @@ export class PlacesListItemComponent {
             case Weather.CLOUDS:
                 return "Nublado";
         }
+    }
+
+    private getLogger() {
+        if (!this.logger) {
+            this.logger = getLogger("PlacesListController");
+        }
+
+        return this.logger;
     }
 }
