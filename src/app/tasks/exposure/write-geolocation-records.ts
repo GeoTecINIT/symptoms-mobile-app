@@ -21,8 +21,11 @@ export class WriteGeolocationRecordsTask extends Task {
     ): Promise<void> {
         const ongoingExposure = await this.store.getLastUnfinished();
         if (!ongoingExposure) return;
-
+        
+        // Add exposureId field in the geolocation record 
+        const data = { ...invocationEvent.data, exposureId: ongoingExposure.id }
+        
         // Only store geolocation when there is an ongoing pre-exposure/exposure
-        return writeRecordsTask().run(taskParams, invocationEvent);
+        return writeRecordsTask().run(taskParams, { ...invocationEvent, data });
     }
 }
