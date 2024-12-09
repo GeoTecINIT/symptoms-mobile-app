@@ -101,6 +101,7 @@ export class QueriesApiAdapter {
                     type: record.getType(),
                     timestamp: record.getTimestamp()!.toDate(),
                     change: this.recordChangeFrom(record.getChange()),
+                    exposureId: payload.id as string,
                     place: payload.place as AreaOfInterest,
                     successful: payload.successful,
                     contextualConditions:

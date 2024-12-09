@@ -34,6 +34,7 @@ export class FinishExposureTask extends Task {
             result: new ExposureChange(
                 Change.END,
                 ongoingExposure.endTime,
+                ongoingExposure.id,
                 ongoingExposure.place,
                 ongoingExposure.emotionValues,
                 successful,

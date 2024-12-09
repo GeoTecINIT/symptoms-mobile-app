@@ -42,6 +42,8 @@ export class StartExposureTask extends Task {
             invocationEvent.data[0].weatherSummary;
 
         let exposure: Exposure;
+        let exposureId: string;
+
         if (!ongoingExposure) {
             exposure = {
                 startTime: new Date(),
@@ -51,9 +53,15 @@ export class StartExposureTask extends Task {
                 ...(contextualConditions && { contextualConditions }), // short-circuit object construction
                 ...(weatherSummary && { weatherSummary }),
             };
-            await this.store.insert(exposure);
+            exposureId = await this.store.insert(exposure);
         } else {
-            exposure = { ...ongoingExposure, startTime: new Date() };
+            exposureId = ongoingExposure.id;
+            exposure = { 
+                ...ongoingExposure, 
+                startTime: new Date(),
+                ...(contextualConditions && { contextualConditions }), // short-circuit object construction
+                ...(weatherSummary && { weatherSummary }) 
+            };
             await this.store.update(exposure);
         }
 
@@ -61,6 +69,7 @@ export class StartExposureTask extends Task {
             result: new ExposureChange(
                 Change.START,
                 exposure.startTime,
+                exposureId,
                 exposure.place,
                 exposure.emotionValues,
                 false,

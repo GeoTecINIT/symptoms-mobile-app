@@ -94,6 +94,7 @@ export const exposures = new ExposuresStoreDB();
 
 function docFrom(exposure: Exposure): any {
     const {
+        id,
         startTime,
         endTime,
         place,
@@ -104,6 +105,7 @@ function docFrom(exposure: Exposure): any {
     } = exposure;
 
     return {
+        id: id, 
         startTime: startTime ? startTime.getTime() : -1,
         endTime: endTime ? endTime.getTime() : -1,
         place,

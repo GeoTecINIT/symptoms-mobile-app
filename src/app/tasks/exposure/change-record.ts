@@ -8,6 +8,7 @@ export class ExposureChange extends Record {
     constructor(
         change: Change,
         timestamp: Date,
+        public exposureId: string,
         public place: AreaOfInterest,
         public emotionValues: Array<EmotionValue>,
         public successful: boolean = false,
