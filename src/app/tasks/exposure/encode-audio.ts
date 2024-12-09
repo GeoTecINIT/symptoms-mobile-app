@@ -8,12 +8,17 @@ import { DispatchableEvent, Task, TaskOutcome, TaskParams } from "@awarns/core/t
 import { EventData } from "@awarns/core/events";
 
 import { getLogger } from "~/app/core/utils/logger";
+import {
+    Exposure,
+    exposures,
+    ExposuresStore,
+} from "~/app/core/persistence/exposures";
 
 // This task takes the records from user-feedback and questionnaire-answers modals
 // and encode the audios in base64 (if present). This task must be done before the 
 // writeRecords task. 
 export class EncodeAudioTask extends Task {
-    constructor() {
+    constructor(private store: ExposuresStore = exposures) {
         super("encodeAudio", {
             // Different output names are needed because different tasks are executed after the audio encoding for feedback and questionnaires
             // There is a distinction in questionnaires. When an exposure is finished, some post-exposure questions are asked and, unlike exposure 
@@ -30,7 +35,12 @@ export class EncodeAudioTask extends Task {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<void | TaskOutcome> {
-        let invocationEventData: EventData = invocationEvent.data;
+        const ongoingExposure = await this.store.getLastUnfinished();
+        if (!ongoingExposure) return;
+
+        const exposureId: string = ongoingExposure.id;
+        let invocationEventData: EventData = { ...invocationEvent.data, exposureId };
+
         let eventName = "";
         switch (invocationEventData.type) {
             case "user-feedback":
