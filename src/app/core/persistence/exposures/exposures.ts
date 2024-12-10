@@ -4,6 +4,7 @@ import { AwarnsStore, QueryLogicalOperator } from "@awarns/persistence";
 export interface ExposuresStore {
     insert(exposure: Exposure): Promise<string>;
     getLastUnfinished(andStarted?: boolean): Promise<Exposure>;
+    getLastFinished(): Promise<Exposure>;
     update(exposure: Exposure): Promise<void>;
     getAll(): Promise<Array<Exposure>>;
     remove(id: string): Promise<void>;
@@ -79,6 +80,22 @@ class ExposuresStoreDB implements ExposuresStore {
         }
 
         return unfinished[0];
+    }
+
+    async getLastFinished(): Promise<Exposure> {
+        const query: any = {
+            select: [],
+            where: [{ property: "endTime", comparison: "notEqualTo", value: -1 }],
+            order: [{ property: "startTime", direction: "desc" }],
+        };
+        
+        const finished = await this.store.fetch(query);
+
+        if (finished.length === 0) {
+            return null;
+        }
+
+        return finished[0];
     }
 
     async remove(id: string): Promise<void> {

@@ -14,6 +14,10 @@ import {
     ExposuresStore,
 } from "~/app/core/persistence/exposures";
 
+const AUDIOS_ENCODED_IN_FEEDBACK = "audiosEncodedInFeedback";
+const AUDIOS_ENCODED_IN_QUESTIONNAIRE = "audiosEncodedInQuestionnaire";
+const AUDIOS_ENCODED_IN_QUESTIONNAIRE_WITHOUT_PROCESSING = "audiosEncodedInQuestionnaireWithoutProcessing"; 
+
 // This task takes the records from user-feedback and questionnaire-answers modals
 // and encode the audios in base64 (if present). This task must be done before the 
 // writeRecords task. 
@@ -24,9 +28,9 @@ export class EncodeAudioTask extends Task {
             // There is a distinction in questionnaires. When an exposure is finished, some post-exposure questions are asked and, unlike exposure 
             // questions, these don't need to be processed (processExposureAnswers task).    
             outputEventNames: [
-                "audiosEncodedInFeedback", 
-                "audiosEncodedInQuestionnaire",
-                "audiosEncodedInQuestionnaireWithoutProcessing"
+                AUDIOS_ENCODED_IN_FEEDBACK,
+                AUDIOS_ENCODED_IN_QUESTIONNAIRE,
+                AUDIOS_ENCODED_IN_QUESTIONNAIRE_WITHOUT_PROCESSING
             ]
         })
     }
@@ -35,26 +39,29 @@ export class EncodeAudioTask extends Task {
         taskParams: TaskParams,
         invocationEvent: DispatchableEvent
     ): Promise<void | TaskOutcome> {
-        const ongoingExposure = await this.store.getLastUnfinished();
-        if (!ongoingExposure) return;
+        const exposureId = 
+            (await this.store.getLastUnfinished())?.id ?? 
+            (await this.store.getLastFinished())?.id;
 
-        const exposureId: string = ongoingExposure.id;
+        if (!exposureId) return;
+
         let invocationEventData: EventData = { ...invocationEvent.data, exposureId };
 
-        let eventName = "";
+        let eventName = AUDIOS_ENCODED_IN_FEEDBACK;
         switch (invocationEventData.type) {
             case "user-feedback":
                 invocationEventData = this.replaceAudioPathInAnswers(invocationEventData);
-                eventName= "audiosEncodedInFeedback";
+                eventName = AUDIOS_ENCODED_IN_FEEDBACK;
                 break;
             case "questionnaire-answers":
                 invocationEventData = this.replaceAudioPathInQuestions(invocationEventData);
                 eventName = invocationEventData.questionnaireId === "post-exposure-questions" 
-                    ? "audiosEncodedInQuestionnaireWithoutProcessing" 
-                    : "audiosEncodedInQuestionnaire";
+                    ? AUDIOS_ENCODED_IN_QUESTIONNAIRE_WITHOUT_PROCESSING 
+                    : AUDIOS_ENCODED_IN_QUESTIONNAIRE;
                 break;
         }
-        return { eventName, result: invocationEventData };
+
+        return { eventName: eventName, result: invocationEventData };
     }
 
     private replaceAudioPathInAnswers(invocationEventData: EventData) {
