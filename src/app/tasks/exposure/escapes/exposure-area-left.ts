@@ -4,6 +4,7 @@ import { AppRecordType } from "~/app/core/app-record-type";
 
 export class ExposureAreaLeftRecord extends Record {
     constructor(
+        public exposureId, 
         public place: AreaOfInterest,
         change: Change,
         timestamp: Date = new Date()

@@ -43,6 +43,7 @@ export abstract class ExposurePresenceChecker extends Task {
                 return {
                     eventName: this.outputEvent,
                     result: new ExposureAreaLeftRecord(
+                        ongoingExposure.id,
                         ongoingExposure.place,
                         this.change
                     ),
