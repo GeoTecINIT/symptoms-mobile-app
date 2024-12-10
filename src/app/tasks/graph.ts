@@ -295,7 +295,7 @@ class DemoTaskGraph implements TaskGraph {
         // on("sendExposureProgress", run("sendPlainMessageToWatch"));
         // on("plainMessageSent", run("writeRecords"));
 
-        on("watchHeartRateSamplesAcquired", run("writeRecords"));
+        on("watchHeartRateSamplesAcquired", run("writeHeartRateRecords"));
         // END: Pre-exposure events
 
         // START: Exposure events
