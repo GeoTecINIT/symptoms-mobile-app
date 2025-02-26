@@ -32,7 +32,6 @@ registerElement(
         PlacesListInfoDialogComponent,
         PlacesListItemConditionComponent,
     ],
-    entryComponents: [PlacesListInfoDialogComponent],
     exports: [PlacesContainerComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })

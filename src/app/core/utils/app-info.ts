@@ -1,8 +1,11 @@
 import { Application, isAndroid } from "@nativescript/core";
+import { android as AndroidApplication } from "@nativescript/core/application";
 
 export function getPackageName(): string {
     if (isAndroid) {
-        return Application.android.context.getPackageName();
+        const context =
+            AndroidApplication.context || Application.android.nativeApp;
+        return context.getPackageName();
     } else {
         return NSBundle.mainBundle.bundleIdentifier;
     }
@@ -31,10 +34,12 @@ export interface DeviceInfo {
 export function getVersionName(): string {
     if (isAndroid) {
         const PackageManager = android.content.pm.PackageManager;
-        const pkg = Application.android.context
+        const context =
+            AndroidApplication.context || Application.android.nativeApp;
+        const pkg = context
             .getPackageManager()
             .getPackageInfo(
-                Application.android.context.getPackageName(),
+                context.getPackageName(),
                 PackageManager.GET_META_DATA
             );
 
@@ -42,6 +47,6 @@ export function getVersionName(): string {
     } else {
         return NSBundle.mainBundle.objectForInfoDictionaryKey(
             "CFBundleVersion"
-        );
+        ) as string;
     }
 }

@@ -15,9 +15,8 @@ import { ContextualConditionItem } from "./modal-body/contextual-conditions-card
         CompletionScreenComponent,
         ContextualConditionsComplianceDialogComponent,
         ContextualConditionsCard,
-        ContextualConditionItem
+        ContextualConditionItem,
     ],
-    entryComponents: [ContextualConditionsComplianceDialogComponent],
     schemas: [NO_ERRORS_SCHEMA],
     exports: [ModalBodyComponent, CompletionScreenComponent],
 })

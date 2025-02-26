@@ -14,6 +14,9 @@ class RemoteRecordsStore implements RecordsStore {
         private accountInfo: Account,
         private serverClient: ServerApiClient
     ) {}
+    deleteBy(recordType: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     async insert(record: Record): Promise<void> {
         const { patientId, studyId, deviceId } = await getUploadMetadata(
@@ -62,6 +65,8 @@ class RemoteRecordsStore implements RecordsStore {
     clear(): Promise<void> {
         throw new Error("Unimplemented");
     }
+
+    async deleteby(recordType): Promise<void> {}
 }
 
 export const remoteRecords = new RemoteRecordsStore(account, serverApi);

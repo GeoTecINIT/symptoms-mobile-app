@@ -10,8 +10,12 @@ const EXPORTS_FOLDER = "exports";
 export async function exportData(exportWindowTitle: string): Promise<string> {
     const exportsFolder = knownFolders.temp().getFolder(EXPORTS_FOLDER);
 
-    await createRecordsExporter(exportsFolder, "csv", "records").export();
-    await createRecordsExporter(exportsFolder, "json", "records").export();
+    await createRecordsExporter(exportsFolder, "csv", {
+        fileName: "records",
+    }).export();
+    await createRecordsExporter(exportsFolder, "json", {
+        fileName: "records",
+    }).export();
 
     await createTracesExporter(exportsFolder, "csv", "traces").export();
     await createTracesExporter(exportsFolder, "json", "traces").export();
