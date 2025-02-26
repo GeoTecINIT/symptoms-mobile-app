@@ -3,7 +3,6 @@ import { Task } from "@awarns/core/tasks";
 import { getLogger } from "../utils/logger";
 
 export async function preparePlugin(): Promise<boolean | Task[]> {
-    // nuevo tipo que tenga success y array de tareas
     const isReady = await awarns.isReady();
     const tasksNotReady = await awarns.tasksNotReady$;
 

@@ -111,7 +111,7 @@ export class UnderExposureComponent {
         this.underExposureService.exposureProgress$
             .pipe(
                 takeUntil(this.unloaded$),
-                filter(exposureProgress => exposureProgress !== undefined)
+                filter((exposureProgress) => exposureProgress !== undefined)
             )
             .subscribe((exposureProgress) => {
                 this.ngZone.run(() => {

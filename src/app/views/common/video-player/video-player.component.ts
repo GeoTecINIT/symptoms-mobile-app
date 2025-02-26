@@ -1,7 +1,15 @@
-import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, AfterContentInit } from "@angular/core";
+import {
+    Component,
+    ElementRef,
+    Input,
+    ViewChild,
+    AfterViewInit,
+    OnDestroy,
+    AfterContentInit,
+} from "@angular/core";
 
 import { registerElement } from "@nativescript/angular";
-import { Video } from '@nstudio/nativescript-exoplayer';
+import { Video } from "@nstudio/nativescript-exoplayer";
 registerElement("Video", () => Video);
 
 @Component({
@@ -10,7 +18,7 @@ registerElement("Video", () => Video);
     styleUrls: ["./video-player.component.scss"],
 })
 export class VideoPlayerComponent implements OnDestroy {
-    @Input() src: string = '';
+    @Input() src: string = "";
     @Input() height: number = 300;
 
     @ViewChild("player") private player: ElementRef;
