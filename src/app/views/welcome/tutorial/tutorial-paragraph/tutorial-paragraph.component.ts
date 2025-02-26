@@ -8,4 +8,5 @@ import { Component, Input } from "@angular/core";
 export class TutorialParagraphComponent {
     @Input() text = "";
     @Input() bold = false;
+    @Input() fontSize = 15;
 }

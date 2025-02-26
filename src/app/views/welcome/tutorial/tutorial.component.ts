@@ -60,4 +60,18 @@ export class TutorialComponent implements OnInit {
             }
         });
     }
+
+    async proceedWithSetup() {
+        const setupComplete = await preparePlugin();
+        if (setupComplete) {
+            emitTreatmentStartEvent();
+            this.appSettingsService.markSetupAsComplete();
+            this.navigationService.navigate(["../setup-confirmation"], {
+                source: this.activeRoute,
+                clearHistory: true,
+            });
+        } else {
+            this.dialogsService.showInfo(infoOnPermissionsNeed);
+        }
+    }
 }

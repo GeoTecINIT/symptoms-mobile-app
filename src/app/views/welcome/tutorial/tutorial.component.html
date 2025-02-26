@@ -4,62 +4,66 @@
   <StackLayout>
     <Label class="header" text="¡Hola! 👋"></Label>
     <SymTutorialParagraph
-      text="Te damos la bienvenida a SyMptOMS. Al empezar con la terapia has dado un paso importante para  mejorar tu problema. Al instalar esta aplicación, esperamos además que te sientas acompañado/a durante las tareas que te recomendamos dentro de la terapia. Nos esperan unas semanas de intenso trabajo para superar tu problema, juntos podremos lograrlo"
+      text="Bienvenido a SyMptOMS. Al iniciar tu terapia, has dado un gran paso para mejorar tu problema. Esta app te acompañará con tareas y seguimiento. ¡Juntos podremos lograrlo!"
     ></SymTutorialParagraph>
+
     <SymVideoPlayer #player src="~/media/videos/Geovid00.mp4"></SymVideoPlayer>
-    <SymTutorialParagraph
-      text="Antes de continuar, es necesario configurar ciertos aspectos de tu teléfono para asegurar el correcto funcionamiento de la aplicación."
-    ></SymTutorialParagraph>
-    <SymTutorialParagraph
-      text="A continuación, se te solicitará tu permiso para que la aplicación pueda acceder a algunas funcionalidades de tu teléfono con el fin de poder acompañarte en el camino y ofrecerte un tratamiento más eficaz y cercano."
-    ></SymTutorialParagraph>
-    <SymTutorialParagraph
-      text="Probablemente te preguntarás, ¿por qué tenemos que pedirte permiso? Esto se debe a que la información que esta aplicación recoge se considera habitualmente sensible, ya que puede utilizarse para identificarte (por ejemplo, tu ubicación)."
-    ></SymTutorialParagraph>
-    <SymVideoPlayer #player src="~/media/videos/Geovid01.mp4"></SymVideoPlayer>
-    <SymTutorialParagraph
-      text="En SyMptOMS nos tomamos muy en serio tu privacidad y por ello cuando trabajamos con esta información en ningún momento almacenamos otra información (nombre, DNI, correo electrónico) que pueda utilizarse para identificarte directamente. Te habrás fijado que te hemos pedido una clave anónima en el paso anterior y no un correo electrónico, esto es una muestra de nuestro compromiso con la privacidad de nuestros usuarios."
-    ></SymTutorialParagraph>
-    <SymTutorialParagraph
-      text="Detrás de SyMptOMS no hay ninguna empresa, somos un equipo de investigadores e investigadoras que trabajamos en la universidad pública y nuestro único objetivo para recoger tus datos no es otro que ayudarte, a ti y a otras personas que como tú quieren disfrutar de una mejor calidad de vida."
-    ></SymTutorialParagraph>
+
     <SymButtonLink
       text="Puedes saber más sobre el proyecto aquí"
       (tap)="onOpenProjectWebsiteTap()"
+      [margin]="6"
     ></SymButtonLink>
+
     <SymTutorialParagraph
-      text="Los datos que nos proporciones se utilizarán únicamente para ofrecerte un mejor tratamiento. Si lo deseas, de forma opcional y siempre y cuando nos des tu consentimiento expreso (al activar la opción que se encuentra a continuación), puedes ceder tu información (debidamente anonimizada) para futuros estudios científicos relacionados. De ser así, nos comprometemos a no desvelar públicamente ningún tipo de información que pueda exponerte o atentar contra tu intimidad. Al hacerlo, ayudarás a que esta aplicación perdure más tiempo."
+      text="Antes de continuar, es necesario configurar tu teléfono y conceder los permisos necesarios para que la app funcione correctamente. Así recibirás un tratamiento eficaz y cercano."
     ></SymTutorialParagraph>
+
+    <SymVideoPlayer #player src="~/media/videos/Geovid01.mp4"></SymVideoPlayer>
+
+    <SymTutorialParagraph
+      text="Recopilamos datos sensibles, como tu ubicación, para ayudarte con exposiciones guiadas. No guardamos información que te identifique (nombre, DNI o correo) ni almacenamos datos fuera de las exposiciones. Somos un equipo universitario dedicado a tu bienestar."
+    ></SymTutorialParagraph>
+
     <SymButtonLink
       text="Consulta nuestra política de privacidad aquí"
       (tap)="onOpenPrivacyPolicyTap()"
+      [margin]="6"
     ></SymButtonLink>
+
+    <SymTutorialParagraph
+      text="Para ayudar a avanzar en la investigación en tratamientos digitales, te pedimos ceder tus datos de exposiciones anonimizados para un análisis más detallado."
+    ></SymTutorialParagraph>
+
     <SymDataSharingOption
       marginBottom="18"
       [italic]="true"
       [bold]="true"
     ></SymDataSharingOption>
+
     <SymTutorialParagraph
-      text="En el caso de no querer compartir tus datos, toda la información que pueda utilizarse para identificarte será eliminada una vez finalices el tratamiento."
+      text="También te pedimos compartir información de errores de la app para corregirlos rápidamente. En cualquier momento podrás modificar estas opciones en los ajustes."
     ></SymTutorialParagraph>
-    <SymTutorialParagraph
-      text="De forma similar, puedes marcar la opción que encontrarás a continuación si deseas que la aplicación nos avise automáticamente en el caso de que se produzca un fallo para poder solucionarlo cuanto antes."
-    ></SymTutorialParagraph>
+
     <SymReportUsageOption
       marginBottom="18"
       [italic]="true"
       [bold]="true"
     ></SymReportUsageOption>
+
     <SymTutorialParagraph
-      text="Si en algún momento cambias de opinión, puedes cambiar estas opciones a través de los ajustes de la aplicación."
+      text="Finalmente, pedimos permisos para recopilar ubicación (GPS) y desactivar las restricciones de batería para un seguimiento continuo durante exposiciones; consulta con tu terapeuta si tienes dudas."
     ></SymTutorialParagraph>
+
     <SymTutorialParagraph
-      text="Dicho esto, vamos a proceder a configurar tu teléfono. Una vez pulses el botón de configurar se te mostrarán una serie de diálogos de solicitud de permisos. Es importante que los aceptes todos para el correcto funcionamiento de la aplicación. Si tienes dudas sobre para qué se solicita cada permiso, consulta a tu terapeuta."
+      text="Al finalizar el tratamiento se eliminará toda la información que pueda identificarte si así lo deseas."
     ></SymTutorialParagraph>
+
     <SymTutorialParagraph
       bold="true"
-      text="Nota: es importante que hayas configurado previamente tu teléfono para que no aplique restricciones de uso de batería sobre esta aplicación, con el fin de poder realizarte un seguimiento eficaz y estar contigo en todo momento. Consulta a tu terapeuta si no sabes cómo hacerlo y te proporcionará las instrucciones necesarias."
+      text="Al pulsar “Configurar” verás los permisos necesarios. Aceptarlos es fundamental para que la app funcione correctamente."
     ></SymTutorialParagraph>
+
     <SymPrimaryButton
       text="Configurar"
       horizontalAlignment="center"
@@ -67,5 +71,16 @@
       (tap)="onConfigureTap()"
     >
     </SymPrimaryButton>
+
+    <Image
+      margin="16 20 6 20"
+      src="~/media/images/tutorial/logo_Ministerio_ciencia_v2.jpg"
+      stretch="aspectFit"
+    ></Image>
+
+    <SymTutorialParagraph
+      text='Esta aplicación se enmarca dentro del proyecto coordinado "Maximizing the efficacy of in vivo exposure therapy using smartphone-assisted just-in-time adaptive intervention for anxiety disorder"'
+      fontSize="11"
+    ></SymTutorialParagraph>
   </StackLayout>
 </ScrollView>

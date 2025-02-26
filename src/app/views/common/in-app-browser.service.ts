@@ -7,8 +7,10 @@ import { getLogger, Logger } from "~/app/core/utils/logger";
 const actionBarBgColor = "#FAFAFA";
 const actionBarTextColor = "#212121";
 
-const domain = "symptoms.uji.es";
-const privacyPolicyRoute = "/privacy-policy";
+// const domain = "symptoms.uji.es";
+// https://symptoms-app.com/privacy-policy.html
+const domain = "symptoms-app.com/es";
+const privacyPolicyRoute = "/privacy-policies.html";
 
 @Injectable({
     providedIn: CommonComponentsModule,
