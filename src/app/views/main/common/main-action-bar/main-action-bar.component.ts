@@ -3,7 +3,11 @@ import { Component, Input } from "@angular/core";
 import { SettingsModalService } from "../../modals/settings/settings-modal.service";
 import { SimulationModalService } from "../../modals/simulation/simulation-modal.service";
 import { getConfig } from "~/app/core/config";
-import { AdvancedSetting, AdvancedSettingsService } from "~/app/core/account";
+import {
+    AccountService,
+    AdvancedSetting,
+    AdvancedSettingsService,
+} from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
 import { preparePlugin, handleWatchToUse } from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
@@ -37,6 +41,7 @@ export class MainActionBarComponent {
     hasOngoingExposure: boolean;
     hasWatchAvailable: boolean; // whether the mobile app detects the watch app
     hasWatchConnected: boolean; // whether permissions have been granted on the watch
+    testUser = this.accountService.deviceProfile.patientId;
     private logger: Logger;
 
     panicButtonActive: boolean;
@@ -47,7 +52,8 @@ export class MainActionBarComponent {
         private advancedSettingsService: AdvancedSettingsService,
         private panicButtonModalService: PanicButtonModalService,
         private dialogsService: DialogsService,
-        private watchDisplayService: WatchDisplayService
+        private watchDisplayService: WatchDisplayService,
+        private accountService: AccountService
     ) {
         this.logger = getLogger("MainActionBarComponent");
         this.development = !getConfig().production;
