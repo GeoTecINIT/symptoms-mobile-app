@@ -10,6 +10,7 @@ import {
 } from "~/app/core/dialogs/confirm";
 import { isAnyWatchConnected } from "~/app/core/framework/smartwatch-setup";
 import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
+import { InAppBrowserService } from "~/app/views/common/in-app-browser.service";
 
 const TAPS_TO_ENTER_ADVANCED_SETTINGS = 5;
 
@@ -32,7 +33,8 @@ export class SettingsModalComponent {
         private appSettingsService: AppSettingsService,
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
-        private watchDisplayService: WatchDisplayService
+        private watchDisplayService: WatchDisplayService,
+        private inAppBrowserService: InAppBrowserService
     ) {
         this.logger = getLogger("SettingsModalComponent");
     }
@@ -83,6 +85,10 @@ export class SettingsModalComponent {
             this.watchDisplayService.setWatchConnected(connected);
             this.waitingForResponse = false;
         });
+    }
+
+    onOpenPrivacyPolicyTap() {
+        this.inAppBrowserService.openPrivacyPolicy();
     }
 
     onVersionTap() {
