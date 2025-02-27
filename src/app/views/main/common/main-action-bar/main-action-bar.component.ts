@@ -12,7 +12,11 @@ import {
     infoOnWatchPermissionsNeed,
 } from "~/app/core/dialogs/info";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import { areWatchFeaturesEnabled } from "@awarns/wear-os/internal/setup";
+import {
+    areWatchFeaturesEnabled,
+    setWatchFeaturesState,
+    useWatch,
+} from "@awarns/wear-os/internal/setup";
 import { awarns } from "@awarns/core";
 import { Dialogs } from "@nativescript/core";
 import {
@@ -31,8 +35,8 @@ export class MainActionBarComponent {
     @Input() title: string;
     development: boolean;
     hasOngoingExposure: boolean;
-    hasWatchAvailable: boolean;
-    hasWatchConnected: boolean;
+    hasWatchAvailable: boolean; // whether the mobile app detects the watch app
+    hasWatchConnected: boolean; // whether permissions have been granted on the watch
     private logger: Logger;
 
     panicButtonActive: boolean;
@@ -50,7 +54,6 @@ export class MainActionBarComponent {
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
             AdvancedSetting.PanicButton
         );
-        // this.hasWatchConnected = areWatchFeaturesEnabled();
     }
 
     ngOnInit(): void {
@@ -77,16 +80,14 @@ export class MainActionBarComponent {
                 okButtonText: "Sí",
                 cancelButtonText: "No",
             })
-                .then((result) => {
+                .then(async (result) => {
                     if (result) {
-                        this.onHandleWatchTap();
-                    } else {
-                        this.hasWatchConnected = false;
+                        await this.handleWatchConnect();
                     }
                 })
                 .catch((error) => {
                     this.logger.error(
-                        "Error al mostrar el diálogo de confirmación " + error
+                        "Error al mostrar el diálogo de confirmación: " + error
                     );
                 });
         } else {
@@ -96,62 +97,58 @@ export class MainActionBarComponent {
                 okButtonText: "Sí",
                 cancelButtonText: "No",
             })
-                .then((result) => {
+                .then(async (result) => {
                     if (result) {
-                        this.hasWatchConnected = false;
-                        this.logger.info(
-                            "👉👉👉 onWatchDialogTap Desconectar hasWatchConnected: " +
-                                this.hasWatchConnected
-                        );
-                    } else {
-                        this.onHandleWatchTap();
+                        await this.handleWatchDisconnect();
                     }
                 })
                 .catch((error) => {
                     this.logger.error(
-                        "Error al mostrar el diálogo de confirmación " + error
+                        "Error al mostrar el diálogo de confirmación: " + error
                     );
                 });
         }
     }
 
-    // TODO: consider tapping the button mid-exposure --> either do nothing or hide it
-    // recursive version
-    async onHandleWatchTap() {
-        try {
-            await handleWatchToUse();
-            const isReady = await preparePlugin();
+    async handleWatchConnect() {
+        const logger = getLogger("WatchSetup");
 
-            // TODO: remove this function's logs
-            if (isReady !== true) {
-                console.log(
-                    "👉👉👉 onHandleWatchTap notReady hasWatchConnected",
-                    this.hasWatchConnected
-                );
-                this.hasWatchConnected = false;
-                await this.informAboutWatchPermissionsNeed();
-                this.onHandleWatchTap();
-                awarns.emitEvent("sendWatchNotConnectedMessage", {
-                    plainMessage: {
-                        message: "Permissions denied",
-                    },
-                });
-                return;
-            }
-            console.log("👉👉👉 READY", isReady);
-            this.hasWatchConnected = true;
-            console.log(
-                "👉👉👉 onHandleWatchTap isReady hasWatchConnected",
-                this.hasWatchConnected
-            );
-            awarns.emitEvent("sendWatchConnectedMessage", {
-                plainMessage: {
-                    message: "Permissions granted",
-                },
-            });
-        } catch (e) {
-            this.logger.error(`Could not setup watch. Reason: ${e}`);
+        const watches = await getConnectedWatches();
+        if (!watches.length) {
+            logger.info("No watch is connected (physically paired)");
+            this.hasWatchConnected = false;
+            return;
         }
+
+        setWatchFeaturesState(true);
+
+        const watch = watches[0];
+        useWatch(watch);
+
+        const isReady = await preparePlugin();
+        if (!isReady) {
+            console.log("Watch plugin is not ready");
+            this.hasWatchConnected = false;
+            await this.informAboutWatchPermissionsNeed();
+            return;
+        }
+        this.hasWatchConnected = true;
+
+        awarns.emitEvent("sendWatchConnectedMessage", {
+            plainMessage: {
+                message: "Permissions granted",
+            },
+        });
+    }
+
+    async handleWatchDisconnect() {
+        setWatchFeaturesState(false);
+        this.hasWatchConnected = false;
+        awarns.emitEvent("sendWatchNotConnectedMessage", {
+            plainMessage: {
+                message: "Permissions denied",
+            },
+        });
     }
 
     onSettingsTap() {

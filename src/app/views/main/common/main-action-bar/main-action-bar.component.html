@@ -11,11 +11,11 @@
 
   <ActionItem
     *ngIf="hasWatchAvailable"
-    [text]="!hasWatchConnected ? 'Conectar reloj' : 'Desconectar reloj'"
+    [text]="hasWatchConnected ? 'Desconectar reloj' : 'Conectar reloj'"
     [icon]="
-      !hasWatchConnected
-        ? 'res://round_watch_off_white_24'
-        : 'res://round_watch_on_white_24'
+      hasWatchConnected
+        ? 'res://round_watch_on_white_24'
+        : 'res://round_watch_off_white_24'
     "
     android.position="actionBar"
     ios.position="right"
