@@ -28,6 +28,9 @@ export class QueriesApiAdapter {
     private transformEmotionValues(
         emotionValues: Array<any>
     ): Array<EmotionValue> {
+        if (!emotionValues) {
+            return [];
+        }
         return emotionValues.map((ev) => ({
             value: ev.value,
             timestamp: this.transformTimestamp(ev.timestamp),
@@ -109,6 +112,9 @@ export class QueriesApiAdapter {
                     weatherSummary: payload?.weatherSummary as WeatherSummary,
                     emotionValues: this.transformEmotionValues(
                         payload.emotionValues
+                    ),
+                    toleranceValues: this.transformEmotionValues(
+                        payload?.toleranceValues
                     ),
                 };
             });

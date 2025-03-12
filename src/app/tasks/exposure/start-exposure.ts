@@ -52,15 +52,16 @@ export class StartExposureTask extends Task {
                 successful: false,
                 ...(contextualConditions && { contextualConditions }), // short-circuit object construction
                 ...(weatherSummary && { weatherSummary }),
+                toleranceValues: [],
             };
             exposureId = await this.store.insert(exposure);
         } else {
             exposureId = ongoingExposure.id;
-            exposure = { 
-                ...ongoingExposure, 
+            exposure = {
+                ...ongoingExposure,
                 startTime: new Date(),
                 ...(contextualConditions && { contextualConditions }), // short-circuit object construction
-                ...(weatherSummary && { weatherSummary }) 
+                ...(weatherSummary && { weatherSummary }),
             };
             await this.store.update(exposure);
         }
@@ -74,7 +75,8 @@ export class StartExposureTask extends Task {
                 exposure.emotionValues,
                 false,
                 contextualConditions,
-                weatherSummary
+                weatherSummary,
+                exposure.toleranceValues
             ),
         };
     }

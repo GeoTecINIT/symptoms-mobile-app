@@ -30,6 +30,12 @@ export class ProcessExposureAnswers extends Task {
             value: anxietyLevel,
             timestamp: questionnaireAnswers.timestamp,
         });
+
+        const toleranceLevel = questionnaireAnswers.answers[1].answer as number;
+        ongoingExposure.toleranceValues.push({
+            value: toleranceLevel,
+            timestamp: questionnaireAnswers.timestamp,
+        });
         await this.store.update(ongoingExposure);
 
         return { result: ongoingExposure };

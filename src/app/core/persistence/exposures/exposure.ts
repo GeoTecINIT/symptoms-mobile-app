@@ -10,6 +10,7 @@ export interface Exposure {
     successful: boolean;
     weatherSummary?: WeatherSummary;
     contextualConditions?: ContextualConditions;
+    toleranceValues?: Array<EmotionValue>;
 }
 
 export interface EmotionValue {

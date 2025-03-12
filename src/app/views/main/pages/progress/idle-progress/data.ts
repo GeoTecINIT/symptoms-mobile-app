@@ -23,7 +23,7 @@ export function createFakeDataGenerator(): DataGenerator {
         const exposureChange = new ExposureChange(
             Change.END,
             timestamp,
-            'fake-id-for-mock-data',
+            "fake-id-for-mock-data",
             {
                 id: placeName.toLowerCase(),
                 name: placeName,

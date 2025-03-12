@@ -41,6 +41,7 @@ class ExposuresStoreDB implements ExposuresStore {
             successful,
             contextualConditions,
             weatherSummary,
+            toleranceValues,
         } = docFrom(exposure);
         await this.store.update(exposure.id, {
             startTime,
@@ -49,6 +50,7 @@ class ExposuresStoreDB implements ExposuresStore {
             successful,
             contextualConditions,
             weatherSummary,
+            toleranceValues,
         });
     }
 
@@ -85,10 +87,12 @@ class ExposuresStoreDB implements ExposuresStore {
     async getLastFinished(): Promise<Exposure> {
         const query: any = {
             select: [],
-            where: [{ property: "endTime", comparison: "notEqualTo", value: -1 }],
+            where: [
+                { property: "endTime", comparison: "notEqualTo", value: -1 },
+            ],
             order: [{ property: "startTime", direction: "desc" }],
         };
-        
+
         const finished = await this.store.fetch(query);
 
         if (finished.length === 0) {
@@ -119,10 +123,11 @@ function docFrom(exposure: Exposure): any {
         successful,
         contextualConditions,
         weatherSummary,
+        toleranceValues,
     } = exposure;
 
     return {
-        id: id, 
+        id: id,
         startTime: startTime ? startTime.getTime() : -1,
         endTime: endTime ? endTime.getTime() : -1,
         place,
@@ -137,6 +142,12 @@ function docFrom(exposure: Exposure): any {
             ? contextualConditions
             : null,
         weatherSummary: weatherSummary ? weatherSummary : null,
+        toleranceValues: [
+            ...toleranceValues.map((value) => ({
+                timestamp: value.timestamp.getTime(),
+                value: value.value,
+            })),
+        ],
     };
 }
 
@@ -150,6 +161,7 @@ function exposureFrom(doc: any): Exposure {
         successful,
         contextualConditions,
         weatherSummary,
+        toleranceValues,
     } = doc;
 
     return {
@@ -167,5 +179,11 @@ function exposureFrom(doc: any): Exposure {
         contextualConditions:
             contextualConditions !== null ? contextualConditions : undefined,
         weatherSummary: weatherSummary !== null ? weatherSummary : undefined,
+        toleranceValues: [
+            ...toleranceValues.map((value) => ({
+                timestamp: new Date(value.timestamp),
+                value: value.value,
+            })),
+        ],
     };
 }

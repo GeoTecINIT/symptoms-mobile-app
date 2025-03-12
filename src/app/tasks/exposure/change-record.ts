@@ -14,6 +14,7 @@ export class ExposureChange extends Record {
         public successful: boolean = false,
         public contextualConditions?: ContextualConditions,
         public weatherSummary?: WeatherSummary,
+        public toleranceValues?: Array<EmotionValue>
     ) {
         super(AppRecordType.ExposureChange, timestamp, change);
     }

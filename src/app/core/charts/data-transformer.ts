@@ -39,6 +39,31 @@ function transformExposureChange(
     exposureChange: ExposureChange,
     showPlaceName: boolean
 ): ChartDescription {
+    const chartData = [
+        {
+            label: `Nivel de ansiedad`,
+            values: exposureChange.emotionValues.map((emotionValue) => ({
+                x: emotionValue.timestamp,
+                y: emotionValue.value,
+            })),
+            successful: exposureChange.successful,
+        },
+    ];
+
+    if (
+        exposureChange.toleranceValues &&
+        exposureChange.toleranceValues.length > 0
+    ) {
+        chartData.push({
+            label: `Nivel de tolerancia`,
+            values: exposureChange.toleranceValues.map((toleranceValue) => ({
+                x: toleranceValue.timestamp,
+                y: toleranceValue.value,
+            })),
+            successful: exposureChange.successful,
+        });
+    }
+
     return {
         iconCode: "\ue55e",
         title: showPlaceName
@@ -48,19 +73,7 @@ function transformExposureChange(
         chart: {
             yAxisDataRange: ANXIETY_LEVEL_RANGE,
             cuttingLines: ANXIETY_THRESHOLDS,
-            data: [
-                {
-                    // label: `Nivel de ansiedad`,
-                    label: `${exposureChange.timestamp}`,
-                    values: exposureChange.emotionValues.map(
-                        (emotionValue) => ({
-                            x: emotionValue.timestamp,
-                            y: emotionValue.value,
-                        })
-                    ),
-                    successful: exposureChange.successful,
-                },
-            ],
+            data: chartData,
         },
     };
 }

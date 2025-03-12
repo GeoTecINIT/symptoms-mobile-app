@@ -39,7 +39,8 @@ export class FinishExposureTask extends Task {
                 ongoingExposure.emotionValues,
                 successful,
                 ongoingExposure.contextualConditions,
-                ongoingExposure.weatherSummary
+                ongoingExposure.weatherSummary,
+                ongoingExposure.toleranceValues
             ),
         };
     }
