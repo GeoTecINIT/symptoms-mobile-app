@@ -42,7 +42,6 @@ const COLOR_SCHEME = [
     "#F9CB5E",
     "#669C81",
     "#B1AF50",
-    "#79979E",
     "#AEBEB2",
     "#53AD94",
     "#6DC09E",
@@ -52,7 +51,7 @@ const COLOR_SCHEME = [
     "#8BA568",
 ];
 
-const ERROR_COLOR = "#C43D32";
+const ERROR_COLOR_SCHEME = ["#C43D32", "#f0a432"];
 
 const DATASET_COLOR_ALPHA = 0.7;
 
@@ -66,7 +65,7 @@ export abstract class BaseChart<
     protected chart: BarLineChartBase<Entry, S, D>;
     protected dataStream$ = new ReplaySubject<Array<ChartData2D>>(1);
     protected readonly colorScheme: Array<Color>;
-    protected readonly errorColor: Color;
+    protected readonly errorColorScheme: Array<Color>;
     protected internalData: Array<InternalChartData2D> = [];
 
     private xAxisFormatter?: AxisValueFormatter;
@@ -84,13 +83,16 @@ export abstract class BaseChart<
                 nsColor.b
             );
         });
-        const errorNsColor = new Color(ERROR_COLOR);
-        this.errorColor = new Color(
-            Math.round(DATASET_COLOR_ALPHA * 255),
-            errorNsColor.r,
-            errorNsColor.g,
-            errorNsColor.b
-        );
+        this.errorColorScheme = ERROR_COLOR_SCHEME.map((color) => {
+            const nsColor = new Color(color);
+
+            return new Color(
+                Math.round(DATASET_COLOR_ALPHA * 255),
+                nsColor.r,
+                nsColor.g,
+                nsColor.b
+            );
+        });
     }
 
     get isDataEmpty(): boolean {

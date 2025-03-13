@@ -51,10 +51,17 @@ export class LineChartComponent
     private generateDataSet(index: number, dataSet: ChartData2D): LineDataSet {
         const set = new LineDataSet(dataSet.values, dataSet.label, "x", "y");
         set.setColor(
-            dataSet.successful ? this.colorScheme[index] : this.errorColor
+            // this can be changed if you want to specify an error colors scheme
+            dataSet.successful
+                ? this.colorScheme[index]
+                : this.colorScheme[index]
         );
         set.setLineWidth(3);
         set.setMode(Mode.CUBIC_BEZIER);
+
+        if (!dataSet.successful) {
+            set.enableDashedLine(10, 5, 0);
+        }
 
         return set;
     }
