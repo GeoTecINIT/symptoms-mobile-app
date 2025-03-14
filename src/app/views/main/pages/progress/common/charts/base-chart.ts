@@ -33,7 +33,7 @@ const AXIS_LINE_COLOR = "#E0E0E0";
 
 const CUTTING_LINE_TEXT_COLOR = "#1F525E";
 const CUTTING_LINE_COLOR = "#62868e";
-const CUTTING_LINE_WIDTH = 1;
+const CUTTING_LINE_WIDTH = 0.75;
 
 const TEXT_FONT_SIZE = 12;
 
@@ -102,14 +102,9 @@ export abstract class BaseChart<
     load(chart: BarLineChartBase<Entry, S, D>) {
         this.chart = chart;
         this.dataStream$.pipe(takeUntil(this.unloaded$)).subscribe((data) => {
-            if (data.length === 0 || data[0].values.length === 0) {
-                data = [
-                    {
-                        values: [{ x: new Date(), y: 0 }],
-                        label: "No Data",
-                        successful: false,
-                    },
-                ];
+            this.chart.clear();
+            if (data.length === 0 || data[0].values.length < 2) {
+                return;
             }
             this.plot(data);
         });

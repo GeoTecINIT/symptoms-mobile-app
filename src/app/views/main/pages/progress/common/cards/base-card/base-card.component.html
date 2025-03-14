@@ -1,3 +1,7 @@
-<StackLayout [horizontalAlignment]="horizontalAlignment" [verticalAlignment]="verticalAlignment">
-    <ng-content></ng-content>
+<StackLayout
+  [class.card--has-data]="hasData"
+  [horizontalAlignment]="horizontalAlignment"
+  [verticalAlignment]="verticalAlignment"
+>
+  <ng-content></ng-content>
 </StackLayout>

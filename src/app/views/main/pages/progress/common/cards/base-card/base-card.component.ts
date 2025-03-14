@@ -12,4 +12,5 @@ type HorizontalAlignmentOpts = CommonAlignmentOpts | "right" | "left";
 export class BaseCardComponent {
     @Input() horizontalAlignment: HorizontalAlignmentOpts = "right";
     @Input() verticalAlignment: VerticalAlignmentOpts = "top";
+    @Input() hasData = false;
 }

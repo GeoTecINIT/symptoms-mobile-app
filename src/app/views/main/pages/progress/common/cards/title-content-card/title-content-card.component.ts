@@ -9,4 +9,5 @@ export class TitleContentCardComponent {
     @Input() iconCode = "";
     @Input() title = "";
     @Input() subtitle = "";
+    @Input() hasData = false;
 }

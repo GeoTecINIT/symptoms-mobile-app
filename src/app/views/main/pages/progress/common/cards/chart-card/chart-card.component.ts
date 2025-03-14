@@ -36,4 +36,16 @@ export class ChartCardComponent {
             );
         }
     }
+
+    get hasEnoughData(): boolean {
+        if (!this.chartDescription?.chart) return false;
+        const data = this.chartDescription.chart.data;
+        if (!data || data.length === 0) return false;
+
+        const firstDataSet = data[0];
+        if (!firstDataSet?.values || firstDataSet.values.length < 2) {
+            return false;
+        }
+        return true;
+    }
 }
