@@ -56,11 +56,11 @@ export class LineChartComponent
                 ? this.colorScheme[index]
                 : this.colorScheme[index]
         );
-        set.setLineWidth(3);
+        set.setLineWidth(2.5);
         set.setMode(Mode.CUBIC_BEZIER);
 
         if (!dataSet.successful) {
-            set.enableDashedLine(10, 5, 0);
+            set.enableDashedLine(7, 7, 0);
         }
 
         return set;
