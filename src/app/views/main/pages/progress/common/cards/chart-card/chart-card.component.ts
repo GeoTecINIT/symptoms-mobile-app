@@ -42,10 +42,12 @@ export class ChartCardComponent {
         const data = this.chartDescription.chart.data;
         if (!data || data.length === 0) return false;
 
-        const firstDataSet = data[0];
-        if (!firstDataSet?.values || firstDataSet.values.length < 2) {
-            return false;
+        if (this.chartType === "line") {
+            return data.some((dataset) => dataset?.values?.length >= 2);
+        } else if (this.chartType === "bar") {
+            return data.some((dataset) => dataset?.values?.length >= 1);
         }
+
         return true;
     }
 }

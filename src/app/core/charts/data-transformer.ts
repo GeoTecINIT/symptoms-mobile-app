@@ -81,6 +81,12 @@ function transformExposureChange(
 function transformExposureAggregate(
     exposureAggregate: ExposureAggregate
 ): ChartDescription {
+    console.log("👉👉👉 exposureAggregate.data:", exposureAggregate.data);
+    console.log(
+        "👉👉👉 exposureAggregate.data.length:",
+        exposureAggregate.data.length
+    );
+
     return {
         iconCode: "\ue26b",
         title: `Últimas exposiciones`,
@@ -108,6 +114,15 @@ function transformExposureAggregate(
 function transformExposurePlaceAggregate(
     exposurePlaceAggregate: ExposurePlaceAggregate
 ): ChartDescription {
+    const values = exposurePlaceAggregate.emotionValues.map((emotionValue) => ({
+        x: emotionValue.timestamp,
+        y: emotionValue.value,
+    }));
+
+    console.log(
+        `✅✅✅ Transformed values for the place ${exposurePlaceAggregate.placeName}:`,
+        values
+    );
     return {
         iconCode: "\ue26b",
         title: `En ${exposurePlaceAggregate.placeName}`,

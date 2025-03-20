@@ -103,7 +103,7 @@ export abstract class BaseChart<
         this.chart = chart;
         this.dataStream$.pipe(takeUntil(this.unloaded$)).subscribe((data) => {
             this.chart.clear();
-            if (data.length === 0 || data[0].values.length < 2) {
+            if (data.length === 0) {
                 return;
             }
             this.plot(data);
