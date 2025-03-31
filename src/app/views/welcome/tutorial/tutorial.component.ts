@@ -11,6 +11,7 @@ import { emitTreatmentStartEvent } from "~/app/core/framework/events";
 
 import { infoOnPermissionsNeed } from "~/app/core/dialogs/info";
 import { getLogger, Logger } from "~/app/core/utils/logger";
+import { autoStarter } from "nativescript-autostarter";
 
 @Component({
     selector: "SymTutorial",
@@ -47,18 +48,30 @@ export class TutorialComponent implements OnInit {
     }
 
     async onConfigureTap() {
-        preparePlugin().then((done) => {
-            if (done) {
-                emitTreatmentStartEvent();
-                this.appSettingsService.markSetupAsComplete();
-                this.navigationService.navigate(["../setup-confirmation"], {
-                    source: this.activeRoute,
-                    clearHistory: true,
-                });
-            } else {
-                this.dialogsService.showInfo(infoOnPermissionsNeed);
-            }
+        const done = await preparePlugin();
+        if (!done) {
+            this.dialogsService.showInfo(infoOnPermissionsNeed);
+            return;
+        }
+
+        emitTreatmentStartEvent();
+        this.appSettingsService.markSetupAsComplete();
+        this.navigationService.navigate(["../setup-confirmation"], {
+            source: this.activeRoute,
+            clearHistory: true,
         });
+    }
+
+    async launchAutostarterIfNeeded() {
+        const autoStarterManager = autoStarter.getManager();
+        const available = autoStarterManager.canShowAutoStartDialogRequest();
+        // this.logger.info(`Can show dialog request: ${available}`);
+
+        if (available) {
+            const dialogResponse =
+                await autoStarterManager.showAutoStartDialogRequest();
+            // this.logger.info(`Dialog response: ${dialogResponse}`);
+        }
     }
 
     async proceedWithSetup() {

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="autostarter_dialog_dontShowAgainButtonText">"Don\'t show again"</string>
+  <string name="autostarter_dialog_cancelButtonText">"Cancel"</string>
+  <string name="autostarter_dialog_okButtonText">"OK"</string>
+  <string name="autostarter_dialog_message">"The app could not work as expected if you don\'t grant the autostart permissions. Tap OK to go to the autostart screen options and to grant the required permissions to this app."</string>
+  <string name="autostarter_dialog_title">"Autostart permissions"</string>
+  <string name="title_activity_kimera">"SyMptOMS"</string>
   <string name="task_dispatcher_notification_content">""</string>
   <string name="task_dispatcher_notification_title">"SyMptOMS is using your location"</string>
   <string name="task_dispatcher_channel_description">"Indicates when the app is accessing your location in background"</string>
@@ -8,5 +14,4 @@
   <string name="_title_activity_kimera_PKGla">"SyMptOMS"</string>
   <string name="_app_name_1k3Sbz">"SyMptOMS"</string>
   <string name="app_name">"SyMptOMS"</string>
-  <string name="title_activity_kimera">"SyMptOMS"</string>
 </resources>

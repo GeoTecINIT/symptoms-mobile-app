@@ -8,6 +8,8 @@ import { AppModule } from "./app/app.module";
 
 import { firebaseManager } from "./app/core/utils/firebase";
 
+import { autoStarter } from "nativescript-autostarter";
+
 import { awarns } from "@awarns/core";
 import { appTasks } from "./app/tasks";
 import { appTaskGraph } from "./app/tasks/graph";
@@ -35,6 +37,13 @@ firebaseManager
             e
         )
     );
+
+autoStarter.init({
+    retryFrequency: {
+        value: 1,
+        unit: "days",
+    },
+});
 
 awarns
     .init(

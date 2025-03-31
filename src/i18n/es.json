@@ -7,5 +7,11 @@
   "task_dispatcher_channel_name": "Ubicación en segundo plano",
   "task_dispatcher_channel_description": "Indica cuando la app está accediendo a tu ubicación en segundo plano",
   "task_dispatcher_notification_title": "SyMptOMS está accediendo a tu ubicación",
-  "task_dispatcher_notification_content": ""
+  "task_dispatcher_notification_content": "",
+  "title_activity_kimera": "El nombre de tu aplicación",
+  "autostarter_dialog_title": "Permisos de inicio automático",
+  "autostarter_dialog_message": "La aplicación podría no funcionar como se espera si no concedes los permisos de inicio automático. Toca OK para ir a la pantalla de opciones de inicio automático y conceder los permisos requeridos a esta aplicación.",
+  "autostarter_dialog_okButtonText": "OK",
+  "autostarter_dialog_cancelButtonText": "Cancelar",
+  "autostarter_dialog_dontShowAgainButtonText": "No mostrar de nuevo"
 }

@@ -7,5 +7,11 @@
   "task_dispatcher_channel_name": "Background location",
   "task_dispatcher_channel_description": "Indicates when the app is accessing your location in background",
   "task_dispatcher_notification_title": "SyMptOMS is using your location",
-  "task_dispatcher_notification_content": ""
+  "task_dispatcher_notification_content": "",
+  "title_activity_kimera": "Your app name",
+  "autostarter_dialog_title": "Autostart permissions",
+  "autostarter_dialog_message": "The app could not work as expected if you don't grant the autostart permissions. Tap OK to go to the autostart screen options and to grant the required permissions to this app.",
+  "autostarter_dialog_okButtonText": "OK",
+  "autostarter_dialog_cancelButtonText": "Cancel",
+  "autostarter_dialog_dontShowAgainButtonText": "Don't show again"
 }
