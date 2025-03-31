@@ -1,18 +1,10 @@
 @import "src/app-variables";
 
-/*
-* This is not the best HTML + SCSS code ever for an animation, but I really struggled to implement this. I basically
-* tried to copy the animation from https://codepen.io/ayaos/pen/wvPBbdX to the NativeScript mobile app. In the process,
-* I was on edge as nonsensical errors were appearing continuously. In the end, this is the best I could do
-* to approximate the original animation.
-*/
-
-
 .audio-waves {
-    border-radius: 6;
-    padding: 6 10;
-    margin-right: 10;
-    height: auto;
+  border-radius: 6;
+  padding: 6 10;
+  margin-right: 10;
+  height: auto;
 }
 
 .wave {
