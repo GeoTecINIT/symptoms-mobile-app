@@ -7,9 +7,8 @@
   <ng-container
     *ngIf="isRecording || recordedAudioFilePath; else textInputTemplate"
   >
-    <ng-container *ngIf="isRecording; else audioPlayer">
-      <SymAudioWaves flexGrow="1" numBars="30"></SymAudioWaves>
-    </ng-container>
+
+    <SymAudioWaves *ngIf="isRecording; else audioPlayer" flexGrow="1" [numBars]="50"/>
 
     <ng-template #audioPlayer>
       <!-- Audio component -->

@@ -1,58 +1,68 @@
-import { Component, Input } from '@angular/core';
-import { Page, View } from "@nativescript/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
+import {
+  CoreTypes, KeyframeAnimation, KeyframeAnimationInfo, Page, View
+} from "@nativescript/core";
 
-type AnimatedBar = {
-    animationName: string,
-    animationDuration: string
-}
 
 @Component({
   selector: "SymAudioWaves",
   templateUrl: "./audio-waves.component.html",
   styleUrls: ["./audio-waves.component.scss"],
 })
-export class AudioWavesComponent {
-//   @Input() numBars: number = 160; // Number of bars to display
-  @Input() numBars: number = 50; // Number of bars to display
+export class AudioWavesComponent implements AfterViewInit, OnDestroy {
 
-  bars: any[] = Array.from({ length: this.numBars }, _ => ({
-    class: this.getRandomAnimationName(),
-  }));
+  @Input() private numBars: number = 50; // Number of bars to display
+  @Input() private maxDuration: number = 1.0;
+  @Input() private minDuration: number = 0.5;
 
+  @ViewChildren("wave_bar", { read: ElementRef })
+  private waveBars: QueryList<ElementRef>;
 
+  private keyframesNames = ["wave-sm", "wave-md", "wave-lg"];
+  private animationsInfo: Array<KeyframeAnimationInfo>;
+  private animations: Array<KeyframeAnimation> = [];
 
-  getRandomAnimationName() {
-      const animations = [
-        'wave-sm-class-short',
-        'wave-sm-class-medium',
-        'wave-sm-class-long',
-        'wave-md-class-short',
-        'wave-md-class-medium',
-        'wave-md-class-long',
-        'wave-lg-class-short',
-        'wave-lg-class-medium',
-        'wave-lg-class-long',
-      ];
-      return animations[Math.floor(Math.random() * animations.length)];
+  protected get bars(): number[] {
+    return Array(this.numBars);
   }
 
-  getRandomAnimationDuration() {
-    const durations = ['sm-duration', 'md-duration', 'lg-duration'];
-    return durations[Math.floor(Math.random() * durations.length)];
+  constructor(private page: Page) {
+    this.animationsInfo = this.keyframesNames.map(name => this.page.getKeyframeAnimationWithName(name));
   }
 
-  getRandomClasses(): string {
-    const randomAnimationClass = this.getRandomAnimationName();
-    const randomDurationClass = this.getRandomAnimationDuration();
-    return `${randomAnimationClass} ${randomDurationClass}`;
+  ngAfterViewInit(): void {
+    this.animations = this.waveBars.map((waveBar) => this.buildAndStartKeyframeAnimationFor(waveBar));
   }
 
-//   getRandomAnimationDuration() {
-//     return `${(Math.random() * 0.5 + 0.2).toFixed(2)}s`
-//   }
+  ngOnDestroy(): void {
+    this.animations.forEach((animation) => animation.cancel());
+  }
 
-  getRandomColor() {
-    const colors = ['white', 'cyan', 'magenta'];
-    return colors[Math.floor(Math.random() * colors.length)];
+  private buildAndStartKeyframeAnimationFor(elementRef: ElementRef): KeyframeAnimation {
+    const view = <View> elementRef.nativeElement;
+    const keyframeAnimation = this.buildRandomKeyframeAnimation();
+    keyframeAnimation.play(view);
+    return keyframeAnimation;
+  }
+
+  private buildRandomKeyframeAnimation(): KeyframeAnimation {
+    const animationInfo = this.animationsInfo[Math.floor(Math.random() * this.animationsInfo.length)];
+    animationInfo.duration = this.randomDuration(this.minDuration, this.maxDuration);
+    animationInfo.iterations = Number.POSITIVE_INFINITY;
+    animationInfo.curve = CoreTypes.AnimationCurve.easeInOut;
+    return KeyframeAnimation.keyframeAnimationFromInfo(animationInfo);
+  }
+
+  private randomDuration(min: number, max: number): number {
+    return (Math.random() * (max - min) + min) * 1000;
   }
 }
+

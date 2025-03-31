@@ -86,3 +86,38 @@ Label {
   // margin: -4em 2em;
   padding: 18;
 }
+
+// Audio wave keyframes
+
+@keyframes wave-sm {
+  0%,100% {
+    opacity: 0.35;
+    height: 10%;
+  }
+  50% {
+    opacity: 1;
+    height: 25%;
+  }
+}
+
+@keyframes wave-md {
+  0%,100% {
+    opacity: 0.35;
+    height: 30%;
+  }
+  50% {
+    opacity: 1;
+    height: 60%;
+  }
+}
+
+@keyframes wave-lg {
+  0%, 100% {
+    opacity: 0.35;
+    height: 20%;
+  }
+  50% {
+    opacity: 1;
+    height: 90%;
+  }
+}
