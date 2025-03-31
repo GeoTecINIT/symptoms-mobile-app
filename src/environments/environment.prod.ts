@@ -4,7 +4,18 @@ export const environment = {
     exposureTimes: {
         regular: 60,
         extension: 15,
-        betweenQuestions: 8,
+        betweenQuestions: 10,
     },
-    mapboxAccessToken: ""
+    mapboxAccessToken: "",
+    openWeatherApiKey: "",
+    firebaseConfig: {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: "",
+    },
 };

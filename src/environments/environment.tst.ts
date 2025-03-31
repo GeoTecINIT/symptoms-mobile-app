@@ -2,9 +2,20 @@ export const environment = {
     production: false,
     serverHostname: "",
     exposureTimes: {
-        regular: 30,
-        extension: 15,
-        betweenQuestions: 8,
+        regular: 12,
+        extension: 3,
+        betweenQuestions: 2,
     },
-    mapboxAccessToken: ""
+    mapboxAccessToken: "",
+    openWeatherApiKey: "",
+    firebaseConfig: {
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: "",
+    },
 };
