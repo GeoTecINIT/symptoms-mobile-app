@@ -12,6 +12,7 @@ import { createFakeDataGenerator, DataGenerator } from "./data";
 import { getConfig } from "~/app/core/config";
 import { takeUntil } from "rxjs/operators";
 import { ExposureAggregate } from "~/app/tasks/visualizations/exposure-aggregate";
+import { View } from "@nativescript/core";
 
 const GENERATE_DATA_TIMEOUT = 2000;
 
@@ -52,6 +53,15 @@ export class IdleProgressComponent {
     @HostListener("unloaded")
     onUnloaded() {
         this.unloaded$.next();
+    }
+
+    onScrollViewLoaded(args: { object: View }) {
+        if (global.isAndroid) {
+            const scrollView = args.object;
+            scrollView.nativeViewProtected.setId(
+                android.view.View.generateViewId()
+            );
+        }
     }
 
     onGenerateDataTap() {
