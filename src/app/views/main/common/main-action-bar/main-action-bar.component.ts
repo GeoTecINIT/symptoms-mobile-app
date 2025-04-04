@@ -9,25 +9,17 @@ import {
     AdvancedSettingsService,
 } from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
-import { preparePlugin, handleWatchToUse } from "~/app/core/framework";
+import { preparePlugin } from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
-import {
-    infoOnPermissionsNeed,
-    infoOnWatchPermissionsNeed,
-} from "~/app/core/dialogs/info";
+import { infoOnWatchPermissionsNeed } from "~/app/core/dialogs/info";
 import { getLogger, Logger } from "~/app/core/utils/logger";
 import {
-    areWatchFeaturesEnabled,
     setWatchFeaturesState,
     useWatch,
 } from "@awarns/wear-os/internal/setup";
 import { awarns } from "@awarns/core";
 import { Dialogs } from "@nativescript/core";
-import {
-    PlainMessage,
-    WatchSensorsProvider,
-    getConnectedWatches,
-} from "@awarns/wear-os";
+import { getConnectedWatches } from "@awarns/wear-os";
 import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
 
 @Component({
@@ -39,8 +31,13 @@ export class MainActionBarComponent {
     @Input() title: string;
     development: boolean;
     hasOngoingExposure: boolean;
-    hasWatchAvailable: boolean; // whether the mobile app detects the watch app
-    hasWatchConnected: boolean; // whether permissions have been granted on the watch
+
+    // hasWatchAvailable is whether the mobile sees any watch physically
+    // hasWatchConnected is whether permissions have actually been granted
+    hasWatchAvailable: boolean;
+    hasWatchConnected: boolean;
+
+    // user for google play testers
     testUser = this.accountService.deviceProfile.patientId;
     private logger: Logger;
 
@@ -57,21 +54,24 @@ export class MainActionBarComponent {
     ) {
         this.logger = getLogger("MainActionBarComponent");
         this.development = !getConfig().production;
+
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
             AdvancedSetting.PanicButton
         );
     }
 
-    ngOnInit(): void {
-        this.checkWatchAvailability();
-        this.watchDisplayService.watchConnected$.subscribe((connected) => {
-            this.hasWatchAvailable = connected;
-        });
-    }
-
-    private async checkWatchAvailability(): Promise<void> {
+    async ngOnInit(): Promise<void> {
         const watches = await getConnectedWatches();
         this.hasWatchAvailable = watches.length > 0;
+
+        const lastKnownConnected = this.watchDisplayService.getCurrentValue();
+        const initialConnected = lastKnownConnected && watches.length > 0;
+
+        this.watchDisplayService.setWatchConnected(initialConnected);
+
+        this.watchDisplayService.watchConnected$.subscribe((connected) => {
+            this.hasWatchConnected = connected;
+        });
     }
 
     onSimulationTap() {
@@ -123,6 +123,7 @@ export class MainActionBarComponent {
         if (!watches.length) {
             logger.info("No watch is connected (physically paired)");
             this.hasWatchConnected = false;
+            this.watchDisplayService.setWatchConnected(false);
             return;
         }
 
@@ -133,12 +134,17 @@ export class MainActionBarComponent {
 
         const isReady = await preparePlugin();
         if (!isReady) {
-            console.log("Watch plugin is not ready");
+            console.log(
+                "Watch plugin is not ready (permissions likely denied)"
+            );
             this.hasWatchConnected = false;
+            this.watchDisplayService.setWatchConnected(false);
             await this.informAboutWatchPermissionsNeed();
             return;
         }
+
         this.hasWatchConnected = true;
+        this.watchDisplayService.setWatchConnected(true);
 
         awarns.emitEvent("sendWatchConnectedMessage", {
             plainMessage: {
@@ -150,6 +156,7 @@ export class MainActionBarComponent {
     async handleWatchDisconnect() {
         setWatchFeaturesState(false);
         this.hasWatchConnected = false;
+        this.watchDisplayService.setWatchConnected(false);
         awarns.emitEvent("sendWatchNotConnectedMessage", {
             plainMessage: {
                 message: "Permissions denied",

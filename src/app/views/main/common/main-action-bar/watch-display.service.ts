@@ -13,4 +13,8 @@ export class WatchDisplayService {
     setWatchConnected(isConnected: boolean) {
         this.watchConnectedSource.next(isConnected);
     }
+
+    getCurrentValue(): boolean {
+        return this.watchConnectedSource.value;
+    }
 }
