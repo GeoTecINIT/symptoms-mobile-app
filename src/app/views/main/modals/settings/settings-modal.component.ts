@@ -91,6 +91,10 @@ export class SettingsModalComponent {
         this.inAppBrowserService.openPrivacyPolicy();
     }
 
+    onOpenLandingPageTap() {
+        this.inAppBrowserService.openProjectWebSite();
+    }
+
     onVersionTap() {
         if (this.versionTapCount < TAPS_TO_ENTER_ADVANCED_SETTINGS - 1) {
             this.versionTapCount++;
