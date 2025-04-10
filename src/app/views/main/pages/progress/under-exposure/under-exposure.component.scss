@@ -7,6 +7,10 @@
 
 .body-text {
   text-align: center;
+
+  &.red-text {
+    color: $dark-red;
+  }
 }
 
 .body-title {
@@ -34,4 +38,8 @@
   margin: 4;
   padding: 8;
   margin-top: 48;
+
+  &.red-text {
+    border-color: transparent;
+  }
 }

@@ -14,6 +14,7 @@ import { BarSegment } from "./exposure-progress-bar";
 import { filter, takeUntil } from "rxjs/operators";
 import { awarns } from "@awarns/core";
 import { PlainMessage } from "@awarns/wear-os";
+import { NotificationsReaderService } from "../../../notifications-reader.service";
 
 const exposureTimes = getConfig().exposureTimes;
 const REGULAR_EXPOSURE_TIME = exposureTimes.regular;
@@ -54,6 +55,7 @@ export class UnderExposureComponent {
     ongoingExposure: Exposure;
     exposureProgress: number;
     inDanger: boolean;
+    hasUnreadNotifications = false;
 
     private unloaded$ = new Subject<void>();
 
@@ -64,7 +66,8 @@ export class UnderExposureComponent {
         private contentViewModalService: ContentViewModalService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private notificationsReaderService: NotificationsReaderService
     ) {
         this.logger = getLogger("UnderExposureComponent");
     }
@@ -74,6 +77,7 @@ export class UnderExposureComponent {
         this.subscribeToOngoingExposureChanges();
         this.subscribeToExposureProgressChanges();
         this.subscribeToInDangerChanges();
+        this.subscribeToUnreadNotifications();
     }
 
     @HostListener("unloaded")
@@ -148,5 +152,15 @@ export class UnderExposureComponent {
             .catch((e) =>
                 this.logger.error(`Could not deliver feedback: Reason ${e}`)
             );
+    }
+
+    private subscribeToUnreadNotifications() {
+        this.notificationsReaderService.unread$
+            .pipe(takeUntil(this.unloaded$))
+            .subscribe((hasUnread) => {
+                this.ngZone.run(() => {
+                    this.hasUnreadNotifications = hasUnread;
+                });
+            });
     }
 }
