@@ -1,7 +1,16 @@
-<Video
-  #player
-  *ngIf="src"
-  [src]="src"
-  [height]="height"
-  (onLoaded)="onLoaded()"
-></Video>
+<WrapLayout
+  class="video-player-wrapper"
+  clipToBounds="true"
+  android:clipToOutline="true"
+>
+  <Video
+    #player
+    *ngIf="src"
+    [src]="src"
+    [height]="height"
+    fill="aspectFill"
+    enableSurfaceView="true"
+    class="video-player"
+    (onLoaded)="onLoaded()"
+  ></Video>
+</WrapLayout>

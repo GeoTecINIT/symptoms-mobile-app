@@ -6,22 +6,15 @@
 
   <ScrollView (scroll)="onScroll($event)">
     <StackLayout (layoutChanged)="onContentRendered($event)">
-      <Label textWrap="true" [text]="content.subtitle"></Label>
-      <Label textWrap="true" [text]="content.body"></Label>
+      <Label class="subtitle" textWrap="true" [text]="content.subtitle"></Label>
+      <Label class="body" textWrap="true" [text]="content.body"></Label>
       <SymVideoPlayer
         *ngIf="content.videoPath"
         #player
         [src]="content.videoPath"
         controls="true"
-        height="300"
+        height="200"
       ></SymVideoPlayer>
-      <!-- <Video
-        *ngIf="content.videoPath"
-        #player
-        [src]="content.videoPath"
-        controls="true"
-        height="300"
-      ></Video> -->
       <Image
         *ngIf="content.infographicPath"
         [src]="content.infographicPath"

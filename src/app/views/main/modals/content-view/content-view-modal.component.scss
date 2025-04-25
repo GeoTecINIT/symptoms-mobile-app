@@ -3,3 +3,13 @@
 StackLayout {
   padding: $global-spacing;
 }
+
+.subtitle {
+  font-weight: bold;
+  font-size: 21;
+}
+
+.body {
+  text-align: justify;
+  font-size: 17;
+}
