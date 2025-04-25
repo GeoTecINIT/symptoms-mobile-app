@@ -3,7 +3,7 @@
 // Uncomment to add recyclerview-v7 dependency
 dependencies {
 //	implementation 'com.android.support:recyclerview-v7:+'
-
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.3'
   implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 }
 
@@ -17,6 +17,13 @@ android {
 	targetSdkVersion 34
     multiDexEnabled true
     generatedDensities = []
+  }
+  compileOptions {
+    // Flag to enable support for the new language APIs
+    coreLibraryDesugaringEnabled true
+    // Sets Java compatibility to Java 8
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
   aaptOptions {
     additionalParameters "--no-version-vectors"
@@ -39,4 +46,17 @@ allprojects {
         }
     }
   }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    taskGraph.allTasks.each { task ->
+        // Check for the desugaring task (l8DexDesugarLibDebug) and compileDebugArtProfile
+        if (task.name.contains("l8DexDesugarLibDebug") || task.name == 'compileDebugArtProfile') {
+            println "Desugaring or ART profile task detected: Disabling ART profile tasks"
+            tasks.matching { it.name.startsWith("compile") && it.name.endsWith("ArtProfile") }.configureEach {
+                it.enabled = false
+                println "Disabled ${it.name} due to desugaring"
+            }
+        }
+    }
 }
