@@ -7,12 +7,13 @@ import {
     SimpleChanges,
     ViewChild,
     ElementRef,
+    ChangeDetectorRef,
 } from "@angular/core";
 import { Animation, AnimationDefinition } from "@nativescript/core";
 
 import { Record, Change } from "@awarns/core/entities";
 import { Weather, LightCondition } from "~/app/core/weather";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, Subscription, takeUntil } from "rxjs";
 import { AppRecordType } from "~/app/core/app-record-type";
 import { FetchCondition, recordsStore } from "@awarns/persistence";
 import { ExtendedAreaOfInterest } from "~/app/core/account/app-config";
@@ -29,8 +30,9 @@ export interface FormatedContextualCondition {
     templateUrl: "./places-list-item.component.html",
     styleUrls: ["./places-list-item.component.scss"],
 })
-export class PlacesListItemComponent {
+export class PlacesListItemComponent implements OnChanges {
     @Input() place: ExtendedAreaOfInterest;
+    @Input() exposures = 0;
     @Input() isExpanded: boolean = false;
 
     @ViewChild("expandableContainer", { static: false })
@@ -39,35 +41,62 @@ export class PlacesListItemComponent {
     records: Array<Record> = [];
 
     private unloaded$ = new Subject<void>();
+    private recordSub?: Subscription;
 
     private logger: Logger;
 
-    constructor(private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone, private cd: ChangeDetectorRef) {}
+
+    ngOnChanges(changes: SimpleChanges): void {
+        // if (changes["place"] && !changes["place"].firstChange) {
+        //     this.subscribeToRecordChanges();
+        // }
+    }
 
     @HostListener("loaded")
     onLoaded(): void {
-        this.subscribeToRecordChanges();
+        // this.subscribeToRecordChanges();
         // this.updateView();
     }
 
     @HostListener("unloaded")
     onUnloaded() {
-        this.unloaded$.next();
-        this.unloaded$.complete();
+        // this.unloaded$.next();
+        // this.unloaded$.complete();
+        // this.recordSub?.unsubscribe();
+        this.unsubscribeFromRecords();
+    }
+
+    private unsubscribeFromRecords() {
+        this.recordSub?.unsubscribe();
+        this.recordSub = undefined;
+        this.records = [];
+        this.cd.markForCheck();
+    }
+
+    private resubscribeToRecordChanges() {
+        this.recordSub?.unsubscribe();
+        this.records = [];
+        this.subscribeToRecordChanges();
     }
 
     private subscribeToRecordChanges() {
+        this.unsubscribeFromRecords();
+
+        const placeId = this.place.id;
+
         const conditions: Array<FetchCondition> = [
             { property: "change", comparison: "=", value: Change.END },
             { property: "successful", comparison: "=", value: true },
             { property: "place.id", comparison: "=", value: this.place.id },
         ];
-        recordsStore
+        this.recordSub = recordsStore
             .listBy(AppRecordType.ExposureChange, "desc", conditions)
-            .pipe(takeUntil(this.unloaded$))
             .subscribe((records) => {
+                if (this.place.id !== placeId) return;
                 this.ngZone.run(() => {
                     this.records = records;
+                    this.cd.markForCheck();
                 });
             });
     }
@@ -107,8 +136,12 @@ export class PlacesListItemComponent {
         return { text, isMandatory: false };
     }
 
+    // get numberOfExposures(): number {
+    //     return this.records.length;
+    // }
+
     get numberOfExposures(): number {
-        return this.records.length;
+        return (this.place as any).exposures ?? 0;
     }
 
     get lightCondition(): FormatedContextualCondition {

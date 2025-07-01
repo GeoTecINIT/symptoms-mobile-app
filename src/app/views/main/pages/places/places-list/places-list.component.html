@@ -19,7 +19,12 @@
     </FlexboxLayout>
     <Label class="separator"></Label>
   </StackLayout>
-  <ListView row="1" [items]="places" (itemTap)="onListItemTap($event)">
+  <ListView
+    #listView
+    row="1"
+    [items]="places"
+    (itemTap)="onListItemTap($event)"
+  >
     <ng-template let-item="item">
       <SymPlacesListItem
         [place]="item"
