@@ -3,37 +3,32 @@ import { AreaOfInterest } from "@awarns/geofencing";
 import {
     Notification,
     notificationsManager,
-    TapActionType
+    TapActionType,
 } from "@awarns/notifications";
-import {
-    appConfigController
-} from "~/app/core/account/app-config";
+import { appConfigController } from "~/app/core/account/app-config";
 import {
     emitExposureStartConfirmedEvent,
     emitPatientDidNotLeaveExposureAreaOnPurposeEvent,
     emitPatientLeftExposureAreaOnPurposeEvent,
-    emitPreExposureStartConfirmedEvent
+    emitPreExposureStartConfirmedEvent,
 } from "~/app/core/framework/events";
 import {
     confirmDidNotLeaveAreaOnPurpose,
     ConfirmModalOptionsDataEmbedder,
     confirmPretendsToStartAnExposure,
-    confirmWantsToStartAnExposure
+    confirmWantsToStartAnExposure,
 } from "~/app/core/modals/confirm";
 import {
     askCannotExposeFeedback,
-    askWantsToLeaveFeedback
+    askWantsToLeaveFeedback,
 } from "~/app/core/modals/feedback";
 import {
     askExposureQuestions,
     askPostExposureQuestions,
-    askPreExposureQuestions
+    askPreExposureQuestions,
 } from "~/app/core/modals/questions";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import {
-    WeatherService,
-    WeatherSummary
-} from "~/app/core/weather";
+import { WeatherService, WeatherSummary } from "~/app/core/weather";
 import { NavigationService } from "../navigation.service";
 import { ConfirmModalOptions, ConfirmModalService } from "./modals/confirm";
 import { ContentViewModalService } from "./modals/content-view";
@@ -41,10 +36,9 @@ import { FeedbackModalOptions, FeedbackModalService } from "./modals/feedback";
 import {
     QuestionAnswer,
     QuestionsModalOptions,
-    QuestionsModalService
+    QuestionsModalService,
 } from "./modals/questions";
-import { Utils } from '@nativescript/core';
-
+import { Utils } from "@nativescript/core";
 
 @Injectable({
     providedIn: "root",
@@ -120,6 +114,7 @@ export class NotificationsHandlerService {
         const tapActionId = notification.tapAction.id;
         const { metadata }: any = notification.tapAction;
         let weatherSummary: WeatherSummary;
+
         switch (tapActionId) {
             case "exposure-intention":
                 const pretendsToStartExposure = await this.showConfirmModal(
@@ -142,11 +137,19 @@ export class NotificationsHandlerService {
                 break;
             case "start-exposure":
                 const aoi = metadata[0].aoi as AreaOfInterest;
+
+                if (!appConfigController.getIsPlaceActiveFromAoi(aoi.id)) {
+                    this.logger.info(
+                        `AOI ${aoi.id} is inactive - notification ignored`
+                    );
+                    return;
+                }
+
                 weatherSummary = aoi
                     ? await this.weatherService.getContextualInformation(
-                        aoi.latitude,
-                        aoi.longitude
-                    )
+                          aoi.latitude,
+                          aoi.longitude
+                      )
                     : undefined;
 
                 const contextualConditions =
@@ -169,7 +172,11 @@ export class NotificationsHandlerService {
                         notification
                     );
                 } else {
-                    emitExposureStartConfirmedEvent(metadata, contextualConditions, weatherSummary);
+                    emitExposureStartConfirmedEvent(
+                        metadata,
+                        contextualConditions,
+                        weatherSummary
+                    );
                 }
                 break;
             case "escape-intention":
@@ -188,7 +195,7 @@ export class NotificationsHandlerService {
                 }
                 break;
             case "show-geolocation":
-                const url = `https://www.google.com/maps/search/?api=1&query=${metadata.latitude},${metadata.longitude}`
+                const url = `https://www.google.com/maps/search/?api=1&query=${metadata.latitude},${metadata.longitude}`;
                 Utils.openUrl(url);
             default:
                 throw new Error(`Unsupported confirm action: ${tapActionId}`);

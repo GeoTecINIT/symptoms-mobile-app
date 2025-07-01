@@ -1,6 +1,7 @@
 import { getLogger } from "~/app/core/utils/logger";
 import { AreaOfInterest, areasOfInterest } from "@awarns/geofencing";
 import { ApplicationSettings } from "@nativescript/core";
+import { ExtendedAreaOfInterest } from "../account/app-config";
 
 const APP_CONFIG_KEY = "PATIENT_APP_CONFIG";
 
@@ -10,7 +11,9 @@ export async function setupAreasOfInterest() {
     const currentAoIs = await areasOfInterest.getAll();
     const appConfig = ApplicationSettings.getString(APP_CONFIG_KEY);
 
-    const newAoIs = JSON.parse(appConfig).places;
+    const newAoIs: ExtendedAreaOfInterest[] = JSON.parse(
+        appConfig
+    ).places.filter((a: ExtendedAreaOfInterest) => a.active);
 
     if (!aoisDidChange(currentAoIs, newAoIs)) {
         return;

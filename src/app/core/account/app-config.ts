@@ -18,6 +18,7 @@ export type Message = {
 
 export interface ExtendedAreaOfInterest extends AreaOfInterest {
     contextualConditions: ContextualConditions;
+    active: boolean;
 }
 
 export interface AppConfig {
@@ -57,6 +58,11 @@ export class AppConfigControllerImpl implements AppConfigController {
 
     get messages(): Message[] {
         return this._appConfig.messages;
+    }
+
+    getIsPlaceActiveFromAoi(id: string): boolean {
+        const aoi = this.aois.find((aoi) => aoi.id === id);
+        return aoi ? aoi.active !== false : true;
     }
 
     getContextualConditionsFromAoi(id: string): ContextualConditions {
