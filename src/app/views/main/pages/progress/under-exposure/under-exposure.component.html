@@ -30,7 +30,8 @@
       <Label
         class="body-text red-text"
         textWrap="true"
-        [text]="'Tienes notificaciones pendientes'"
+        [text]="'Pulsa para ver las notificaciones pendientes'"
+        (tap)="onPendingNotificationsTap()"
       ></Label>
     </StackLayout>
   </StackLayout>

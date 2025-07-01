@@ -15,6 +15,7 @@ import { filter, takeUntil } from "rxjs/operators";
 import { awarns } from "@awarns/core";
 import { PlainMessage } from "@awarns/wear-os";
 import { NotificationsReaderService } from "../../../notifications-reader.service";
+import { MainViewService, NavigationTab } from "../../../main-view.service";
 
 const exposureTimes = getConfig().exposureTimes;
 const REGULAR_EXPOSURE_TIME = exposureTimes.regular;
@@ -64,6 +65,7 @@ export class UnderExposureComponent {
     constructor(
         private underExposureService: UnderExposureService,
         private contentViewModalService: ContentViewModalService,
+        private mainViewService: MainViewService,
         private dialogsService: DialogsService,
         private feedbackModalService: FeedbackModalService,
         private ngZone: NgZone,
@@ -99,6 +101,10 @@ export class UnderExposureComponent {
                     `Could not show content! Reason: ${JSON.stringify(err)}`
                 )
             );
+    }
+
+    onPendingNotificationsTap() {
+        this.mainViewService.setSelectedTab(NavigationTab.Notifications);
     }
 
     private subscribeToOngoingExposureChanges() {
