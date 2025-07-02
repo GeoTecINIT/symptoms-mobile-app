@@ -218,7 +218,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Stays nearby an area of interest for a while
         on(
             "movedCloseToAreaOfInterest",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Has llegado a un lugar de exposición",
                 body: "Exponerte te ayudará a superar tu problema, adelante",
             })
@@ -232,7 +232,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Enters exposure area with no ongoing exposure
         on(
             "enteredAreaWithNoOngoingExposure",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Has llegado a un lugar de exposición",
                 body: "¿Te animas a hacer una?",
                 tapAction: {
@@ -384,7 +384,7 @@ class DemoTaskGraph implements TaskGraph {
         on("movedOutsideAreaOfInterest", run("checkExposureAreaLeft"));
         on(
             "exposureAreaLeft",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Parece que has salido del lugar de exposición",
                 body: "Pulsa sobre la notificación, por favor",
                 tapAction: {
@@ -402,7 +402,7 @@ class DemoTaskGraph implements TaskGraph {
         );
         on(
             "patientLeftExposureAreaOnPurpose",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Abandonar ahora retrasaría tu recuperación",
                 body: "Pulsa aquí para recordar el papel de la evitación",
                 tapAction: {
@@ -416,7 +416,7 @@ class DemoTaskGraph implements TaskGraph {
         on("enteredAreaWithOngoingExposure", run("checkExposureAreaReturn"));
         on(
             "returnedToExposureArea",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "¡Felicidades por regresar!",
                 body: "Los escapes pueden ayudarte en momentos difíciles y de intenso malestar, pero regresar es algo fundamental y muy necesario para conseguir los objetivos terapéuticos. Ahora, ¡adelante!",
             })
@@ -425,6 +425,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Abandoning exposure area
         on("movedAwayFromAreaOfInterest", run("checkExposureDropout"));
         on("exposureDroppedOut", run("finishExposure", { successful: false }));
+        on("exposureDroppedOut", run("clearNotifications")); // not working for some reason
         on(
             "exposureDroppedOut",
             run("sendNotification", {
@@ -454,7 +455,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Exposure evaluation results successful
         on(
             "exposureEvaluationResultedSuccessful",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "¡Has tolerado muy bien la ansiedad!",
                 body: "Puedes terminar aquí o ir a otro lugar",
             })
@@ -466,7 +467,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Exposure evaluation results neutral
         on(
             "exposureEvaluationResultedNeutral",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Has conseguido tolerar tu ansiedad, es un gran logro",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
@@ -482,7 +483,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Exposure evaluation results unsuccessful
         on(
             "exposureEvaluationResultedUnsuccessful",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Te recomendamos permanecer un poco más",
                 body: "Pulsa aquí, leer esto te puede resultar de ayuda",
                 tapAction: {
@@ -502,7 +503,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Exposure extension evaluation results successful
         on(
             "exposureExtensionEvaluationResultedSuccessful",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "Bien hecho, será más tolerable con la práctica",
                 body: "Pulsa aquí, leer esto puede resultarte útil",
                 tapAction: {
@@ -518,7 +519,7 @@ class DemoTaskGraph implements TaskGraph {
         // -> Exposure extension evaluation results unsuccessful
         on(
             "exposureExtensionEvaluationResultedUnsuccessful",
-            run("sendNotification", {
+            run("sendCustomNotification", {
                 title: "A veces resulta difícil tolerar la ansiedad",
                 body: "Pulsa aquí, quizás estas pautas te ayuden",
                 tapAction: {
