@@ -40,7 +40,6 @@ export class PlacesListItemComponent implements OnChanges {
 
     records: Array<Record> = [];
 
-    private unloaded$ = new Subject<void>();
     private recordSub?: Subscription;
 
     private logger: Logger;
@@ -54,16 +53,10 @@ export class PlacesListItemComponent implements OnChanges {
     }
 
     @HostListener("loaded")
-    onLoaded(): void {
-        // this.subscribeToRecordChanges();
-        // this.updateView();
-    }
+    onLoaded(): void {}
 
     @HostListener("unloaded")
     onUnloaded() {
-        // this.unloaded$.next();
-        // this.unloaded$.complete();
-        // this.recordSub?.unsubscribe();
         this.unsubscribeFromRecords();
     }
 
@@ -72,33 +65,6 @@ export class PlacesListItemComponent implements OnChanges {
         this.recordSub = undefined;
         this.records = [];
         this.cd.markForCheck();
-    }
-
-    private resubscribeToRecordChanges() {
-        this.recordSub?.unsubscribe();
-        this.records = [];
-        this.subscribeToRecordChanges();
-    }
-
-    private subscribeToRecordChanges() {
-        this.unsubscribeFromRecords();
-
-        const placeId = this.place.id;
-
-        const conditions: Array<FetchCondition> = [
-            { property: "change", comparison: "=", value: Change.END },
-            { property: "successful", comparison: "=", value: true },
-            { property: "place.id", comparison: "=", value: this.place.id },
-        ];
-        this.recordSub = recordsStore
-            .listBy(AppRecordType.ExposureChange, "desc", conditions)
-            .subscribe((records) => {
-                if (this.place.id !== placeId) return;
-                this.ngZone.run(() => {
-                    this.records = records;
-                    this.cd.markForCheck();
-                });
-            });
     }
 
     get anyContextualConditions() {
@@ -135,10 +101,6 @@ export class PlacesListItemComponent implements OnChanges {
 
         return { text, isMandatory: false };
     }
-
-    // get numberOfExposures(): number {
-    //     return this.records.length;
-    // }
 
     get numberOfExposures(): number {
         return (this.place as any).exposures ?? 0;
@@ -186,7 +148,7 @@ export class PlacesListItemComponent implements OnChanges {
                     scale: {
                         x: this.isExpanded ? 1 : 0.1,
                         y: this.isExpanded ? 1 : 0.1,
-                    }, // Asegúrate de que el elemento no desaparezca completamente si eso afecta la UX
+                    },
                     opacity: this.isExpanded ? 1 : 0,
                     duration: 5000,
                 },
