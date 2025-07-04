@@ -25,6 +25,7 @@
 
   <ng-container class="contextual-conditions-body">
     <SymContextualConditionItem
+      *ngIf="lightConditionFromContextualConditions"
       [title]="'Cond. lumínica '"
       [configuredCondition]="lightConditionFromContextualConditions"
       [receivedCondition]="lightConditionFromWeatherSummary"
@@ -32,6 +33,7 @@
     </SymContextualConditionItem>
 
     <SymContextualConditionItem
+      *ngIf="weatherAndWindFromContextualConditions"
       [title]="'Cond. meteorológica '"
       [configuredCondition]="weatherAndWindFromContextualConditions"
       [receivedCondition]="weatherAndWindFromWeatherSummary"
@@ -39,6 +41,7 @@
     </SymContextualConditionItem>
 
     <SymContextualConditionItem
+      *ngIf="timeRangeFromContextualConditions"
       [title]="'Horario '"
       [configuredCondition]="timeRangeFromContextualConditions"
       [receivedCondition]="currentTimeFormatted"
