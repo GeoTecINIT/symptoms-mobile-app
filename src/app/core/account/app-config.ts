@@ -57,6 +57,18 @@ export class AppConfigControllerImpl implements AppConfigController {
     }
 
     get messages(): Message[] {
+        if (this._appConfig?.messages) {
+            this.getLogger().info(
+                `AppConfig messages: ${JSON.stringify(
+                    this._appConfig.messages,
+                    null,
+                    2
+                )}`
+            );
+        } else {
+            this.getLogger().info("AppConfig messages: not loaded yet");
+        }
+
         return this._appConfig.messages;
     }
 
@@ -101,6 +113,11 @@ export class AppConfigControllerImpl implements AppConfigController {
 
             // Serialize and save messages separately
             const serializedMessages = JSON.stringify(this._appConfig.messages);
+
+            this.getLogger().info(
+                `AppConfig serialized messages: ${serializedMessages}`
+            );
+
             ApplicationSettings.setString(
                 PATIENT_MESSAGES_KEY,
                 serializedMessages
