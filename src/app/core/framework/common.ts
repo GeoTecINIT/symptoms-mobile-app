@@ -22,11 +22,9 @@ export async function preparePlugin(): Promise<boolean | Task[]> {
 async function launchAutostarterIfNeeded() {
     const autoStarterManager = autoStarter.getManager();
     const available = autoStarterManager.canShowAutoStartDialogRequest();
-    // this.logger.info(`Can show dialog request: ${available}`);
 
     if (available) {
         const dialogResponse =
             await autoStarterManager.showAutoStartDialogRequest();
-        // this.logger.info(`Dialog response: ${dialogResponse}`);
     }
 }

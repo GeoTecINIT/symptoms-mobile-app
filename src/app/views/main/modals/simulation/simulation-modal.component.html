@@ -22,7 +22,7 @@
       <SymPrimaryButton
         [margin]="btnMargin"
         text="Simular movimiento"
-        (tap)="emitAwarnsFrameworkEvent('userFinishedBeingStill')"
+        (tap)="emitActivityTransitionEvent()"
       ></SymPrimaryButton>
       <SymPrimaryButton
         [margin]="btnMargin"
@@ -178,13 +178,13 @@
         "
       ></SymPrimaryButton>
     </SymSimulationSection>
-    <SymSimulationSection title="Services">
+    <!-- <SymSimulationSection title="Services">
       <SymPrimaryButton
         [margin]="btnMargin"
         text="GetAllRequest"
         (tap)="loadPreviousExposures()"
       ></SymPrimaryButton>
-    </SymSimulationSection>
+    </SymSimulationSection> -->
     <SymSimulationSection title="Otros">
       <SymPrimaryButton
         [margin]="btnMargin"
