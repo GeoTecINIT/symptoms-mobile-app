@@ -12,10 +12,22 @@ const routes: Routes = [
 
     {
         path: "welcome",
-        loadChildren: () =>
-            import("./views/welcome/welcome.module").then(
-                (m) => m.WelcomeModule
-            ),
+        loadChildren: () => {
+            console.log("=== LOADING WELCOME MODULE ===");
+            return import("./views/welcome/welcome.module")
+                .then((m) => {
+                    console.log("=== WELCOME MODULE LOADED:", m, "===");
+                    return m.WelcomeModule;
+                })
+                .catch((err) => {
+                    console.error(
+                        "=== WELCOME MODULE LOAD FAILED:",
+                        err,
+                        "===",
+                    );
+                    throw err;
+                });
+        },
     },
     {
         path: "main",

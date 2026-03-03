@@ -1,4 +1,7 @@
+import "@nativescript/core/globals";
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
+console.log("=== MAIN.TS STARTING ===");
+
 import {
     platformNativeScript,
     runNativeScriptAngularApp,
@@ -24,18 +27,22 @@ import { getLogger } from "./app/core/utils/logger";
 import { install } from "@nativescript-community/ui-chart";
 import { WatchSensor, registerWearOSPlugin } from "@awarns/wear-os";
 
+console.log("=== IMPORTS LOADED ===");
+
 firebaseManager
     .init()
-    .catch((e) =>
-        console.error("Could not initialize Firebase manager. Reason:", e)
-    );
+    .then(() => console.log("=== FIREBASE INITIALIZED ==="))
+    .catch((e) => {
+        console.error("Could not initialize Firebase manager. Reason:", e);
+        console.log("=== FIREBASE FAILED ===");
+    });
 firebaseManager
     .enableUsageDataCollection()
     .catch((e) =>
         console.error(
             "Could not enable firebase usage data collection. Reason:",
-            e
-        )
+            e,
+        ),
     );
 
 autoStarter.init({
@@ -67,14 +74,24 @@ awarns
         ],
         {
             customLogger: getLogger,
-        }
+        },
     )
-    .catch((e) =>
-        console.error("Could not initialize EMA/I framework. Reason:", e)
-    );
+    .catch((e) => {
+        console.error("Could not initialize EMA/I framework. Reason:", e);
+        console.log("=== CONTINUING DESPITE AWARNS ERROR ===");
+    });
 
 install();
 
+// runNativeScriptAngularApp({
+//     appModuleBootstrap: () => platformNativeScript().bootstrapModule(AppModule),
+// });
+
 runNativeScriptAngularApp({
-    appModuleBootstrap: () => platformNativeScript().bootstrapModule(AppModule),
+    appModuleBootstrap: () => {
+        console.log("=== INSIDE BOOTSTRAP FUNCTION ===");
+        return platformNativeScript().bootstrapModule(AppModule);
+    },
 });
+
+console.log("=== BOOTSTRAP CALLED ===");

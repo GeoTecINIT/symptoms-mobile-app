@@ -20,8 +20,14 @@ export class LoginComponent {
         private authService: AuthService,
         private navigationService: NavigationService,
         private inAppBrowserService: InAppBrowserService,
-        private activeRoute: ActivatedRoute
-    ) { }
+        private activeRoute: ActivatedRoute,
+    ) {
+        console.log("=== LOGIN COMPONENT CONSTRUCTOR ===");
+    }
+
+    ngOnInit() {
+        console.log("=== LOGIN COMPONENT NG ON INIT ===");
+    }
 
     onCodeInputChange(code: string) {
         this.errorMessage = "";
@@ -42,10 +48,9 @@ export class LoginComponent {
                 });
             } else {
                 this.waitingForResponse = false;
-                this.errorMessage =
-                    error.includes("network error")
-                        ? "No estás conectado a internet."
-                        : "Código incorrecto";
+                this.errorMessage = error.includes("network error")
+                    ? "No estás conectado a internet."
+                    : "Código incorrecto";
             }
         });
     }

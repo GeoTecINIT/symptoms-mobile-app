@@ -6,7 +6,7 @@ module.exports = (env) => {
   // Learn how to customize:
   // https://docs.nativescript.org/webpack
 
-  webpack.Utils.addCopyRule('media/**')
+  webpack.Utils.addCopyRule("media/**");
 
   webpack.chainWebpack((config) => {
     config.plugin("DefinePlugin").tap((args) => {
@@ -18,6 +18,11 @@ module.exports = (env) => {
 
       return args;
     });
+
+    // Disabling FixSourceMapUrlPlugin prevents maximum call stack error
+    if (config.plugins.has("FixSourceMapUrlPlugin")) {
+      config.plugins.delete("FixSourceMapUrlPlugin");
+    }
   });
 
   return webpack.resolveConfig();

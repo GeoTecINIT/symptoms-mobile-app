@@ -14,7 +14,7 @@ export class NavigationService {
 
     constructor(
         private routerExtension: RouterExtensions,
-        private ngZone: NgZone
+        private ngZone: NgZone,
     ) {
         this.logger = getLogger("NavigationService");
     }
@@ -32,13 +32,19 @@ export class NavigationService {
                 })
                 .catch((e) =>
                     this.logger.error(
-                        `Could not navigate to ${route}. Reason: ${e}`
-                    )
+                        `Could not navigate to ${route}. Reason: ${e}`,
+                    ),
                 );
         });
     }
 
     forceNavigate(absoluteRoute: Array<any>) {
+        console.log(
+            "=== FORCE NAVIGATE CALLED WITH:",
+            JSON.stringify(absoluteRoute),
+            "===",
+        );
+
         this.routerExtension
             .navigate(absoluteRoute, {
                 animated: false,
@@ -46,21 +52,21 @@ export class NavigationService {
             })
             .catch((e) =>
                 this.logger.error(
-                    `Could not navigate to ${absoluteRoute}. Reason: ${e}`
-                )
+                    `Could not navigate to ${absoluteRoute}. Reason: ${e}`,
+                ),
             );
     }
 
     outletNavigation(
         outlets: { [key: string]: Array<any> },
-        source: ActivatedRoute
+        source: ActivatedRoute,
     ) {
         this.routerExtension
             .navigate([{ outlets }], { relativeTo: source })
             .catch((e) =>
                 this.logger.error(
-                    `Could not navigate ${outlets} outlets. Reason: ${e}`
-                )
+                    `Could not navigate ${outlets} outlets. Reason: ${e}`,
+                ),
             );
     }
 

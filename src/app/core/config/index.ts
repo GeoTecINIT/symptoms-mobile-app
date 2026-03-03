@@ -15,5 +15,6 @@ export function getConfig() {
 }
 
 export function setEnvironment(env: Environment) {
+    console.log("👉👉👉 environment: " + environment.toString());
     environment = env;
 }

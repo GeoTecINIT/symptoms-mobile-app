@@ -7,11 +7,26 @@ import {
     OnDestroy,
 } from "@angular/core";
 import { registerElement } from "@nativescript/angular";
-import { Video } from "@nstudio/nativescript-exoplayer";
-
 import { isAndroid } from "@nativescript/core";
 
+// Avoid TS module-typing issues with @nstudio/nativescript-exoplayer
+const { Video } = require("@nstudio/nativescript-exoplayer");
+
 registerElement("Video", () => Video);
+
+// Creates a ViewOutlineProvider without @NativeClass()
+// Uses .extend() at runtime, cast to any to satisfy TS typings
+function createRoundedOutlineProvider(radius: number) {
+    const Provider = (android.view.ViewOutlineProvider as any).extend({
+        getOutline(view: android.view.View, outline: android.graphics.Outline) {
+            const w = Math.max(1, view.getWidth());
+            const h = Math.max(1, view.getHeight());
+            outline.setRoundRect(0, 0, w, h, radius);
+        },
+    });
+
+    return new Provider();
+}
 
 @Component({
     selector: "SymVideoPlayer",
@@ -29,7 +44,7 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
         if (this.player?.nativeElement) {
             try {
                 this.player.nativeElement.release();
-            } catch (error) {
+            } catch {
                 // swallow
             }
         }
@@ -39,44 +54,25 @@ export class VideoPlayerComponent implements OnDestroy, AfterViewInit {
         if (isAndroid && this.player?.nativeElement?.android) {
             const nativeView = this.player.nativeElement.android;
 
-            // For Android Lollipop+:
             if (android.os.Build.VERSION.SDK_INT >= 21) {
                 const radius =
                     12 * nativeView.getResources().getDisplayMetrics().density;
 
-                // Clip the Video view itself:
                 nativeView.setClipToOutline(true);
                 nativeView.setOutlineProvider(
-                    new RoundedOutlineProvider(radius)
+                    createRoundedOutlineProvider(radius),
                 );
                 nativeView.invalidateOutline();
 
-                // ...and optionally clip the parent:
                 const parent = nativeView.getParent();
                 if (parent instanceof android.view.ViewGroup) {
                     parent.setClipToOutline(true);
                     parent.setOutlineProvider(
-                        new RoundedOutlineProvider(radius)
+                        createRoundedOutlineProvider(radius),
                     );
                     parent.invalidateOutline();
                 }
             }
         }
-    }
-}
-
-@NativeClass()
-class RoundedOutlineProvider extends android.view.ViewOutlineProvider {
-    constructor(private radius: number) {
-        super();
-    }
-    getOutline(view: android.view.View, outline: android.graphics.Outline) {
-        outline.setRoundRect(
-            0,
-            0,
-            view.getWidth(),
-            view.getHeight(),
-            this.radius
-        );
     }
 }
