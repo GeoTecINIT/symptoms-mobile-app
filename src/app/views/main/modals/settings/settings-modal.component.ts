@@ -34,7 +34,7 @@ export class SettingsModalComponent {
         private navigationService: NavigationService,
         private activeRoute: ActivatedRoute,
         private watchDisplayService: WatchDisplayService,
-        private inAppBrowserService: InAppBrowserService
+        private inAppBrowserService: InAppBrowserService,
     ) {
         this.logger = getLogger("SettingsModalComponent");
     }
@@ -52,7 +52,7 @@ export class SettingsModalComponent {
                         .unlink()
                         .then(() => this.onClose())
                         .catch((e) =>
-                            this.logger.error(`Could not unlink. Reason: ${e}`)
+                            this.logger.error(`Could not unlink. Reason: ${e}`),
                         );
                 }
             });
@@ -67,13 +67,13 @@ export class SettingsModalComponent {
                         .exportData()
                         .then((path) =>
                             this.logger.debug(
-                                `Data exported and available at: ${path}`
-                            )
+                                `Data exported and available at: ${path}`,
+                            ),
                         )
                         .catch((e) =>
                             this.logger.error(
-                                `Could not export data. Reason: ${e}`
-                            )
+                                `Could not export data. Reason: ${e}`,
+                            ),
                         );
                 }
             });
@@ -81,8 +81,8 @@ export class SettingsModalComponent {
 
     onScanWatchTap() {
         this.waitingForResponse = true;
-        isAnyWatchConnected().then((connected) => {
-            this.watchDisplayService.setWatchConnected(connected);
+        isAnyWatchConnected().then((available) => {
+            this.watchDisplayService.setWatchAvailable(available);
             this.waitingForResponse = false;
         });
     }

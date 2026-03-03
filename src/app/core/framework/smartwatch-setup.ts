@@ -34,7 +34,7 @@ export async function handleWatchToUse(): Promise<void> {
         useWatch(watch);
         getCollectorManager().isReady(
             watch,
-            toSensorType(WatchSensor.HEART_RATE)
+            toSensorType(WatchSensor.HEART_RATE),
         );
     }
 }
@@ -42,4 +42,27 @@ export async function handleWatchToUse(): Promise<void> {
 export async function isAnyWatchConnected(): Promise<boolean> {
     const watches = await getConnectedWatches();
     return watches.length > 0;
+}
+
+export async function verifyWatchPermissionsActive(): Promise<boolean> {
+    const logger: Logger = getLogger("WatchSetup");
+    const watches = await getConnectedWatches();
+
+    if (watches.length === 0) {
+        logger.info("No watch connected for permission verification");
+        return false;
+    }
+
+    const watch = watches[0];
+    try {
+        const isReady = await getCollectorManager().isReady(
+            watch,
+            toSensorType(WatchSensor.HEART_RATE),
+        );
+        logger.info(`Watch permissions active: ${isReady}`);
+        return isReady;
+    } catch (error) {
+        logger.error("Error verifying watch permissions: " + error);
+        return false;
+    }
 }

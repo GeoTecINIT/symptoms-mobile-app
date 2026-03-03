@@ -9,7 +9,10 @@ import {
     AdvancedSettingsService,
 } from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
-import { preparePlugin } from "~/app/core/framework";
+import {
+    preparePlugin,
+    verifyWatchPermissionsActive,
+} from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { infoOnWatchPermissionsNeed } from "~/app/core/dialogs/info";
 import { getLogger, Logger } from "~/app/core/utils/logger";
@@ -50,25 +53,38 @@ export class MainActionBarComponent {
         private panicButtonModalService: PanicButtonModalService,
         private dialogsService: DialogsService,
         private watchDisplayService: WatchDisplayService,
-        private accountService: AccountService
+        private accountService: AccountService,
     ) {
         this.logger = getLogger("MainActionBarComponent");
         this.development = !getConfig().production;
 
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
-            AdvancedSetting.PanicButton
+            AdvancedSetting.PanicButton,
         );
     }
 
     async ngOnInit(): Promise<void> {
         const watches = await getConnectedWatches();
         this.hasWatchAvailable = watches.length > 0;
+        this.watchDisplayService.setWatchAvailable(this.hasWatchAvailable);
+        this.watchDisplayService.watchAvailable$.subscribe((isAvailable) => {
+            this.hasWatchAvailable = isAvailable;
+        });
 
-        const lastKnownConnected = this.watchDisplayService.getCurrentValue();
-        const initialConnected = lastKnownConnected && watches.length > 0;
+        let actualPermissionsActive = false;
+        if (watches.length > 0) {
+            try {
+                actualPermissionsActive = await verifyWatchPermissionsActive();
+                this.logger.info(
+                    `Permisos del reloj activos al iniciar: ${actualPermissionsActive}`,
+                );
+            } catch (error) {
+                this.logger.error("Error checking watch permissions: " + error);
+                actualPermissionsActive = false;
+            }
+        }
 
-        this.watchDisplayService.setWatchConnected(initialConnected);
-
+        this.watchDisplayService.setWatchConnected(actualPermissionsActive);
         this.watchDisplayService.watchConnected$.subscribe((connected) => {
             this.hasWatchConnected = connected;
         });
@@ -93,7 +109,7 @@ export class MainActionBarComponent {
                 })
                 .catch((error) => {
                     this.logger.error(
-                        "Error al mostrar el diálogo de confirmación: " + error
+                        "Error al mostrar el diálogo de confirmación: " + error,
                     );
                 });
         } else {
@@ -110,7 +126,7 @@ export class MainActionBarComponent {
                 })
                 .catch((error) => {
                     this.logger.error(
-                        "Error al mostrar el diálogo de confirmación: " + error
+                        "Error al mostrar el diálogo de confirmación: " + error,
                     );
                 });
         }
@@ -122,8 +138,8 @@ export class MainActionBarComponent {
         const watches = await getConnectedWatches();
         if (!watches.length) {
             logger.info("No watch is connected (physically paired)");
-            this.hasWatchConnected = false;
-            this.watchDisplayService.setWatchConnected(false);
+            this.hasWatchAvailable = false;
+            this.watchDisplayService.setWatchAvailable(false);
             return;
         }
 
@@ -135,7 +151,7 @@ export class MainActionBarComponent {
         const isReady = await preparePlugin();
         if (!isReady) {
             console.log(
-                "Watch plugin is not ready (permissions likely denied)"
+                "Watch plugin is not ready (permissions likely denied)",
             );
             this.hasWatchConnected = false;
             this.watchDisplayService.setWatchConnected(false);
