@@ -1,7 +1,19 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, Output } from "@angular/core";
-import { EventData, Folder, knownFolders, Slider, TextField, File } from "@nativescript/core";
+import { Component, EventEmitter, Input, NgZone, Output } from "@angular/core";
+import {
+    EventData,
+    Folder,
+    knownFolders,
+    Slider,
+    TextField,
+    File,
+} from "@nativescript/core";
 
-import { AudioPlayerOptions, AudioRecorderOptions, TNSPlayer, TNSRecorder } from "nativescript-audio";
+import {
+    AudioPlayerOptions,
+    AudioRecorderOptions,
+    TNSPlayer,
+    TNSRecorder,
+} from "nativescript-audio";
 
 type ReturnKeyType = "done" | "next" | "go" | "search" | "send";
 
@@ -23,7 +35,7 @@ export class TextAndAudioInputComponent {
     // Audio recorder related Output
     @Output() audioRecorded = new EventEmitter<string>();
 
-    constructor(private zone: NgZone, private cdr: ChangeDetectorRef) { }
+    constructor(private zone: NgZone) {}
 
     audioRecorder: TNSRecorder = new TNSRecorder();
     audioPlayer: TNSPlayer = new TNSPlayer();
@@ -39,14 +51,14 @@ export class TextAndAudioInputComponent {
     focus: boolean = false;
 
     // Audio variables
-    // -> Audio file 
-    recordedAudioFilePath: string = '';
+    // -> Audio file
+    recordedAudioFilePath: string = "";
     totalDuration: number = 0; // In seconds
 
     // -> Recording state
     isRecording: boolean = false;
 
-    // -> Playback state 
+    // -> Playback state
     playbackIntervalId;
     isPlaying: boolean = false;
     currentTime: number = 0; // In seconds
@@ -59,11 +71,13 @@ export class TextAndAudioInputComponent {
     }
 
     /*
-    * Text field functions
-    */
+     * Text field functions
+     */
 
     onFieldFocus() {
-        this.focus = true;
+        setTimeout(() => {
+            this.focus = true;
+        });
     }
 
     onFieldBlur() {
@@ -80,8 +94,8 @@ export class TextAndAudioInputComponent {
     }
 
     /*
-    * Audio recording functions
-    */
+     * Audio recording functions
+     */
 
     // -> Recording related functions
 
@@ -101,8 +115,9 @@ export class TextAndAudioInputComponent {
             .getFolder("audio");
 
         const audioRecorderOptions: AudioRecorderOptions = {
-            filename: `${audioFolder.path
-                }/recording_EXPOSURE_ID_${new Date().getTime()}.mp3`,
+            filename: `${
+                audioFolder.path
+            }/recording_EXPOSURE_ID_${new Date().getTime()}.mp3`,
             // working formats: 0, 1, *2, *6, 8
             // 2: https://developer.android.com/reference/android/media/AudioFormat#ENCODING_PCM_16BIT, most stable/guaranteed to work
             // 6: https://developer.android.com/reference/android/media/AudioFormat#ENCODING_E_AC3, best quality and quite stable as well
@@ -136,8 +151,10 @@ export class TextAndAudioInputComponent {
     }
 
     async stopRecording() {
+        this.zone.run(() => {
+            this.isRecording = false;
+        });
         await this.audioRecorder.stop();
-        this.isRecording = false;
 
         this.audioRecorded.emit(this.recordedAudioFilePath);
 
@@ -150,11 +167,12 @@ export class TextAndAudioInputComponent {
                     this.isPlaying = false;
                     clearInterval(this.playbackIntervalId);
                 });
-            }
-        }
+            },
+        };
 
         await this.audioPlayer.initFromFile(playerOptions);
-        this.totalDuration = parseFloat(await this.audioPlayer.getAudioTrackDuration()) / 1000;
+        this.totalDuration =
+            parseFloat(await this.audioPlayer.getAudioTrackDuration()) / 1000;
     }
 
     async deleteRecording() {
@@ -162,9 +180,9 @@ export class TextAndAudioInputComponent {
         audioFile.removeSync();
 
         await this.audioRecorder.dispose();
-        this.recordedAudioFilePath = '';
-        this.currentTime = 0; 
-        this.audioRecorded.emit('');   
+        this.recordedAudioFilePath = "";
+        this.currentTime = 0;
+        this.audioRecorded.emit("");
     }
 
     // -> Playback related functions
@@ -179,8 +197,6 @@ export class TextAndAudioInputComponent {
     async playRecording() {
         if (!this.recordedAudioFilePath) return;
 
-        console.log("this.currentTime:", this.currentTime)
-
         if (this.currentTime !== 0) this.audioPlayer.resume();
         else await this.audioPlayer.play();
 
@@ -188,12 +204,13 @@ export class TextAndAudioInputComponent {
         this.zone.run(() => {
             this.isPlaying = true;
         });
-    
+
         this.playbackIntervalId = setInterval(() => {
             this.zone.run(() => {
                 this.currentTime = this.audioPlayer.currentTime / 1000;
-                this.currentPlaybackPosition = (this.currentTime / this.totalDuration) * 100;
-            })
+                this.currentPlaybackPosition =
+                    (this.currentTime / this.totalDuration) * 100;
+            });
         }, 50);
     }
 
@@ -214,14 +231,14 @@ export class TextAndAudioInputComponent {
 
     async onSliderValueChange(event: any) {
         if (!this.recordedAudioFilePath) return;
-        
+
         const slider = event.object as Slider;
         const newValue = slider.value;
 
         if (Math.abs(newValue - this.currentPlaybackPosition) <= 1) return;
 
         const seekTime = (newValue / 100) * this.totalDuration;
-        await this.audioPlayer.seekTo(seekTime)
+        await this.audioPlayer.seekTo(seekTime);
 
         this.currentPlaybackPosition = newValue;
         this.currentTime = this.audioPlayer.currentTime / 1000;

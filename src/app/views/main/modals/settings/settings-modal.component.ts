@@ -8,7 +8,6 @@ import {
     confirmWantsToExport,
     confirmWantsToUnlink,
 } from "~/app/core/dialogs/confirm";
-import { isAnyWatchConnected } from "~/app/core/framework/smartwatch-setup";
 import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
 import { InAppBrowserService } from "~/app/views/common/in-app-browser.service";
 
@@ -81,8 +80,7 @@ export class SettingsModalComponent {
 
     onScanWatchTap() {
         this.waitingForResponse = true;
-        isAnyWatchConnected().then((available) => {
-            this.watchDisplayService.setWatchAvailable(available);
+        this.watchDisplayService.scanForWatch().finally(() => {
             this.waitingForResponse = false;
         });
     }
@@ -98,7 +96,6 @@ export class SettingsModalComponent {
     onVersionTap() {
         if (this.versionTapCount < TAPS_TO_ENTER_ADVANCED_SETTINGS - 1) {
             this.versionTapCount++;
-
             return;
         }
         this.navigationService.navigate(["./advanced"], {

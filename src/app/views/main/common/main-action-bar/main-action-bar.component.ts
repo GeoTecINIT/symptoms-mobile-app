@@ -1,4 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 import { SettingsModalService } from "../../modals/settings/settings-modal.service";
 import { SimulationModalService } from "../../modals/simulation/simulation-modal.service";
@@ -9,42 +11,35 @@ import {
     AdvancedSettingsService,
 } from "~/app/core/account";
 import { PanicButtonModalService } from "~/app/views/main/modals/panic-button/panic-button-modal.service";
-import {
-    preparePlugin,
-    verifyWatchPermissionsActive,
-} from "~/app/core/framework";
 import { DialogsService } from "~/app/views/common/dialogs.service";
 import { infoOnWatchPermissionsNeed } from "~/app/core/dialogs/info";
 import { getLogger, Logger } from "~/app/core/utils/logger";
-import {
-    setWatchFeaturesState,
-    useWatch,
-} from "@awarns/wear-os/internal/setup";
-import { awarns } from "@awarns/core";
 import { Dialogs } from "@nativescript/core";
-import { getConnectedWatches } from "@awarns/wear-os";
-import { WatchDisplayService } from "~/app/views/main/common/main-action-bar/watch-display.service";
+import {
+    WatchDisplayService,
+    WatchStatus,
+} from "~/app/views/main/common/main-action-bar/watch-display.service";
 
 @Component({
     selector: "SymMainActionBar",
     templateUrl: "./main-action-bar.component.html",
     styleUrls: ["./main-action-bar.component.scss"],
 })
-export class MainActionBarComponent {
-    @Input() title: string;
+export class MainActionBarComponent implements OnInit, OnDestroy {
+    @Input() title!: string;
     development: boolean;
-    hasOngoingExposure: boolean;
-
-    // hasWatchAvailable is whether the mobile sees any watch physically
-    // hasWatchConnected is whether permissions have actually been granted
-    hasWatchAvailable: boolean;
-    hasWatchConnected: boolean;
-
-    // user for google play testers
-    testUser = this.accountService.deviceProfile.patientId;
-    private logger: Logger;
-
     panicButtonActive: boolean;
+
+    // Used in the template for the simulation action item guard
+    testUser = this.accountService.deviceProfile.patientId;
+
+    // Expose enum to the template (the HTML uses hasWatchAvailable / hasWatchConnected getters,
+    // so the enum isn't strictly needed in the template -> kept here in case the template is extended).
+    WatchStatus = WatchStatus;
+
+    private watchStatus: WatchStatus = WatchStatus.Unavailable;
+    private destroyed$ = new Subject<void>();
+    private logger: Logger;
 
     constructor(
         private settingsModalService: SettingsModalService,
@@ -57,41 +52,35 @@ export class MainActionBarComponent {
     ) {
         this.logger = getLogger("MainActionBarComponent");
         this.development = !getConfig().production;
-
         this.panicButtonActive = this.advancedSettingsService.getBoolean(
             AdvancedSetting.PanicButton,
         );
     }
 
-    async ngOnInit(): Promise<void> {
-        const watches = await getConnectedWatches();
-        this.hasWatchAvailable = watches.length > 0;
-        this.watchDisplayService.setWatchAvailable(this.hasWatchAvailable);
-        this.watchDisplayService.watchAvailable$.subscribe((isAvailable) => {
-            this.hasWatchAvailable = isAvailable;
-        });
-
-        let actualPermissionsActive = false;
-        if (watches.length > 0) {
-            try {
-                actualPermissionsActive = await verifyWatchPermissionsActive();
-                this.logger.info(
-                    `Permisos del reloj activos al iniciar: ${actualPermissionsActive}`,
-                );
-            } catch (error) {
-                this.logger.error("Error checking watch permissions: " + error);
-                actualPermissionsActive = false;
-            }
-        }
-
-        this.watchDisplayService.setWatchConnected(actualPermissionsActive);
-        this.watchDisplayService.watchConnected$.subscribe((connected) => {
-            this.hasWatchConnected = connected;
-        });
+    get hasWatchAvailable(): boolean {
+        return this.watchStatus !== WatchStatus.Unavailable;
     }
 
-    onSimulationTap() {
-        this.simulationModalService.show();
+    get hasWatchConnected(): boolean {
+        return this.watchStatus === WatchStatus.Connected;
+    }
+
+    async ngOnInit(): Promise<void> {
+        // Mirror service state into the local watchStatus so Angular's
+        // change detection picks it up for the getters above.
+        this.watchDisplayService.status$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((status) => {
+                this.watchStatus = status;
+            });
+
+        // initialize() is idempotent -> safe to call on every ngOnInit.
+        await this.watchDisplayService.initialize();
+    }
+
+    ngOnDestroy() {
+        this.destroyed$.next();
+        this.destroyed$.complete();
     }
 
     onWatchDialogTap() {
@@ -102,9 +91,11 @@ export class MainActionBarComponent {
                 okButtonText: "Sí",
                 cancelButtonText: "No",
             })
-                .then(async (result) => {
-                    if (result) {
-                        await this.handleWatchConnect();
+                .then(async (confirmed) => {
+                    if (confirmed) {
+                        await this.watchDisplayService.connect(() =>
+                            this.informAboutWatchPermissionsNeed(),
+                        );
                     }
                 })
                 .catch((error) => {
@@ -119,9 +110,9 @@ export class MainActionBarComponent {
                 okButtonText: "Sí",
                 cancelButtonText: "No",
             })
-                .then(async (result) => {
-                    if (result) {
-                        await this.handleWatchDisconnect();
+                .then(async (confirmed) => {
+                    if (confirmed) {
+                        await this.watchDisplayService.disconnect();
                     }
                 })
                 .catch((error) => {
@@ -132,52 +123,8 @@ export class MainActionBarComponent {
         }
     }
 
-    async handleWatchConnect() {
-        const logger = getLogger("WatchSetup");
-
-        const watches = await getConnectedWatches();
-        if (!watches.length) {
-            logger.info("No watch is connected (physically paired)");
-            this.hasWatchAvailable = false;
-            this.watchDisplayService.setWatchAvailable(false);
-            return;
-        }
-
-        setWatchFeaturesState(true);
-
-        const watch = watches[0];
-        useWatch(watch);
-
-        const isReady = await preparePlugin();
-        if (!isReady) {
-            console.log(
-                "Watch plugin is not ready (permissions likely denied)",
-            );
-            this.hasWatchConnected = false;
-            this.watchDisplayService.setWatchConnected(false);
-            await this.informAboutWatchPermissionsNeed();
-            return;
-        }
-
-        this.hasWatchConnected = true;
-        this.watchDisplayService.setWatchConnected(true);
-
-        awarns.emitEvent("sendWatchConnectedMessage", {
-            plainMessage: {
-                message: "Permissions granted",
-            },
-        });
-    }
-
-    async handleWatchDisconnect() {
-        setWatchFeaturesState(false);
-        this.hasWatchConnected = false;
-        this.watchDisplayService.setWatchConnected(false);
-        awarns.emitEvent("sendWatchNotConnectedMessage", {
-            plainMessage: {
-                message: "Permissions denied",
-            },
-        });
+    onSimulationTap() {
+        this.simulationModalService.show();
     }
 
     onSettingsTap() {
